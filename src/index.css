@@ -2,7 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-/* General and reset */
+/* ============================================================
+   Learntopia — global foundation
+   Darker midnight-violet identity, single-theme by design.
+   ============================================================ */
 
 * {
   margin: 0;
@@ -10,199 +13,138 @@
   box-sizing: border-box;
 }
 
-body {
-  background: linear-gradient(135deg, #0f0a1c 0%, #1a122c 50%, #251b3d 100%);
-  min-height: 100vh;
-  color: #f3f4f6;
-  overflow-x: hidden;
-  font-family: "Poppins", sans-serif;
-  font-weight: 400;
+html {
+  scroll-behavior: smooth;
 }
 
-/* Custom Scrollbar */
+body {
+  /* Deep midnight ground with restrained ambient glows (kept subtle, not flashy). */
+  background:
+    radial-gradient(1100px 560px at 82% -8%, rgba(139, 99, 227, 0.10), transparent 60%),
+    radial-gradient(820px 460px at -5% 8%, rgba(123, 191, 242, 0.06), transparent 55%),
+    linear-gradient(160deg, #070510 0%, #0E0A1C 55%, #150E28 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  color: #bdb4d0;
+  overflow-x: hidden;
+  font-family: "Poppins", "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 9px;
 }
 ::-webkit-scrollbar-track {
-  background: #0f0a1c;
+  background: #070510;
 }
 ::-webkit-scrollbar-thumb {
-  background: #413065;
-  border-radius: 4px;
+  background: #2a2040;
+  border-radius: 5px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #a584eb;
+  background: #6d42be;
 }
 
-a.active {
-  @apply text-highlighted-btn-bg;
+/* Selection */
+::selection {
+  background: rgba(139, 99, 227, 0.35);
+  color: #f1eef8;
 }
 
 .toastbody {
-  font-size: 1rem;
+  font-size: 0.95rem;
+  font-family: inherit;
 }
 
-.end {
-  @apply text-highlighted-btn-bg;
+a.active {
+  @apply text-sky;
 }
-
-/* Component Layer */
 
 @layer components {
-  /* navbar */
-  .header {
-    @apply flex justify-between items-center px-6 py-4 relative border-b border-white/5 backdrop-blur-md bg-black/10 z-40 transition-all duration-300;
-  }
-  
-  .btn-style {
-    @apply rounded-xl font-semibold px-6 py-3 text-sm text-white bg-button-bg-color shadow-lg shadow-button-bg-color/20 border border-white/10 transition-all duration-300 hover:bg-opacity-90 hover:scale-[0.98] hover:shadow-button-bg-color/35 active:scale-95;
+  /* --- Layout container: consistent gutters + 1280px boundary everywhere --- */
+  .container-page {
+    @apply w-full max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-12;
   }
 
+  /* --- Glass surfaces (three tiers) --- */
+  .glass {
+    @apply border border-white/[0.07] bg-white/[0.03] backdrop-blur-md;
+  }
+  .glass-2 {
+    @apply border border-white/[0.08] bg-white/[0.05] backdrop-blur-md;
+  }
+  .glass-panel {
+    @apply glass rounded-2xl shadow-card;
+  }
+
+  /* --- Navbar underline links --- */
   .nav-li {
-    @apply my-3 md:my-0 mx-4 text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer text-base font-medium tracking-wide relative pb-1;
+    @apply relative mx-0 my-1 cursor-pointer pb-1 text-[0.95rem] font-medium tracking-wide text-ink transition-colors duration-200 hover:text-ink-hi md:my-0;
   }
   .nav-li::after {
-    content: '';
+    content: "";
     position: absolute;
-    bottom: 0;
     left: 0;
-    width: 0;
+    bottom: 0;
     height: 2px;
-    background-color: #7BBFF2;
-    transition: width 0.3s ease;
+    width: 0;
+    background-color: #7bbff2;
+    transition: width 0.28s ease;
   }
-  .nav-li:hover::after, .nav-li.text-highlighted-btn-bg::after {
+  .nav-li:hover::after,
+  .nav-li.text-sky::after {
     width: 100%;
   }
 
-  /* Input area */
+  /* --- Form field primitives (used by ui/Field) --- */
   .inputContainers {
-    @apply flex flex-col min-w-full my-3 gap-2;
+    @apply my-3 flex min-w-full flex-col gap-2;
   }
-  
   .inputLabels {
-    @apply text-sm text-left font-semibold text-gray-300 ml-1;
+    @apply ml-0.5 text-left text-sm font-semibold text-ink;
   }
-
   .inputbox {
-    @apply border border-white/10 bg-white/5 outline-none px-4 py-3 rounded-xl text-base text-white transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-button-bg-color focus:border-button-bg-color focus:bg-white/10 placeholder-gray-500;
-  }
-
-  /* Home styles */
-  .home-headIcons {
-    @apply flex justify-center items-center gap-4 mt-4 mb-8;
-  }
-
-  .home-icons {
-    @apply max-w-[50px] bg-white/10 border border-white/15 p-3 rounded-2xl mediumPhone:max-w-[60px] lg:max-w-[70px] hover:bg-white/15 hover:scale-105 transition-all duration-300;
-  }
-
-  .h-images {
-    @apply w-full h-auto object-contain block transition-all duration-300;
-  }
-
-  .homeCustomers {
-    @apply rounded-full max-w-[32px] border border-primary-bg-color shadow-md object-contain h-fit;
-  }
-  
-  .achieve {
-    @apply grid place-content-center gap-4;
-  }
-  
-  .achievecustomers {
-    @apply rounded-2xl flex justify-center items-center flex-col p-5 bg-white/5 border border-white/10 shadow-xl backdrop-blur-md;
-  }
-  
-  .achieveRatings {
-    @apply flex items-center relative;
-  }
-
-  .achieveCards {
-    @apply rounded-2xl flex flex-col justify-center items-center gap-3 p-6 my-2 text-center bg-white/5 border border-white/10 shadow-xl backdrop-blur-md transition-all duration-300 hover:bg-white/10 hover:translate-y-[-4px];
-  }
-  
-  .card-details {
-    @apply bg-white/15 border border-white/20 rounded-2xl max-w-[75px] p-4 flex justify-center items-center shadow-inner;
-  }
-  
-  .card-details img {
-    @apply w-full h-auto object-contain;
-  }
-  
-  .boxes {
-    @apply py-6 px-4 rounded-3xl bg-black/10 border border-white/5;
-  }
-
-  .box {
-    @apply p-5 rounded-2xl bg-white/5 border border-white/10 shadow-md transition-all duration-300 hover:bg-white/10;
-  }
-
-  /* Course style */
-  .courseCard {
-    @apply flex justify-between flex-col p-5 rounded-3xl text-white transition-all duration-300 select-none border border-white/5 shadow-lg;
-    background: rgba(255, 255, 255, 0.03);
-  }
-  .courseCard:hover {
-    background: rgba(255, 255, 255, 0.07);
-    border-color: rgba(165, 132, 235, 0.3);
-    transform: translateY(-6px);
-    box-shadow: 0 12px 30px rgba(165, 132, 235, 0.15);
-  }
-
-  .courseHeader {
-    @apply flex justify-between items-center mb-3;
-  }
-  
-  .type {
-    @apply max-w-[22%] h-auto rounded-xl bg-white/10 border border-white/15 p-2 flex justify-center items-center;
-  }
-  
-  .rating {
-    @apply max-w-[32%] h-auto rounded-xl bg-white/10 border border-white/15 p-2 flex justify-center items-center;
-  }
-  
-  .courseImg {
-    @apply max-w-[70%] mx-auto my-4 h-auto object-cover transition-transform duration-500 hover:scale-105;
-  }
-  
-  .coursesDetails {
-    @apply flex justify-evenly flex-col gap-3 mt-2;
-  }
-
-  .courseBtn {
-    @apply bg-button-bg-color text-center text-white rounded-xl text-sm font-semibold py-2 px-4 transition-all duration-300 hover:scale-95 shadow-md shadow-button-bg-color/20 border border-white/10;
-  }
-
-  .info {
-    @apply flex justify-between items-center border-t border-white/5 pt-3 mt-2;
-  }
-  
-  .info p {
-    @apply text-xs text-gray-400 font-medium;
-  }
-
-  .studentsImg {
-    @apply flex relative;
-  }
-
-  .courseCustomer {
-    @apply rounded-full max-w-[27px] border border-primary-bg-color shadow-sm object-contain;
+    @apply w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3 text-[0.95rem] text-ink-hi outline-none transition-all duration-200 placeholder:text-ink-low focus:border-violet-500 focus:bg-white/[0.05] focus:ring-2 focus:ring-violet-500/25;
   }
 }
 
 @layer utilities {
-  .custom-border {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  }
-  
+  /* Legacy alias kept for any stragglers; matches the new glass tier. */
   .background-blur {
-    background-color: rgba(65, 48, 101, 0.22);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    @apply glass;
   }
 
-  .letter {
-    @apply hover:text-highlighted-btn-bg transition-colors duration-200;
+  .text-gradient {
+    @apply bg-gradient-to-r from-violet-400 to-sky bg-clip-text text-transparent;
+  }
+
+  /* Skeleton shimmer */
+  .skeleton {
+    @apply relative overflow-hidden rounded-lg bg-white/[0.06];
+  }
+  .skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+    animation: shimmer 1.5s infinite;
+  }
+}
+
+/* Respect reduced-motion globally */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
 }

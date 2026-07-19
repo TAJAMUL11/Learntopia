@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="4" y1="2" x2="44" y2="46" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#B79DF0"/>
+      <stop offset="0.55" stop-color="#8B63E3"/>
+      <stop offset="1" stop-color="#7BBFF2"/>
+    </linearGradient>
+    <linearGradient id="sheen" x1="0" y1="0" x2="0" y2="48" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffffff" stop-opacity="0.22"/>
+      <stop offset="0.5" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="44" height="44" rx="13" fill="url(#bg)"/>
+  <rect x="2" y="2" width="44" height="44" rx="13" fill="url(#sheen)"/>
+  <rect x="2.6" y="2.6" width="42.8" height="42.8" rx="12.4" stroke="#ffffff" stroke-opacity="0.18" stroke-width="1.2"/>
+  <path d="M24 12.5 42 20 24 27.5 6 20 24 12.5Z" fill="#ffffff"/>
+  <path d="M14 22.2 24 26.4 34 22.2V29.4C34 32.1 29.5 34 24 34 18.5 34 14 32.1 14 29.4V22.2Z" fill="#ffffff" fill-opacity="0.92"/>
+  <path d="M40.5 20.7V29.2" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round"/>
+  <circle cx="40.5" cy="30.6" r="1.9" fill="#ffffff"/>
+</svg>
