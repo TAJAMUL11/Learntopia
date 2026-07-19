@@ -1,4 +1,11 @@
-import { NavLink } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Card from "../Components/ui/Card";
+import Button from "../Components/ui/Button";
+import SearchInput from "../Components/ui/SearchInput";
+import SectionHeading from "../Components/ui/SectionHeading";
+import EmptyState from "../Components/ui/EmptyState";
+
 import math from "../assets/CourseImg/math.png";
 import paint from "../assets/CourseImg/paint.png";
 import finance from "../assets/CourseImg/finance.png";
@@ -11,131 +18,109 @@ import two from "../assets/Icons/two.jpg";
 import three from "../assets/Icons/three.jpg";
 import four from "../assets/Icons/four.jpg";
 
+const COURSES = [
+  { id: 1, category: "IT Software", title: "Python: Programming for Beginners", rating: "4.8", image: python, students: "320", desc: "Core syntax, data types, and the fundamentals every developer needs.", avatars: [one, two, three, four] },
+  { id: 2, category: "Mathematics", title: "Algebra & Calculus: Beginner Friendly", rating: "4.2", image: math, students: "210", desc: "Build confident foundations in algebra and introductory calculus.", avatars: [one, two, three] },
+  { id: 3, category: "Finance", title: "Invest Early & Secure Your Future", rating: "4.9", image: finance, students: "480", desc: "Saving, compounding, and long-term investing made approachable.", avatars: [one, two, three, four] },
+  { id: 4, category: "Marketing", title: "Digital Marketing: Complete Guide", rating: "5.0", image: Dmarket, students: "190", desc: "SEO, campaigns, and conversion funnels from the ground up.", avatars: [one, two, three] },
+  { id: 5, category: "IT Software", title: "Frontend Development: Advanced Topics", rating: "4.8", image: coding, students: "540", desc: "Modern layout, state, and asynchronous JavaScript patterns.", avatars: [one, two, three] },
+  { id: 6, category: "Arts", title: "Interior Design: A Complete Guide", rating: "4.5", image: paint, students: "260", desc: "Composition, color, and space for beautiful, livable rooms.", avatars: [one, two, three, four] },
+];
+
 const Courses = () => {
-  const coursesList = [
-    {
-      id: 1,
-      category: "IT Software",
-      title: "Python: Programming Language for beginners.",
-      rating: "4.8",
-      image: python,
-      students: "3,320",
-      avatars: [one, two, three, four]
-    },
-    {
-      id: 2,
-      category: "Mathematics",
-      title: "Algebra and Calculus: Beginner friendly",
-      rating: "4.2",
-      image: math,
-      students: "2,020",
-      avatars: [one, two, three]
-    },
-    {
-      id: 3,
-      category: "Finance",
-      title: "How to invest early and save your future",
-      rating: "4.9",
-      image: finance,
-      students: "8,320",
-      avatars: [one, two, three, four]
-    },
-    {
-      id: 4,
-      category: "Marketing",
-      title: "Digital Marketing: Complete guide for beginners.",
-      rating: "5.0",
-      image: Dmarket,
-      students: "1,990",
-      avatars: [one, two, three]
-    },
-    {
-      id: 5,
-      category: "IT Software",
-      title: "Frontend development: Advance Topics",
-      rating: "4.8",
-      image: coding,
-      students: "9,120",
-      avatars: [one, two, three]
-    },
-    {
-      id: 6,
-      category: "Arts",
-      title: "Interior Designs: Complete guide for all",
-      rating: "4.5",
-      image: paint,
-      students: "3,320",
-      avatars: [one, two, three, four]
-    }
-  ];
+  const navigate = useNavigate();
+  const [query, setQuery] = useState("");
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return COURSES;
+    return COURSES.filter(
+      (c) => c.title.toLowerCase().includes(q) || c.category.toLowerCase().includes(q)
+    );
+  }, [query]);
 
   return (
-    <div className="max-w-[1280px] mx-auto px-6 md:px-12 py-12 md:py-16 text-white">
-      {/* Page Header */}
-      <div className="text-center mb-12 md:mb-16">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight max-w-3xl mx-auto">
-          Invest In Your <br />
-          <span className="bg-gradient-to-r from-button-bg-color to-highlighted-btn-bg bg-clip-text text-transparent">
-            Education
-          </span>
-        </h1>
-        <p className="text-base md:text-lg text-gray-400 mt-4 max-w-xl mx-auto leading-relaxed">
-          Unlock your potential by learning from industry-leading instructors and earning verified high scores.
-        </p>
+    <div className="container-page py-16 md:py-20">
+      <SectionHeading
+        centered
+        eyebrow="Course catalog"
+        title="Invest in your education"
+        description="Learn from focused, beginner-friendly tracks across six subjects and earn verified high scores."
+      />
+
+      {/* Search */}
+      <div className="mx-auto mt-8 max-w-xl">
+        <SearchInput
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onClear={() => setQuery("")}
+          placeholder="Search by course or subject…"
+        />
+        {query && (
+          <p className="mt-3 text-center text-sm text-ink-low">
+            {filtered.length} {filtered.length === 1 ? "result" : "results"} for “{query}”
+          </p>
+        )}
       </div>
 
-      {/* Courses Grid */}
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {coursesList.map((course) => (
-          <div key={course.id} className="courseCard">
-            {/* Card Header Info */}
-            <div className="courseHeader">
-              <div className="type">
-                <img src={course.image} alt={course.category} className="courseImg" />
+      {/* Grid or empty state */}
+      {filtered.length > 0 ? (
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {filtered.map((course) => (
+            <Card key={course.id} hoverable className="group flex flex-col p-5">
+              <div className="mb-4 flex items-center justify-between">
+                <span className="text-xs font-semibold uppercase tracking-[0.06em] text-ink-low">
+                  {course.category}
+                </span>
+                <span className="flex items-center gap-1.5 rounded-full border border-white/[0.13] bg-white/[0.06] px-3 py-1 text-xs font-bold text-ink-hi">
+                  <img src={star} alt="" className="h-3.5 w-3.5" />
+                  {course.rating}
+                </span>
               </div>
-              <h4 className="text-sm font-bold text-gray-200 tracking-wider uppercase">{course.category}</h4>
-              <div className="rating flex items-center gap-1.5 bg-white/10 px-3 py-1 rounded-xl border border-white/15">
-                <img src={star} alt="star" className="w-3.5 h-3.5 object-contain" />
-                <span className="text-sm font-extrabold text-highlighted-btn-bg">{course.rating}</span>
-              </div>
-            </div>
 
-            {/* Course Image Banner & Title */}
-            <div className="coursesDetails flex-grow flex flex-col justify-between">
-              <h3 className="text-xl md:text-2xl font-bold text-left text-white leading-snug my-4">
-                {course.title}
-              </h3>
-              
-              {/* Bottom Metadata */}
-              <div>
-                <div className="info">
-                  <p className="text-sm font-semibold text-gray-300">{course.students} students</p>
-                  <div className="studentsImg flex -space-x-2 items-center">
-                    {course.avatars.map((avatar, idx) => (
-                      <img
-                        key={idx}
-                        src={avatar}
-                        alt="student"
-                        className="w-6 h-6 rounded-full border border-primary-bg-color shadow-sm object-cover"
-                      />
+              <div className="relative mb-4 flex justify-center overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-white/[0.08] to-white/[0.02] py-8">
+                {/* soft colored glow so the artwork reads bright, not dull */}
+                <div className="pointer-events-none absolute left-1/2 top-3 h-20 w-32 -translate-x-1/2 rounded-full bg-violet-500/30 blur-2xl transition-opacity duration-500 group-hover:bg-sky/30" />
+                <img
+                  src={course.image}
+                  alt={course.title}
+                  className="relative h-24 w-auto object-contain drop-shadow-[0_12px_22px_rgba(0,0,0,0.5)] transition-transform duration-500 group-hover:scale-[1.07]"
+                />
+              </div>
+
+              <h3 className="text-lg font-bold leading-snug text-ink-hi">{course.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-ink-low">{course.desc}</p>
+
+              <div className="mt-auto flex items-center justify-between border-t border-white/[0.07] pt-4">
+                <div>
+                  <div className="flex -space-x-2">
+                    {course.avatars.map((a, i) => (
+                      <img key={i} src={a} alt="" className="h-6 w-6 rounded-full border-2 border-ground-800 object-cover" />
                     ))}
                   </div>
+                  <p className="mt-1.5 text-xs text-ink-low">{course.students} students</p>
                 </div>
-
-                {/* Enrollment Button */}
-                <div className="mt-5">
-                  <NavLink to="/signUp" className="block w-full">
-                    <button className="w-full bg-button-bg-color hover:bg-button-bg-color/90 py-3 rounded-xl text-sm font-bold uppercase tracking-wider text-white shadow-md transition-all hover:scale-[0.98]">
-                      Enroll Now
-                    </button>
-                  </NavLink>
-                </div>
+                <Button size="sm" onClick={() => navigate("/signUp")}>
+                  Enroll
+                </Button>
               </div>
-
-            </div>
-          </div>
-        ))}
-      </div>
+            </Card>
+          ))}
+        </div>
+      ) : (
+        <div className="mt-12">
+          <EmptyState
+            icon="search"
+            title={`No courses match “${query}”`}
+            description="Try a broader term, or browse the full catalog of six subjects."
+            action={
+              <Button variant="secondary" size="sm" onClick={() => setQuery("")}>
+                Clear search
+              </Button>
+            }
+          />
+        </div>
+      )}
     </div>
   );
 };

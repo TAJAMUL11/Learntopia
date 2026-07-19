@@ -1,22 +1,21 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import gsap from "gsap";
+import Card from "../Components/ui/Card";
+import Button from "../Components/ui/Button";
+import Field from "../Components/ui/Field";
+import Icon from "../Components/ui/Icon";
+import SectionHeading from "../Components/ui/SectionHeading";
+
+const CONTACT_POINTS = [
+  { icon: "mail", label: "Email us", value: "tajamul.270@gmail.com", href: "mailto:tajamul.270@gmail.com" },
+  { icon: "clock", label: "Response time", value: "Within 1–2 business days" },
+  { icon: "book", label: "Documentation", value: "Read the docs", to: "/doc" },
+];
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
-  const containerRef = useRef(null);
-
-  useEffect(() => {
-    if (containerRef.current) {
-      gsap.fromTo(
-        containerRef.current.children,
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.6, stagger: 0.15, ease: "power3.out" }
-      );
-    }
-  }, []);
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -25,11 +24,9 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-
     try {
-      // Simulate form submission
       await new Promise((resolve) => setTimeout(resolve, 1200));
-      toast.success("Thank you! Your message has been sent successfully.");
+      toast.success("Thanks! Your message has been sent.");
       setFormData({ name: "", email: "", message: "" });
     } catch (err) {
       console.error(err);
@@ -40,83 +37,80 @@ const Contact = () => {
   };
 
   return (
-    <div className="w-full max-w-[1280px] mx-auto px-6 md:px-12 py-12 flex flex-col items-center justify-center min-h-[80vh] select-none text-white">
-      <div
-        ref={containerRef}
-        className="w-full max-w-lg background-blur p-6 md:p-8 rounded-3xl border border-light-bg-color shadow-custom-shadow"
-      >
-        {/* Title */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-extrabold tracking-wide">Contact Us</h1>
-          <p className="text-xs md:text-sm text-gray-400 mt-2">
-            {"Have questions or feedback? Drop us a line and we'll reply shortly."}
-          </p>
+    <div className="container-page py-16 md:py-20">
+      <SectionHeading
+        centered
+        eyebrow="Get in touch"
+        title="Contact us"
+        description="Have questions or feedback? Drop us a line and we'll get back to you shortly."
+      />
+
+      <div className="mx-auto mt-10 grid max-w-5xl gap-6 lg:grid-cols-[1fr_1.3fr]">
+        {/* Info column */}
+        <div className="flex flex-col gap-4">
+          {CONTACT_POINTS.map((point) => (
+            <Card key={point.label} className="flex items-center gap-4 p-5">
+              <div className="grid h-11 w-11 flex-none place-items-center rounded-xl border border-white/[0.08] bg-white/[0.05] text-violet-400">
+                <Icon name={point.icon} size={20} />
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-ink-low">{point.label}</p>
+                {point.href ? (
+                  <a href={point.href} className="mt-0.5 block truncate text-sm font-medium text-ink-hi transition-colors hover:text-sky">
+                    {point.value}
+                  </a>
+                ) : point.to ? (
+                  <Link to={point.to} className="mt-0.5 block text-sm font-medium text-ink-hi transition-colors hover:text-sky">
+                    {point.value}
+                  </Link>
+                ) : (
+                  <p className="mt-0.5 text-sm font-medium text-ink-hi">{point.value}</p>
+                )}
+              </div>
+            </Card>
+          ))}
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Name Field */}
-          <div className="inputContainers">
-            <label htmlFor="name" className="inputLabels">
-              Your Name
-            </label>
-            <input
-              type="text"
+        <Card className="p-6 md:p-8">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+            <Field
+              label="Your name"
               id="name"
               name="name"
-              value={formData.name}
-              onChange={handleChange}
+              type="text"
               placeholder="Enter your name"
               required
-              className="inputbox"
+              value={formData.name}
+              onChange={handleChange}
             />
-          </div>
-
-          {/* Email Field */}
-          <div className="inputContainers">
-            <label htmlFor="email" className="inputLabels">
-              Email Address
-            </label>
-            <input
-              type="email"
+            <Field
+              label="Email address"
               id="email"
               name="email"
-              value={formData.email}
-              onChange={handleChange}
+              type="email"
+              icon="mail"
               placeholder="Enter your email"
               required
-              className="inputbox"
+              value={formData.email}
+              onChange={handleChange}
             />
-          </div>
-
-          {/* Message Field */}
-          <div className="inputContainers">
-            <label htmlFor="message" className="inputLabels">
-              Your Message
-            </label>
-            <textarea
+            <Field
+              label="Your message"
               id="message"
               name="message"
-              value={formData.message}
-              onChange={handleChange}
+              textarea
+              rows={5}
               placeholder="How can we help you?"
               required
-              rows={4}
-              className="inputbox resize-none"
+              value={formData.message}
+              onChange={handleChange}
             />
-          </div>
-
-          {/* Submit Button */}
-          <div className="pt-2">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full btn-style py-3 font-semibold uppercase tracking-wider text-xs shadow-md active:scale-95 disabled:opacity-50"
-            >
-              {isSubmitting ? "Sending inquiry..." : "Send Message"}
-            </button>
-          </div>
-        </form>
+            <Button type="submit" fullWidth loading={isSubmitting}>
+              {isSubmitting ? "Sending…" : "Send message"}
+            </Button>
+          </form>
+        </Card>
       </div>
     </div>
   );

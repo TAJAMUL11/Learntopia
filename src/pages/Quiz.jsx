@@ -1,36 +1,35 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import gsap from "gsap";
 import { auth, db } from "../firebase/firebase";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { quizzes } from "../data/quizData";
+import Card from "../Components/ui/Card";
+import Button from "../Components/ui/Button";
+import Badge from "../Components/ui/Badge";
+import Alert from "../Components/ui/Alert";
+import Icon from "../Components/ui/Icon";
+import { Skeleton } from "../Components/ui/Skeleton";
 
 const Quiz = () => {
-
-  // Core Game States
+  // Core game state
   const [screen, setScreen] = useState("selection"); // 'selection' | 'active' | 'results'
   const [activeQuiz, setActiveQuiz] = useState(null);
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [isAnswerSubmitted, setIsAnswerSubmitted] = useState(false);
   const [score, setScore] = useState(0);
-  
-  // Timer States (15s per question)
+
+  // Timer (15s per question)
   const [timeLeft, setTimeLeft] = useState(15);
 
-  // Firebase/User States
+  // Firebase / user state
   const [user, setUser] = useState(null);
   const [highScores, setHighScores] = useState({});
   const [isSaving, setIsSaving] = useState(false);
   const [loadingScores, setLoadingScores] = useState(false);
 
-  // GSAP Refs
-  const selectionRef = useRef(null);
-  const questionContainerRef = useRef(null);
-  const resultsCardRef = useRef(null);
-
-  // Save Score to Firestore
+  // Save score to Firestore
   const saveScore = async (finalScore) => {
     setIsSaving(true);
     try {
@@ -39,12 +38,12 @@ const Quiz = () => {
         quizTitle: activeQuiz.title,
         score: finalScore,
         totalQuestions: activeQuiz.questions.length,
-        completedAt: new Date()
+        completedAt: new Date(),
       };
       await addDoc(collection(db, "Users", user.uid, "quizAttempts"), attempt);
       setHighScores((prev) => ({
         ...prev,
-        [activeQuiz.id]: Math.max(prev[activeQuiz.id] || 0, finalScore)
+        [activeQuiz.id]: Math.max(prev[activeQuiz.id] || 0, finalScore),
       }));
       toast.success("Progress saved successfully!");
     } catch (err) {
@@ -55,26 +54,28 @@ const Quiz = () => {
     }
   };
 
-  // Handle Option Selection
-  const handleAnswerSelect = useCallback((option, isTimeout = false) => {
-    if (isAnswerSubmitted) return;
+  // Handle option selection
+  const handleAnswerSelect = useCallback(
+    (option, isTimeout = false) => {
+      if (isAnswerSubmitted) return;
 
-    const currentQuestion = activeQuiz.questions[currentQuestionIdx];
-    const isCorrect = option === currentQuestion.correctAnswer;
+      const currentQuestion = activeQuiz.questions[currentQuestionIdx];
+      const isCorrect = option === currentQuestion.correctAnswer;
 
-    setSelectedAnswer(option);
-    setIsAnswerSubmitted(true);
+      setSelectedAnswer(option);
+      setIsAnswerSubmitted(true);
 
-    if (isCorrect) {
-      setScore((prev) => prev + 1);
-    }
+      if (isCorrect) {
+        setScore((prev) => prev + 1);
+      }
 
-    if (isTimeout) {
-      toast.warn("Time's up for this question!");
-    }
-  }, [isAnswerSubmitted, activeQuiz, currentQuestionIdx]);
+      if (isTimeout) {
+        toast.warn("Time's up for this question!");
+      }
+    },
+    [isAnswerSubmitted, activeQuiz, currentQuestionIdx]
+  );
 
-  // Handle Quiz Start
   const startQuiz = (quiz) => {
     setActiveQuiz(quiz);
     setCurrentQuestionIdx(0);
@@ -84,7 +85,6 @@ const Quiz = () => {
     setScreen("active");
   };
 
-  // Handle Progression
   const handleNext = () => {
     const nextIdx = currentQuestionIdx + 1;
     if (nextIdx < activeQuiz.questions.length) {
@@ -99,16 +99,15 @@ const Quiz = () => {
     }
   };
 
-  // Score Grading Comments
   const getGradingFeedback = () => {
     const pct = (score / activeQuiz.questions.length) * 100;
-    if (pct === 100) return { title: "Mastery Achieved! 🏆", msg: "Flawless score! You are a subject expert." };
-    if (pct >= 80) return { title: "Outstanding! 🌟", msg: "Excellent job, you have a solid understanding!" };
-    if (pct >= 60) return { title: "Good Effort! 👍", msg: "Nice try! Just a little more practice to master it." };
-    return { title: "Keep Learning! 📚", msg: "A great opportunity to review the topics and try again." };
+    if (pct === 100) return { title: "Mastery achieved", msg: "Flawless score — you're a subject expert." };
+    if (pct >= 80) return { title: "Outstanding work", msg: "Excellent job, you have a solid understanding!" };
+    if (pct >= 60) return { title: "Good effort", msg: "Nice try — a little more practice to master it." };
+    return { title: "Keep learning", msg: "A great chance to review the topics and try again." };
   };
 
-  // 1. Listen for Auth State & Fetch High Scores
+  // Listen for auth state & fetch high scores
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
       setUser(currentUser);
@@ -137,40 +136,7 @@ const Quiz = () => {
     return () => unsubscribe();
   }, []);
 
-  // 2. Entrance Animation for Selection Screen
-  useEffect(() => {
-    if (screen === "selection" && selectionRef.current) {
-      gsap.fromTo(
-        selectionRef.current.querySelectorAll(".quiz-card"),
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.6, stagger: 0.15, ease: "power3.out" }
-      );
-    }
-  }, [screen]);
-
-  // 3. Slide Transition Animation for Questions
-  useEffect(() => {
-    if (screen === "active" && questionContainerRef.current) {
-      gsap.fromTo(
-        questionContainerRef.current,
-        { x: 50, opacity: 0 },
-        { x: 0, opacity: 1, duration: 0.4, ease: "power2.out" }
-      );
-    }
-  }, [currentQuestionIdx, screen]);
-
-  // 4. Results Screen Entry Animation
-  useEffect(() => {
-    if (screen === "results" && resultsCardRef.current) {
-      gsap.fromTo(
-        resultsCardRef.current,
-        { scale: 0.9, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.2)" }
-      );
-    }
-  }, [screen]);
-
-  // 5. Timer Countdown Effect
+  // Timer countdown
   useEffect(() => {
     if (screen !== "active" || isAnswerSubmitted || !activeQuiz) return;
 
@@ -179,7 +145,7 @@ const Quiz = () => {
       setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          handleAnswerSelect(null, true); // Timeout trigger
+          handleAnswerSelect(null, true); // timeout
           return 0;
         }
         return prev - 1;
@@ -189,117 +155,92 @@ const Quiz = () => {
     return () => clearInterval(timer);
   }, [screen, currentQuestionIdx, isAnswerSubmitted, activeQuiz, handleAnswerSelect]);
 
+  const urgent = timeLeft <= 5;
+
   return (
-    <div className="w-full max-w-[1280px] mx-auto px-6 md:px-12 py-8 flex flex-col items-center justify-center min-h-[80vh] select-none text-white">
-      
-      {/* SCREEN 1: Selection Grid */}
+    <div className="container-page flex min-h-[80vh] flex-col items-center justify-center py-14 text-ink-hi">
+      {/* SCREEN 1 — Selection */}
       {screen === "selection" && (
-        <div ref={selectionRef} className="w-full max-w-5xl">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold tracking-wide">Quiz Center</h1>
-            <p className="text-sm md:text-base text-gray-300 mt-2">
-              Test your knowledge and verify your skillset in real time.
-            </p>
+        <div className="w-full max-w-5xl animate-fade-in">
+          <div className="mb-10 text-center">
+            <h1 className="text-3xl font-bold tracking-tight md:text-4xl">Quiz Center</h1>
+            <p className="mt-2 text-ink-low">Test your knowledge and verify your skills in real time.</p>
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {quizzes.map((quiz) => (
-              <div
-                key={quiz.id}
-                className="quiz-card background-blur flex flex-col justify-between p-6 rounded-2xl border border-light-bg-color transition-all hover:scale-[1.02] hover:bg-gradient-to-br from-primary-bg-color to-light-bg-color"
-              >
-                <div>
-                  <span className="inline-block bg-highlighted-btn-bg text-black font-semibold text-xs px-3 py-1 rounded-full mb-4">
-                    {quiz.subject}
-                  </span>
-                  <h3 className="text-xl font-bold mb-2">{quiz.title}</h3>
-                  <p className="text-xs text-gray-300 mb-6">{quiz.description}</p>
-                </div>
+              <Card key={quiz.id} hoverable className="flex flex-col p-6">
+                <Badge variant="sky" className="self-start">{quiz.subject}</Badge>
+                <h3 className="mt-4 text-lg font-bold text-ink-hi">{quiz.title}</h3>
+                <p className="mt-1.5 flex-grow text-sm leading-relaxed text-ink-low">{quiz.description}</p>
 
-                <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-600/40">
+                <div className="mt-5 flex items-center justify-between border-t border-white/[0.07] pt-4">
                   <div className="text-xs">
                     {loadingScores ? (
-                      <span className="text-gray-400">Loading record...</span>
+                      <Skeleton className="h-4 w-24" />
                     ) : highScores[quiz.id] !== undefined ? (
-                      <span className="text-highlighted-btn-bg font-semibold">
-                        High Score: {highScores[quiz.id]} / 5
+                      <span className="flex items-center gap-1.5 font-semibold text-sky">
+                        <Icon name="trophy" size={14} /> Best: {highScores[quiz.id]} / {quiz.questions.length}
                       </span>
                     ) : (
-                      <span className="text-gray-400">Not attempted yet</span>
+                      <span className="text-ink-low">Not attempted yet</span>
                     )}
                   </div>
-                  <button
-                    onClick={() => startQuiz(quiz)}
-                    className="bg-button-bg-color text-white text-xs font-semibold px-4 py-2 rounded-xl transition-all hover:scale-95"
-                  >
-                    Start
-                  </button>
+                  <Button size="sm" onClick={() => startQuiz(quiz)}>Start</Button>
                 </div>
-              </div>
+              </Card>
             ))}
           </div>
         </div>
       )}
 
-      {/* SCREEN 2: Active Session */}
+      {/* SCREEN 2 — Active */}
       {screen === "active" && activeQuiz && (
-        <div className="w-full max-w-2xl background-blur p-6 md:p-8 rounded-3xl border border-light-bg-color shadow-custom-shadow">
-          
-          {/* Header Progress and Timer */}
-          <div className="flex justify-between items-center mb-6">
+        <Card key={currentQuestionIdx} className="w-full max-w-2xl animate-fade-in p-6 md:p-8">
+          <div className="mb-6 flex items-center justify-between">
             <div>
-              <p className="text-xs text-highlighted-btn-bg uppercase font-bold tracking-wider">
-                {activeQuiz.title}
-              </p>
-              <h2 className="text-lg font-bold text-gray-200">
+              <p className="text-xs font-bold uppercase tracking-[0.12em] text-sky">{activeQuiz.title}</p>
+              <h2 className="mt-1 text-base font-bold text-ink">
                 Question {currentQuestionIdx + 1} of {activeQuiz.questions.length}
               </h2>
             </div>
-            
-            {/* Timer visual count */}
-            <div className="flex items-center gap-2">
-              <span className={`text-sm font-bold px-3 py-1 rounded-full border ${
-                timeLeft <= 5 ? "bg-rose-500/20 border-rose-500 text-rose-300 animate-pulse" : "bg-light-bg-color border-button-bg-color text-button-bg-color"
-              }`}>
-                00:{timeLeft < 10 ? `0${timeLeft}` : timeLeft}
-              </span>
-            </div>
+            <span
+              className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-bold tabular-nums ${
+                urgent
+                  ? "animate-pulse border-state-danger/40 bg-state-danger/15 text-state-danger"
+                  : "border-sky/30 bg-sky/10 text-sky"
+              }`}
+            >
+              <Icon name="clock" size={14} /> 00:{timeLeft < 10 ? `0${timeLeft}` : timeLeft}
+            </span>
           </div>
 
-          {/* Horizontal progress bar representing timer */}
-          <div className="w-full h-1 bg-gray-700/60 rounded-full mb-8 overflow-hidden">
+          {/* Timer bar */}
+          <div className="mb-8 h-1.5 overflow-hidden rounded-full bg-white/[0.08]">
             <div
-              className={`h-full transition-all duration-1000 ease-linear ${
-                timeLeft <= 5 ? "bg-rose-500" : "bg-button-bg-color"
+              className={`h-full rounded-full transition-[width] duration-1000 ease-linear ${
+                urgent ? "bg-state-danger" : "bg-gradient-to-r from-violet-500 to-sky"
               }`}
               style={{ width: `${(timeLeft / 15) * 100}%` }}
             />
           </div>
 
-          {/* Question Text */}
-          <div ref={questionContainerRef} className="mb-8">
-            <h3 className="text-xl md:text-2xl font-bold leading-snug">
-              {activeQuiz.questions[currentQuestionIdx].questionText}
-            </h3>
-          </div>
+          <h3 className="mb-7 text-xl font-bold leading-snug text-ink-hi md:text-2xl">
+            {activeQuiz.questions[currentQuestionIdx].questionText}
+          </h3>
 
-          {/* Options List */}
-          <div className="grid gap-4">
+          <div className="grid gap-3">
             {activeQuiz.questions[currentQuestionIdx].options.map((option) => {
               const isSelected = selectedAnswer === option;
               const isCorrectAnswer = option === activeQuiz.questions[currentQuestionIdx].correctAnswer;
-              
-              let cardStyle = "border-white/10 bg-white/5 hover:border-button-bg-color hover:bg-white/10";
+
+              let style = "border-white/[0.08] bg-white/[0.03] hover:border-violet-500 hover:bg-white/[0.06]";
               if (isAnswerSubmitted) {
-                if (isCorrectAnswer) {
-                  cardStyle = "bg-emerald-500/20 border-emerald-500 text-emerald-200";
-                } else if (isSelected) {
-                  cardStyle = "bg-rose-500/20 border-rose-500 text-rose-200";
-                } else {
-                  cardStyle = "opacity-60 border-white/5";
-                }
+                if (isCorrectAnswer) style = "border-state-success bg-state-success/15 text-emerald-200";
+                else if (isSelected) style = "border-state-danger bg-state-danger/15 text-rose-200";
+                else style = "border-white/[0.05] opacity-60";
               } else if (isSelected) {
-                cardStyle = "border-highlighted-btn-bg bg-white/15";
+                style = "border-violet-500 bg-white/[0.08]";
               }
 
               return (
@@ -307,91 +248,77 @@ const Quiz = () => {
                   key={option}
                   disabled={isAnswerSubmitted}
                   onClick={() => handleAnswerSelect(option)}
-                  className={`w-full text-left p-4 rounded-xl border text-sm md:text-base font-medium transition-all duration-300 flex justify-between items-center ${cardStyle}`}
+                  className={`flex w-full items-center justify-between rounded-xl border px-4 py-3.5 text-left text-sm font-medium transition-all duration-200 md:text-base ${style}`}
                 >
                   <span>{option}</span>
                   {isAnswerSubmitted && isCorrectAnswer && (
-                    <span className="text-emerald-400 font-bold text-xs uppercase">✓ Correct</span>
+                    <span className="text-xs font-bold uppercase text-state-success">✓ Correct</span>
                   )}
                   {isAnswerSubmitted && isSelected && !isCorrectAnswer && (
-                    <span className="text-rose-400 font-bold text-xs uppercase">✗ Wrong</span>
+                    <span className="text-xs font-bold uppercase text-state-danger">✗ Wrong</span>
                   )}
                 </button>
               );
             })}
           </div>
 
-          {/* Action Row */}
-          <div className="mt-8 flex justify-end">
-            {isAnswerSubmitted && (
-              <button
-                onClick={handleNext}
-                className="bg-highlighted-btn-bg text-black font-semibold px-6 py-3 rounded-xl transition-all hover:scale-95"
-              >
-                {currentQuestionIdx + 1 === activeQuiz.questions.length ? "Finish Quiz" : "Next Question"}
-              </button>
-            )}
-          </div>
-        </div>
+          {isAnswerSubmitted && (
+            <div className="mt-8 flex justify-end">
+              <Button onClick={handleNext}>
+                {currentQuestionIdx + 1 === activeQuiz.questions.length ? "Finish quiz" : "Next question"}
+                <Icon name="arrow" size={16} />
+              </Button>
+            </div>
+          )}
+        </Card>
       )}
 
-      {/* SCREEN 3: Results Score summary card */}
+      {/* SCREEN 3 — Results */}
       {screen === "results" && activeQuiz && (
-        <div ref={resultsCardRef} className="w-full max-w-lg background-blur p-8 rounded-3xl border border-light-bg-color shadow-custom-shadow text-center">
-          
-          <h2 className="text-3xl font-bold mb-1">{getGradingFeedback().title}</h2>
-          <p className="text-sm text-gray-300 mb-6">{getGradingFeedback().msg}</p>
+        <Card className="w-full max-w-lg animate-fade-up p-8 text-center">
+          <h2 className="text-2xl font-bold text-ink-hi md:text-3xl">{getGradingFeedback().title}</h2>
+          <p className="mt-1.5 text-sm text-ink-low">{getGradingFeedback().msg}</p>
 
-          {/* Score Circle Display */}
-          <div className="inline-flex items-center justify-center w-36 h-36 rounded-full border-4 border-button-bg-color bg-light-bg-color/30 mb-6">
-            <div className="text-center">
-              <span className="text-4xl font-extrabold">{score}</span>
-              <span className="text-xl text-gray-300"> / {activeQuiz.questions.length}</span>
-              <p className="text-xs uppercase font-bold text-highlighted-btn-bg tracking-widest mt-1">
+          <div className="mx-auto my-7 grid h-36 w-36 place-items-center rounded-full border-4 border-violet-600 bg-white/[0.04]">
+            <div>
+              <span className="text-4xl font-extrabold text-ink-hi">{score}</span>
+              <span className="text-xl text-ink-low"> / {activeQuiz.questions.length}</span>
+              <p className="mt-1 text-xs font-bold uppercase tracking-[0.15em] text-sky">
                 {Math.round((score / activeQuiz.questions.length) * 100)}%
               </p>
             </div>
           </div>
 
-          {/* User auth verification/alert */}
           {!user ? (
-            <div className="bg-yellow-500/10 border border-yellow-500/30 text-yellow-200 text-xs p-4 rounded-xl mb-8 leading-relaxed">
-              ⚠️ You are not signed in. Your high scores will not be saved to your student profile. 
-              <div className="mt-2 flex gap-4 justify-center">
-                <Link to="/login" className="underline text-highlighted-btn-bg font-semibold">Log In</Link>
-                <Link to="/signUp" className="underline text-highlighted-btn-bg font-semibold">Sign Up</Link>
-              </div>
+            <div className="mb-7 text-left">
+              <Alert variant="warning" title="You're not signed in">
+                Your high scores won&rsquo;t be saved to your student profile.
+                <div className="mt-2 flex gap-4">
+                  <Link to="/login" className="font-semibold text-sky underline">Log in</Link>
+                  <Link to="/signUp" className="font-semibold text-sky underline">Sign up</Link>
+                </div>
+              </Alert>
             </div>
           ) : (
-            <div className="text-xs text-gray-300 mb-8">
+            <div className="mb-7">
               {isSaving ? (
-                <span className="animate-pulse">Saving score to your profile...</span>
+                <p className="animate-pulse text-sm text-ink-low">Saving score to your profile…</p>
               ) : (
-                <span className="text-emerald-400 font-semibold">✓ Score saved to your profile</span>
+                <p className="flex items-center justify-center gap-1.5 text-sm font-semibold text-state-success">
+                  <Icon name="check-circle" size={16} /> Score saved to your profile
+                </p>
               )}
             </div>
           )}
 
-          {/* Actions */}
-          <div className="flex gap-4 justify-center">
-            <button
-              onClick={() => startQuiz(activeQuiz)}
-              className="border border-button-bg-color text-white px-5 py-3 rounded-xl transition-all hover:bg-button-bg-color/20 text-sm font-semibold"
-            >
-              Try Again
-            </button>
-            <button
-              onClick={() => setScreen("selection")}
-              className="bg-button-bg-color text-white px-5 py-3 rounded-xl transition-all hover:scale-95 text-sm font-semibold"
-            >
-              Back to Quizzes
-            </button>
+          <div className="flex justify-center gap-3">
+            <Button variant="secondary" onClick={() => startQuiz(activeQuiz)}>Try again</Button>
+            <Button onClick={() => setScreen("selection")}>Back to quizzes</Button>
           </div>
-        </div>
+        </Card>
       )}
-
     </div>
   );
 };
 
-export default Quiz;
+export default Quiz;

@@ -1,22 +1,75 @@
+import { NavLink } from "react-router-dom";
+import Logo from "./ui/Logo";
 
-const Footer = () => {
-  return (
-    <footer className="w-full border-t border-white/5 bg-[#0f0a1c]/60 backdrop-blur-md py-6 mt-16 select-none">
-      <div className="max-w-[1280px] mx-auto px-6 md:px-12 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs md:text-sm text-gray-400">
+const LINK_GROUPS = [
+  {
+    title: "Explore",
+    links: [
+      { to: "/courses", label: "Courses" },
+      { to: "/quiz", label: "Quiz Center" },
+      { to: "/doc", label: "Documentation" },
+    ],
+  },
+  {
+    title: "Account",
+    links: [
+      { to: "/login", label: "Log in" },
+      { to: "/signUp", label: "Sign up" },
+      { to: "/dashboard", label: "Dashboard" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { to: "/contact", label: "Contact" },
+      { to: "/", label: "Home" },
+    ],
+  },
+];
+
+const Footer = () => (
+  <footer className="mt-20 select-none border-t border-white/[0.07] bg-ground-900/60 backdrop-blur-md">
+    <div className="container-page py-12">
+      <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+        {/* Brand column */}
         <div>
-          &copy; {new Date().getFullYear()} Learntopia. All rights reserved.
+          <Logo size={34} />
+          <p className="mt-4 max-w-xs text-sm leading-relaxed text-ink-low">
+            Build real skills online with interactive courses and timed quiz challenges — and track your progress as you go.
+          </p>
         </div>
-        <div className="text-white font-extrabold tracking-wider uppercase bg-gradient-to-r from-button-bg-color to-highlighted-btn-bg bg-clip-text text-transparent text-sm">
-          Learntopia
-        </div>
-        <div className="flex gap-4">
-          <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-          <span className="text-gray-700">|</span>
-          <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+
+        {/* Link columns */}
+        {LINK_GROUPS.map((group) => (
+          <div key={group.title}>
+            <h4 className="mb-4 text-xs font-semibold uppercase tracking-[0.15em] text-ink">{group.title}</h4>
+            <ul className="flex flex-col gap-2.5">
+              {group.links.map((link) => (
+                <li key={link.label}>
+                  <NavLink
+                    to={link.to}
+                    className="text-sm text-ink-low transition-colors hover:text-ink-hi"
+                  >
+                    {link.label}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      {/* Bottom bar */}
+      <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-white/[0.06] pt-6 text-xs text-ink-low sm:flex-row">
+        <p>&copy; {new Date().getFullYear()} Learntopia. All rights reserved.</p>
+        <div className="flex items-center gap-4">
+          <a href="#" className="transition-colors hover:text-ink-hi">Privacy Policy</a>
+          <span className="text-white/15">|</span>
+          <a href="#" className="transition-colors hover:text-ink-hi">Terms of Service</a>
         </div>
       </div>
-    </footer>
-  );
-};
+    </div>
+  </footer>
+);
 
 export default Footer;

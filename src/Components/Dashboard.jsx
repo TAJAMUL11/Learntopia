@@ -3,14 +3,20 @@ import { getDoc, doc } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Card from "./ui/Card";
+import Button from "./ui/Button";
+import Icon from "./ui/Icon";
+import EmptyState from "./ui/EmptyState";
+import { Skeleton } from "./ui/Skeleton";
 
 const Dashboard = () => {
-  const logOutNavigation = useNavigate();
+  const navigate = useNavigate();
   const [userDetails, setUserDetails] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchData = async () => {
-    auth.onAuthStateChanged(async (user) => {
+  useEffect(() => {
+    // Single auth listener, properly torn down on unmount (no leak).
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         try {
           const docRef = doc(db, "Users", user.uid);
@@ -24,71 +30,75 @@ const Dashboard = () => {
           setLoading(false);
         }
       } else {
+        setUserDetails(null);
         setLoading(false);
       }
     });
-  };
-
-  useEffect(() => {
-    fetchData();
+    return () => unsubscribe();
   }, []);
 
-  async function handleLogout() {
+  const handleLogout = async () => {
     try {
       await auth.signOut();
       toast.success("Logged out successfully");
-      logOutNavigation('/login', { replace: true });
+      navigate("/login", { replace: true });
     } catch (error) {
       toast.error(error.message);
     }
-  }
+  };
 
   return (
-    <div className="w-full max-w-[1280px] mx-auto px-6 md:px-12 py-8 flex flex-col items-center justify-center min-h-[80vh] select-none text-white">
+    <div className="container-page flex min-h-[80vh] flex-col items-center justify-center py-14 text-ink-hi">
       {loading ? (
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 border-4 border-button-bg-color border-t-transparent rounded-full animate-spin" />
-          <p className="text-sm text-gray-400">Loading student profile...</p>
-        </div>
+        // Skeleton profile card while Firestore loads
+        <Card className="w-full max-w-md p-8 text-center">
+          <Skeleton className="mx-auto mb-6 h-20 w-20 rounded-full" />
+          <Skeleton className="mx-auto mb-2 h-6 w-40" />
+          <Skeleton className="mx-auto mb-6 h-3 w-56" />
+          <div className="space-y-3 rounded-2xl border border-white/[0.06] bg-black/20 p-4">
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-full" />
+          </div>
+          <Skeleton className="mt-6 h-11 w-full rounded-xl" />
+        </Card>
       ) : userDetails ? (
-        <div className="w-full max-w-md background-blur p-6 md:p-8 rounded-3xl border border-light-bg-color shadow-custom-shadow text-center">
-          {/* Avatar Icon */}
-          <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-button-bg-color to-highlighted-btn-bg flex items-center justify-center text-3xl font-extrabold text-white mx-auto mb-6 shadow-lg shadow-button-bg-color/20">
+        <Card className="w-full max-w-md animate-fade-up p-8 text-center">
+          {/* Avatar */}
+          <div className="mx-auto mb-6 grid h-20 w-20 place-items-center rounded-full bg-gradient-to-tr from-violet-600 to-sky text-3xl font-extrabold text-white shadow-glow">
             {userDetails.fullName ? userDetails.fullName.charAt(0).toUpperCase() : "S"}
           </div>
-          
-          <h1 className="text-2xl md:text-3xl font-extrabold tracking-wide mb-2">Student Dashboard</h1>
-          <p className="text-sm text-gray-400 mb-6">Manage your account and view enrolled course progress.</p>
 
-          {/* Details list */}
-          <div className="text-left space-y-4 bg-black/20 rounded-2xl p-4 border border-white/5 mb-6 text-sm">
-            <div className="flex justify-between items-center py-1 border-b border-white/5">
-              <span className="text-gray-400">Full Name</span>
-              <span className="font-semibold text-gray-200">{userDetails.fullName}</span>
+          <h1 className="text-2xl font-extrabold tracking-tight md:text-3xl">Student Dashboard</h1>
+          <p className="mt-1.5 text-sm text-ink-low">Manage your account and view your learning profile.</p>
+
+          {/* Details */}
+          <div className="mt-6 space-y-1 rounded-2xl border border-white/[0.06] bg-black/20 p-4 text-sm">
+            <div className="flex items-center justify-between border-b border-white/[0.06] py-2">
+              <span className="flex items-center gap-2 text-ink-low"><Icon name="user" size={15} /> Full name</span>
+              <span className="font-semibold text-ink-hi">{userDetails.fullName || "—"}</span>
             </div>
-            <div className="flex justify-between items-center py-1">
-              <span className="text-gray-400">Email Address</span>
-              <span className="font-semibold text-gray-200">{userDetails.email}</span>
+            <div className="flex items-center justify-between py-2">
+              <span className="flex items-center gap-2 text-ink-low"><Icon name="mail" size={15} /> Email</span>
+              <span className="font-semibold text-ink-hi">{userDetails.email}</span>
             </div>
           </div>
 
-          {/* Log Out button */}
-          <button className="w-full btn-style py-3 font-semibold uppercase tracking-wider text-xs shadow-md active:scale-95" onClick={handleLogout}>
-            Log Out
-          </button>
-        </div>
+          <Button variant="danger" fullWidth className="mt-6" onClick={handleLogout}>
+            <Icon name="logout" size={16} /> Log out
+          </Button>
+        </Card>
       ) : (
-        <div className="w-full max-w-md background-blur p-6 md:p-8 rounded-3xl border border-light-bg-color shadow-custom-shadow text-center">
-          <h2 className="text-xl font-bold mb-4">No Profile Active</h2>
-          <p className="text-sm text-gray-400 mb-6">Please log in to view your dashboard.</p>
-          <button className="w-full btn-style py-3" onClick={() => logOutNavigation('/login')}>
-            Log In Now
-          </button>
-        </div>
+        <Card className="w-full max-w-md p-8">
+          <EmptyState
+            icon="user"
+            title="No active profile"
+            description="Please log in to view your student dashboard."
+            action={<Button onClick={() => navigate("/login")}>Log in now</Button>}
+          />
+        </Card>
       )}
     </div>
   );
 };
 
 export default Dashboard;
-
