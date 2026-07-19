@@ -85,6 +85,9 @@ const PATHS = {
       <path d="M4 19a2 2 0 0 1 2-2h13" />
     </>
   ),
+  shield: (
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+  ),
 };
 
 const Icon = ({ name, size = 20, strokeWidth = 2, className = "", fill = "none" }) => {

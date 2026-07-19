@@ -1,69 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import Card from "../Components/ui/Card";
 import Button from "../Components/ui/Button";
-import Badge from "../Components/ui/Badge";
 import Icon from "../Components/ui/Icon";
 import SectionHeading from "../Components/ui/SectionHeading";
-
-// Getting-started is a genuine ordered sequence, so numbering is meaningful here.
-const STEPS = [
-  { title: "Create your account", text: "Sign up with your email so your progress can be saved to your profile." },
-  { title: "Explore the courses", text: "Browse the catalog and use search to find a subject you want to learn." },
-  { title: "Test your skills", text: "Take a timed quiz and get instant feedback on every answer." },
-  { title: "Track your progress", text: "See your best scores and manage your account from the dashboard." },
-];
-
-const FEATURES = [
-  {
-    icon: "book",
-    title: "Courses & search",
-    tag: "Learn",
-    what: "A catalog of beginner-friendly course tracks across six subjects, each showing its rating and how many learners are enrolled.",
-    how: "Open the Courses tab, type in the search box to filter by course or subject, then click Enroll to get started.",
-  },
-  {
-    icon: "clock",
-    title: "Quiz engine",
-    tag: "Practice",
-    what: "Multi-topic, timed self-assessments — 15 seconds per question, instant right/wrong feedback, and a final score out of the total questions.",
-    how: "Open the Quiz tab, pick a topic, and answer each question before the timer runs out. Review your result at the end.",
-  },
-  {
-    icon: "user",
-    title: "Accounts & sign-in",
-    tag: "Account",
-    what: "Secure email sign-up and login with session persistence, so you stay signed in between visits.",
-    how: "Use Sign up to create an account, or Log in if you already have one. Your password is never stored by the app.",
-  },
-  {
-    icon: "trophy",
-    title: "Progress & high scores",
-    tag: "Account",
-    what: "When you're signed in, every quiz attempt is saved privately to your profile and your best score appears on each quiz.",
-    how: "Log in before taking a quiz so your scores are recorded. Your best result then shows on the quiz card.",
-  },
-  {
-    icon: "book",
-    title: "Student dashboard",
-    tag: "Account",
-    what: "A personal space showing your name and email, with a quick way to log out.",
-    how: "After logging in, open the dashboard to review your profile details.",
-  },
-  {
-    icon: "mail",
-    title: "Support",
-    tag: "Help",
-    what: "A direct line to the team for questions, feedback, or anything that isn't working.",
-    how: "Use the Contact tab to send a message — we usually reply within 1–2 business days.",
-  },
-  {
-    icon: "shield",
-    title: "Security & design",
-    tag: "Platform",
-    what: "A premium dark UI design system with fully locked-down Firestore security rules protecting all user data.",
-    how: "Browse the app to experience the sleek design, knowing your data is securely isolated.",
-  },
-];
 
 const FAQ = [
   {
@@ -71,12 +10,20 @@ const FAQ = [
     a: "No — you can take any quiz as a guest. But you must be signed in for your scores to be saved to your profile.",
   },
   {
+    q: "How do I enroll in a course?",
+    a: "Navigate to the Courses tab, browse or search for a subject, and click the Enroll button. The course will instantly be added to your Student Dashboard.",
+  },
+  {
     q: "Is my data private?",
-    a: "Yes. Your profile and quiz attempts can be read and written only by you — enforced by database security rules.",
+    a: "Yes. Your profile, enrolled courses, and quiz attempts can be read and written only by you. This is enforced by strict database security rules.",
   },
   {
     q: "What does it cost?",
-    a: "Learntopia is free to use. Create an account and start learning right away.",
+    a: "Learntopia is completely free to use. Create an account and start learning right away.",
+  },
+  {
+    q: "How do I change my profile picture?",
+    a: "Currently, your profile picture is linked directly to your Google account if you used 'Sign in with Google'. Native picture uploads are coming in a future update.",
   },
 ];
 
@@ -89,56 +36,77 @@ const Doc = () => {
         <SectionHeading
           eyebrow="Documentation"
           title="Using Learntopia"
-          description="Learntopia is an interactive e-learning platform for building skills online. This guide explains what the platform offers and how to use each feature."
+          description="Everything you need to know about the platform, clearly and simply."
         />
 
-        {/* Getting started */}
-        <Card className="mt-8 p-6 md:p-8">
-          <h2 className="text-lg font-bold text-ink-hi">Getting started</h2>
-          <div className="mt-5 grid gap-4 sm:grid-cols-2">
-            {STEPS.map((step, i) => (
-              <div key={step.title} className="flex gap-4">
-                <div className="grid h-9 w-9 flex-none place-items-center rounded-lg border border-white/[0.08] bg-white/[0.05] text-sm font-bold text-violet-400">
-                  {i + 1}
-                </div>
-                <div>
-                  <h3 className="font-semibold text-ink-hi">{step.title}</h3>
-                  <p className="mt-0.5 text-sm text-ink-low">{step.text}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Card>
+        <div className="mt-8 grid gap-8">
+          
+          {/* What it is */}
+          <Card className="p-6 md:p-8">
+            <h2 className="mb-3 flex items-center gap-2 text-xl font-bold text-ink-hi">
+              <span className="text-violet-400"><Icon name="info" size={22} /></span>
+              What this application is
+            </h2>
+            <p className="leading-relaxed text-ink-low">
+              Learntopia is a modern, interactive e-learning platform designed to help you discover new subjects and test your knowledge. It serves as a unified digital classroom where your progress, courses, and quiz scores are securely managed in one place.
+            </p>
+          </Card>
 
-        {/* Feature guide */}
-        <h2 className="mt-12 text-xl font-bold text-ink-hi">Feature guide</h2>
-        <p className="mt-1.5 text-sm text-ink-low">What each part of the app does, and how to use it.</p>
-        <div className="mt-5 grid gap-4 md:grid-cols-2">
-          {FEATURES.map((f) => (
-            <Card key={f.title} className="p-6">
-              <div className="flex items-center gap-3">
-                <div className="grid h-10 w-10 flex-none place-items-center rounded-xl border border-white/[0.08] bg-white/[0.05] text-violet-400">
-                  <Icon name={f.icon} size={20} />
-                </div>
-                <h3 className="text-base font-bold text-ink-hi">{f.title}</h3>
-                <Badge variant="sky" className="ml-auto">{f.tag}</Badge>
+          {/* What it does */}
+          <Card className="p-6 md:p-8">
+            <h2 className="mb-3 flex items-center gap-2 text-xl font-bold text-ink-hi">
+              <span className="text-sky"><Icon name="star" size={22} /></span>
+              What it does
+            </h2>
+            <ul className="ml-5 list-disc space-y-2 leading-relaxed text-ink-low marker:text-white/20">
+              <li>Provides a searchable catalog of beginner-friendly courses across six distinct subjects.</li>
+              <li>Offers an interactive, timed Quiz Engine to test your skills with instant right/wrong feedback.</li>
+              <li>Manages a secure, personalized Student Dashboard that tracks your enrolled courses and high scores.</li>
+              <li>Keeps you globally signed in across all tabs using Google Authentication or secure email login.</li>
+            </ul>
+          </Card>
+
+          {/* How to use it */}
+          <Card className="p-6 md:p-8">
+            <h2 className="mb-3 flex items-center gap-2 text-xl font-bold text-ink-hi">
+              <span className="text-violet-400"><Icon name="book" size={22} /></span>
+              How to use it
+            </h2>
+            <div className="space-y-4 text-ink-low">
+              <div className="flex gap-4">
+                <div className="grid h-8 w-8 flex-none place-items-center rounded-lg border border-white/[0.08] bg-white/[0.05] font-bold text-ink-hi">1</div>
+                <p className="mt-1"><strong className="text-ink-hi">Create an account:</strong> Click &quot;Sign up&quot; to create a secure account with your email or via Google.</p>
               </div>
-              <dl className="mt-4 space-y-3 text-sm">
-                <div>
-                  <dt className="text-xs font-semibold uppercase tracking-[0.1em] text-ink-low">What it does</dt>
-                  <dd className="mt-1 leading-relaxed text-ink">{f.what}</dd>
-                </div>
-                <div>
-                  <dt className="text-xs font-semibold uppercase tracking-[0.1em] text-ink-low">How to use it</dt>
-                  <dd className="mt-1 leading-relaxed text-ink">{f.how}</dd>
-                </div>
-              </dl>
-            </Card>
-          ))}
+              <div className="flex gap-4">
+                <div className="grid h-8 w-8 flex-none place-items-center rounded-lg border border-white/[0.08] bg-white/[0.05] font-bold text-ink-hi">2</div>
+                <p className="mt-1"><strong className="text-ink-hi">Enroll in courses:</strong> Visit the &quot;Courses&quot; tab, search for topics you like, and click &quot;Enroll&quot;.</p>
+              </div>
+              <div className="flex gap-4">
+                <div className="grid h-8 w-8 flex-none place-items-center rounded-lg border border-white/[0.08] bg-white/[0.05] font-bold text-ink-hi">3</div>
+                <p className="mt-1"><strong className="text-ink-hi">Take quizzes:</strong> Visit the &quot;Quiz&quot; tab and test yourself. Answer before the 15-second timer runs out!</p>
+              </div>
+              <div className="flex gap-4">
+                <div className="grid h-8 w-8 flex-none place-items-center rounded-lg border border-white/[0.08] bg-white/[0.05] font-bold text-ink-hi">4</div>
+                <p className="mt-1"><strong className="text-ink-hi">Track your progress:</strong> Click on your profile picture in the top right to visit your Dashboard and see your data.</p>
+              </div>
+            </div>
+          </Card>
+
+          {/* Why to use it */}
+          <Card className="p-6 md:p-8">
+            <h2 className="mb-3 flex items-center gap-2 text-xl font-bold text-ink-hi">
+              <span className="text-sky"><Icon name="shield" size={22} /></span>
+              Why use it
+            </h2>
+            <p className="leading-relaxed text-ink-low">
+              Unlike passive video tutorials, Learntopia forces active recall through timed assessments. Combined with a premium, distraction-free dark UI and strict database security that guarantees your data is isolated, it is the safest and most engaging way to build new skills online.
+            </p>
+          </Card>
+
         </div>
 
         {/* FAQ */}
-        <h2 className="mt-12 text-xl font-bold text-ink-hi">Frequently asked</h2>
+        <h2 className="mt-12 text-xl font-bold text-ink-hi">Frequently asked questions</h2>
         <div className="mt-5 space-y-3">
           {FAQ.map((item) => (
             <Card key={item.q} className="p-5">
