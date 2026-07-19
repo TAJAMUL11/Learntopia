@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { auth, db } from "../firebase/firebase";
+import { db } from "../firebase/firebase";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { quizzes } from "../data/quizData";
+import { useAuth } from "../context/AuthContext";
 import Card from "../Components/ui/Card";
 import Button from "../Components/ui/Button";
 import Badge from "../Components/ui/Badge";
@@ -24,7 +25,7 @@ const Quiz = () => {
   const [timeLeft, setTimeLeft] = useState(15);
 
   // Firebase / user state
-  const [user, setUser] = useState(null);
+  const { currentUser } = useAuth();
   const [highScores, setHighScores] = useState({});
   const [isSaving, setIsSaving] = useState(false);
   const [loadingScores, setLoadingScores] = useState(false);
@@ -40,7 +41,7 @@ const Quiz = () => {
         totalQuestions: activeQuiz.questions.length,
         completedAt: new Date(),
       };
-      await addDoc(collection(db, "Users", user.uid, "quizAttempts"), attempt);
+      await addDoc(collection(db, "Users", currentUser.uid, "quizAttempts"), attempt);
       setHighScores((prev) => ({
         ...prev,
         [activeQuiz.id]: Math.max(prev[activeQuiz.id] || 0, finalScore),
@@ -93,7 +94,7 @@ const Quiz = () => {
       setIsAnswerSubmitted(false);
     } else {
       setScreen("results");
-      if (user) {
+      if (currentUser) {
         saveScore(score);
       }
     }
@@ -109,10 +110,9 @@ const Quiz = () => {
 
   // Listen for auth state & fetch high scores
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
-      setUser(currentUser);
-      if (currentUser) {
-        setLoadingScores(true);
+    if (currentUser) {
+      setLoadingScores(true);
+      const fetchScores = async () => {
         try {
           const q = collection(db, "Users", currentUser.uid, "quizAttempts");
           const snapshot = await getDocs(q);
@@ -129,12 +129,12 @@ const Quiz = () => {
         } finally {
           setLoadingScores(false);
         }
-      } else {
-        setHighScores({});
-      }
-    });
-    return () => unsubscribe();
-  }, []);
+      };
+      fetchScores();
+    } else {
+      setHighScores({});
+    }
+  }, [currentUser]);
 
   // Timer countdown
   useEffect(() => {
@@ -289,7 +289,7 @@ const Quiz = () => {
             </div>
           </div>
 
-          {!user ? (
+          {!currentUser ? (
             <div className="mb-7 text-left">
               <Alert variant="warning" title="You're not signed in">
                 Your high scores won&rsquo;t be saved to your student profile.

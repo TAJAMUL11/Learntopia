@@ -51,6 +51,12 @@ service cloud.firestore {
         allow create: if isOwner(userId) && isValidAttempt();
         allow update, delete: if false;
       }
+
+      // --- Enrolled Courses -----------------------------------------------
+      // Owner can read and enroll in courses.
+      match /enrolledCourses/{courseId} {
+        allow read, write: if isOwner(userId);
+      }
     }
 
     // --- Default deny ----------------------------------------------------

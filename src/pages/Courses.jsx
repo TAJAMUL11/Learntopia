@@ -1,5 +1,9 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { db } from "../firebase/firebase";
+import { setDoc, doc } from "firebase/firestore";
+import { toast } from "react-toastify";
 import Card from "../Components/ui/Card";
 import Button from "../Components/ui/Button";
 import SearchInput from "../Components/ui/SearchInput";
@@ -29,7 +33,27 @@ const COURSES = [
 
 const Courses = () => {
   const navigate = useNavigate();
+  const { currentUser } = useAuth();
   const [query, setQuery] = useState("");
+
+  const handleEnroll = async (course) => {
+    if (!currentUser) {
+      navigate("/signUp");
+      return;
+    }
+    try {
+      await setDoc(doc(db, "Users", currentUser.uid, "enrolledCourses", course.id.toString()), {
+        courseId: course.id,
+        title: course.title,
+        category: course.category,
+        enrolledAt: new Date()
+      });
+      toast.success(`Successfully enrolled in ${course.title}!`);
+    } catch (err) {
+      console.error("Enrollment error:", err);
+      toast.error("Failed to enroll. Please try again.");
+    }
+  };
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -100,7 +124,7 @@ const Courses = () => {
                   </div>
                   <p className="mt-1.5 text-xs text-ink-low">{course.students} students</p>
                 </div>
-                <Button size="sm" onClick={() => navigate("/signUp")}>
+                <Button size="sm" onClick={() => handleEnroll(course)}>
                   Enroll
                 </Button>
               </div>
