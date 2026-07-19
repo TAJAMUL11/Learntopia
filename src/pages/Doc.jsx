@@ -56,6 +56,13 @@ const FEATURES = [
     what: "A direct line to the team for questions, feedback, or anything that isn't working.",
     how: "Use the Contact tab to send a message — we usually reply within 1–2 business days.",
   },
+  {
+    icon: "shield",
+    title: "Security & design",
+    tag: "Platform",
+    what: "A premium dark UI design system with fully locked-down Firestore security rules protecting all user data.",
+    how: "Browse the app to experience the sleek design, knowing your data is securely isolated.",
+  },
 ];
 
 const FAQ = [

@@ -8,7 +8,7 @@ Learntopia is a premium, interactive e-learning platform designed to help users 
 * **Modern Design System**: High-fidelity glassmorphic panels (`backdrop-blur bg-white/5 border border-white/10`) with deep midnight purple gradients.
 * **Responsive Layout Grid**: Constrained to a standard `1280px` layout boundary to keep margins and paddings uniform across screens.
 * **Interactive Quiz Engine**: Multi-topic timed quiz self-assessments (15s limits, progress bars, firestore tracking).
-* **Robust Authentication**: Secure Firebase Authentication and user profile settings.
+* **Robust Authentication & Security**: Secure Firebase Authentication and user profile settings, protected by strict, per-user Firestore security rules.
 * **SEO, GEO, and AEO Optimized**: Configured with Canonical links, Open Graph cards, Geographical region properties, and JSON-LD graph schema markups for Answer Engine Optimization.
 * **Global Footer**: A unified footer persistent across all routing pages.
 
