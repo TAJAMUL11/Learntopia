@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../firebase/firebase";
+import { useAuth } from "../context/AuthContext";
 import { setDoc, doc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import Card from "../Components/ui/Card";
@@ -14,6 +15,14 @@ import signUpImage from "../assets/signUpImage.jpeg";
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const { googleSignIn, currentUser } = useAuth();
+
+  useEffect(() => {
+    if (currentUser) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [currentUser, navigate]);
+
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [userFName, setUserFName] = useState("");
   const [userEmail, setUserEmail] = useState("");
@@ -44,6 +53,17 @@ const SignUp = () => {
       setUserPassword("");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await googleSignIn();
+      toast.success("Signed in with Google successfully");
+      navigate("/dashboard", { replace: true });
+    } catch (err) {
+      console.error("Google sign-in error:", err);
+      toast.error("Google sign-in failed. Please try again.");
     }
   };
 
@@ -129,7 +149,11 @@ const SignUp = () => {
             </Button>
           </form>
 
-          <button className="mt-4 flex w-full items-center justify-center gap-3 rounded-xl border border-white/[0.1] bg-white/[0.04] p-3 text-xs font-semibold uppercase tracking-wider text-ink-hi transition-colors hover:bg-white/[0.08]">
+          <button
+            type="button"
+            onClick={handleGoogleSignIn}
+            className="mt-4 flex w-full items-center justify-center gap-3 rounded-xl border border-white/[0.1] bg-white/[0.04] p-3 text-xs font-semibold uppercase tracking-wider text-ink-hi transition-colors hover:bg-white/[0.08]"
+          >
             <img src={google} alt="" className="h-5 w-5 object-contain" />
             Sign up with Google
           </button>

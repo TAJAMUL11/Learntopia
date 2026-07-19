@@ -3,6 +3,7 @@ import { useState } from "react";
 import Icon from "./ui/Icon";
 import Button from "./ui/Button";
 import Logo from "./ui/Logo";
+import { useAuth } from "../context/AuthContext";
 
 // Primary navigation. Documentation is intentionally kept out of the main nav
 // (it's reference material) and lives in the footer instead.
@@ -16,8 +17,19 @@ const NAV_ITEMS = [
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const { currentUser, logOut } = useAuth();
 
   const closeMenu = () => setIsMenuOpen(false);
+
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      closeMenu();
+      navigate("/");
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 select-none border-b border-white/[0.07] bg-ground-900/70 backdrop-blur-xl">
@@ -44,12 +56,34 @@ const Navbar = () => {
 
         {/* Desktop auth */}
         <div className="hidden items-center gap-3 md:flex">
-          <Button variant="ghost" size="sm" onClick={() => navigate("/login")}>
-            Log in
-          </Button>
-          <Button variant="primary" size="sm" onClick={() => navigate("/signUp")}>
-            Sign up
-          </Button>
+          {currentUser ? (
+            <div className="flex items-center gap-4">
+              <div onClick={() => navigate("/dashboard")} className="flex items-center gap-2 cursor-pointer transition-opacity hover:opacity-80">
+                {currentUser.photoURL ? (
+                  <img src={currentUser.photoURL} alt="Profile" referrerPolicy="no-referrer" className="h-8 w-8 rounded-full border border-white/10" />
+                ) : (
+                  <div className="grid h-8 w-8 place-items-center rounded-full border border-white/10 bg-white/5 text-ink-low">
+                    <Icon name="user" size={16} />
+                  </div>
+                )}
+                <span className="text-sm font-medium text-ink-hi">
+                  {currentUser.displayName || currentUser.email?.split("@")[0]}
+                </span>
+              </div>
+              <Button variant="ghost" size="sm" onClick={handleLogout}>
+                Log out
+              </Button>
+            </div>
+          ) : (
+            <>
+              <Button variant="ghost" size="sm" onClick={() => navigate("/login")}>
+                Log in
+              </Button>
+              <Button variant="primary" size="sm" onClick={() => navigate("/signUp")}>
+                Sign up
+              </Button>
+            </>
+          )}
         </div>
 
         {/* Mobile toggle */}
@@ -86,13 +120,35 @@ const Navbar = () => {
               </NavLink>
             </li>
           ))}
-          <li className="mt-3 grid grid-cols-2 gap-3">
-            <Button variant="ghost" fullWidth onClick={() => { closeMenu(); navigate("/login"); }}>
-              Log in
-            </Button>
-            <Button variant="primary" fullWidth onClick={() => { closeMenu(); navigate("/signUp"); }}>
-              Sign up
-            </Button>
+          <li className="mt-3">
+            {currentUser ? (
+              <div className="flex flex-col gap-3">
+                <div onClick={() => { closeMenu(); navigate("/dashboard"); }} className="flex items-center gap-3 rounded-lg bg-white/5 p-3 cursor-pointer transition-colors hover:bg-white/10">
+                  {currentUser.photoURL ? (
+                    <img src={currentUser.photoURL} alt="Profile" referrerPolicy="no-referrer" className="h-10 w-10 rounded-full border border-white/10" />
+                  ) : (
+                    <div className="grid h-10 w-10 flex-none place-items-center rounded-full border border-white/10 bg-white/5 text-ink-low">
+                      <Icon name="user" size={20} />
+                    </div>
+                  )}
+                  <span className="text-sm font-semibold text-ink-hi">
+                    {currentUser.displayName || currentUser.email?.split("@")[0]}
+                  </span>
+                </div>
+                <Button variant="ghost" fullWidth onClick={handleLogout}>
+                  Log out
+                </Button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-3">
+                <Button variant="ghost" fullWidth onClick={() => { closeMenu(); navigate("/login"); }}>
+                  Log in
+                </Button>
+                <Button variant="primary" fullWidth onClick={() => { closeMenu(); navigate("/signUp"); }}>
+                  Sign up
+                </Button>
+              </div>
+            )}
           </li>
         </ul>
       </div>
