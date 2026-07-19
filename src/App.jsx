@@ -16,6 +16,7 @@ import { ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Dashboard from "./Components/Dashboard";
 import Doc from "./pages/Doc";
+import { AuthProvider } from "./context/AuthContext";
 
 const App = () => {
   const router = createBrowserRouter(
@@ -35,7 +36,7 @@ const App = () => {
   );
 
   return (
-    <>
+    <AuthProvider>
       <RouterProvider router={router} />
       <ToastContainer
         position="top-right"
@@ -51,7 +52,7 @@ const App = () => {
         bodyClassName="toastbody"
         transition={Slide}
       />
-    </>
+    </AuthProvider>
   );
 };
 
