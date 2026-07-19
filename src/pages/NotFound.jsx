@@ -1,46 +1,28 @@
 import { useNavigate } from "react-router-dom";
-// import { useRef, useEffect } from 'react';
-// import gsap from 'gsap';
+import Button from "../Components/ui/Button";
+import Icon from "../Components/ui/Icon";
 
 const NotFound = () => {
-  const goToHome = useNavigate();
-  // const h1Ref1 = useRef(null);
-  // const h1Ref2 = useRef(null);
-  // const h1Ref3 = useRef(null);
-  // useEffect(() => {
-  //   const tl1 = gsap.timeline({ delay: 0.2 });
-  //   tl1.fromTo(h1Ref1.current, { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.5 });
-  //   tl1.to(h1Ref1.current, { scale: 1.2, duration: 0.2, yoyo: true, repeat: 5 });
+  const navigate = useNavigate();
 
-  //   const tl2 = gsap.timeline({ delay: 0.4 });
-  //   tl2.fromTo(h1Ref2.current, { opacity: 0, rotation: -90 }, { opacity: 1, rotation: 0, duration: 0.5 });
-  //   tl2.to(h1Ref2.current, { rotation: 20, duration: 0.2, yoyo: true, repeat: 5 });
-
-  //   const tl3 = gsap.timeline({ delay: 0.6 });
-  //   tl3.fromTo(h1Ref3.current, { opacity: 0, scale: 1.2 }, { opacity: 1, scale: 1, duration: 0.5 });
-  //   tl3.to(h1Ref3.current, { scale: 0.8, duration: 0.2, yoyo: true, repeat: 5 });
-  // }, []);
   return (
-    <div className="flex items-center justify-center flex-col text-white gap-3 text-center py-2">
-      <div className="notFound flex text-9xl">
-        <h1>4</h1>
-        <h1 className="">0</h1>
-        <h1>4</h1>
-      </div>
-
-      <h1 className="text-4xl font-bold my-2 tablets:text-6xl md:text-[4.5rem]">
-        Page not Found
+    <div className="container-page flex min-h-[80vh] flex-col items-center justify-center py-16 text-center">
+      <h1 className="animate-fade-up text-7xl font-black tracking-tight text-gradient sm:text-8xl md:text-9xl">
+        404
       </h1>
-      <p className="w-full px-1 tablets:w-[85%] md:text-[1.3rem]">
-        Sorry for the inconvience, please try again later or check your internet
-        connection...
+      <h2 className="mt-4 animate-fade-up text-2xl font-bold text-ink-hi sm:text-3xl md:text-4xl" style={{ animationDelay: "0.05s" }}>
+        Page not found
+      </h2>
+      <p className="mt-3 max-w-md animate-fade-up text-ink-low" style={{ animationDelay: "0.1s" }}>
+        Sorry, the page you&rsquo;re looking for doesn&rsquo;t exist or may have moved. Check the address, or head
+        back home.
       </p>
-      <button
-        className="btn-style max-w-72 md:w-[320px] md:p-4 md:text-xl"
-        onClick={() => goToHome("/")}
-      >
-        Go to HomePage
-      </button>
+      <div className="mt-8 animate-fade-up" style={{ animationDelay: "0.15s" }}>
+        <Button size="lg" onClick={() => navigate("/")}>
+          <Icon name="arrow" size={18} className="rotate-180" />
+          Back to homepage
+        </Button>
+      </div>
     </div>
   );
 };

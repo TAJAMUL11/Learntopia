@@ -1,94 +1,100 @@
-import { NavLink } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import Icon from "./ui/Icon";
+import Button from "./ui/Button";
+import Logo from "./ui/Logo";
+
+// Primary navigation. Documentation is intentionally kept out of the main nav
+// (it's reference material) and lives in the footer instead.
+const NAV_ITEMS = [
+  { to: "/", label: "Home", end: true },
+  { to: "/courses", label: "Courses" },
+  { to: "/quiz", label: "Quiz" },
+  { to: "/contact", label: "Contact" },
+];
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const handleItemClick = () => {
-    setIsMenuOpen(false);
-  };
+  const closeMenu = () => setIsMenuOpen(false);
 
   return (
-    <header className="sticky top-0 z-50 py-4 backdrop-blur-md bg-[#0f0a1c]/70 border-b border-white/5 shadow-lg select-none">
-      <div className="w-full max-w-[1280px] mx-auto flex justify-between items-center px-6 md:px-12">
-        {/* Brand Logo */}
-        <NavLink to="/" onClick={handleItemClick} className="flex items-center gap-2.5">
-          <img src="/favicon.png" alt="Learntopia Icon" className="w-8 h-8 md:w-9 md:h-9 object-contain transition-transform duration-300 hover:scale-[1.05]" />
-          <span className="text-xl md:text-2xl font-black tracking-wider bg-gradient-to-r from-button-bg-color to-highlighted-btn-bg bg-clip-text text-transparent uppercase font-sans">
-            Learntopia
-          </span>
+    <header className="sticky top-0 z-50 select-none border-b border-white/[0.07] bg-ground-900/70 backdrop-blur-xl">
+      <nav className="container-page flex h-16 items-center justify-between">
+        {/* Brand */}
+        <NavLink to="/" onClick={closeMenu} className="transition-opacity hover:opacity-90">
+          <Logo size={34} />
         </NavLink>
 
-        {/* Navigation List */}
-        <ul
-          className={`absolute md:static top-full left-0 w-full md:w-auto bg-[#0f0a1c]/95 md:bg-transparent backdrop-blur-xl md:backdrop-blur-none border-b md:border-none border-white/10 flex flex-col md:flex-row justify-center items-center gap-2 py-6 md:py-0 transition-all duration-300 ease-out z-40 ${
-            isMenuOpen
-              ? "opacity-100 pointer-events-auto translate-y-0"
-              : "opacity-0 pointer-events-none -translate-y-4 md:opacity-100 md:pointer-events-auto md:translate-y-0"
-          }`}
-          onClick={handleItemClick}
-        >
-          <NavLink to="/" className={({ isActive }) => `nav-li ${isActive ? "text-highlighted-btn-bg" : ""}`}>
-            <li>Home</li>
-          </NavLink>
-          <NavLink to="/courses" className={({ isActive }) => `nav-li ${isActive ? "text-highlighted-btn-bg" : ""}`}>
-            <li>Courses</li>
-          </NavLink>
-          <NavLink to="/quiz" className={({ isActive }) => `nav-li ${isActive ? "text-highlighted-btn-bg" : ""}`}>
-            <li>Quiz</li>
-          </NavLink>
-          <NavLink to="/contact" className={({ isActive }) => `nav-li ${isActive ? "text-highlighted-btn-bg" : ""}`}>
-            <li>Contact</li>
-          </NavLink>
-          <NavLink to="/doc" className={({ isActive }) => `nav-li ${isActive ? "text-highlighted-btn-bg" : ""}`}>
-            <li>Docs</li>
-          </NavLink>
-
-          {/* Mobile auth buttons inside list */}
-          <div className="flex flex-col gap-2 w-full px-8 mt-4 md:hidden">
-            <NavLink to="/login" className="w-full">
-              <button className="w-full border border-white/20 hover:bg-white/5 py-2.5 rounded-xl text-white font-semibold transition-all">
-                Log In
-              </button>
-            </NavLink>
-            <NavLink to="/signUp" className="w-full">
-              <button className="w-full bg-button-bg-color hover:bg-button-bg-color/90 py-2.5 rounded-xl text-white font-semibold shadow-md transition-all">
-                Sign Up
-              </button>
-            </NavLink>
-          </div>
+        {/* Desktop links */}
+        <ul className="hidden items-center gap-7 md:flex">
+          {NAV_ITEMS.map((item) => (
+            <li key={item.to}>
+              <NavLink
+                to={item.to}
+                end={item.end}
+                className={({ isActive }) => `nav-li ${isActive ? "text-sky" : ""}`}
+              >
+                {item.label}
+              </NavLink>
+            </li>
+          ))}
         </ul>
 
-        {/* Desktop Authentication Panel */}
-        <div className="hidden md:flex items-center gap-3">
-          <NavLink to="/login">
-            <button className="px-5 py-2 border border-white/10 hover:border-white/25 hover:bg-white/5 rounded-xl text-sm font-semibold transition-all">
-              Log In
-            </button>
-          </NavLink>
-          <NavLink to="/signUp">
-            <button className="px-5 py-2 bg-button-bg-color hover:bg-[#926eed] rounded-xl text-sm font-semibold shadow-md shadow-button-bg-color/20 transition-all hover:scale-[0.98]">
-              Sign up
-            </button>
-          </NavLink>
+        {/* Desktop auth */}
+        <div className="hidden items-center gap-3 md:flex">
+          <Button variant="ghost" size="sm" onClick={() => navigate("/login")}>
+            Log in
+          </Button>
+          <Button variant="primary" size="sm" onClick={() => navigate("/signUp")}>
+            Sign up
+          </Button>
         </div>
 
-        {/* Mobile Toggle Trigger */}
-        <div className="md:hidden">
-          <button
-            className="text-white hover:text-highlighted-btn-bg text-2xl p-1 transition-colors duration-200"
-            onClick={toggleMenu}
-            aria-label="Toggle Menu"
-          >
-            <FontAwesomeIcon icon={isMenuOpen ? faTimes : faBars} />
-          </button>
-        </div>
+        {/* Mobile toggle */}
+        <button
+          className="grid h-10 w-10 place-items-center rounded-lg text-ink-hi transition-colors hover:bg-white/5 md:hidden"
+          onClick={() => setIsMenuOpen((v) => !v)}
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={isMenuOpen}
+        >
+          <Icon name={isMenuOpen ? "close" : "menu"} size={22} />
+        </button>
+      </nav>
+
+      {/* Mobile drawer */}
+      <div
+        className={`overflow-hidden border-t border-white/[0.06] bg-ground-900/95 backdrop-blur-xl transition-[max-height,opacity] duration-300 ease-out md:hidden ${
+          isMenuOpen ? "max-h-[420px] opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <ul className="container-page flex flex-col gap-1 py-4">
+          {NAV_ITEMS.map((item) => (
+            <li key={item.to}>
+              <NavLink
+                to={item.to}
+                end={item.end}
+                onClick={closeMenu}
+                className={({ isActive }) =>
+                  `block rounded-lg px-3 py-2.5 text-[0.95rem] font-medium transition-colors ${
+                    isActive ? "bg-white/[0.06] text-sky" : "text-ink hover:bg-white/[0.04] hover:text-ink-hi"
+                  }`
+                }
+              >
+                {item.label}
+              </NavLink>
+            </li>
+          ))}
+          <li className="mt-3 grid grid-cols-2 gap-3">
+            <Button variant="ghost" fullWidth onClick={() => { closeMenu(); navigate("/login"); }}>
+              Log in
+            </Button>
+            <Button variant="primary" fullWidth onClick={() => { closeMenu(); navigate("/signUp"); }}>
+              Sign up
+            </Button>
+          </li>
+        </ul>
       </div>
     </header>
   );

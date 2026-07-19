@@ -1,0 +1,62 @@
+rules_version = '2';
+
+// Learntopia Firestore Security Rules
+// Principle: deny everything by default; a signed-in user may only touch their OWN data.
+// The Firebase web apiKey is public, so THESE RULES — not the key — protect the database.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // --- Helpers ---------------------------------------------------------
+
+    // True only when the request is authenticated AND acting on its own uid.
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    // Profile documents (Users/{uid}) may only hold the two known fields.
+    function isValidProfile() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['email', 'fullName'])
+          && d.email is string
+          && d.fullName is string;
+    }
+
+    // Quiz attempts are validated so a client can't write garbage or an
+    // impossible score. Shape mirrors Quiz.jsx -> saveScore().
+    function isValidAttempt() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['quizId', 'quizTitle', 'score', 'totalQuestions', 'completedAt'])
+          && d.quizId is string
+          && d.quizTitle is string
+          && d.score is number
+          && d.totalQuestions is number
+          && d.score >= 0
+          && d.score <= d.totalQuestions
+          && d.completedAt is timestamp;
+    }
+
+    // --- User profile ----------------------------------------------------
+
+    match /Users/{userId} {
+      allow read:   if isOwner(userId);
+      allow create: if isOwner(userId) && isValidProfile();
+      allow update: if isOwner(userId) && isValidProfile();
+      allow delete: if false; // profiles are not deleted from the client
+
+      // --- Quiz attempts (append-only history) --------------------------
+      // Owner can read and add attempts, but cannot edit or delete past
+      // ones — this keeps the score record tamper-evident.
+      match /quizAttempts/{attemptId} {
+        allow read:   if isOwner(userId);
+        allow create: if isOwner(userId) && isValidAttempt();
+        allow update, delete: if false;
+      }
+    }
+
+    // --- Default deny ----------------------------------------------------
+    // Anything not matched above is fully locked.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

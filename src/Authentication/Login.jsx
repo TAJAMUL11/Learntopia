@@ -1,167 +1,131 @@
-import { Link, useNavigate } from "react-router-dom"
-import google from '../assets/Icons/google.png'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/firebase";
 import { toast } from "react-toastify";
-import signIn from '../assets/Icons/signIn.png'
-import signUpImage from '../assets/signUpImage.jpeg'
-
+import Card from "../Components/ui/Card";
+import Button from "../Components/ui/Button";
+import Field from "../Components/ui/Field";
+import Icon from "../Components/ui/Icon";
+import google from "../assets/Icons/google.png";
+import signIn from "../assets/Icons/signIn.png";
+import signUpImage from "../assets/signUpImage.jpeg";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const logNavigate = useNavigate();
-  const [userEmail, setUserEmail] = useState('');
-  const [userPassword, setUserPassword] = useState('');
-  const [userPolicy, setUserPolicy] = useState(false);
-
-  const togglePasswordVisibility = () => {
-    setIsPasswordVisible(!isPasswordVisible);
-  };
-  const handlePolicyCheck = () => {
-    if (userEmail && userPassword) {
-      setUserPolicy(true);
-    }
-  };
+  const [userEmail, setUserEmail] = useState("");
+  const [userPassword, setUserPassword] = useState("");
+  const [agreed, setAgreed] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    try{
-      await signInWithEmailAndPassword(auth, userEmail, userPassword)
-      toast.success('Successfully Logged in');
-      logNavigate('/dashboard', {replace:true})
-      setUserEmail('')
-      setUserPassword('')
-      setUserPolicy(false);
-
+    setLoading(true);
+    try {
+      await signInWithEmailAndPassword(auth, userEmail, userPassword);
+      toast.success("Successfully logged in");
+      navigate("/dashboard", { replace: true });
+    } catch (err) {
+      let message = "Invalid email or password.";
+      if (err.code === "auth/user-not-found") message = "No account found for this email.";
+      else if (err.code === "auth/wrong-password") message = "Incorrect password. Please try again.";
+      else if (err.code === "auth/invalid-email") message = "That email address looks incomplete.";
+      toast.error(message);
+      setUserPassword("");
+    } finally {
+      setLoading(false);
     }
-    catch (e) {
-      let errorMessage = "Invalid Email or Password";
-      if (e.code === "auth/user-not-found") {
-        errorMessage = "User not found. Please check your email address.";
-      } else if (e.code === 'auth/wrong-password') {
-        errorMessage = "Incorrect password. Please try again.";
-      }
-    
-      toast.error(errorMessage);
-      setUserEmail('');
-      setUserPassword('');
-      setUserPolicy(false);
-    }
-
-
-  }
+  };
 
   return (
-    <div className="w-full max-w-[1280px] mx-auto px-6 md:px-12 py-12 flex items-center justify-center min-h-[80vh] text-white">
-      <div className="flex w-full max-w-5xl gap-10 items-center justify-center">
-        {/* Left Side banner */}
-        <div className="hidden lg:block w-1/2 max-w-[45%]">
-          <img src={signUpImage} alt="Sign In Banner" className="w-full h-auto object-cover rounded-3xl border border-white/5 shadow-2xl" />
+    <div className="container-page flex min-h-[80vh] items-center justify-center py-12">
+      <div className="grid w-full max-w-5xl items-center gap-10 lg:grid-cols-2">
+        {/* Banner */}
+        <div className="hidden lg:block">
+          <img
+            src={signUpImage}
+            alt=""
+            className="h-full max-h-[560px] w-full rounded-3xl border border-white/[0.06] object-cover shadow-card"
+          />
         </div>
 
-        {/* Frosted Glass Form Container */}
-        <div className="w-full max-w-md background-blur p-6 md:p-8 rounded-3xl border border-light-bg-color shadow-custom-shadow">
-          <form className="flex flex-col w-full" onSubmit={handleSubmit}>
-            
-            {/* Header Form */}
-            <div className="flex flex-col items-center mb-6">
-              <img src={signIn} alt="LearnTopia logo" className="max-w-[60px] mb-2" />
-              <h2 className="text-2xl md:text-3xl font-extrabold text-center">Welcome Back!</h2>
-              <p className="text-sm text-gray-400 mt-1">
-                We are <span className="text-highlighted-btn-bg font-semibold">happy</span> to see you again.
-              </p>
-            </div>
-
-            {/* Email Field */}
-            <div className="inputContainers">
-              <label htmlFor="email" className="inputLabels">Email</label>
-              <input
-                type="email"
-                id="email"
-                placeholder="Enter your Email"
-                required
-                className="inputbox"
-                onChange={(e) => setUserEmail(e.target.value)}
-                value={userEmail}
-              />
-            </div>
-            
-            {/* Password Field */}
-            <div className="inputContainers relative">
-              <label htmlFor="password" className="inputLabels">Password</label>
-              <input
-                type={isPasswordVisible ? 'text' : 'password'}
-                id="password"
-                placeholder="6+ characters"
-                required
-                minLength={6}
-                className="inputbox pr-10"
-                onChange={(e) => setUserPassword(e.target.value)}
-                value={userPassword}
-              />
-              <button
-                type="button"
-                onClick={togglePasswordVisibility}
-                className="absolute right-3.5 top-[44px] text-gray-400 hover:text-white transition-colors duration-200"
-              >
-                <FontAwesomeIcon icon={isPasswordVisible ? faEye : faEyeSlash} />
-              </button>
-            </div>
-
-            {/* Checkbox Rows */}
-            <div className="flex justify-between items-center text-xs text-gray-300 mt-2 mb-3">
-              <label className="flex items-center gap-1.5 cursor-pointer">
-                <input type="checkbox" onChange={handlePolicyCheck} className="rounded accent-button-bg-color" />
-                Remember me
-              </label>
-              <Link to="/" className="text-highlighted-btn-bg hover:underline">Forgot Password?</Link>
-            </div>
-
-            <div className="text-xs text-gray-400 mb-5 leading-relaxed">
-              <label className="flex items-start gap-1.5 cursor-pointer">
-                <input
-                  type="checkbox"
-                  required
-                  checked={userPolicy}
-                  onChange={handlePolicyCheck}
-                  className="mt-0.5 rounded accent-button-bg-color"
-                />
-                <span>I agree with Terms of Service, Privacy Policy, and Notification settings.</span>
-              </label>
-            </div>
-              
-            {/* Submit Button */}
-            <button type="submit" className="w-full btn-style py-3 font-semibold uppercase tracking-wider text-xs shadow-md">
-              Log in
-            </button>
-
-          </form>
-
-          {/* Social Authenticator */}
-          <div className="mt-4">
-            <div className="rounded-xl flex justify-center gap-3 items-center p-3 w-full bg-white/5 border border-white/10 hover:bg-white/10 transition-colors duration-300 cursor-pointer">
-              <img src={google} alt="google icon" className="w-5 h-5 object-contain" />
-              <button className="text-white text-xs font-semibold uppercase tracking-wider">Log in with Google</button>
-            </div>
-          </div>
-
-          <div className="text-center text-xs text-gray-400 mt-6">
-            <p>
-              Do not have an account?{" "}
-              <button className="text-highlighted-btn-bg font-extrabold hover:underline" onClick={() => logNavigate('/signUp')}>
-                Register Here
-              </button>
+        {/* Form */}
+        <Card className="w-full p-6 md:p-8">
+          <div className="mb-7 flex flex-col items-center text-center">
+            <img src={signIn} alt="" className="mb-2 max-w-[56px]" />
+            <h2 className="text-2xl font-extrabold text-ink-hi md:text-3xl">Welcome back</h2>
+            <p className="mt-1 text-sm text-ink-low">
+              We&rsquo;re <span className="font-semibold text-sky">happy</span> to see you again.
             </p>
           </div>
 
-        </div>  
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+            <Field
+              label="Email"
+              id="email"
+              type="email"
+              icon="mail"
+              placeholder="Enter your email"
+              required
+              value={userEmail}
+              onChange={(e) => setUserEmail(e.target.value)}
+            />
+
+            <Field
+              label="Password"
+              id="password"
+              type={isPasswordVisible ? "text" : "password"}
+              placeholder="Your password"
+              required
+              minLength={6}
+              value={userPassword}
+              onChange={(e) => setUserPassword(e.target.value)}
+              rightSlot={
+                <button
+                  type="button"
+                  onClick={() => setIsPasswordVisible((v) => !v)}
+                  aria-label={isPasswordVisible ? "Hide password" : "Show password"}
+                  className="grid h-9 w-9 place-items-center rounded-lg text-ink-low transition-colors hover:text-ink-hi"
+                >
+                  <Icon name={isPasswordVisible ? "eye-off" : "eye"} size={18} />
+                </button>
+              }
+            />
+
+            <div className="flex items-center justify-between text-xs text-ink">
+              <label className="flex cursor-pointer items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={agreed}
+                  onChange={(e) => setAgreed(e.target.checked)}
+                  className="h-4 w-4 rounded accent-violet-600"
+                />
+                Remember me
+              </label>
+              <Link to="/" className="text-sky transition-colors hover:underline">Forgot password?</Link>
+            </div>
+
+            <Button type="submit" fullWidth loading={loading} className="mt-1">
+              {loading ? "Signing in…" : "Log in"}
+            </Button>
+          </form>
+
+          <button className="mt-4 flex w-full items-center justify-center gap-3 rounded-xl border border-white/[0.1] bg-white/[0.04] p-3 text-xs font-semibold uppercase tracking-wider text-ink-hi transition-colors hover:bg-white/[0.08]">
+            <img src={google} alt="" className="h-5 w-5 object-contain" />
+            Log in with Google
+          </button>
+
+          <p className="mt-6 text-center text-xs text-ink-low">
+            Don&rsquo;t have an account?{" "}
+            <button onClick={() => navigate("/signUp")} className="font-bold text-sky hover:underline">
+              Register here
+            </button>
+          </p>
+        </Card>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
