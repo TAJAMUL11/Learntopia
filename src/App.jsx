@@ -16,14 +16,16 @@ import { ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Dashboard from "./Components/Dashboard";
 import Doc from "./pages/Doc";
+import CourseDetails from "./pages/CourseDetails";
 import { AuthProvider } from "./context/AuthContext";
 
 const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/" element={<RootLayout />}>
+        <Route path="/" element={<RootLayout />}>
         <Route index element={<Home />} />
         <Route path="courses" element={<Courses />} />
+        <Route path="course/:id" element={<CourseDetails />} />
         <Route path="quiz" element={<Quiz />} />
         <Route path="contact" element={<Contact />} />
         <Route path="signUp" element={<SignUp />} />
