@@ -9,27 +9,8 @@ import Button from "../Components/ui/Button";
 import SearchInput from "../Components/ui/SearchInput";
 import SectionHeading from "../Components/ui/SectionHeading";
 import EmptyState from "../Components/ui/EmptyState";
-
-import math from "../assets/CourseImg/math.png";
-import paint from "../assets/CourseImg/paint.png";
-import finance from "../assets/CourseImg/finance.png";
-import Dmarket from "../assets/CourseImg/Dmarket.png";
-import coding from "../assets/CourseImg/coding.png";
-import python from "../assets/CourseImg/python.png";
+import { COURSES } from "../data/coursesData";
 import star from "../assets/CourseImg/star.png";
-import one from "../assets/Icons/one.jpg";
-import two from "../assets/Icons/two.jpg";
-import three from "../assets/Icons/three.jpg";
-import four from "../assets/Icons/four.jpg";
-
-const COURSES = [
-  { id: 1, category: "IT Software", title: "Python: Programming for Beginners", rating: "4.8", image: python, students: "320", desc: "Core syntax, data types, and the fundamentals every developer needs.", avatars: [one, two, three, four] },
-  { id: 2, category: "Mathematics", title: "Algebra & Calculus: Beginner Friendly", rating: "4.2", image: math, students: "210", desc: "Build confident foundations in algebra and introductory calculus.", avatars: [one, two, three] },
-  { id: 3, category: "Finance", title: "Invest Early & Secure Your Future", rating: "4.9", image: finance, students: "480", desc: "Saving, compounding, and long-term investing made approachable.", avatars: [one, two, three, four] },
-  { id: 4, category: "Marketing", title: "Digital Marketing: Complete Guide", rating: "5.0", image: Dmarket, students: "190", desc: "SEO, campaigns, and conversion funnels from the ground up.", avatars: [one, two, three] },
-  { id: 5, category: "IT Software", title: "Frontend Development: Advanced Topics", rating: "4.8", image: coding, students: "540", desc: "Modern layout, state, and asynchronous JavaScript patterns.", avatars: [one, two, three] },
-  { id: 6, category: "Arts", title: "Interior Design: A Complete Guide", rating: "4.5", image: paint, students: "260", desc: "Composition, color, and space for beautiful, livable rooms.", avatars: [one, two, three, four] },
-];
 
 const Courses = () => {
   const navigate = useNavigate();
@@ -38,7 +19,8 @@ const Courses = () => {
 
   const handleEnroll = async (course) => {
     if (!currentUser) {
-      navigate("/signUp");
+      toast.info("Please log in to enroll and view course details.");
+      navigate("/login", { state: { returnTo: `/course/${course.id}` } });
       return;
     }
     try {
@@ -47,8 +29,8 @@ const Courses = () => {
         title: course.title,
         category: course.category,
         enrolledAt: new Date()
-      });
-      toast.success(`Successfully enrolled in ${course.title}!`);
+      }, { merge: true });
+      navigate(`/course/${course.id}`);
     } catch (err) {
       console.error("Enrollment error:", err);
       toast.error("Failed to enroll. Please try again.");
@@ -67,9 +49,9 @@ const Courses = () => {
     <div className="container-page py-16 md:py-20">
       <SectionHeading
         centered
-        eyebrow="Course catalog"
-        title="Invest in your education"
-        description="Learn from focused, beginner-friendly tracks across six subjects and earn verified high scores."
+        eyebrow="Kids Course Catalog"
+        title="Start Your Learning Adventure!"
+        description="Explore fun, interactive courses designed specifically for kids. Learn to code, draw, and solve puzzles!"
       />
 
       {/* Search */}
@@ -103,7 +85,6 @@ const Courses = () => {
               </div>
 
               <div className="relative mb-4 flex justify-center overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-white/[0.08] to-white/[0.02] py-8">
-                {/* soft colored glow so the artwork reads bright, not dull */}
                 <div className="pointer-events-none absolute left-1/2 top-3 h-20 w-32 -translate-x-1/2 rounded-full bg-violet-500/30 blur-2xl transition-opacity duration-500 group-hover:bg-sky/30" />
                 <img
                   src={course.image}
@@ -136,7 +117,7 @@ const Courses = () => {
           <EmptyState
             icon="search"
             title={`No courses match “${query}”`}
-            description="Try a broader term, or browse the full catalog of six subjects."
+            description="Try a broader term, or browse the full catalog."
             action={
               <Button variant="secondary" size="sm" onClick={() => setQuery("")}>
                 Clear search

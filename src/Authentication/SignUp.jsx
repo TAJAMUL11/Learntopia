@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../firebase/firebase";
@@ -15,13 +15,16 @@ import signUpImage from "../assets/signUpImage.jpeg";
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { googleSignIn, currentUser } = useAuth();
+
+  const returnTo = location.state?.returnTo || "/dashboard";
 
   useEffect(() => {
     if (currentUser) {
-      navigate("/dashboard", { replace: true });
+      navigate(returnTo, { replace: true });
     }
-  }, [currentUser, navigate]);
+  }, [currentUser, navigate, returnTo]);
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [userFName, setUserFName] = useState("");
@@ -43,7 +46,7 @@ const SignUp = () => {
         });
       }
       toast.success("Account created successfully");
-      navigate("/dashboard", { replace: true });
+      navigate(returnTo, { replace: true });
     } catch (err) {
       let message = "Couldn't create your account. Please try again.";
       if (err.code === "auth/email-already-in-use") message = "That email is already registered. Try logging in.";
@@ -60,7 +63,7 @@ const SignUp = () => {
     try {
       await googleSignIn();
       toast.success("Signed in with Google successfully");
-      navigate("/dashboard", { replace: true });
+      navigate(returnTo, { replace: true });
     } catch (err) {
       console.error("Google sign-in error:", err);
       toast.error("Google sign-in failed. Please try again.");
