@@ -1,7 +1,7 @@
 import { db } from "../firebase/firebase";
 import { getDoc, doc, collection, getDocs } from "firebase/firestore";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useMemo } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
 import Card from "./ui/Card";
@@ -80,6 +80,12 @@ const Dashboard = () => {
     }
   };
 
+  // Derived Metrics
+  const activeCourses = useMemo(() => enrolledCourses.filter(c => !c.completed), [enrolledCourses]);
+  const completedCourses = useMemo(() => enrolledCourses.filter(c => c.completed), [enrolledCourses]);
+  const totalQuizzes = Object.keys(quizScores).length;
+  const totalPoints = Object.values(quizScores).reduce((sum, score) => sum + score, 0);
+
   return (
     <div className="container-page py-16 md:py-20 text-ink-hi">
       {loading ? (
@@ -98,66 +104,136 @@ const Dashboard = () => {
           />
         </Card>
       ) : (
-        <div className="mx-auto max-w-4xl space-y-6 animate-fade-up">
-          <Card className="flex flex-col items-center justify-between gap-6 p-6 sm:flex-row md:p-8">
+        <div className="mx-auto max-w-5xl space-y-8 animate-fade-up">
+          
+          {/* Profile Header */}
+          <Card className="flex flex-col items-center justify-between gap-6 p-6 sm:flex-row md:p-8 border-violet-500/20 bg-gradient-to-br from-violet-500/5 to-transparent">
             <div className="flex items-center gap-6">
               {currentUser.photoURL ? (
-                 <img src={currentUser.photoURL} referrerPolicy="no-referrer" alt="Profile" className="h-20 w-20 flex-none rounded-full border-4 border-white/10" />
+                 <img src={currentUser.photoURL} referrerPolicy="no-referrer" alt="Profile" className="h-20 w-20 flex-none rounded-full border-4 border-white/10 shadow-lg" />
               ) : (
                 <div className="grid h-20 w-20 flex-none place-items-center rounded-full bg-gradient-to-tr from-violet-600 to-sky text-3xl font-extrabold text-white shadow-glow">
                   {userDetails?.fullName ? userDetails.fullName.charAt(0).toUpperCase() : "S"}
                 </div>
               )}
               <div>
-                <h1 className="text-2xl font-extrabold tracking-tight md:text-3xl">{userDetails?.fullName || currentUser.displayName || "Student"}</h1>
-                <p className="mt-1 text-sm text-ink-low">{userDetails?.email}</p>
+                <h1 className="text-2xl font-extrabold tracking-tight md:text-3xl text-ink-hi">
+                  {userDetails?.fullName || currentUser.displayName || "Student"}
+                </h1>
+                <p className="mt-1 text-sm font-medium text-ink-low">{userDetails?.email}</p>
               </div>
             </div>
-            <Button variant="danger" onClick={handleLogout}>
+            <Button variant="danger" onClick={handleLogout} className="flex-none">
               <Icon name="logout" size={16} /> Log out
             </Button>
           </Card>
 
-          <div className="grid gap-6 md:grid-cols-2">
-            {/* Courses Section */}
+          {/* Metrics Grid */}
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 shadow-card transition-colors hover:bg-white/[0.04]">
+              <div className="flex items-center gap-3 text-sky">
+                <Icon name="book" size={20} />
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-ink-low">Enrolled</h3>
+              </div>
+              <p className="mt-3 text-3xl font-extrabold text-ink-hi">{enrolledCourses.length}</p>
+            </div>
+            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 shadow-card transition-colors hover:bg-white/[0.04]">
+              <div className="flex items-center gap-3 text-green-400">
+                <Icon name="check" size={20} />
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-ink-low">Completed</h3>
+              </div>
+              <p className="mt-3 text-3xl font-extrabold text-ink-hi">{completedCourses.length}</p>
+            </div>
+            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 shadow-card transition-colors hover:bg-white/[0.04]">
+              <div className="flex items-center gap-3 text-violet-400">
+                <Icon name="message-circle" size={20} />
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-ink-low">Quizzes</h3>
+              </div>
+              <p className="mt-3 text-3xl font-extrabold text-ink-hi">{totalQuizzes}</p>
+            </div>
+            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 shadow-card transition-colors hover:bg-white/[0.04]">
+              <div className="flex items-center gap-3 text-yellow-400">
+                <Icon name="star" size={20} />
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-ink-low">Total Pts</h3>
+              </div>
+              <p className="mt-3 text-3xl font-extrabold text-ink-hi">{totalPoints}</p>
+            </div>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2 items-start">
+            
+            {/* Active Courses */}
             <Card className="p-6 md:p-8">
-              <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-ink-hi">
-                <span className="text-sky"><Icon name="book" size={18} /></span> Enrolled Courses
+              <h2 className="mb-5 flex items-center gap-2 text-lg font-bold text-ink-hi">
+                <span className="text-sky"><Icon name="play" size={18} /></span> Active Courses
               </h2>
-              {enrolledCourses.length > 0 ? (
+              {activeCourses.length > 0 ? (
                 <ul className="space-y-3">
-                  {enrolledCourses.map((c) => (
-                    <li key={c.courseId} className="rounded-xl border border-white/[0.06] bg-black/20 p-4">
-                      <p className="text-xs font-semibold uppercase tracking-wider text-ink-low">{c.category}</p>
-                      <h3 className="mt-1 font-semibold text-ink-hi">{c.title}</h3>
+                  {activeCourses.map((c) => (
+                    <li key={c.courseId} className="group relative overflow-hidden rounded-xl border border-white/[0.08] bg-black/20 p-4 transition-all hover:-translate-y-0.5 hover:bg-white/[0.04]">
+                      <Link to={`/course/${c.courseId}`} className="block">
+                        <p className="text-xs font-semibold uppercase tracking-wider text-sky">{c.category}</p>
+                        <h3 className="mt-1 font-semibold text-ink-hi group-hover:text-white">{c.title}</h3>
+                      </Link>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="text-sm text-ink-low">You haven&rsquo;t enrolled in any courses yet.</p>
+                <EmptyState
+                  icon="book"
+                  title="No active courses"
+                  description="You are not actively taking any courses."
+                  action={<Button variant="secondary" size="sm" onClick={() => navigate("/courses")}>Browse Catalog</Button>}
+                />
               )}
             </Card>
 
-            {/* Quiz Scores Section */}
-            <Card className="p-6 md:p-8">
-              <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-ink-hi">
-                <span className="text-sky"><Icon name="trophy" size={18} /></span> Quiz High Scores
-              </h2>
-              {Object.keys(quizScores).length > 0 ? (
-                <ul className="space-y-3">
-                  {Object.entries(quizScores).map(([title, score]) => (
-                    <li key={title} className="flex items-center justify-between rounded-xl border border-white/[0.06] bg-black/20 p-4">
-                      <h3 className="font-semibold text-ink-hi">{title}</h3>
-                      <span className="flex items-center gap-1 text-sm font-bold text-violet-400">
-                        {score} pts
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-sm text-ink-low">You haven&rsquo;t taken any quizzes yet.</p>
-              )}
-            </Card>
+            <div className="flex flex-col gap-6">
+              
+              {/* Completed Courses */}
+              <Card className="p-6 md:p-8">
+                <h2 className="mb-5 flex items-center gap-2 text-lg font-bold text-ink-hi">
+                  <span className="text-green-400"><Icon name="check-circle" size={18} /></span> Completed Courses
+                </h2>
+                {completedCourses.length > 0 ? (
+                  <ul className="space-y-3">
+                    {completedCourses.map((c) => (
+                      <li key={c.courseId} className="group flex items-center justify-between rounded-xl border border-white/[0.08] bg-white/[0.02] p-4 transition-colors hover:bg-white/[0.04]">
+                        <Link to={`/course/${c.courseId}`} className="block pr-4">
+                          <p className="text-[10px] font-bold uppercase tracking-wider text-ink-low">{c.category}</p>
+                          <h3 className="mt-1 text-sm font-semibold text-ink-hi group-hover:text-white line-clamp-1">{c.title}</h3>
+                        </Link>
+                        <span className="flex-none rounded-full bg-green-500/20 px-2 py-1 text-[10px] font-bold text-green-400 uppercase tracking-widest">Done</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-sm text-ink-low text-center py-4">You haven&rsquo;t finished any courses yet.</p>
+                )}
+              </Card>
+
+              {/* Quiz High Scores */}
+              <Card className="p-6 md:p-8">
+                <h2 className="mb-5 flex items-center gap-2 text-lg font-bold text-ink-hi">
+                  <span className="text-violet-400"><Icon name="trophy" size={18} /></span> Quiz High Scores
+                </h2>
+                {totalQuizzes > 0 ? (
+                  <ul className="space-y-3">
+                    {Object.entries(quizScores).map(([title, score]) => (
+                      <li key={title} className="flex items-center justify-between gap-4 rounded-xl border border-white/[0.06] bg-gradient-to-r from-black/20 to-violet-900/10 p-4 transition-colors hover:border-violet-500/30 hover:bg-violet-500/5">
+                        <h3 className="font-semibold text-ink-hi leading-snug">{title}</h3>
+                        <div className="flex-none whitespace-nowrap rounded-lg bg-violet-500/20 px-3 py-1.5 text-sm font-extrabold text-violet-300">
+                          {score} <span className="text-xs font-semibold text-violet-400/80">pts</span>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-sm text-ink-low text-center py-4">You haven&rsquo;t taken any quizzes yet.</p>
+                )}
+              </Card>
+
+            </div>
           </div>
         </div>
       )}
