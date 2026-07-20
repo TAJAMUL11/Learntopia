@@ -59,7 +59,8 @@ const Doc = () => {
               What it does
             </h2>
             <ul className="ml-5 list-disc space-y-2 leading-relaxed text-ink-low marker:text-white/20">
-              <li>Provides a searchable catalog of beginner-friendly courses across six distinct subjects.</li>
+              <li>Provides a searchable catalog of fun, interactive courses covering topics like Programming, Science, and Art, specifically designed for kids and teens.</li>
+              <li>Features dedicated Course Syllabus pages where users can track modules and mark courses as &quot;Completed&quot;.</li>
               <li>Offers an interactive, timed Quiz Engine to test your skills with instant right/wrong feedback.</li>
               <li>Manages a secure, personalized Student Dashboard that tracks your enrolled courses and high scores.</li>
               <li>Keeps you globally signed in across all tabs using Google Authentication or secure email login.</li>
@@ -79,7 +80,7 @@ const Doc = () => {
               </div>
               <div className="flex gap-4">
                 <div className="grid h-8 w-8 flex-none place-items-center rounded-lg border border-white/[0.08] bg-white/[0.05] font-bold text-ink-hi">2</div>
-                <p className="mt-1"><strong className="text-ink-hi">Enroll in courses:</strong> Visit the &quot;Courses&quot; tab, search for topics you like, and click &quot;Enroll&quot;.</p>
+                <p className="mt-1"><strong className="text-ink-hi">Enroll in courses:</strong> Visit the &quot;Courses&quot; tab, search for topics you like, and click &quot;Enroll&quot; to view the syllabus and modules.</p>
               </div>
               <div className="flex gap-4">
                 <div className="grid h-8 w-8 flex-none place-items-center rounded-lg border border-white/[0.08] bg-white/[0.05] font-bold text-ink-hi">3</div>
