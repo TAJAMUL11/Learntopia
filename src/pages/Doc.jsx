@@ -35,6 +35,11 @@ const FEATURES = [
     title: "Searchable catalog",
     text: "Find courses fast by title or subject, with a friendly empty state when nothing matches your search.",
   },
+  {
+    icon: "refresh-cw",
+    title: "Course resets & unenrollment",
+    text: "Fully control your dashboard. Start a completed course over from scratch, or permanently unenroll from any course.",
+  },
 ];
 
 const STEPS = [
@@ -67,6 +72,10 @@ const FAQ = [
   {
     q: "What does it cost?",
     a: "Learntopia is completely free to use. Create an account and start learning right away.",
+  },
+  {
+    q: "Can I unenroll or reset a course?",
+    a: "Yes! You can unenroll from any course directly from your dashboard using the trash icon. If you have 100% completed a course, a 'Start Again' button will appear in the course details so you can reset your progress.",
   },
 ];
 

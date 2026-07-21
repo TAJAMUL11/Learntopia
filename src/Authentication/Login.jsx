@@ -11,13 +11,13 @@ import Icon from "../Components/ui/Icon";
 import ImageWithSkeleton from "../Components/ui/ImageWithSkeleton";
 import google from "../assets/Icons/google.png";
 import signIn from "../assets/Icons/signIn.png";
-import signUpImage from "../assets/signUpImage.jpeg";
+import signUpImage from "../assets/Icons/auth-image.jpg";
 
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { googleSignIn, currentUser } = useAuth();
-  
+
   const returnTo = location.state?.returnTo || "/dashboard";
 
   useEffect(() => {
@@ -68,6 +68,14 @@ const Login = () => {
         {/* Banner */}
         <div className="relative hidden aspect-[4/5] max-h-[560px] overflow-hidden rounded-3xl border border-white/[0.06] shadow-card lg:block">
           <ImageWithSkeleton src={signUpImage} alt="" imgClassName="h-full w-full object-cover transition-opacity duration-500" />
+          
+          {/* Overlay and Text */}
+          <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-b from-black/80 via-black/40 to-transparent" />
+          <div className="absolute left-6 top-8 right-6 z-20">
+            <h3 className="text-3xl font-extrabold leading-tight text-white drop-shadow-md">
+              Let us learn <br /> something new
+            </h3>
+          </div>
         </div>
 
         {/* Form */}

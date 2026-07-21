@@ -11,6 +11,7 @@ Learntopia is a premium, interactive e-learning platform designed to help users 
 * **Smart Intent Routing**: Intelligent unauthenticated redirect flows that safely bounce users directly back to the course details after logging in.
 * **Interactive Quiz Engine**: Multi-topic timed quiz self-assessments (15s limits, progress bars, firestore tracking).
 * **Robust Authentication & Security**: Secure Firebase Authentication (including Google One-Tap Login) and global user session states, protected by strict, per-user Firestore security rules.
+* **Course Control & Flexibility**: Users can unenroll from courses to clean up their dashboard, or reset 100% completed courses to start fresh, protected by premium warning modals.
 * **SEO, GEO, and AEO Optimized**: Configured with Canonical links, Open Graph cards, Geographical region properties, and JSON-LD graph schema markups for Answer Engine Optimization.
 * **Global Footer**: A unified footer persistent across all routing pages.
 
@@ -65,4 +66,4 @@ Ensure you have Node.js and npm installed on your system.
 ---
 
 ## 👨‍💻 Author
-Built by **Tajamul Wani** (Email: [thetj4054@gmail.com](mailto:thetj4054@gmail.com)) in collaboration with **Antigravity AI**.
+Built by **Tajamul Wani** (Email: [thetj4054@gmail.com](mailto:thetj4054@gmail.com)).
