@@ -22,3 +22,24 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_LEARNTOPIA_REACT }}
           channelId: live
           projectId: learntopia-react
+
+  # Deploy Firestore Security Rules on merge, so the live rules always match
+  # firestore.rules in the repo. Authenticates with the same service account
+  # secret used for hosting (no personal Firebase login required).
+  # NOTE: the service account must have the "Firebase Rules Admin" role for
+  # this to succeed — grant it in Google Cloud IAM if the deploy is denied.
+  deploy_firestore_rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Deploy Firestore rules
+        env:
+          FIREBASE_SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_LEARNTOPIA_REACT }}
+        run: |
+          printf '%s' "$FIREBASE_SA" > "$RUNNER_TEMP/gcp-key.json"
+          export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/gcp-key.json"
+          npx --yes firebase-tools deploy --only firestore:rules --project learntopia-react --non-interactive
+          rm -f "$RUNNER_TEMP/gcp-key.json"
