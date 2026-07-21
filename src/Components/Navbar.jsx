@@ -67,7 +67,7 @@ const Navbar = () => {
                   </div>
                 )}
                 <span className="text-sm font-medium text-ink-hi">
-                  {currentUser.displayName || currentUser.email?.split("@")[0]}
+                  Dashboard
                 </span>
               </div>
               <Button variant="ghost" size="sm" onClick={handleLogout}>
@@ -132,7 +132,7 @@ const Navbar = () => {
                     </div>
                   )}
                   <span className="text-sm font-semibold text-ink-hi">
-                    {currentUser.displayName || currentUser.email?.split("@")[0]}
+                    Dashboard
                   </span>
                 </div>
                 <Button variant="ghost" fullWidth onClick={handleLogout}>

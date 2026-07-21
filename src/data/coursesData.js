@@ -1,6 +1,6 @@
-import math from "../assets/CourseImg/math.png";
+import math from "../assets/CourseImg/math-2.png";
 import paint from "../assets/CourseImg/paint.png";
-import finance from "../assets/CourseImg/finance.png";
+import finance from "../assets/CourseImg/finance-3.png";
 import Dmarket from "../assets/CourseImg/Dmarket.png";
 import coding from "../assets/CourseImg/coding.png";
 import python from "../assets/CourseImg/python.png";
@@ -10,9 +10,6 @@ import two from "../assets/Icons/two.jpg";
 import three from "../assets/Icons/three.jpg";
 import four from "../assets/Icons/four.jpg";
 
-// Each syllabus module now carries real reading `content` and a single-question
-// `exercise`. A module is only completed when its exercise is answered correctly,
-// and a course can only be marked complete once every module is done.
 export const COURSES = [
   {
     id: 1,
@@ -21,49 +18,45 @@ export const COURSES = [
     rating: "4.9",
     image: python,
     students: "1,200",
-    desc: "Learn to code by building real games. Perfect for beginners aged 10-16. No experience needed!",
+    desc: "Learn to code by building real games. Perfect for beginners aged 10-16. Dive into Python fundamentals and game mechanics!",
     avatars: [one, two, three, four],
     syllabus: [
       {
         title: "Module 1: Hello Python!",
-        desc: "Learn what Python is and write your very first lines of code.",
-        content:
-          "Python is a programming language — a way of giving instructions to a computer using words that look a bit like English. People use Python to build games, websites, and even robots. The most famous first program is printing a message to the screen. In Python you write it like this: print(\"Hello!\"). The word print tells the computer to show whatever is inside the quotation marks.",
+        desc: "Learn what Python is, how to set up your environment, and write your very first lines of code.",
+        content: "Python is a high-level, interpreted programming language known for its readability and beginner-friendly syntax. It’s used by companies like Google, NASA, and Netflix. In Python, you write instructions that the computer reads top-to-bottom. The most fundamental command is the 'print' statement. For example, 'print(\"Hello World!\")' instructs the computer to display text on the screen. Programming is simply the art of giving clear, step-by-step instructions to a machine to solve a problem or perform a task. In this module, we will explore the Python interpreter, learn about strings (text), and run our first script.",
         exercise: {
-          question: "Which Python command shows a message on the screen?",
+          question: "Which Python command is used to display a message on the screen?",
           options: ["show()", "print()", "say()", "display()"],
           answer: "print()",
         },
       },
       {
-        title: "Module 2: Variables & Math",
-        desc: "Store numbers, text, and make the computer do math for you.",
-        content:
-          "A variable is like a labelled box where you keep a value so you can use it later. For example, age = 10 puts the number 10 into a box called age. You can do math with variables too: score = 5 + 3 stores 8 in score. Computers are brilliant at math and never make mistakes with it, so variables let you build calculators, scoreboards, and game points.",
+        title: "Module 2: Variables & Data Types",
+        desc: "Store numbers and text, and learn how to make the computer perform mathematical operations.",
+        content: "A variable is like a labeled container in the computer's memory where you can store data for later use. For example, 'player_score = 10' stores the integer 10 in a variable named player_score. Python handles different 'Data Types' automatically. You have Integers (whole numbers), Floats (decimals), Strings (text), and Booleans (True/False). You can perform arithmetic directly with variables: 'total = 5 + 3' stores 8. Understanding how to store and manipulate these basic data types is crucial for keeping track of game states, like health points, timers, or player names.",
         exercise: {
-          question: "What is stored in the variable after: points = 4 + 6 ?",
+          question: "What will be stored in the variable after running: points = 4 + 6 ?",
           options: ["46", "10", "4 + 6", "Nothing"],
           answer: "10",
         },
       },
       {
-        title: "Module 3: Logic & Loops",
-        desc: "Teach the computer how to make decisions and repeat actions.",
-        content:
-          "Sometimes you want the computer to choose. An if statement runs code only when something is true, like: if score > 10: print(\"You win!\"). Other times you want to repeat something without copying it many times. A loop does that — a for loop can repeat an action 10 times in just two lines. Decisions and loops are what make programs feel smart.",
+        title: "Module 3: Logic, If-Statements, & Loops",
+        desc: "Teach your program to make dynamic decisions and repeat actions using Control Flow.",
+        content: "Control Flow dictates how a program makes choices. An 'if' statement evaluates a condition: 'if score > 10: print(\"You win!\")' only runs the code block if the condition evaluates to True. Conversely, loops allow you to repeat code efficiently without copy-pasting. A 'for' loop iterates over a sequence a specific number of times (e.g., 'for i in range(5):'), while a 'while' loop runs continuously as long as a condition remains true. Mastering loops and conditionals is the secret to building AI behaviors, game loops, and responsive applications.",
         exercise: {
-          question: "What do we use to make the computer repeat an action?",
-          options: ["A variable", "A loop", "A print", "A quote"],
+          question: "What control structure do we use to make the computer repeat an action?",
+          options: ["A variable", "A loop", "A print statement", "A string"],
           answer: "A loop",
         },
       },
       {
-        title: "Module 4: Build a Guessing Game",
-        desc: "Put it all together and build an interactive game to play with friends!",
-        content:
-          "Now we combine everything. A guessing game picks a secret number, then asks the player to guess. We use input() to read the player's guess, an if statement to check if it is correct, and a loop to keep asking until they get it right. That is variables, logic, and loops working together — a real, playable game built by you!",
+        title: "Module 4: Build a Number Guessing Game",
+        desc: "Combine variables, loops, logic, and user input to build an interactive, playable game.",
+        content: "It's time to build your first game! We will use the 'random' module to generate a secret number. We will use the 'input()' function to capture the player's guess from the keyboard. We then wrap the logic in a 'while' loop, giving the player multiple chances. If their guess is too high, we print 'Too high!'. If it's too low, we print 'Too low!'. When they match the secret number, we break out of the loop and declare them the winner. This project combines all your previous learning into a real, functional software application.",
         exercise: {
-          question: "Which command reads what the player types in?",
+          question: "Which function allows us to read text typed by the player?",
           options: ["read()", "input()", "get()", "type()"],
           answer: "input()",
         },
@@ -77,51 +70,47 @@ export const COURSES = [
     rating: "4.8",
     image: math,
     students: "950",
-    desc: "Math isn't just numbers—it's magic! Solve fun puzzles, learn cool tricks, and master logic.",
+    desc: "Math isn't just numbers—it's magic! Develop critical thinking by solving puzzles, identifying patterns, and mastering logic.",
     avatars: [one, two, three],
     syllabus: [
       {
-        title: "Module 1: The Magic of Numbers",
-        desc: "Discover cool number patterns that look like magic tricks.",
-        content:
-          "Numbers hide secret patterns. Even numbers (2, 4, 6, 8) can always be split into two equal groups, while odd numbers (1, 3, 5) always have one left over. Spotting patterns is the first superpower of a mathematician — once you see a pattern, you can predict what comes next without counting everything.",
+        title: "Module 1: Number Sequences & Patterns",
+        desc: "Discover mathematical patterns that help you predict the future and solve complex problems quickly.",
+        content: "Mathematics is often called the science of patterns. Recognizing sequences allows us to predict the next number without manual counting. Consider the Fibonacci sequence: 0, 1, 1, 2, 3, 5, 8... where each number is the sum of the two preceding ones. Such patterns appear everywhere in nature, from the spiral of galaxies to the arrangement of leaves on a stem. By identifying whether a pattern relies on addition, multiplication, or powers, you unlock a mathematical superpower to solve problems exponentially faster.",
         exercise: {
-          question: "Which of these is an even number?",
-          options: ["7", "3", "8", "5"],
-          answer: "8",
+          question: "In the sequence 2, 4, 6, 8, what comes next?",
+          options: ["9", "10", "12", "16"],
+          answer: "10",
         },
       },
       {
-        title: "Module 2: Geometry in the Wild",
-        desc: "Find shapes in nature, architecture, and video games.",
-        content:
-          "Geometry is the study of shapes. A triangle has 3 sides, a square has 4 equal sides, and a circle has none — it is perfectly round. You can find these shapes everywhere: pizza slices are triangles, windows are squares, and wheels are circles. Learning shapes helps you understand how things are built.",
+        title: "Module 2: Real-World Geometry",
+        desc: "Understand spatial reasoning by exploring 2D shapes, 3D solids, and their properties.",
+        content: "Geometry explores the properties of space, shapes, and figures. A triangle has 3 sides and its interior angles always add up to 180 degrees. A square is a regular quadrilateral with 4 equal sides and 90-degree angles. Beyond 2D flat shapes, we have 3D solids like spheres, cubes, and pyramids. Geometry is the foundation of architecture, engineering, and 3D video game design. By learning how to calculate perimeters and areas, you learn how to measure the physical world around you.",
         exercise: {
-          question: "How many sides does a triangle have?",
-          options: ["2", "3", "4", "5"],
-          answer: "3",
+          question: "How many sides does a hexagon have?",
+          options: ["5", "6", "7", "8"],
+          answer: "6",
         },
       },
       {
-        title: "Module 3: Logic Puzzles",
-        desc: "Solve riddles that will bend your brain and make you smarter.",
-        content:
-          "Logic means thinking in careful steps to reach an answer. In a logic puzzle you use clues to rule things out. For example: if a fruit is red and round and grows on a tree, it is probably an apple. Each clue removes wrong answers until only the right one is left. Good detectives and good mathematicians both use logic.",
+        title: "Module 3: Deductive Logic & Puzzles",
+        desc: "Enhance your brain's processing power by solving riddles using strict logical deduction.",
+        content: "Logic is the systematic process of valid reasoning. Deductive reasoning involves starting with general premises and narrowing down to a specific conclusion. For example: Premise 1: All birds have feathers. Premise 2: A robin is a bird. Conclusion: A robin has feathers. In logic puzzles, you apply constraints to eliminate impossible scenarios. If a treasure is not in the red box or the blue box, and there are only three boxes, deduction tells us it must be in the green box. Mathematicians use logic to write infallible proofs.",
         exercise: {
-          question: "In logic, what do we use clues to do?",
-          options: ["Guess randomly", "Rule out wrong answers", "Skip the question", "Count to ten"],
-          answer: "Rule out wrong answers",
+          question: "If A is taller than B, and B is taller than C, who is the tallest?",
+          options: ["A", "B", "C", "They are the same"],
+          answer: "A",
         },
       },
       {
-        title: "Module 4: Master Problem Solver",
-        desc: "Learn the secret steps to solving ANY math problem easily.",
-        content:
-          "Every hard problem gets easier with a plan. Step 1: read carefully and find what is being asked. Step 2: pick out the important numbers. Step 3: choose the operation (add, subtract, multiply, or divide). Step 4: check your answer makes sense. Breaking a big problem into small steps is the real secret of every math master.",
+        title: "Module 4: Algorithmic Problem Solving",
+        desc: "Learn the universal step-by-step framework to tackle and solve ANY complex problem.",
+        content: "An algorithm is simply a step-by-step set of instructions to solve a problem. The ultimate problem-solving framework is: 1) Understand the Problem (What is known? What is unknown?). 2) Formulate a Plan (Have I seen a similar problem? Can I draw a diagram?). 3) Execute the Plan (Perform the calculations). 4) Review and Verify (Does the answer make sense?). Breaking a massive, intimidating problem down into tiny, manageable steps is how software engineers and mathematicians tackle the world's hardest challenges.",
         exercise: {
-          question: "What is the FIRST step to solving a problem?",
-          options: ["Guess the answer", "Read carefully and find what's asked", "Write it down neatly", "Ask a friend"],
-          answer: "Read carefully and find what's asked",
+          question: "What is the most important FIRST step when solving a difficult math word problem?",
+          options: ["Guess the answer immediately", "Understand the problem and what is being asked", "Write down random numbers", "Skip it"],
+          answer: "Understand the problem and what is being asked",
         },
       },
     ],
@@ -133,51 +122,47 @@ export const COURSES = [
     rating: "4.9",
     image: finance,
     students: "840",
-    desc: "Learn how money works, how to save your allowance, and what investing really means.",
+    desc: "Develop financial literacy early. Learn about budgeting, compound interest, banking, and smart investing.",
     avatars: [one, two, three, four],
     syllabus: [
       {
-        title: "Module 1: What is Money?",
-        desc: "Learn where money comes from and how people use it every day.",
-        content:
-          "Money is something everyone agrees has value, so we can trade it for things we need. Long ago people swapped goods directly — a chicken for some bread — but that was tricky. Money makes trading easy: you earn it by doing work, then spend it on food, toys, or games. It is really just a helpful tool for exchange.",
+        title: "Module 1: The Evolution of Money",
+        desc: "Learn why money was invented, how currency works, and the concept of value.",
+        content: "Before money, humans used 'barter'—trading goods directly, like exchanging wheat for a cow. This was inefficient. Money was invented as a universal 'Medium of Exchange'. It acts as a unit of account and a store of value. Whether it is cowrie shells, gold coins, paper bills, or modern digital cryptocurrency, money only works because a society collectively agrees that it has value. Understanding that money is simply a tool to facilitate trade is the first step in mastering personal finance.",
         exercise: {
-          question: "Why did people invent money?",
-          options: ["To make trading easier", "To decorate homes", "To play games", "To feed animals"],
-          answer: "To make trading easier",
+          question: "What economic problem did the invention of money solve?",
+          options: ["The need for decorations", "The difficulty of direct bartering", "The lack of paper", "The need for heavier pockets"],
+          answer: "The difficulty of direct bartering",
         },
       },
       {
-        title: "Module 2: Saving & Spending",
-        desc: "How to budget your allowance so you can buy the things you really want.",
-        content:
-          "A budget is a simple plan for your money: some to spend now, and some to save for later. If you want a toy that costs more than this week's allowance, saving a little each week gets you there. The trick is patience — spending everything instantly means you can never afford the bigger things you really want.",
+        title: "Module 2: Budgeting Fundamentals",
+        desc: "Take control of your cash flow. Learn how to track expenses and create a realistic budget.",
+        content: "A budget is a strategic plan that tells your money where to go, rather than wondering where it went. It involves balancing your Income (money coming in) with your Expenses (money going out). A popular rule is the 50/30/20 rule: 50% for Needs (food, shelter), 30% for Wants (toys, games), and 20% for Savings. Consistently spending less than you earn is the golden rule of wealth building. Without a budget, it is impossible to save for large, meaningful goals.",
         exercise: {
-          question: "What is a budget?",
-          options: ["A type of coin", "A plan for your money", "A shop", "A bank robber"],
-          answer: "A plan for your money",
+          question: "In personal finance, what do we call the money you earn or receive?",
+          options: ["Expense", "Income", "Debt", "Tax"],
+          answer: "Income",
         },
       },
       {
-        title: "Module 3: What is a Bank?",
-        desc: "Learn how banks keep your money safe and even pay you to keep it there!",
-        content:
-          "A bank is a safe place to keep your money instead of under your bed. Banks protect your cash and keep a record of exactly how much is yours. Amazingly, they can even pay you a little extra, called interest, just for keeping your money with them. That means your money can slowly grow while it sits safely in the bank.",
+        title: "Module 3: Banking & Compound Interest",
+        desc: "Discover how banking works and the magical mathematical phenomenon of compound interest.",
+        content: "Banks are financial institutions that safeguard your deposits. Instead of letting your money sit idle, banks lend it out to others and charge them interest. In return, the bank pays you a smaller percentage of interest for keeping your money with them. The real magic is 'Compound Interest'—earning interest on your interest. If you save $100 at 10% interest, next year you have $110. The year after, you earn 10% on $110, so you get $11. Over decades, compounding causes wealth to grow exponentially.",
         exercise: {
-          question: "The extra money a bank pays you for saving is called…",
-          options: ["A fee", "Interest", "A fine", "Change"],
-          answer: "Interest",
+          question: "Earning interest not just on your initial deposit, but also on past interest is called:",
+          options: ["Simple Interest", "Compound Interest", "Tax Deduction", "Inflation"],
+          answer: "Compound Interest",
         },
       },
       {
-        title: "Module 4: The Idea of Investing",
-        desc: "A simple, kid-friendly look at how money can grow over time.",
-        content:
-          "Investing means using your money to try to make more money over time — like planting a seed that grows into a tree. Instead of spending, you put money into something that can grow, and you wait patiently. Investing can grow your money more than saving, but it also has more risk, so smart investors are patient and careful.",
+        title: "Module 4: Principles of Investing",
+        desc: "Learn how to put your money to work through stocks, bonds, and assets.",
+        content: "Saving protects your money, but investing grows it. When you invest, you buy assets that you believe will increase in value or generate income. Buying a 'Stock' means you own a tiny slice of a real company (like Apple or Disney). If the company does well, your slice becomes more valuable. Buying a 'Bond' means you are lending money to a company or government for a fixed return. Investing involves risk, so smart investors diversify—they don't put all their eggs in one basket.",
         exercise: {
-          question: "Investing is most like…",
-          options: ["Spending it all today", "Planting a seed that grows over time", "Hiding money in a sock", "Giving it away"],
-          answer: "Planting a seed that grows over time",
+          question: "When you buy a 'Stock', what are you actually buying?",
+          options: ["A piece of paper", "A small ownership slice of a company", "A loan to the government", "A physical product"],
+          answer: "A small ownership slice of a company",
         },
       },
     ],
@@ -189,51 +174,47 @@ export const COURSES = [
     rating: "4.7",
     image: Dmarket,
     students: "620",
-    desc: "Love making videos or designing? Learn how creators safely share their ideas with the world.",
+    desc: "Master the art of attention. Learn branding, storytelling, content creation, and online safety for future creators.",
     avatars: [one, two, three],
     syllabus: [
       {
-        title: "Module 1: What is a Brand?",
-        desc: "Learn why you recognize your favorite toys, games, and snacks instantly.",
-        content:
-          "A brand is the personality of a product — its name, logo, colors, and the feeling it gives you. You can spot your favorite snack or game from far away because its brand is consistent everywhere. A strong brand helps people remember and trust something, which is why companies design their logos and colors so carefully.",
+        title: "Module 1: Brand Identity & Positioning",
+        desc: "Learn how companies create recognizable identities using logos, colors, and psychology.",
+        content: "A brand is much more than just a logo; it is the emotional response and reputation a company holds in a consumer's mind. Brand Identity includes visual elements (color palettes, typography) and voice (how the brand speaks). For example, red often conveys excitement or urgency, while blue implies trust and calm. Good positioning answers: 'Why should someone choose my product over the competition?' Consistency across all platforms is what makes a brand instantly recognizable.",
         exercise: {
-          question: "A logo is part of a company's…",
-          options: ["Homework", "Brand", "Lunch", "Password"],
-          answer: "Brand",
+          question: "Which of the following is considered part of a company's Brand Identity?",
+          options: ["Office location", "Employee salaries", "Logos, colors, and tone of voice", "Tax returns"],
+          answer: "Logos, colors, and tone of voice",
         },
       },
       {
-        title: "Module 2: Telling a Story",
-        desc: "How to make a poster or a video that tells a great story.",
-        content:
-          "The best posters and videos tell a little story: they grab your attention, show why something matters, and end with a clear message. A good story has a beginning, a middle, and an end. When you make something, ask: what do I want people to feel, and what do I want them to do next?",
+        title: "Module 2: The Art of Storytelling",
+        desc: "Discover how to structure narratives that captivate audiences and drive engagement.",
+        content: "Humans are hardwired to respond to stories, not just raw facts. In digital marketing, storytelling is used to build a connection. A great marketing story features a Hero (the customer), a Problem (their pain point), a Guide (your product), and a Resolution (success). Whether you are writing a 15-second TikTok script or a blog post, hooking the audience in the first 3 seconds is crucial. A compelling narrative transforms a casual viewer into a loyal fan.",
         exercise: {
-          question: "A good story needs a beginning, a middle, and a…",
-          options: ["Colour", "End", "Price", "Song"],
-          answer: "End",
+          question: "In marketing storytelling, who should typically be the 'Hero' of the story?",
+          options: ["The CEO", "The Customer", "The Product", "The Competitor"],
+          answer: "The Customer",
         },
       },
       {
-        title: "Module 3: Safe Sharing",
-        desc: "How to safely share ideas online while protecting your privacy.",
-        content:
-          "Sharing online is fun, but staying safe matters most. Never share private details like your home address, school, or passwords with strangers. A good rule: only post things you would be happy for a teacher or parent to see, and always ask a trusted adult if you are unsure. Being safe online keeps the fun going.",
+        title: "Module 3: Digital Citizenship & Safety",
+        desc: "Navigate the digital landscape responsibly. Learn about privacy, digital footprints, and online ethics.",
+        content: "As a creator, sharing your work online is exciting, but safety is paramount. Your 'Digital Footprint' is the permanent trail of data you leave behind on the internet. Once something is posted, it can be screenshotted and shared forever. Never share Personally Identifiable Information (PII) like your home address, phone number, or school location. Furthermore, practice good digital citizenship by respecting copyrights, crediting original artists, and treating others with respect in comment sections.",
         exercise: {
-          question: "Which of these should you NEVER share with strangers online?",
-          options: ["Your favorite color", "Your home address", "A drawing", "A joke"],
-          answer: "Your home address",
+          question: "Which of the following should you NEVER share publicly online?",
+          options: ["Your favorite movie", "Your home address (PII)", "A drawing you made", "Your opinion on a game"],
+          answer: "Your home address (PII)",
         },
       },
       {
-        title: "Module 4: Your First Campaign",
-        desc: "Design a fun campaign for a fake product of your choice!",
-        content:
-          "A campaign is a plan to tell people about something. It has a goal (what you want to happen), a message (what you want to say), and an audience (who you want to reach). Imagine inventing a new juice: your goal might be to get kids excited, your message 'super fruity and fun', and your audience other kids your age.",
+        title: "Module 4: Launching Your Campaign",
+        desc: "Design, plan, and execute a mock digital marketing campaign for a product.",
+        content: "A marketing campaign is a coordinated series of steps to promote a product. First, you define your Objective (e.g., get 100 new sign-ups). Next, you identify your Target Audience (who exactly are you speaking to?). Then, you choose your Channels (YouTube, Instagram, Email). Finally, you craft the Call To Action (CTA)—a clear instruction telling the audience what to do next, like 'Click here to subscribe!'. Understanding these metrics allows creators to measure the success of their campaigns.",
         exercise: {
-          question: "Who you want to reach with your message is called the…",
-          options: ["Audience", "Budget", "Logo", "Weather"],
-          answer: "Audience",
+          question: "What does 'CTA' stand for in digital marketing?",
+          options: ["Cost To Advertise", "Call To Action", "Center Text Alignment", "Click To Add"],
+          answer: "Call To Action",
         },
       },
     ],
@@ -245,51 +226,47 @@ export const COURSES = [
     rating: "4.9",
     image: coding,
     students: "1,400",
-    desc: "Learn the languages of the internet. Build and style your very own custom webpage!",
+    desc: "Become a web developer. Master the core markup and styling languages that power the entire internet.",
     avatars: [one, two, three],
     syllabus: [
       {
-        title: "Module 1: Skeleton of the Web",
-        desc: "Learn HTML and build the bones of your first website.",
-        content:
-          "HTML is the language that builds the structure of every webpage — its skeleton. It uses tags written in angle brackets, like <h1> for a big heading and <p> for a paragraph. Each tag tells the browser what a piece of content is. Just like bones hold up your body, HTML holds up a website.",
+        title: "Module 1: The DOM & HTML Structure",
+        desc: "Learn how the Document Object Model works and write semantic HTML5 markup.",
+        content: "HTML (HyperText Markup Language) provides the raw structure of a webpage. Browsers read HTML to construct the DOM (Document Object Model), a tree-like representation of the page. Semantic HTML involves using tags that convey meaning, like <header>, <article>, and <footer>, rather than just generic <div> tags. This not only makes your code easier for humans to read but is crucial for SEO (Search Engine Optimization) and screen readers used by visually impaired users. Every web journey starts with a solid, semantic skeleton.",
         exercise: {
-          question: "What does HTML build on a webpage?",
-          options: ["The colors", "The structure (skeleton)", "The music", "The internet"],
-          answer: "The structure (skeleton)",
+          question: "Why is using Semantic HTML important?",
+          options: ["It makes the code colorful", "It improves SEO and Accessibility", "It makes the website load slower", "It replaces the need for CSS"],
+          answer: "It improves SEO and Accessibility",
         },
       },
       {
-        title: "Module 2: Painting with CSS",
-        desc: "Add colors, fonts, and backgrounds to make your site pop.",
-        content:
-          "If HTML is the skeleton, CSS is the paint and clothes. CSS controls how things look: colors, fonts, sizes, and spacing. For example, color: blue makes text blue. With CSS you take a plain page and turn it into something beautiful and colorful, without changing the structure underneath.",
+        title: "Module 2: CSS Selectors & Styling",
+        desc: "Master Cascading Style Sheets to inject color, typography, and visual flair into your layouts.",
+        content: "If HTML is the skeleton, CSS (Cascading Style Sheets) is the skin and clothing. CSS applies styling rules to HTML elements. You use Selectors to target elements: tag selectors (p), class selectors (.btn), or ID selectors (#header). You can adjust properties like color, background, font-family, and padding. The 'Cascade' means that rules read later in the stylesheet can override earlier ones. With CSS, you can completely transform a boring text document into a stunning, professional user interface.",
         exercise: {
-          question: "What is CSS mainly used for?",
-          options: ["Building structure", "Making the page look good (styling)", "Storing data", "Sending email"],
-          answer: "Making the page look good (styling)",
+          question: "Which CSS selector targets an element with the class name 'box'?",
+          options: ["#box", ".box", "box", "*box"],
+          answer: ".box",
         },
       },
       {
-        title: "Module 3: Adding Images & Links",
-        desc: "Learn how to connect pages together and add cool pictures.",
-        content:
-          "Websites are connected by links. The <a> tag creates a link you can click to jump to another page. To show a picture, the <img> tag points to an image file. Links and images turn a single boring page into a connected, colorful website you can explore.",
+        title: "Module 3: The Box Model & Layouts",
+        desc: "Understand margins, borders, padding, and how to position elements perfectly on screen.",
+        content: "The CSS Box Model is the foundation of all web layouts. Every single element on a webpage is a rectangular box. The box consists of four layers: the Content (the actual text/image), the Padding (space inside the box), the Border (the outline), and the Margin (space outside the box pushing other elements away). Understanding the box model prevents elements from overlapping unpredictably. Modern layouts also utilize Flexbox and CSS Grid to align boxes side-by-side easily.",
         exercise: {
-          question: "Which tag is used to add a clickable link?",
-          options: ["<img>", "<a>", "<h1>", "<p>"],
-          answer: "<a>",
+          question: "In the CSS Box Model, what represents the transparent space OUTSIDE the border?",
+          options: ["Content", "Padding", "Margin", "Outline"],
+          answer: "Margin",
         },
       },
       {
-        title: "Module 4: Publish Your Page",
-        desc: "Put everything together into a final project you can show off.",
-        content:
-          "Publishing means putting your webpage on the internet so others can visit it. You combine your HTML structure and CSS styling into a finished page, then upload it using a hosting service. Once it is live, anyone with the link can see the website you built — your very own corner of the internet!",
+        title: "Module 4: Deployment & Hosting",
+        desc: "Take your local code and deploy it to a live web server for the world to see.",
+        content: "Writing code on your local computer is great, but to share it, you must Deploy it. Web Hosting involves placing your HTML and CSS files on a server—a powerful computer that is always connected to the internet. Services like Vercel, Netlify, or Firebase Hosting make it incredibly easy to upload your files. Once deployed, the host assigns your site a URL (Uniform Resource Locator). You have now successfully transformed from a consumer of the internet into a creator!",
         exercise: {
-          question: "What does 'publishing' a webpage mean?",
-          options: ["Deleting it", "Putting it online for others to see", "Printing it", "Hiding it"],
-          answer: "Putting it online for others to see",
+          question: "What is a server in the context of web hosting?",
+          options: ["A waiter in a restaurant", "A computer always connected to the internet that serves your files", "A type of CSS code", "A local folder"],
+          answer: "A computer always connected to the internet that serves your files",
         },
       },
     ],
@@ -301,51 +278,47 @@ export const COURSES = [
     rating: "4.6",
     image: paint,
     students: "1,100",
-    desc: "Turn your computer into a canvas! Learn colors, shapes, and digital drawing tools.",
+    desc: "Unleash your creativity. Learn industry-standard digital art techniques, composition, and color theory.",
     avatars: [one, two, three, four],
     syllabus: [
       {
-        title: "Module 1: The Digital Brush",
-        desc: "Learn how to use digital drawing tools and layers.",
-        content:
-          "Digital art is drawing on a screen with special tools instead of paper. One superpower is layers — like clear sheets stacked on top of each other. You can draw the background on one layer and a character on another, then move or fix one without ruining the rest. Layers make mistakes easy to undo.",
+        title: "Module 1: Interface & Layer Management",
+        desc: "Familiarize yourself with digital canvases, brush settings, and the power of non-destructive layers.",
+        content: "Transitioning from traditional to digital art gives you absolute control. The UI of most art software (like Procreate or Photoshop) revolves around the Canvas, the Tool Palette (brushes, erasers), and the Layer Panel. Layers are transparent sheets stacked on top of each other. Drawing a character's sketch on Layer 1 and coloring on Layer 2 ensures that fixing the color won't erase your perfect sketch lines. This non-destructive workflow is the biggest advantage of digital creation.",
         exercise: {
-          question: "What do layers let a digital artist do?",
-          options: ["Change one part without ruining the rest", "Print faster", "Save money", "Turn off the screen"],
-          answer: "Change one part without ruining the rest",
+          question: "What is the main advantage of using Layers in digital art?",
+          options: ["It makes the file size smaller", "It allows non-destructive editing (changing one part without ruining another)", "It automatically draws for you", "It makes colors brighter"],
+          answer: "It allows non-destructive editing (changing one part without ruining another)",
         },
       },
       {
-        title: "Module 2: Color Theory Basics",
-        desc: "Discover which colors look great together and why.",
-        content:
-          "Color theory helps you choose colors that look good together. The three primary colors — red, blue, and yellow — can be mixed to make all other colors. Colors opposite each other on the color wheel, like blue and orange, create exciting contrast. Understanding color makes your art feel balanced and lively.",
+        title: "Module 2: Advanced Color Theory",
+        desc: "Master the color wheel, values, saturation, and how to create emotional lighting.",
+        content: "Color isn't just about picking what looks pretty; it's a science. The Color Wheel maps out relationships. Analogous colors (next to each other) create harmony, while Complementary colors (opposites, like Blue and Orange) create striking contrast. 'Value' refers to how light or dark a color is, and 'Saturation' refers to its intensity. By mastering values, you can create the illusion of 3D form and dramatic lighting, manipulating where the viewer's eye is drawn first.",
         exercise: {
-          question: "Which of these is a primary color?",
-          options: ["Green", "Purple", "Red", "Pink"],
-          answer: "Red",
+          question: "In color theory, what are colors opposite each other on the color wheel called?",
+          options: ["Analogous", "Complementary", "Primary", "Monochromatic"],
+          answer: "Complementary",
         },
       },
       {
-        title: "Module 3: Drawing Characters",
-        desc: "Learn simple shapes to create cool, cartoon-style characters.",
-        content:
-          "Every character starts with simple shapes. A circle for a head, ovals for a body and arms, and lines for legs. Artists sketch these basic shapes first, then add details like eyes and clothes on top. Starting with shapes makes even tricky characters easy to draw.",
+        title: "Module 3: Composition & Anatomy",
+        desc: "Learn to structure your artwork with the Rule of Thirds and build dynamic character poses.",
+        content: "Composition is the arrangement of elements within an artwork. The 'Rule of Thirds' suggests dividing your canvas into a 3x3 grid and placing focal points at the intersections, which feels naturally pleasing to the human eye. When drawing characters, don't focus on outlines first. Instead, break anatomy down into basic 3D shapes: spheres for the head, cylinders for arms, and blocks for the torso. Establishing a solid structural foundation ensures dynamic and believable poses.",
         exercise: {
-          question: "What do artists usually start a character with?",
-          options: ["Tiny details", "Simple shapes", "The background", "Their name"],
-          answer: "Simple shapes",
+          question: "When drawing a character, what should you start with to build a solid foundation?",
+          options: ["Detailed eyes and hair", "Basic 3D shapes (spheres, cylinders)", "The background", "Perfect outlines"],
+          answer: "Basic 3D shapes (spheres, cylinders)",
         },
       },
       {
-        title: "Module 4: Your Masterpiece",
-        desc: "Create a final digital painting using all the skills you've learned.",
-        content:
-          "Now you bring it all together: use layers to stay organized, color theory to pick a great palette, and simple shapes to build your subject. Take your time, zoom in for details, and remember that every artist improves with practice. Your finished piece is a masterpiece made with real skills you learned step by step.",
+        title: "Module 4: Rendering & Final Polish",
+        desc: "Bring your artwork to life by adding highlights, shadows, textures, and post-processing effects.",
+        content: "Rendering is the final stage where flat shapes become 3D masterpieces. First, determine your light source. Surfaces facing the light get Highlights, while surfaces facing away fall into Shadow. 'Ambient Occlusion' occurs in deep crevices where little light reaches. Finally, you can add texture brushes to simulate materials like metal or fur. A final polish pass might include color balancing or adding a subtle glow. Patience in the rendering phase transforms a good sketch into a professional illustration.",
         exercise: {
-          question: "Which skills do you combine for your final piece?",
-          options: ["Only color", "Layers, color theory, and shapes", "Just shapes", "None"],
-          answer: "Layers, color theory, and shapes",
+          question: "What determines where the highlights and shadows fall on your drawing?",
+          options: ["The color palette", "The light source", "The layer order", "The canvas size"],
+          answer: "The light source",
         },
       },
     ],
