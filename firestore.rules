@@ -35,6 +35,18 @@ service cloud.firestore {
           && d.completedAt is timestamp;
     }
 
+    // A course enrollment may only be flagged `completed: true` once the number
+    // of completed modules covers every module. Any not-yet-completed write is
+    // allowed (enroll, per-module progress). This gates completion on the
+    // database, not just in the UI.
+    function isValidEnrollment() {
+      let d = request.resource.data;
+      return d.get('completed', false) == false
+          || (d.completedModules is list
+              && d.totalModules is number
+              && d.completedModules.size() >= d.totalModules);
+    }
+
     // --- User profile ----------------------------------------------------
 
     match /Users/{userId} {
@@ -52,10 +64,12 @@ service cloud.firestore {
         allow update, delete: if false;
       }
 
-      // --- Enrolled Courses -----------------------------------------------
-      // Owner can read and enroll in courses.
+      // --- Enrolled courses + progress ------------------------------------
+      // Owner-only. Enroll and per-module progress writes are allowed; flagging
+      // the course completed requires all modules done (isValidEnrollment).
       match /enrolledCourses/{courseId} {
-        allow read, write: if isOwner(userId);
+        allow read, delete: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidEnrollment();
       }
     }
 
