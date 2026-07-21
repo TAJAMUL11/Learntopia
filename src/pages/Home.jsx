@@ -58,7 +58,7 @@ const Home = () => {
         </div>
 
         <h1
-          className="mt-6 animate-fade-up text-balance text-4xl font-black leading-[1.08] tracking-tight sm:text-6xl md:text-7xl"
+          className="mt-6 animate-fade-up text-balance text-4xl font-black leading-[1.1] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
           style={{ animationDelay: "0.05s" }}
         >
           <span className="text-ink-hi">Build your </span>
@@ -79,7 +79,7 @@ const Home = () => {
         </div>
 
         <p
-          className="mt-8 max-w-2xl animate-fade-up text-lg leading-relaxed text-ink md:text-xl"
+          className="mt-6 max-w-2xl animate-fade-up text-base leading-relaxed text-ink sm:mt-8 sm:text-lg md:text-xl"
           style={{ animationDelay: "0.15s" }}
         >
           Learn and sharpen your skills with interactive courses and real-time skill tests, built for

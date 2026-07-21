@@ -59,17 +59,17 @@ const StatsSection = () => {
         });
       });
 
-      // Bars grow from the baseline
+      // Horizontal bars grow from the left
       if (reduced) {
-        gsap.set(barRefs.current, { scaleY: 1 });
+        gsap.set(barRefs.current, { scaleX: 1 });
       } else {
         gsap.from(barRefs.current, {
-          scaleY: 0,
-          transformOrigin: "bottom",
+          scaleX: 0,
+          transformOrigin: "left",
           duration: 1,
           ease: "power3.out",
-          stagger: 0.09,
-          scrollTrigger: { trigger: sectionRef.current, start: "top 68%", once: true },
+          stagger: 0.08,
+          scrollTrigger: { trigger: sectionRef.current, start: "top 78%", once: true },
         });
       }
     },
@@ -103,52 +103,36 @@ const StatsSection = () => {
         ))}
       </div>
 
-      {/* Bar chart */}
+      {/* Horizontal bar chart — no overflow on any width */}
       <Card className="mt-6 p-6 md:p-8">
-        <div className="mb-8 flex flex-wrap items-end justify-between gap-2">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-2">
           <div>
-            <h3 className="text-lg font-bold text-ink-hi">Enrollments by subject</h3>
+            <h3 className="text-base font-bold text-ink-hi sm:text-lg">Enrollments by subject</h3>
             <p className="mt-1 text-sm text-ink-low">Where our learners are focusing right now.</p>
           </div>
           <span className="flex items-center gap-2 text-xs text-ink-low">
-            <span className="inline-block h-2.5 w-2.5 rounded-sm bg-violet-500" />
-            Students enrolled
+            <span className="inline-block h-2.5 w-2.5 rounded-sm bg-gradient-to-r from-violet-600 to-sky" />
+            Students
           </span>
         </div>
 
-        {/* plot area with y-axis gridlines */}
-        <div className="relative h-56 pl-8">
-          <div className="absolute inset-0 flex flex-col-reverse justify-between pl-8">
-            {[0, 200, 400, 600].map((tick) => (
-              <div key={tick} className="relative border-t border-white/[0.05]">
-                <span className="absolute -top-2 left-0 -translate-x-full pr-2 text-[0.65rem] tabular-nums text-ink-faint">
-                  {tick}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          {/* bars */}
-          <div className="relative flex h-full items-end justify-between gap-4 sm:gap-6">
-            {BARS.map((bar, i) => (
-              <div key={bar.label} className="flex h-full flex-1 flex-col items-center justify-end">
-                <span className="mb-1.5 text-xs font-semibold tabular-nums text-ink">{bar.value}</span>
+        <div className="space-y-3.5">
+          {BARS.map((bar, i) => (
+            <div key={bar.label} className="flex items-center gap-3 sm:gap-4">
+              <span className="w-[68px] flex-none truncate text-xs font-medium text-ink-low sm:w-24 sm:text-sm">
+                {bar.label}
+              </span>
+              <div className="h-3.5 flex-grow overflow-hidden rounded-full bg-white/[0.06]">
                 <div
                   ref={(el) => { barRefs.current[i] = el; }}
-                  style={{ height: `${(bar.value / MAX) * 100}%` }}
-                  className="w-full max-w-[38px] rounded-t-md bg-gradient-to-t from-violet-700 to-violet-500"
+                  style={{ width: `${(bar.value / MAX) * 100}%` }}
+                  className="h-full origin-left rounded-full bg-gradient-to-r from-violet-600 to-sky"
                 />
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* x-axis labels */}
-        <div className="mt-3 flex justify-between gap-4 pl-8 sm:gap-6">
-          {BARS.map((bar) => (
-            <span key={bar.label} className="flex-1 text-center text-[0.7rem] font-medium text-ink-low sm:text-xs">
-              {bar.label}
-            </span>
+              <span className="w-9 flex-none text-right text-xs font-bold tabular-nums text-ink sm:text-sm">
+                {bar.value}
+              </span>
+            </div>
           ))}
         </div>
       </Card>

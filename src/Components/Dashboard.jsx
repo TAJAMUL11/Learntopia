@@ -169,14 +169,29 @@ const Dashboard = () => {
               </h2>
               {activeCourses.length > 0 ? (
                 <ul className="space-y-3">
-                  {activeCourses.map((c) => (
-                    <li key={c.courseId} className="group relative overflow-hidden rounded-xl border border-white/[0.08] bg-black/20 p-4 transition-all hover:-translate-y-0.5 hover:bg-white/[0.04]">
-                      <Link to={`/course/${c.courseId}`} className="block">
-                        <p className="text-xs font-semibold uppercase tracking-wider text-sky">{c.category}</p>
-                        <h3 className="mt-1 font-semibold text-ink-hi group-hover:text-white">{c.title}</h3>
-                      </Link>
-                    </li>
-                  ))}
+                  {activeCourses.map((c) => {
+                    const doneCount = Array.isArray(c.completedModules) ? c.completedModules.length : 0;
+                    const pct = c.totalModules ? Math.round((doneCount / c.totalModules) * 100) : null;
+                    return (
+                      <li key={c.courseId} className="group relative overflow-hidden rounded-xl border border-white/[0.08] bg-black/20 p-4 transition-all hover:-translate-y-0.5 hover:bg-white/[0.04]">
+                        <Link to={`/course/${c.courseId}`} className="block">
+                          <p className="text-xs font-semibold uppercase tracking-wider text-sky">{c.category}</p>
+                          <h3 className="mt-1 font-semibold text-ink-hi group-hover:text-white">{c.title}</h3>
+                          {pct !== null && (
+                            <div className="mt-3">
+                              <div className="mb-1 flex justify-between text-[11px] text-ink-low">
+                                <span>{doneCount} / {c.totalModules} modules</span>
+                                <span className="tabular-nums">{pct}%</span>
+                              </div>
+                              <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.08]">
+                                <div className="h-full rounded-full bg-gradient-to-r from-violet-600 to-sky transition-[width] duration-500" style={{ width: `${pct}%` }} />
+                              </div>
+                            </div>
+                          )}
+                        </Link>
+                      </li>
+                    );
+                  })}
                 </ul>
               ) : (
                 <EmptyState

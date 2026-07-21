@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import Logo from "./ui/Logo";
+import Icon from "./ui/Icon";
 
 const LINK_GROUPS = [
   {
@@ -25,12 +26,19 @@ const LINK_GROUPS = [
       { to: "/", label: "Home" },
     ],
   },
+  {
+    title: "Legal",
+    links: [
+      { to: "/privacy", label: "Privacy Policy" },
+      { to: "/terms", label: "Terms of Service" },
+    ],
+  },
 ];
 
 const Footer = () => (
   <footer className="mt-20 select-none border-t border-white/[0.07] bg-ground-900/60 backdrop-blur-md">
     <div className="container-page py-12">
-      <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+      <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr_1fr]">
         {/* Brand column */}
         <div>
           <Logo size={34} />
@@ -60,12 +68,40 @@ const Footer = () => (
       </div>
 
       {/* Bottom bar */}
-      <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-white/[0.06] pt-6 text-xs text-ink-low sm:flex-row">
+      <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-white/[0.06] pt-6 text-xs text-ink-low sm:flex-row">
         <p>&copy; {new Date().getFullYear()} Learntopia. All rights reserved.</p>
         <div className="flex items-center gap-4">
-          <a href="#" className="transition-colors hover:text-ink-hi">Privacy Policy</a>
-          <span className="text-white/15">|</span>
-          <a href="#" className="transition-colors hover:text-ink-hi">Terms of Service</a>
+          <span>
+            Built by{" "}
+            <a
+              href="https://github.com/tajamul11"
+              target="_blank"
+              rel="noreferrer"
+              className="font-semibold text-ink transition-colors hover:text-ink-hi"
+            >
+              Tajamul Wani
+            </a>
+          </span>
+          <div className="flex items-center gap-2">
+            <a
+              href="https://github.com/tajamul11"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="GitHub"
+              className="grid h-8 w-8 place-items-center rounded-lg border border-white/[0.08] text-ink-low transition-colors hover:border-white/20 hover:bg-white/[0.05] hover:text-ink-hi"
+            >
+              <Icon name="github" size={16} />
+            </a>
+            <a
+              href="https://linkedin.com/in/tajamul-wani"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="LinkedIn"
+              className="grid h-8 w-8 place-items-center rounded-lg border border-white/[0.08] text-ink-low transition-colors hover:border-white/20 hover:bg-white/[0.05] hover:text-ink-hi"
+            >
+              <Icon name="linkedin" size={16} />
+            </a>
+          </div>
         </div>
       </div>
     </div>

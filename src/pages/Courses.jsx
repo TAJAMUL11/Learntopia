@@ -6,6 +6,7 @@ import { setDoc, doc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import Card from "../Components/ui/Card";
 import Button from "../Components/ui/Button";
+import ImageWithSkeleton from "../Components/ui/ImageWithSkeleton";
 import SearchInput from "../Components/ui/SearchInput";
 import SectionHeading from "../Components/ui/SectionHeading";
 import EmptyState from "../Components/ui/EmptyState";
@@ -86,10 +87,10 @@ const Courses = () => {
 
               <div className="relative mb-4 flex justify-center overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-white/[0.08] to-white/[0.02] py-8">
                 <div className="pointer-events-none absolute left-1/2 top-3 h-20 w-32 -translate-x-1/2 rounded-full bg-violet-500/30 blur-2xl transition-opacity duration-500 group-hover:bg-sky/30" />
-                <img
+                <ImageWithSkeleton
                   src={course.image}
                   alt={course.title}
-                  className="relative h-24 w-auto object-contain drop-shadow-[0_12px_22px_rgba(0,0,0,0.5)] transition-transform duration-500 group-hover:scale-[1.07]"
+                  imgClassName="relative h-24 w-auto object-contain drop-shadow-[0_12px_22px_rgba(0,0,0,0.5)] transition-[opacity,transform] duration-500 group-hover:scale-[1.07]"
                 />
               </div>
 
