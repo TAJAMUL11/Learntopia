@@ -1,5 +1,5 @@
 import { db } from "../firebase/firebase";
-import { getDoc, doc, collection, getDocs } from "firebase/firestore";
+import { getDoc, doc, collection, getDocs, deleteDoc } from "firebase/firestore";
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -9,6 +9,7 @@ import Button from "./ui/Button";
 import Icon from "./ui/Icon";
 import EmptyState from "./ui/EmptyState";
 import { Skeleton } from "./ui/Skeleton";
+import Modal from "./ui/Modal";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -18,6 +19,8 @@ const Dashboard = () => {
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [quizScores, setQuizScores] = useState({});
   const [loading, setLoading] = useState(true);
+  const [courseToUnenroll, setCourseToUnenroll] = useState(null);
+  const [unenrollLoading, setUnenrollLoading] = useState(false);
 
   useEffect(() => {
     if (!currentUser) {
@@ -77,6 +80,22 @@ const Dashboard = () => {
       navigate("/login", { replace: true });
     } catch (error) {
       toast.error(error.message);
+    }
+  };
+
+  const handleUnenroll = async () => {
+    if (!courseToUnenroll) return;
+    setUnenrollLoading(true);
+    try {
+      await deleteDoc(doc(db, "Users", currentUser.uid, "enrolledCourses", courseToUnenroll.courseId.toString()));
+      setEnrolledCourses(prev => prev.filter(c => c.courseId !== courseToUnenroll.courseId));
+      toast.success(`Successfully unenrolled from ${courseToUnenroll.title}`);
+      setCourseToUnenroll(null);
+    } catch (err) {
+      console.error("Error unenrolling:", err);
+      toast.error("Failed to unenroll. Please try again.");
+    } finally {
+      setUnenrollLoading(false);
     }
   };
 
@@ -189,6 +208,13 @@ const Dashboard = () => {
                             </div>
                           )}
                         </Link>
+                        <button 
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); setCourseToUnenroll(c); }}
+                          className="absolute right-3 top-3 rounded-lg p-2 text-ink-low transition-all hover:bg-white/[0.08] hover:text-state-danger"
+                          title="Unenroll"
+                        >
+                          <Icon name="trash-2" size={16} />
+                        </button>
                       </li>
                     );
                   })}
@@ -214,11 +240,20 @@ const Dashboard = () => {
                   <ul className="space-y-3">
                     {completedCourses.map((c) => (
                       <li key={c.courseId} className="group flex items-center justify-between rounded-xl border border-white/[0.08] bg-white/[0.02] p-4 transition-colors hover:bg-white/[0.04]">
-                        <Link to={`/course/${c.courseId}`} className="block pr-4">
+                        <Link to={`/course/${c.courseId}`} className="block pr-4 flex-grow">
                           <p className="text-[10px] font-bold uppercase tracking-wider text-ink-low">{c.category}</p>
                           <h3 className="mt-1 text-sm font-semibold text-ink-hi group-hover:text-white line-clamp-1">{c.title}</h3>
                         </Link>
-                        <span className="flex-none rounded-full bg-green-500/20 px-2 py-1 text-[10px] font-bold text-green-400 uppercase tracking-widest">Done</span>
+                        <div className="flex flex-none items-center gap-2">
+                          <span className="flex-none rounded-full bg-green-500/20 px-2 py-1 text-[10px] font-bold text-green-400 uppercase tracking-widest">Done</span>
+                          <button 
+                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setCourseToUnenroll(c); }}
+                            className="rounded-lg p-2 text-ink-low transition-all hover:bg-white/[0.08] hover:text-state-danger"
+                            title="Unenroll"
+                          >
+                            <Icon name="trash-2" size={16} />
+                          </button>
+                        </div>
                       </li>
                     ))}
                   </ul>
@@ -252,6 +287,30 @@ const Dashboard = () => {
           </div>
         </div>
       )}
+
+      <Modal
+        isOpen={!!courseToUnenroll}
+        onClose={() => setCourseToUnenroll(null)}
+        title="Unenroll from course?"
+        icon="alert-octagon"
+        actionText="Yes, unenroll"
+        actionVariant="danger"
+        isDestructive={true}
+        onAction={handleUnenroll}
+        loading={unenrollLoading}
+      >
+        <p className="mb-4">
+          Are you sure you want to unenroll from <strong className="text-white">{courseToUnenroll?.title}</strong>?
+        </p>
+        <div className="rounded-xl border border-state-danger/20 bg-state-danger/10 p-4 text-sm">
+          <div className="flex items-start gap-3 text-state-danger">
+            <Icon name="alert-triangle" size={18} className="mt-0.5 flex-none" />
+            <div className="leading-relaxed">
+              <span className="font-bold">Warning:</span> All progress, quiz scores, and completion history for this course will be permanently deleted. This cannot be undone.
+            </div>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
