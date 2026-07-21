@@ -29,7 +29,10 @@ const Courses = () => {
         courseId: course.id,
         title: course.title,
         category: course.category,
-        enrolledAt: new Date()
+        enrolledAt: new Date(),
+        completed: false,
+        completedModules: [],
+        totalModules: course.syllabus ? course.syllabus.length : 0
       }, { merge: true });
       navigate(`/course/${course.id}`);
     } catch (err) {
@@ -95,9 +98,9 @@ const Courses = () => {
               </div>
 
               <h3 className="text-lg font-bold leading-snug text-ink-hi">{course.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink-low">{course.desc}</p>
+              <p className="mt-2 mb-6 text-xs leading-relaxed text-ink-low line-clamp-2">{course.desc}</p>
 
-              <div className="mt-auto flex items-center justify-between border-t border-white/[0.07] pt-4">
+              <div className="mt-auto flex items-center justify-between border-t border-white/[0.07] pt-5">
                 <div>
                   <div className="flex -space-x-2">
                     {course.avatars.map((a, i) => (

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { db } from "../firebase/firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, deleteField } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { COURSES } from "../data/coursesData";
 import Card from "../Components/ui/Card";
@@ -10,6 +10,7 @@ import Button from "../Components/ui/Button";
 import Icon from "../Components/ui/Icon";
 import ImageWithSkeleton from "../Components/ui/ImageWithSkeleton";
 import { Skeleton } from "../Components/ui/Skeleton";
+import Modal from "../Components/ui/Modal";
 
 const CourseDetails = () => {
   const { id } = useParams();
@@ -22,6 +23,7 @@ const CourseDetails = () => {
   const [expandedIndex, setExpandedIndex] = useState(0);
   const [loadingData, setLoadingData] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
 
   // Per-attempt exercise UI state for the currently active module.
   const [selected, setSelected] = useState(null);
@@ -137,6 +139,34 @@ const CourseDetails = () => {
     } catch (err) {
       console.error("Error completing course:", err);
       toast.error("Couldn't mark the course complete. Please try again.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const resetCourse = async () => {
+    if (saving) return;
+    setSaving(true);
+    try {
+      await setDoc(
+        courseRef(),
+        {
+          completed: false,
+          completedAt: deleteField(),
+          completedModules: [],
+          totalModules: total,
+          progressUpdatedAt: new Date(),
+        },
+        { merge: true }
+      );
+      setCompletedModules([]);
+      setIsCompleted(false);
+      setExpandedIndex(0);
+      setShowResetModal(false);
+      toast.success("Course reset! Good luck on your fresh start. 🌱");
+    } catch (err) {
+      console.error("Error resetting course:", err);
+      toast.error("Couldn't reset the course. Please try again.");
     } finally {
       setSaving(false);
     }
@@ -323,7 +353,11 @@ const CourseDetails = () => {
             </div>
             <div className="flex flex-none gap-3">
               <Button variant="secondary" onClick={() => navigate("/dashboard")}>Dashboard</Button>
-              {!isCompleted && (
+              {isCompleted ? (
+                <Button variant="secondary" onClick={() => setShowResetModal(true)} className="gap-2">
+                  <Icon name="refresh-cw" size={16} /> Start Again
+                </Button>
+              ) : (
                 <Button onClick={markCourseComplete} disabled={!allDone} loading={saving && allDone}>
                   Mark as complete
                 </Button>
@@ -332,6 +366,27 @@ const CourseDetails = () => {
           </div>
         </Card>
       </div>
+
+      <Modal
+        isOpen={showResetModal}
+        onClose={() => setShowResetModal(false)}
+        title="Start Again?"
+        icon="refresh-cw"
+        actionText="Yes, reset course"
+        actionVariant="primary"
+        onAction={resetCourse}
+        loading={saving}
+      >
+        <p className="mb-4">Are you sure you want to reset your progress and start this course from the beginning?</p>
+        <div className="rounded-xl border border-state-warning/20 bg-state-warning/10 p-4 text-sm">
+          <div className="flex items-start gap-3 text-state-warning">
+            <Icon name="alert-triangle" size={18} className="mt-0.5 flex-none" />
+            <div className="leading-relaxed">
+              <span className="font-bold">Warning:</span> All your current checkmarks and completion timestamps will be permanently wiped out. This action cannot be undone.
+            </div>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
