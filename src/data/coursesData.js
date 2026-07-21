@@ -3,7 +3,7 @@ import paint from "../assets/CourseImg/paint.png";
 import finance from "../assets/CourseImg/finance-3.png";
 import Dmarket from "../assets/CourseImg/Dmarket.png";
 import coding from "../assets/CourseImg/coding.png";
-import python from "../assets/CourseImg/Python.png";
+import python from "../assets/CourseImg/python.png";
 
 import one from "../assets/Icons/one.jpg";
 import two from "../assets/Icons/two.jpg";
