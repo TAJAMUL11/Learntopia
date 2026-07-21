@@ -8,6 +8,7 @@ import Card from "../Components/ui/Card";
 import Button from "../Components/ui/Button";
 import Field from "../Components/ui/Field";
 import Icon from "../Components/ui/Icon";
+import ImageWithSkeleton from "../Components/ui/ImageWithSkeleton";
 import google from "../assets/Icons/google.png";
 import signIn from "../assets/Icons/signIn.png";
 import signUpImage from "../assets/signUpImage.jpeg";
@@ -65,12 +66,8 @@ const Login = () => {
     <div className="container-page flex min-h-[80vh] items-center justify-center py-12">
       <div className="grid w-full max-w-5xl items-center gap-10 lg:grid-cols-2">
         {/* Banner */}
-        <div className="hidden lg:block">
-          <img
-            src={signUpImage}
-            alt=""
-            className="h-full max-h-[560px] w-full rounded-3xl border border-white/[0.06] object-cover shadow-card"
-          />
+        <div className="relative hidden aspect-[4/5] max-h-[560px] overflow-hidden rounded-3xl border border-white/[0.06] shadow-card lg:block">
+          <ImageWithSkeleton src={signUpImage} alt="" imgClassName="h-full w-full object-cover transition-opacity duration-500" />
         </div>
 
         {/* Form */}
