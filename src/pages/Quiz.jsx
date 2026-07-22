@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useBlocker } from "react-router-dom";
 import { toast } from "react-toastify";
 import { db } from "../firebase/firebase";
 import { collection, addDoc, getDocs } from "firebase/firestore";
@@ -10,6 +10,7 @@ import Button from "../Components/ui/Button";
 import Badge from "../Components/ui/Badge";
 import Alert from "../Components/ui/Alert";
 import Icon from "../Components/ui/Icon";
+import Modal from "../Components/ui/Modal";
 import { Skeleton } from "../Components/ui/Skeleton";
 
 const Quiz = () => {
@@ -20,6 +21,14 @@ const Quiz = () => {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [isAnswerSubmitted, setIsAnswerSubmitted] = useState(false);
   const [score, setScore] = useState(0);
+
+  const [showQuitModal, setShowQuitModal] = useState(false);
+
+  // Block navigation when a quiz is active
+  const blocker = useBlocker(
+    ({ currentLocation, nextLocation }) =>
+      screen === "active" && currentLocation.pathname !== nextLocation.pathname
+  );
 
   // Timer (15s per question)
   const [timeLeft, setTimeLeft] = useState(15);
@@ -71,14 +80,25 @@ const Quiz = () => {
       }
 
       if (isTimeout) {
-        toast.warn("Time's up for this question!");
+        toast.error("Time's up for this question!", {
+          style: { backgroundColor: "rgba(225, 29, 72, 0.15)", color: "#fecdd3", border: "1px solid rgba(225, 29, 72, 0.3)" }
+        });
       }
     },
     [isAnswerSubmitted, activeQuiz, currentQuestionIdx]
   );
 
   const startQuiz = (quiz) => {
-    setActiveQuiz(quiz);
+    const QUESTIONS_PER_QUIZ = 10;
+    const shuffledQuestions = [...quiz.questions].sort(() => 0.5 - Math.random());
+    const selectedQuestions = shuffledQuestions.slice(0, QUESTIONS_PER_QUIZ);
+    
+    const sessionQuiz = {
+      ...quiz,
+      questions: selectedQuestions
+    };
+
+    setActiveQuiz(sessionQuiz);
     setCurrentQuestionIdx(0);
     setScore(0);
     setSelectedAnswer(null);
@@ -180,7 +200,7 @@ const Quiz = () => {
                       <Skeleton className="h-4 w-24" />
                     ) : highScores[quiz.id] !== undefined ? (
                       <span className="flex items-center gap-1.5 font-semibold text-sky">
-                        <Icon name="trophy" size={14} /> Best: {highScores[quiz.id]} / {quiz.questions.length}
+                        <Icon name="trophy" size={14} /> Best: {highScores[quiz.id]} / {Math.min(quiz.questions.length, 10)}
                       </span>
                     ) : (
                       <span className="text-ink-low">Not attempted yet</span>
@@ -204,15 +224,15 @@ const Quiz = () => {
                 Question {currentQuestionIdx + 1} of {activeQuiz.questions.length}
               </h2>
             </div>
-            <span
-              className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-bold tabular-nums ${
-                urgent
-                  ? "animate-pulse border-state-danger/40 bg-state-danger/15 text-state-danger"
-                  : "border-sky/30 bg-sky/10 text-sky"
-              }`}
-            >
-              <Icon name="clock" size={14} /> 00:{timeLeft < 10 ? `0${timeLeft}` : timeLeft}
-            </span>
+              <span
+                className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-bold tabular-nums ${
+                  urgent
+                    ? "animate-pulse border-state-danger/40 bg-state-danger/15 text-state-danger"
+                    : "border-sky/30 bg-sky/10 text-sky"
+                }`}
+              >
+                <Icon name="clock" size={14} /> 00:{timeLeft < 10 ? `0${timeLeft}` : timeLeft}
+              </span>
           </div>
 
           {/* Timer bar */}
@@ -262,14 +282,19 @@ const Quiz = () => {
             })}
           </div>
 
-          {isAnswerSubmitted && (
-            <div className="mt-8 flex justify-end">
+          <div className="mt-8 flex items-center justify-between">
+            <Button variant="danger" onClick={() => setShowQuitModal(true)}>
+              Quit Quiz
+            </Button>
+            {isAnswerSubmitted ? (
               <Button onClick={handleNext}>
                 {currentQuestionIdx + 1 === activeQuiz.questions.length ? "Finish quiz" : "Next question"}
                 <Icon name="arrow" size={16} />
               </Button>
-            </div>
-          )}
+            ) : (
+              <div />
+            )}
+          </div>
         </Card>
       )}
 
@@ -317,6 +342,32 @@ const Quiz = () => {
           </div>
         </Card>
       )}
+
+      {/* Modals */}
+      <Modal
+        isOpen={showQuitModal || blocker.state === "blocked"}
+        onClose={() => {
+          if (blocker.state === "blocked") blocker.reset();
+          setShowQuitModal(false);
+        }}
+        title="Quit Quiz?"
+        icon="alert-triangle"
+        actionText="Quit"
+        actionVariant="danger"
+        isDestructive={true}
+        onAction={() => {
+          if (blocker.state === "blocked") {
+            blocker.proceed();
+          } else {
+            setScreen("selection");
+            setActiveQuiz(null);
+          }
+          setShowQuitModal(false);
+        }}
+      >
+        <p>Are you sure you want to leave? Your progress won't be saved and this attempt won't be logged.</p>
+      </Modal>
+
     </div>
   );
 };
