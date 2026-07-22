@@ -1,136 +1,140 @@
 export const quizzes = [
   {
     id: "python",
-    title: "Python: Programming for Beginners",
-    subject: "IT Software",
-    description: "Test your knowledge of basic Python syntax, data types, and core concepts.",
+    title: "Python for Kids",
+    subject: "Programming",
+    description: "Test your knowledge on basic Python, variables, and loops!",
     questions: [
-      {
-        id: 1,
-        questionText: "Who developed the Python programming language?",
-        options: ["Guido van Rossum", "Dennis Ritchie", "James Gosling", "Bjarne Stroustrup"],
-        correctAnswer: "Guido van Rossum"
-      },
-      {
-        id: 2,
-        questionText: "Which keyword is used to define a function in Python?",
-        options: ["function", "def", "func", "define"],
-        correctAnswer: "def"
-      },
-      {
-        id: 3,
-        questionText: "What is the output of print(type([])) in Python?",
-        options: ["<class 'list'>", "<class 'tuple'>", "<class 'dict'>", "<class 'array'>"],
-        correctAnswer: "<class 'list'>"
-      },
-      {
-        id: 4,
-        questionText: "Which of the following is an immutable data type in Python?",
-        options: ["list", "dict", "set", "tuple"],
-        correctAnswer: "tuple"
-      },
-      {
-        id: 5,
-        questionText: "How do you start a single-line comment in Python?",
-        options: ["//", "/*", "#", "--"],
-        correctAnswer: "#"
-      }
+      { id: 1, questionText: "What is Python?", options: ["A type of snake", "A computer language", "A video game", "A calculator"], correctAnswer: "A computer language" },
+      { id: 2, questionText: "Which command makes the computer display text?", options: ["show()", "speak()", "print()", "display()"], correctAnswer: "print()" },
+      { id: 3, questionText: "Python is famous for being:", options: ["Super hard to read", "Only for scientists", "Easy to read for humans", "Only for old computers"], correctAnswer: "Easy to read for humans" },
+      { id: 4, questionText: "What is a variable?", options: ["A labeled box for storing data", "A type of error", "A math problem", "A printer"], correctAnswer: "A labeled box for storing data" },
+      { id: 5, questionText: "What do we call text like 'Hello' in programming?", options: ["Integer", "String", "Number", "Robot Text"], correctAnswer: "String" },
+      { id: 6, questionText: "If score = 4 + 6, what is inside the score variable?", options: ["46", "4 + 6", "10", "Error"], correctAnswer: "10" },
+      { id: 7, questionText: "What do 'if statements' allow a program to do?", options: ["Crash", "Make decisions", "Print text", "Store variables"], correctAnswer: "Make decisions" },
+      { id: 8, questionText: "In code, what does the '>' symbol mean?", options: ["Equal to", "Less than", "Greater than", "Plus"], correctAnswer: "Greater than" },
+      { id: 9, questionText: "Which of these is a correct if statement?", options: ["if score is 10 then win", "if score > 10:", "score if 10", "if (10) score"], correctAnswer: "if score > 10:" },
+      { id: 10, questionText: "Which command lets the user type in an answer?", options: ["print()", "type()", "input()", "read()"], correctAnswer: "input()" },
+      { id: 11, questionText: "Why do we use a loop in a game?", options: ["To make it colorful", "To let the player guess multiple times", "To stop the game", "To make it harder"], correctAnswer: "To let the player guess multiple times" },
+      { id: 12, questionText: "If the secret is 5 and you guess 8, the program should say:", options: ["Too Low!", "Too High!", "You Win!", "Crash"], correctAnswer: "Too High!" },
+      { id: 13, questionText: "What TV show was Python named after?", options: ["Python Rangers", "Monty Python's Flying Circus", "The Daily Python", "Snake TV"], correctAnswer: "Monty Python's Flying Circus" },
+      { id: 14, questionText: "What type of data is a whole number like 5?", options: ["String", "Integer", "Float", "Boolean"], correctAnswer: "Integer" },
+      { id: 15, questionText: "If Mario hits a Goomba, what kind of statement handles him losing a life?", options: ["A print statement", "An if statement", "A loop", "A string"], correctAnswer: "An if statement" }
     ]
   },
   {
-    id: "frontend",
-    title: "Frontend Development: Core Concepts",
-    subject: "IT Software",
-    description: "Verify your understanding of HTML, CSS, React Hooks, and compilation tools.",
+    id: "math",
+    title: "Math Magic",
+    subject: "Mathematics",
+    description: "Test your skills in sequences, geometry, and logic puzzles.",
     questions: [
-      {
-        id: 1,
-        questionText: "What does HTML stand for?",
-        options: [
-          "HyperText Markup Language",
-          "HighText Machine Language",
-          "HyperTabular Markup Language",
-          "HyperTech Media Language"
-        ],
-        correctAnswer: "HyperText Markup Language"
-      },
-      {
-        id: 2,
-        questionText: "Which CSS property is used to change the text size of an element?",
-        options: ["text-size", "font-size", "font-weight", "size"],
-        correctAnswer: "font-size"
-      },
-      {
-        id: 3,
-        questionText: "Which React hook is used to perform side effects in functional components?",
-        options: ["useState", "useContext", "useEffect", "useMemo"],
-        correctAnswer: "useEffect"
-      },
-      {
-        id: 4,
-        questionText: "What is the primary purpose of the 'key' prop in React lists?",
-        options: [
-          "To style the list elements uniquely",
-          "To bind event handlers to elements",
-          "To help React identify which items have changed, been added, or been removed",
-          "To secure the list data from injection"
-        ],
-        correctAnswer: "To help React identify which items have changed, been added, or been removed"
-      },
-      {
-        id: 5,
-        questionText: "Which tool/command is configured in Vite projects to run the local development server?",
-        options: ["npm run build", "npm run dev", "npm run start", "npm run serve"],
-        correctAnswer: "npm run dev"
-      }
+      { id: 1, questionText: "What is the next number in: 5, 10, 15, 20...?", options: ["22", "25", "30", "100"], correctAnswer: "25" },
+      { id: 2, questionText: "What is the next number in: 1, 3, 5, 7...?", options: ["8", "9", "10", "11"], correctAnswer: "9" },
+      { id: 3, questionText: "What do we call a list of numbers that follows a rule?", options: ["A mess", "A sequence", "A variable", "A loop"], correctAnswer: "A sequence" },
+      { id: 4, questionText: "How many sides does a hexagon have?", options: ["4", "5", "6", "8"], correctAnswer: "6" },
+      { id: 5, questionText: "What do we call a 3D square?", options: ["Sphere", "Cube", "Pyramid", "Cylinder"], correctAnswer: "Cube" },
+      { id: 6, questionText: "What type of angle is exactly 90 degrees?", options: ["Cute Angle", "Right Angle", "Wrong Angle", "Left Angle"], correctAnswer: "Right Angle" },
+      { id: 7, questionText: "If A is taller than B, and B is taller than C. Who is the tallest?", options: ["A", "B", "C", "They are equal"], correctAnswer: "A" },
+      { id: 8, questionText: "I have 4 legs but cannot walk. What am I?", options: ["A dog", "A chair", "A bird", "A snake"], correctAnswer: "A chair" },
+      { id: 9, questionText: "What is deductive reasoning?", options: ["Guessing wildly", "Using clues to eliminate wrong answers", "Adding numbers", "Drawing shapes"], correctAnswer: "Using clues to eliminate wrong answers" },
+      { id: 10, questionText: "What is an algorithm?", options: ["A math error", "A type of dinosaur", "A step-by-step list of instructions", "A 3D shape"], correctAnswer: "A step-by-step list of instructions" },
+      { id: 11, questionText: "Why does the order of steps matter in an algorithm?", options: ["It doesn't", "So the computer doesn't get confused and fail", "Because it looks pretty", "To save electricity"], correctAnswer: "So the computer doesn't get confused and fail" },
+      { id: 12, questionText: "What is the best way to solve a massive, hard problem?", options: ["Cry", "Break it down into tiny, easy steps", "Guess", "Give up"], correctAnswer: "Break it down into tiny, easy steps" },
+      { id: 13, questionText: "The Fibonacci sequence is found in:", options: ["Only textbooks", "Sunflower seeds and galaxies", "Only computers", "Nowhere"], correctAnswer: "Sunflower seeds and galaxies" },
+      { id: 14, questionText: "If you have a triangle, how many angles does it have?", options: ["2", "3", "4", "5"], correctAnswer: "3" },
+      { id: 15, questionText: "Which company uses algorithms to find websites for you?", options: ["Nintendo", "Google", "McDonald's", "Ford"], correctAnswer: "Google" }
+    ]
+  },
+  {
+    id: "finance",
+    title: "Money Smart",
+    subject: "Finance",
+    description: "Budgeting, investing, and the history of money.",
+    questions: [
+      { id: 1, questionText: "What is bartering?", options: ["Using credit cards", "Trading goods directly", "Investing in stocks", "Saving in a bank"], correctAnswer: "Trading goods directly" },
+      { id: 2, questionText: "Why was money invented?", options: ["Because coins are shiny", "To make trading easier", "To make wallets heavy", "Because chickens ran away"], correctAnswer: "To make trading easier" },
+      { id: 3, questionText: "Money only works if...", options: ["It's made of gold", "It's printed on green paper", "Everyone agrees it has value", "It has a president's face"], correctAnswer: "Everyone agrees it has value" },
+      { id: 4, questionText: "Money that comes IN to your pocket is called:", options: ["Expense", "Income", "Tax", "Debt"], correctAnswer: "Income" },
+      { id: 5, questionText: "Money that goes OUT (when you buy something) is called:", options: ["Expense", "Income", "Profit", "Dividend"], correctAnswer: "Expense" },
+      { id: 6, questionText: "A good budget ensures that...", options: ["You spend everything", "Your expenses are higher than income", "Your expenses are lower than income", "You buy toys every day"], correctAnswer: "Your expenses are lower than income" },
+      { id: 7, questionText: "When a bank pays you for keeping money with them, it's called:", options: ["Taxes", "Interest", "Fines", "Loans"], correctAnswer: "Interest" },
+      { id: 8, questionText: "What is Compound Interest?", options: ["Earning interest on interest", "Losing money", "Paying the bank", "Simple interest"], correctAnswer: "Earning interest on interest" },
+      { id: 9, questionText: "Compound interest works best when you...", options: ["Take your money out immediately", "Leave your money in the bank for a long time", "Spend it all", "Hide it under a bed"], correctAnswer: "Leave your money in the bank for a long time" },
+      { id: 10, questionText: "When you buy a stock, what are you buying?", options: ["A piece of paper", "A tiny slice of a company", "A loan to the government", "A product"], correctAnswer: "A tiny slice of a company" },
+      { id: 11, questionText: "The goal of investing is to...", options: ["Make your money grow", "Lose money", "Keep it exactly the same", "Pay taxes"], correctAnswer: "Make your money grow" },
+      { id: 12, questionText: "Is investing risky?", options: ["No, it's guaranteed", "Yes, companies can lose value", "Only for old people", "No, you always win"], correctAnswer: "Yes, companies can lose value" },
+      { id: 13, questionText: "The golden rule of building wealth is:", options: ["Always spend less than you earn", "Spend everything you have", "Borrow as much as possible", "Never use a bank"], correctAnswer: "Always spend less than you earn" },
+      { id: 14, questionText: "What is a budget?", options: ["A type of animal", "A plan for your money", "A type of bank account", "A loan"], correctAnswer: "A plan for your money" },
+      { id: 15, questionText: "If you buy shares of Disney, you own:", options: ["The whole company", "A tiny slice of Disney", "All their movies", "Nothing"], correctAnswer: "A tiny slice of Disney" }
     ]
   },
   {
     id: "marketing",
-    title: "Digital Marketing: Strategy & Analytics",
+    title: "Future Creators",
     subject: "Marketing",
-    description: "Assess your marketing knowledge including SEO metrics, PPC campaigns, and conversion funnels.",
+    description: "Branding, storytelling, and digital safety for creators.",
     questions: [
-      {
-        id: 1,
-        questionText: "What does SEO stand for?",
-        options: [
-          "Search Engine Optimization",
-          "Social Engagement Optimization",
-          "Search Engine Operations",
-          "Sales Excellence Organization"
-        ],
-        correctAnswer: "Search Engine Optimization"
-      },
-      {
-        id: 2,
-        questionText: "Which of the following is a key performance indicator (KPI) primarily used in email marketing?",
-        options: ["Bounce Rate", "Open Rate", "Cost Per Click", "Impressions"],
-        correctAnswer: "Open Rate"
-      },
-      {
-        id: 3,
-        questionText: "What does PPC stand for in digital advertising?",
-        options: ["Pay-Per-Click", "Price-Per-Campaign", "Post-Purchase-Conversion", "Payment-Protocol-Client"],
-        correctAnswer: "Pay-Per-Click"
-      },
-      {
-        id: 4,
-        questionText: "Which social media platform is primarily tailored towards business networking and professional B2B marketing?",
-        options: ["Instagram", "Pinterest", "LinkedIn", "TikTok"],
-        correctAnswer: "LinkedIn"
-      },
-      {
-        id: 5,
-        questionText: "What is the primary objective of a landing page in digital marketing?",
-        options: [
-          "To host the entire company website map",
-          "To explain the company's historical background",
-          "To convert visitors into leads or customers through a call-to-action",
-          "To list all open jobs in the organization"
-        ],
-        correctAnswer: "To convert visitors into leads or customers through a call-to-action"
-      }
+      { id: 1, questionText: "What is a brand?", options: ["Just a logo", "The feeling and reputation of a company", "The building they work in", "The CEO's name"], correctAnswer: "The feeling and reputation of a company" },
+      { id: 2, questionText: "Why do companies use specific colors?", options: ["Because they are cheap", "To trigger specific emotions", "Because it's random", "To hide dirt"], correctAnswer: "To trigger specific emotions" },
+      { id: 3, questionText: "Which of these is part of a brand's identity?", options: ["Logos, colors, and fonts", "Employee salaries", "The office chairs", "Tax returns"], correctAnswer: "Logos, colors, and fonts" },
+      { id: 4, questionText: "In marketing, who should be the Hero of the story?", options: ["The CEO", "The Product", "The Customer", "The Competitor"], correctAnswer: "The Customer" },
+      { id: 5, questionText: "Why do we use storytelling in marketing?", options: ["To put people to sleep", "To build an emotional connection", "To fill up space", "To confuse people"], correctAnswer: "To build an emotional connection" },
+      { id: 6, questionText: "A good story needs to hook the viewer in the first...", options: ["3 seconds", "3 minutes", "1 hour", "3 days"], correctAnswer: "3 seconds" },
+      { id: 7, questionText: "What is your Digital Footprint?", options: ["Your shoe size", "The trail of data you leave online", "Your printer ink", "Your computer screen"], correctAnswer: "The trail of data you leave online" },
+      { id: 8, questionText: "Which of the following is PII and should NEVER be shared?", options: ["Your favorite movie", "Your home address", "A drawing", "A game review"], correctAnswer: "Your home address" },
+      { id: 9, questionText: "Can things easily be deleted forever from the internet?", options: ["Yes, instantly", "No, people can screenshot and save them", "Yes, by asking nicely", "Yes, if you turn off the computer"], correctAnswer: "No, people can screenshot and save them" },
+      { id: 10, questionText: "What does CTA stand for?", options: ["Call To Action", "Center Text Alignment", "Cost To Advertise", "Click To Add"], correctAnswer: "Call To Action" },
+      { id: 11, questionText: "What is an example of a CTA?", options: ["'We sell shoes.'", "'Subscribe for more videos!'", "'Apples are red.'", "'Hello.'"], correctAnswer: "'Subscribe for more videos!'" },
+      { id: 12, questionText: "Before launching a campaign, you need to know your...", options: ["Favorite color", "Target Audience", "Shoe size", "Lunch order"], correctAnswer: "Target Audience" },
+      { id: 13, questionText: "What colors does McDonald's use to make you feel happy and hungry?", options: ["Blue and Green", "Red and Yellow", "Black and White", "Purple and Orange"], correctAnswer: "Red and Yellow" },
+      { id: 14, questionText: "In a marketing story, the product should act as the:", options: ["Hero", "Villain", "Guide", "Background"], correctAnswer: "Guide" },
+      { id: 15, questionText: "What is the best way to practice digital citizenship?", options: ["Being rude in comments", "Respecting others and giving credit", "Stealing art", "Sharing passwords"], correctAnswer: "Respecting others and giving credit" }
+    ]
+  },
+  {
+    id: "web",
+    title: "Web Wonders",
+    subject: "Science",
+    description: "Test your HTML, CSS, and layout skills.",
+    questions: [
+      { id: 1, questionText: "What does HTML provide for a webpage?", options: ["Colors", "Animations", "The raw structure (skeleton)", "The database"], correctAnswer: "The raw structure (skeleton)" },
+      { id: 2, questionText: "Which tag is used for the biggest heading?", options: ["<p>", "<h1>", "<h6>", "<div>"], correctAnswer: "<h1>" },
+      { id: 3, questionText: "Which tag is used for a paragraph of text?", options: ["<text>", "<p>", "<para>", "<h>"], correctAnswer: "<p>" },
+      { id: 4, questionText: "What does CSS do?", options: ["Builds the structure", "Styles the webpage with colors and layouts", "Stores passwords", "Runs the server"], correctAnswer: "Styles the webpage with colors and layouts" },
+      { id: 5, questionText: "How would you make text red in CSS?", options: ["text: red;", "color: red;", "font-color: red;", "make-red;"], correctAnswer: "color: red;" },
+      { id: 6, questionText: "Can CSS change the font of your text?", options: ["Yes", "No", "Only on Tuesdays", "Only if it's blue"], correctAnswer: "Yes" },
+      { id: 7, questionText: "In the CSS Box model, what is the space INSIDE the border called?", options: ["Margin", "Padding", "Content", "Outline"], correctAnswer: "Padding" },
+      { id: 8, questionText: "What is the space OUTSIDE the border called?", options: ["Margin", "Padding", "Content", "Outline"], correctAnswer: "Margin" },
+      { id: 9, questionText: "Are circular images actually boxes in CSS?", options: ["Yes, everything is a box", "No, circles are circles", "No, they are triangles", "Only if they are red"], correctAnswer: "Yes, everything is a box" },
+      { id: 10, questionText: "What is a server?", options: ["A waiter", "A computer that stays online to host your files", "A type of CSS", "A broken computer"], correctAnswer: "A computer that stays online to host your files" },
+      { id: 11, questionText: "What do you get so people can visit your site?", options: ["A URL", "A USB drive", "A password", "A book"], correctAnswer: "A URL" },
+      { id: 12, questionText: "What does 'Deploying' mean?", options: ["Deleting your code", "Putting your code on a live server for the world to see", "Writing HTML", "Playing a game"], correctAnswer: "Putting your code on a live server for the world to see" },
+      { id: 13, questionText: "What is the DOM?", options: ["Document Object Model", "Direct Object Math", "Digital Outline Maker", "Dog On Moon"], correctAnswer: "Document Object Model" },
+      { id: 14, questionText: "Why is semantic HTML important?", options: ["It makes the site colorful", "It helps blind users and search engines", "It makes the code shorter", "It isn't important"], correctAnswer: "It helps blind users and search engines" },
+      { id: 15, questionText: "Which layer of the box model contains the actual text?", options: ["Margin", "Border", "Padding", "Content"], correctAnswer: "Content" }
+    ]
+  },
+  {
+    id: "art",
+    title: "Digital Art",
+    subject: "Arts",
+    description: "Layers, color theory, and drawing tools.",
+    questions: [
+      { id: 1, questionText: "What are layers in digital art similar to?", options: ["Heavy rocks", "Clear sheets of glass stacked on each other", "A single piece of paper", "A paintbrush"], correctAnswer: "Clear sheets of glass stacked on each other" },
+      { id: 2, questionText: "Why do artists use layers?", options: ["To make the file heavy", "To color without ruining the sketch (non-destructive)", "To break the computer", "To draw slower"], correctAnswer: "To color without ruining the sketch (non-destructive)" },
+      { id: 3, questionText: "If you erase on Layer 2, does it erase Layer 1?", options: ["Yes", "No", "Only if it's red", "Always"], correctAnswer: "No" },
+      { id: 4, questionText: "Colors opposite each other on the wheel are called:", options: ["Analogous", "Complementary", "Primary", "Boring"], correctAnswer: "Complementary" },
+      { id: 5, questionText: "What is an example of complementary colors?", options: ["Red and Pink", "Blue and Orange", "Green and Green", "Black and White"], correctAnswer: "Blue and Orange" },
+      { id: 6, questionText: "What do complementary colors create?", options: ["Boredom", "Maximum contrast and excitement", "A gray mess", "Invisibility"], correctAnswer: "Maximum contrast and excitement" },
+      { id: 7, questionText: "What is the Rule of Thirds?", options: ["Dividing the canvas into a 3x3 grid", "Drawing 3 circles", "Using only 3 colors", "Taking 3 hours to draw"], correctAnswer: "Dividing the canvas into a 3x3 grid" },
+      { id: 8, questionText: "Where should you place your main subject for cinematic composition?", options: ["Dead center", "Off the canvas", "At the grid intersections", "In the bottom corner always"], correctAnswer: "At the grid intersections" },
+      { id: 9, questionText: "Is dead-center always the best place for a character?", options: ["Yes", "No, Rule of Thirds is usually better", "Always", "Only on Mondays"], correctAnswer: "No, Rule of Thirds is usually better" },
+      { id: 10, questionText: "What is rendering?", options: ["Adding light and shadow to make it look 3D", "Erasing the drawing", "Adding a signature", "Saving the file"], correctAnswer: "Adding light and shadow to make it look 3D" },
+      { id: 11, questionText: "The part of the object facing the sun gets a:", options: ["Shadow", "Highlight", "Outline", "Signature"], correctAnswer: "Highlight" },
+      { id: 12, questionText: "The part facing away from the light gets a:", options: ["Highlight", "Shadow", "Bright color", "White spot"], correctAnswer: "Shadow" },
+      { id: 13, questionText: "When drawing a character, what should you draw first?", options: ["Detailed eyes", "Basic 3D shapes like spheres and cylinders", "The background", "The hair"], correctAnswer: "Basic 3D shapes like spheres and cylinders" },
+      { id: 14, questionText: "What does 'value' mean in color theory?", options: ["How much a painting costs", "How light or dark a color is", "How many colors you use", "How big the brush is"], correctAnswer: "How light or dark a color is" },
+      { id: 15, questionText: "Where does 'Ambient Occlusion' happen?", options: ["In direct sunlight", "In deep crevices where light can't reach", "In the sky", "On the highlight"], correctAnswer: "In deep crevices where light can't reach" }
     ]
   }
 ];
