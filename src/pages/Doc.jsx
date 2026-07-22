@@ -17,8 +17,8 @@ const FEATURES = [
   },
   {
     icon: "clock",
-    title: "Timed quizzes",
-    text: "Test yourself against a 15-second-per-question timer with instant right/wrong feedback and saved high scores.",
+    title: "Dynamic timed quizzes",
+    text: "Test yourself with a 15-second timer per question on dynamically randomized questions pulled from a large pool, featuring instant right/wrong feedback. You can safely quit a quiz at any time.",
   },
   {
     icon: "user",
@@ -36,9 +36,19 @@ const FEATURES = [
     text: "Find courses fast by title or subject, with a friendly empty state when nothing matches your search.",
   },
   {
+    icon: "cpu",
+    title: "AI Tutors",
+    text: "Each course features a specialized AI tutor with a unique personality to guide you through the materials.",
+  },
+  {
+    icon: "lock",
+    title: "Strict Focus Mode",
+    text: "Quizzes and modules protect your progress. If you try to navigate away while answering, you'll be warned so you don't lose your work.",
+  },
+  {
     icon: "refresh-cw",
     title: "Course resets & unenrollment",
-    text: "Fully control your dashboard. Start a completed course over from scratch, or permanently unenroll from any course.",
+    text: "Fully control your dashboard. Start a completed course over from scratch, resume active courses, or permanently unenroll.",
   },
 ];
 
@@ -76,6 +86,10 @@ const FAQ = [
   {
     q: "Can I unenroll or reset a course?",
     a: "Yes! You can unenroll from any course directly from your dashboard using the trash icon. If you have 100% completed a course, a 'Start Again' button will appear in the course details so you can reset your progress.",
+  },
+  {
+    q: "Will I lose progress if I accidentally click away?",
+    a: "No. Our Strict Focus Mode detects if you are in the middle of a quiz or an active module challenge. If you try to leave, it will pause and ask for confirmation. Additionally, all completed modules are safely stored in the cloud even if you leave.",
   },
 ];
 
