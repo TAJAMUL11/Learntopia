@@ -15,6 +15,8 @@ Learntopia is a premium, interactive e-learning platform designed to help users 
 * **Robust Authentication & Security**: Secure Firebase Authentication (including Google One-Tap Login) and global user session states, protected by strict, per-user Firestore security rules.
 * **Course Control & Flexibility**: Users can seamlessly resume active courses, unenroll to clean up their dashboard, or reset 100% completed courses to start fresh, protected by premium warning modals.
 * **SEO, GEO, and AEO Optimized**: Configured with Canonical links, Open Graph cards, Geographical region properties, and JSON-LD graph schema markups for Answer Engine Optimization.
+* **Global & Per-Quiz Leaderboards**: Check global top scores or select specific quizzes via dropdown on mobile (or tabs on desktop) to see custom rankings, optimized with stacked card views for mobile screens and a beautiful solid table on desktop.
+* **Mobile Overscroll Optimization**: Custom root background fallbacks and dynamic viewport height (`100dvh`) adjustments to eliminate white background flashes on mobile scroll.
 * **Global Footer**: A unified footer persistent across all routing pages.
 
 ---
@@ -67,5 +69,3 @@ Ensure you have Node.js and npm installed on your system.
 
 ---
 
-## 👨‍💻 Author
-Built by **Tajamul Wani** (Email: [thetj4054@gmail.com](mailto:thetj4054@gmail.com)).

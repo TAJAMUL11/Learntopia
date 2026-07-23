@@ -50,6 +50,11 @@ const FEATURES = [
     title: "Course resets & unenrollment",
     text: "Fully control your dashboard. Start a completed course over from scratch, resume active courses, or permanently unenroll.",
   },
+  {
+    icon: "trophy",
+    title: "Global & Per-Quiz Leaderboards",
+    text: "View top learners globally or filter by individual quizzes with mobile-optimized card views and desktop grid layouts.",
+  },
 ];
 
 const STEPS = [
