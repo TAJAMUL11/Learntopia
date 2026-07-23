@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { to: "/", label: "Home", end: true },
   { to: "/courses", label: "Courses" },
   { to: "/quiz", label: "Quiz" },
+  { to: "/leaderboard", label: "Leaderboard" },
   { to: "/contact", label: "Contact" },
 ];
 
