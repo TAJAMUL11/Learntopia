@@ -15,16 +15,20 @@
 
 html {
   scroll-behavior: smooth;
+  background-color: #070510;
 }
 
 body {
+  /* Solid fallback so mobile overscroll never shows white */
+  background-color: #070510;
   /* Deep midnight ground with restrained ambient glows (kept subtle, not flashy). */
-  background:
+  background-image:
     radial-gradient(1100px 560px at 82% -8%, rgba(139, 99, 227, 0.10), transparent 60%),
     radial-gradient(820px 460px at -5% 8%, rgba(123, 191, 242, 0.06), transparent 55%),
     linear-gradient(160deg, #070510 0%, #0E0A1C 55%, #150E28 100%);
   background-attachment: fixed;
   min-height: 100vh;
+  min-height: 100dvh;
   color: #bdb4d0;
   overflow-x: hidden;
   font-family: "Poppins", "Segoe UI", system-ui, -apple-system, sans-serif;

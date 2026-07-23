@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Link, useBlocker } from "react-router-dom";
 import { toast } from "react-toastify";
 import { db } from "../firebase/firebase";
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import { collection, addDoc, getDocs, doc, updateDoc, increment, setDoc } from "firebase/firestore";
 import { quizzes } from "../data/quizData";
 import { useAuth } from "../context/AuthContext";
 import Card from "../Components/ui/Card";
@@ -51,6 +51,25 @@ const Quiz = () => {
         completedAt: new Date(),
       };
       await addDoc(collection(db, "Users", currentUser.uid, "quizAttempts"), attempt);
+      
+      const pointsEarned = finalScore * 10;
+      if (pointsEarned > 0) {
+        const userRef = doc(db, "Users", currentUser.uid);
+        await updateDoc(userRef, {
+          totalPoints: increment(pointsEarned)
+        });
+        
+        // Also sync to global QuizLeaderboard
+        const globalScoreRef = doc(db, "QuizLeaderboards", activeQuiz.id, "Scores", currentUser.uid);
+        await setDoc(globalScoreRef, {
+          score: pointsEarned,
+          rawScore: finalScore,
+          userFullName: currentUser.displayName || "User",
+          userId: currentUser.uid,
+          completedAt: new Date()
+        }, { merge: true });
+      }
+
       setHighScores((prev) => ({
         ...prev,
         [activeQuiz.id]: Math.max(prev[activeQuiz.id] || 0, finalScore),

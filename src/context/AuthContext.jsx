@@ -5,7 +5,7 @@ import {
   signOut,
   signInWithPopup,
 } from "firebase/auth";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 
 const AuthContext = createContext();
 
@@ -30,9 +30,14 @@ export function AuthProvider({ children }) {
 
       if (!userSnap.exists()) {
         // Create new user document if they are logging in for the first time
+        const todayStr = new Date().toISOString().split("T")[0];
         await setDoc(userRef, {
           email: user.email,
           fullName: user.displayName || "New User",
+          totalPoints: 0,
+          badges: ["Newcomer"],
+          streak: 1,
+          lastLoginDate: todayStr,
         });
       }
       return user;
@@ -47,8 +52,45 @@ export function AuthProvider({ children }) {
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
+      
+      if (user) {
+        try {
+          const userRef = doc(db, "Users", user.uid);
+          const userSnap = await getDoc(userRef);
+          if (userSnap.exists()) {
+            const data = userSnap.data();
+            const todayStr = new Date().toISOString().split("T")[0];
+            const lastDateStr = data.lastLoginDate;
+            
+            if (lastDateStr !== todayStr) {
+              let newStreak = data.streak || 0;
+              if (lastDateStr) {
+                const lastDate = new Date(lastDateStr);
+                const today = new Date(todayStr);
+                const diffTime = Math.abs(today - lastDate);
+                const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+                
+                if (diffDays === 1) {
+                  newStreak += 1;
+                } else if (diffDays > 1) {
+                  newStreak = 1;
+                }
+              } else {
+                newStreak = 1;
+              }
+              await updateDoc(userRef, {
+                streak: newStreak,
+                lastLoginDate: todayStr
+              });
+            }
+          }
+        } catch (err) {
+          console.error("Error updating streak:", err);
+        }
+      }
+      
       setLoading(false);
     });
     return unsubscribe;
