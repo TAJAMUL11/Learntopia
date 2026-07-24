@@ -11,7 +11,7 @@ import { useAuth } from "../context/AuthContext";
 
 // Tab definitions — "all" + one per quiz
 const TABS = [
-  { id: "all", label: "All Quizzes" },
+  { id: "all", label: "Global Leaderboard" },
   ...quizzes.map((q) => ({ id: q.id, label: q.title })),
 ];
 
@@ -22,46 +22,80 @@ const Leaderboard = () => {
   const [activeTab, setActiveTab] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // ── Fetch all leaderboard data once ──
+  // ── Fetch leaderboard data dynamically based on activeTab ──
   useEffect(() => {
     let isMounted = true;
 
-    const fetchAll = async () => {
+    const fetchData = async () => {
       setLoading(true);
       try {
         const entries = [];
 
-        // 1. Fetch per-quiz leaderboards from QuizLeaderboards/{quizId}/Scores
-        for (const quiz of quizzes) {
-          try {
-            const scoresSnap = await getDocs(
-              query(
-                collection(db, "QuizLeaderboards", quiz.id, "Scores"),
-                orderBy("score", "desc"),
-                limit(50)
-              )
-            );
-            scoresSnap.forEach((d) => {
-              const data = d.data();
-              entries.push({
-                id: `${quiz.id}_${d.id}`,
-                userId: d.id,
-                userName: data.userFullName || "Learner",
-                quizId: quiz.id,
-                quizTitle: quiz.title,
-                score: Number(data.score) || 0,
-                rawScore: Number(data.rawScore) || 0,
-                isCurrent: d.id === currentUser?.uid,
-              });
+        if (activeTab === "all") {
+          // Fetch overall user rankings from PublicLeaderboard
+          const publicSnap = await getDocs(
+            query(
+              collection(db, "PublicLeaderboard"),
+              orderBy("totalPoints", "desc"),
+              limit(50)
+            )
+          );
+          publicSnap.forEach((d) => {
+            const data = d.data();
+            entries.push({
+              id: d.id,
+              userId: d.id,
+              userName: data.fullName || "Learner",
+              quizId: "all",
+              quizTitle: "Overall Points",
+              score: Number(data.totalPoints) || 0,
+              rawScore: (Number(data.totalPoints) || 0) / 10,
+              isCurrent: d.id === currentUser?.uid,
             });
-          } catch (e) {
-            // Collection may not exist yet
-          }
+          });
+        } else {
+          // Fetch scores for the active quiz
+          const scoresSnap = await getDocs(
+            query(
+              collection(db, "QuizLeaderboards", activeTab, "Scores"),
+              orderBy("score", "desc"),
+              limit(50)
+            )
+          );
+          const activeQuizDef = quizzes.find((q) => q.id === activeTab);
+          scoresSnap.forEach((d) => {
+            const data = d.data();
+            entries.push({
+              id: `${activeTab}_${d.id}`,
+              userId: d.id,
+              userName: data.userFullName || "Learner",
+              quizId: activeTab,
+              quizTitle: activeQuizDef?.title || "Quiz",
+              score: Number(data.score) || 0,
+              rawScore: Number(data.rawScore) || 0,
+              isCurrent: d.id === currentUser?.uid,
+            });
+          });
         }
 
-        // 2. If no per-quiz data exists, fallback to user's own quizAttempts
+        // 2. Fallback to current user's local attempts if database list is empty
         if (entries.length === 0 && currentUser) {
-          try {
+          if (activeTab === "all") {
+            const userSnap = await getDoc(doc(db, "Users", currentUser.uid));
+            if (userSnap.exists()) {
+              const data = userSnap.data();
+              entries.push({
+                id: currentUser.uid,
+                userId: currentUser.uid,
+                userName: data.fullName || currentUser.displayName || "You",
+                quizId: "all",
+                quizTitle: "Overall Points",
+                score: Number(data.totalPoints) || 0,
+                rawScore: (Number(data.totalPoints) || 0) / 10,
+                isCurrent: true,
+              });
+            }
+          } else {
             const attemptsSnap = await getDocs(
               collection(db, "Users", currentUser.uid, "quizAttempts")
             );
@@ -73,29 +107,27 @@ const Leaderboard = () => {
 
             attemptsSnap.forEach((qd) => {
               const data = qd.data();
-              if (data.score !== undefined) {
+              if (data.quizId === activeTab && data.score !== undefined) {
                 const quizDef = quizzes.find((q) => q.id === data.quizId);
                 entries.push({
                   id: `${currentUser.uid}_${qd.id}`,
                   userId: currentUser.uid,
                   userName: fullName,
-                  quizId: data.quizId || "unknown",
-                  quizTitle: data.quizTitle || quizDef?.title || "Quiz",
+                  quizId: data.quizId,
+                  quizTitle: quizDef?.title || "Quiz",
                   score: Number(data.score) * 10,
                   rawScore: Number(data.score),
                   isCurrent: true,
                 });
               }
             });
-          } catch (err) {
-            console.error("Error fetching user attempts:", err);
           }
         }
 
-        // Deduplicate — keep highest score per user per quiz
+        // Deduplicate - keep highest score per user
         const bestScores = new Map();
         for (const entry of entries) {
-          const key = `${entry.userId}_${entry.quizId}`;
+          const key = activeTab === "all" ? entry.userId : `${entry.userId}_${entry.quizId}`;
           const existing = bestScores.get(key);
           if (!existing || entry.score > existing.score) {
             bestScores.set(key, entry);
@@ -112,18 +144,15 @@ const Leaderboard = () => {
       }
     };
 
-    fetchAll();
-    return () => { isMounted = false; };
-  }, [currentUser]);
+    fetchData();
+    return () => {
+      isMounted = false;
+    };
+  }, [currentUser, activeTab]);
 
-  // ── Filter by active tab + search ──
+  // ── Filter by search query and sort ──
   const filteredEntries = useMemo(() => {
     let data = allEntries;
-
-    // Tab filter
-    if (activeTab !== "all") {
-      data = data.filter((e) => e.quizId === activeTab);
-    }
 
     // Search filter
     const q = searchQuery.toLowerCase().trim();
@@ -137,7 +166,7 @@ const Leaderboard = () => {
 
     // Sort descending by score, limit to top 10
     return [...data].sort((a, b) => b.score - a.score).slice(0, 10);
-  }, [allEntries, activeTab, searchQuery]);
+  }, [allEntries, searchQuery]);
 
   // ── Animate rows on change ──
   useGSAP(() => {

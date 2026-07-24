@@ -1,8 +1,9 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase/firebase";
+import { auth, db } from "../firebase/firebase";
 import { useAuth } from "../context/AuthContext";
+import { setDoc, doc, addDoc, collection, updateDoc, increment, getDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import Card from "../Components/ui/Card";
 import Button from "../Components/ui/Button";
@@ -32,11 +33,63 @@ const Login = () => {
   const [agreed, setAgreed] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const handlePendingQuizResult = async (user, userDisplayName) => {
+    if (location.state?.pendingQuizResult) {
+      try {
+        const { quizId, quizTitle, score, totalQuestions } = location.state.pendingQuizResult;
+        const attempt = {
+          quizId,
+          quizTitle,
+          score,
+          totalQuestions,
+          completedAt: new Date(),
+        };
+        await addDoc(collection(db, "Users", user.uid, "quizAttempts"), attempt);
+
+        const pointsEarned = score * 10;
+        if (pointsEarned > 0) {
+          await updateDoc(doc(db, "Users", user.uid), {
+            totalPoints: increment(pointsEarned)
+          });
+
+          const globalScoreRef = doc(db, "QuizLeaderboards", quizId, "Scores", user.uid);
+          await setDoc(globalScoreRef, {
+            score: pointsEarned,
+            rawScore: score,
+            userFullName: userDisplayName || user.displayName || "User",
+            userId: user.uid,
+            completedAt: new Date()
+          }, { merge: true });
+
+          const userSnap = await getDoc(doc(db, "Users", user.uid));
+          if (userSnap.exists()) {
+            const uData = userSnap.data();
+            const publicRef = doc(db, "PublicLeaderboard", user.uid);
+            await setDoc(publicRef, {
+              uid: user.uid,
+              fullName: uData.fullName || userDisplayName || user.displayName || "Learner",
+              email: user.email,
+              totalPoints: uData.totalPoints || pointsEarned,
+              streak: uData.streak || 1,
+              badges: uData.badges || ["Newcomer"],
+              updatedAt: new Date()
+            }, { merge: true });
+          }
+        }
+        toast.success("Saved your quiz score!");
+      } catch (err) {
+        console.error("Error saving pending quiz score:", err);
+      }
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, userEmail, userPassword);
+      const userCredential = await signInWithEmailAndPassword(auth, userEmail, userPassword);
+      const user = userCredential.user;
+      await handlePendingQuizResult(user, null);
       toast.success("Successfully logged in");
       navigate(returnTo, { replace: true });
     } catch (err) {
@@ -53,7 +106,10 @@ const Login = () => {
 
   const handleGoogleSignIn = async () => {
     try {
-      await googleSignIn();
+      const user = await googleSignIn();
+      if (user) {
+        await handlePendingQuizResult(user, user.displayName);
+      }
       toast.success("Successfully logged in with Google");
       navigate(returnTo, { replace: true });
     } catch (err) {

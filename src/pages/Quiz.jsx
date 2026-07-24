@@ -207,28 +207,53 @@ const Quiz = () => {
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {quizzes.map((quiz) => (
-              <Card key={quiz.id} hoverable className="flex flex-col p-6">
-                <Badge variant="sky" className="self-start">{quiz.subject}</Badge>
-                <h3 className="mt-4 text-lg font-bold text-ink-hi">{quiz.title}</h3>
-                <p className="mt-1.5 flex-grow text-sm leading-relaxed text-ink-low">{quiz.description}</p>
+            {quizzes.map((quiz) => {
+              const attempted = !loadingScores && highScores[quiz.id] !== undefined;
+              return (
+                <Card
+                  key={quiz.id}
+                  hoverable
+                  className={`relative flex flex-col p-6 transition-all ${attempted ? "border-emerald-500/20 bg-emerald-500/[0.03]" : ""}`}
+                >
+                  {/* Attempted badge — top-right corner */}
+                  {attempted && (
+                    <div className="absolute right-4 top-4 flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-emerald-400">
+                      <Icon name="check-circle" size={10} /> Done
+                    </div>
+                  )}
 
-                <div className="mt-5 flex items-center justify-between border-t border-white/[0.07] pt-4">
-                  <div className="text-xs">
-                    {loadingScores ? (
-                      <Skeleton className="h-4 w-24" />
-                    ) : highScores[quiz.id] !== undefined ? (
-                      <span className="flex items-center gap-1.5 font-semibold text-sky">
-                        <Icon name="trophy" size={14} /> Best: {highScores[quiz.id]} / {Math.min(quiz.questions.length, 10)}
-                      </span>
+                  <Badge variant="sky" className="self-start">{quiz.subject}</Badge>
+                  <h3 className="mt-4 text-lg font-bold text-ink-hi">{quiz.title}</h3>
+                  <p className="mt-1.5 flex-grow text-sm leading-relaxed text-ink-low">{quiz.description}</p>
+
+                  <div className="mt-5 flex items-center justify-between border-t border-white/[0.07] pt-4">
+                    <div className="text-xs">
+                      {loadingScores ? (
+                        <Skeleton className="h-4 w-24" />
+                      ) : attempted ? (
+                        <span className="flex items-center gap-1.5 font-semibold text-emerald-400">
+                          <Icon name="trophy" size={14} /> Best: {highScores[quiz.id]} / {Math.min(quiz.questions.length, 10)}
+                        </span>
+                      ) : (
+                        <span className="text-ink-low">Not attempted yet</span>
+                      )}
+                    </div>
+                    {attempted ? (
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        onClick={() => startQuiz(quiz)}
+                        className="flex items-center gap-1.5 !border-emerald-500/30 !text-emerald-400 hover:!bg-emerald-500/10"
+                      >
+                        <Icon name="refresh-cw" size={12} /> Retake
+                      </Button>
                     ) : (
-                      <span className="text-ink-low">Not attempted yet</span>
+                      <Button size="sm" onClick={() => startQuiz(quiz)}>Start</Button>
                     )}
                   </div>
-                  <Button size="sm" onClick={() => startQuiz(quiz)}>Start</Button>
-                </div>
-              </Card>
-            ))}
+                </Card>
+              );
+            })}
           </div>
         </div>
       )}
@@ -338,8 +363,36 @@ const Quiz = () => {
               <Alert variant="warning" title="You're not signed in">
                 Your high scores won&rsquo;t be saved to your student profile.
                 <div className="mt-2 flex gap-4">
-                  <Link to="/login" className="font-semibold text-sky underline">Log in</Link>
-                  <Link to="/signUp" className="font-semibold text-sky underline">Sign up</Link>
+                  <Link
+                    to="/login"
+                    state={{
+                      returnTo: "/quiz",
+                      pendingQuizResult: {
+                        quizId: activeQuiz.id,
+                        quizTitle: activeQuiz.title,
+                        score: score,
+                        totalQuestions: activeQuiz.questions.length,
+                      }
+                    }}
+                    className="font-semibold text-sky underline"
+                  >
+                    Log in
+                  </Link>
+                  <Link
+                    to="/signUp"
+                    state={{
+                      returnTo: "/quiz",
+                      pendingQuizResult: {
+                        quizId: activeQuiz.id,
+                        quizTitle: activeQuiz.title,
+                        score: score,
+                        totalQuestions: activeQuiz.questions.length,
+                      }
+                    }}
+                    className="font-semibold text-sky underline"
+                  >
+                    Sign up
+                  </Link>
                 </div>
               </Alert>
             </div>

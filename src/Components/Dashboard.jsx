@@ -206,7 +206,7 @@ const Dashboard = () => {
                 <h3 className="text-sm font-semibold uppercase tracking-wider text-ink-low">Streak</h3>
               </div>
               <p className="mt-3 flex items-baseline gap-1 text-3xl font-extrabold text-ink-hi">
-                {userDetails?.streak || 0} <span className="text-sm font-semibold text-ink-low">days</span>
+                {userDetails?.streak || 1} <span className="text-sm font-semibold text-ink-low">days</span>
               </p>
             </div>
             <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 shadow-card transition-colors hover:bg-white/[0.04]">

@@ -132,6 +132,22 @@ const PATHS = {
       <line x1="12" y1="16" x2="12.01" y2="16" />
     </>
   ),
+  "bar-chart": (
+    <>
+      <line x1="18" y1="20" x2="18" y2="10" />
+      <line x1="12" y1="20" x2="12" y2="4" />
+      <line x1="6" y1="20" x2="6" y2="14" />
+    </>
+  ),
+  "arrow-right": <path d="M5 12h14M13 5l7 7-7 7" />,
+  zap: <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />,
+  cpu: (
+    <>
+      <rect x="4" y="4" width="16" height="16" rx="2" />
+      <rect x="9" y="9" width="6" height="6" />
+      <path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3" />
+    </>
+  ),
 };
 
 const Icon = ({ name, size = 20, strokeWidth = 2, className = "", fill = "none" }) => {

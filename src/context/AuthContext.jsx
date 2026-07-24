@@ -59,22 +59,48 @@ export function AuthProvider({ children }) {
         try {
           const userRef = doc(db, "Users", user.uid);
           const userSnap = await getDoc(userRef);
-          if (userSnap.exists()) {
+          
+          const today = new Date();
+          const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+          
+          if (!userSnap.exists()) {
+            // User document doesn't exist yet, initialize it to prevent empty/broken states
+            await setDoc(userRef, {
+              email: user.email || "",
+              fullName: user.displayName || "New User",
+              totalPoints: 0,
+              badges: ["Newcomer"],
+              streak: 1,
+              lastLoginDate: todayStr,
+            });
+            
+            const publicRef = doc(db, "PublicLeaderboard", user.uid);
+            await setDoc(publicRef, {
+              uid: user.uid,
+              fullName: user.displayName || "Learner",
+              email: user.email || "",
+              totalPoints: 0,
+              streak: 1,
+              badges: ["Newcomer"],
+              updatedAt: new Date()
+            }, { merge: true });
+          } else {
             const data = userSnap.data();
-            const todayStr = new Date().toISOString().split("T")[0];
             const lastDateStr = data.lastLoginDate;
             
-            if (lastDateStr !== todayStr) {
+            if (lastDateStr !== todayStr || !data.streak) {
               let newStreak = data.streak || 0;
               if (lastDateStr) {
-                const lastDate = new Date(lastDateStr);
-                const today = new Date(todayStr);
-                const diffTime = Math.abs(today - lastDate);
+                const lastDate = new Date(lastDateStr + "T00:00:00");
+                const todayDate = new Date(todayStr + "T00:00:00");
+                const diffTime = Math.abs(todayDate - lastDate);
                 const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
                 
                 if (diffDays === 1) {
                   newStreak += 1;
                 } else if (diffDays > 1) {
+                  newStreak = 1;
+                } else if (diffDays === 0 && !data.streak) {
                   newStreak = 1;
                 }
               } else {
@@ -84,6 +110,13 @@ export function AuthProvider({ children }) {
                 streak: newStreak,
                 lastLoginDate: todayStr
               });
+              
+              // Also sync updated streak to PublicLeaderboard
+              const publicRef = doc(db, "PublicLeaderboard", user.uid);
+              await setDoc(publicRef, {
+                streak: newStreak,
+                updatedAt: new Date()
+              }, { merge: true });
             }
           }
         } catch (err) {

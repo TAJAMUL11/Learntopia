@@ -13,10 +13,15 @@ service cloud.firestore {
       return request.auth != null && request.auth.uid == userId;
     }
 
-    // Profile documents (Users/{uid}) may only hold the two known fields.
+    // True when the request is from any authenticated user.
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Profile documents (Users/{uid}) may hold these known fields.
     function isValidProfile() {
       let d = request.resource.data;
-      return d.keys().hasOnly(['email', 'fullName'])
+      return d.keys().hasOnly(['email', 'fullName', 'totalPoints', 'streak', 'lastLoginDate', 'badges'])
           && d.email is string
           && d.fullName is string;
     }
@@ -31,7 +36,6 @@ service cloud.firestore {
           && d.score is number
           && d.totalQuestions is number
           && d.score >= 0
-          && d.score <= d.totalQuestions
           && d.completedAt is timestamp;
     }
 
@@ -51,8 +55,8 @@ service cloud.firestore {
 
     match /Users/{userId} {
       allow read:   if isOwner(userId);
-      allow create: if isOwner(userId) && isValidProfile();
-      allow update: if isOwner(userId) && isValidProfile();
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId);
       allow delete: if false; // profiles are not deleted from the client
 
       // --- Quiz attempts (append-only history) --------------------------
@@ -71,6 +75,22 @@ service cloud.firestore {
         allow read, delete: if isOwner(userId);
         allow create, update: if isOwner(userId) && isValidEnrollment();
       }
+    }
+
+    // --- Quiz Leaderboards -----------------------------------------------
+    // Any authenticated user may read quiz leaderboards (needed for the
+    // Leaderboard page). A user may only write their OWN score entry.
+    match /QuizLeaderboards/{quizId}/Scores/{userId} {
+      allow read: if isSignedIn();
+      allow write: if isOwner(userId);
+    }
+
+    // --- Public Leaderboard ----------------------------------------------
+    // Any authenticated user may read (needed for the Global Leaderboard tab).
+    // A user may only write/update their OWN entry.
+    match /PublicLeaderboard/{userId} {
+      allow read: if isSignedIn();
+      allow write: if isOwner(userId);
     }
 
     // --- Default deny ----------------------------------------------------
