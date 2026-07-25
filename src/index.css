@@ -63,6 +63,120 @@ body {
   font-family: inherit;
 }
 
+/* ── react-toastify global overrides ──────────────────────────────────────── */
+
+/* Container: keep toasts below the navbar on mobile */
+.Toastify__toast-container {
+  padding: 0 12px;
+  width: 100%;
+  max-width: 420px;
+}
+
+@media (max-width: 480px) {
+  .Toastify__toast-container {
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+  }
+}
+
+/* Base toast */
+.Toastify__toast {
+  border-radius: 12px !important;
+  padding: 14px 18px !important;
+  min-height: 56px !important;
+  font-family: "Poppins", "Segoe UI", system-ui, sans-serif !important;
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
+  line-height: 1.45 !important;
+  box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.45) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+@media (max-width: 480px) {
+  .Toastify__toast {
+    border-radius: 0 !important;
+    margin: 0 !important;
+    min-height: 60px !important;
+    padding: 16px 20px !important;
+    font-size: 0.92rem !important;
+  }
+}
+
+/* ── Error toast — solid deep red, high contrast ── */
+.Toastify__toast--error {
+  background: #991b1b !important;
+  color: #fef2f2 !important;
+  border-color: rgba(248, 113, 113, 0.25) !important;
+}
+.Toastify__toast--error .Toastify__toast-icon svg {
+  fill: #fca5a5 !important;
+}
+.Toastify__toast--error .Toastify__progress-bar {
+  background: #f87171 !important;
+}
+.Toastify__toast--error .Toastify__close-button {
+  color: #fca5a5 !important;
+  opacity: 0.8 !important;
+}
+
+/* ── Success toast — rich emerald ── */
+.Toastify__toast--success {
+  background: #065f46 !important;
+  color: #ecfdf5 !important;
+  border-color: rgba(52, 211, 153, 0.2) !important;
+}
+.Toastify__toast--success .Toastify__toast-icon svg {
+  fill: #6ee7b7 !important;
+}
+.Toastify__toast--success .Toastify__progress-bar {
+  background: #34d399 !important;
+}
+.Toastify__toast--success .Toastify__close-button {
+  color: #6ee7b7 !important;
+  opacity: 0.8 !important;
+}
+
+/* ── Warning toast ── */
+.Toastify__toast--warning {
+  background: #78350f !important;
+  color: #fffbeb !important;
+  border-color: rgba(251, 191, 36, 0.2) !important;
+}
+.Toastify__toast--warning .Toastify__progress-bar {
+  background: #fbbf24 !important;
+}
+
+/* ── Info toast ── */
+.Toastify__toast--info {
+  background: #1e3a5f !important;
+  color: #eff6ff !important;
+  border-color: rgba(96, 165, 250, 0.2) !important;
+}
+.Toastify__toast--info .Toastify__progress-bar {
+  background: #60a5fa !important;
+}
+
+/* Body text */
+.Toastify__toast-body {
+  padding: 0 !important;
+  gap: 10px !important;
+  align-items: center !important;
+}
+
+/* Close button */
+.Toastify__close-button {
+  align-self: center !important;
+  opacity: 0.7 !important;
+}
+.Toastify__close-button:hover {
+  opacity: 1 !important;
+}
+
+
 a.active {
   @apply text-sky;
 }
