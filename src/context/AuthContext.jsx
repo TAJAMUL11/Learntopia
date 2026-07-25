@@ -30,7 +30,9 @@ export function AuthProvider({ children }) {
 
       if (!userSnap.exists()) {
         // Create new user document if they are logging in for the first time
-        const todayStr = new Date().toISOString().split("T")[0];
+        // Use local calendar date (not UTC) to stay consistent with streak logic
+        const _t = new Date();
+        const todayStr = `${_t.getFullYear()}-${String(_t.getMonth() + 1).padStart(2, "0")}-${String(_t.getDate()).padStart(2, "0")}`;
         await setDoc(userRef, {
           email: user.email,
           fullName: user.displayName || "New User",
@@ -87,35 +89,43 @@ export function AuthProvider({ children }) {
           } else {
             const data = userSnap.data();
             const lastDateStr = data.lastLoginDate;
-            
-            if (lastDateStr !== todayStr || !data.streak) {
-              let newStreak = data.streak || 0;
+
+            // Only update if the user hasn't been credited for today yet
+            if (lastDateStr !== todayStr) {
+              let newStreak;
+
               if (lastDateStr) {
-                const lastDate = new Date(lastDateStr + "T00:00:00");
-                const todayDate = new Date(todayStr + "T00:00:00");
-                const diffTime = Math.abs(todayDate - lastDate);
-                const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
-                
+                // Reliable integer calendar-day diff: parse year/month/day directly
+                // to avoid any DST or timezone offset issues.
+                const [ly, lm, ld] = lastDateStr.split("-").map(Number);
+                const [ty, tm, td] = todayStr.split("-").map(Number);
+                const lastMidnight = Date.UTC(ly, lm - 1, ld);
+                const todayMidnight = Date.UTC(ty, tm - 1, td);
+                // diffDays is always a clean integer — no rounding needed
+                const diffDays = (todayMidnight - lastMidnight) / (1000 * 60 * 60 * 24);
+
                 if (diffDays === 1) {
-                  newStreak += 1;
-                } else if (diffDays > 1) {
-                  newStreak = 1;
-                } else if (diffDays === 0 && !data.streak) {
+                  // Consecutive day — extend the streak
+                  newStreak = (data.streak || 0) + 1;
+                } else {
+                  // Missed one or more days — reset
                   newStreak = 1;
                 }
               } else {
+                // No previous login date recorded — start fresh
                 newStreak = 1;
               }
+
               await updateDoc(userRef, {
                 streak: newStreak,
-                lastLoginDate: todayStr
+                lastLoginDate: todayStr,
               });
-              
-              // Also sync updated streak to PublicLeaderboard
+
+              // Sync updated streak to PublicLeaderboard
               const publicRef = doc(db, "PublicLeaderboard", user.uid);
               await setDoc(publicRef, {
                 streak: newStreak,
-                updatedAt: new Date()
+                updatedAt: new Date(),
               }, { merge: true });
             }
           }
