@@ -25,6 +25,7 @@ const Doc = lazy(() => import("./pages/Doc"));
 const Terms = lazy(() => import("./pages/Terms"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Leaderboard = lazy(() => import("./pages/Leaderboard"));
+const ThankYou = lazy(() => import("./pages/ThankYou"));
 
 const App = () => {
   const router = createBrowserRouter(
@@ -42,6 +43,7 @@ const App = () => {
         <Route path="terms" element={<Terms />} />
         <Route path="privacy" element={<Privacy />} />
         <Route path="leaderboard" element={<Leaderboard />} />
+        <Route path="thank-you" element={<ThankYou />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     )
