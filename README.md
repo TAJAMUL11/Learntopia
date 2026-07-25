@@ -47,7 +47,7 @@ The platform is designed to be fast, accessible, and mobile-friendly, with authe
 | **Timed Quizzes** | 15-second per-question randomized quizzes with instant feedback, score logging, and per-quiz leaderboards. |
 | **Quiz Completion Indicators** | Done badge and best score on completed quiz cards; Start button becomes Retake. Incomplete attempts are never logged. |
 | **Personal Dashboard** | Consolidated view of enrolled courses, completion status, quiz high scores, total points, and daily streak. |
-| **Daily Login Streaks** | Consecutive daily login counter tracked server-side in local timezone. Resets on a missed day. |
+| **Daily Login Streaks** | Consecutive daily login counter tracked in local timezone using `Date.UTC` integer arithmetic — DST-safe, no floating-point rounding. Resets on a missed day. |
 | **Global Leaderboard** | Public leaderboard ranking all users by total points. Per-quiz leaderboards available for each quiz topic. |
 | **Guest Score Preservation** | Guest quiz scores are automatically saved to the user profile when signing in or registering from the results screen. |
 | **AI Tutors** | Each course has a personality-driven AI tutor to guide learners through the subject matter. |
@@ -57,6 +57,9 @@ The platform is designed to be fast, accessible, and mobile-friendly, with authe
 | **Firestore Security Rules** | Server-side rules enforce per-user data isolation. Leaderboard exposes name and score only — never private data. |
 | **SEO & Meta** | Canonical links, Open Graph, JSON-LD schema, geographic meta, and custom favicon/meta image on every page. |
 | **Fully Responsive** | Mobile, tablet, and desktop layouts. Dynamic viewport height and custom overscroll colours for native-feel scrolling. |
+| **Contact Form** | Redesigned contact page with Firestore-backed submissions (`ContactMessages` collection). No third-party form services — messages are owned entirely and reviewable in the Firebase Console. |
+| **Thank You Page** | Dedicated `/thank-you` page after contact form submission with personalised greeting, animated check icon, and quick-nav cards to Courses and Quizzes. |
+| **Toast Notifications** | Fully styled error/success/warning toasts — solid high-contrast colours, full-width on mobile with readable padding. |
 
 ---
 
@@ -138,7 +141,8 @@ src/
 │   ├── Doc.jsx           # Platform documentation
 │   ├── Privacy.jsx       # Privacy Policy
 │   ├── Terms.jsx         # Terms of Service
-│   └── Contact.jsx
+│   ├── Contact.jsx       # Contact form → saves to Firestore ContactMessages
+│   └── ThankYou.jsx      # Post-submission thank you page with animated check icon
 ├── App.jsx               # Route definitions
 └── main.jsx
 ```
