@@ -3,6 +3,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import PageSkeleton from "../Components/ui/PageSkeleton";
+import ChunkErrorBoundary from "../Components/ChunkErrorBoundary";
 
 // React Router keeps the previous scroll position on navigation, which lands
 // the user mid-page. Reset to the top whenever the route changes.
@@ -22,9 +23,11 @@ const RootLayout = () => {
       <ScrollToTop />
       <Navbar />
       <main className="flex-grow">
-        <Suspense fallback={<PageSkeleton />}>
-          <Outlet />
-        </Suspense>
+        <ChunkErrorBoundary>
+          <Suspense fallback={<PageSkeleton />}>
+            <Outlet />
+          </Suspense>
+        </ChunkErrorBoundary>
       </main>
       <Footer />
     </div>
