@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import Icon from "../Components/ui/Icon";
 
-const LAST_UPDATED = "July 24, 2026";
+const LAST_UPDATED = "July 27, 2026";
 
 const NAV = [
   { id: "overview", label: "Overview" },
@@ -225,11 +225,28 @@ const Doc = () => {
               <p className="text-ink-low leading-relaxed">
                 Learntopia uses Firebase Authentication. Accounts can be created with an email/password or via Google OAuth. All user data stored in Firestore is protected by server-side security rules — not just client-side checks.
               </p>
-              <div className="mt-6 rounded-xl border border-amber-500/20 bg-amber-500/[0.04] p-5">
-                <p className="text-sm font-semibold text-amber-300 mb-1.5">Data isolation guarantee</p>
-                <p className="text-sm text-ink-low leading-relaxed">
-                  Every Firestore read and write is validated server-side. Your profile, enrolled courses, module progress, and quiz attempts are accessible only to your authenticated session. Leaderboard entries expose only your display name and score — never your email or any personal identifiers.
-                </p>
+
+              <div className="mt-6 space-y-4">
+                <div className="rounded-xl border border-violet-500/20 bg-violet-500/[0.03] p-5">
+                  <p className="text-sm font-semibold text-violet-300 mb-1.5">Offline Data Persistence</p>
+                  <p className="text-sm text-ink-low leading-relaxed">
+                    Firestore offline persistence is enabled automatically. If your internet connection drops while taking a quiz or reading modules, your progress is saved locally in your browser cache. The application automatically syncs this data to the database the moment your connection recovers, avoiding progress loss.
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.03] p-5">
+                  <p className="text-sm font-semibold text-emerald-300 mb-1.5">Connection Resilience (Error Boundaries)</p>
+                  <p className="text-sm text-ink-low leading-relaxed">
+                    All pages on Learntopia are lazy-loaded to optimize speed and download size. In the event of a network drop that prevents your browser from fetching a page chunk, our built-in Error Boundary catches the error cleanly and offers an interactive reload flow instead of crashing or showing a blank page.
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-amber-500/20 bg-amber-500/[0.04] p-5">
+                  <p className="text-sm font-semibold text-amber-300 mb-1.5">Data Isolation & point-cheating guards</p>
+                  <p className="text-sm text-ink-low leading-relaxed">
+                    Every Firestore read and write is validated server-side. Your profile, enrolled courses, module progress, and quiz attempts are accessible only to your authenticated session. To prevent point manipulation, database rules enforce that profile updates can only increment scores, and caps updates at a maximum of 200 points per transaction. Earned badges are also locked and cannot be deleted from the client side.
+                  </p>
+                </div>
               </div>
             </section>
 
