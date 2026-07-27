@@ -51,12 +51,37 @@ service cloud.firestore {
               && d.completedModules.size() >= d.totalModules);
     }
 
+    // Security check for profile updates (cheating prevention)
+    function isValidProfileUpdate(userId) {
+      let current = resource.data;
+      let next = request.resource.data;
+
+      // Prevent points cheating:
+      // 1. totalPoints can only increase or stay the same.
+      // 2. totalPoints cannot jump by more than 200 points in a single write (max quiz bonus).
+      let currentPoints = current.get('totalPoints', 0);
+      let nextPoints = next.get('totalPoints', 0);
+      let pointsDiff = nextPoints - currentPoints;
+
+      // Prevent badges cheating:
+      // 1. Badges list size must be equal to or greater than before (no deleting badges).
+      // 2. Existing badges must not be modified or cleared.
+      let currentBadges = current.get('badges', []);
+      let nextBadges = next.get('badges', []);
+
+      return isValidProfile()
+          && pointsDiff >= 0
+          && pointsDiff <= 200
+          && nextBadges.size() >= currentBadges.size()
+          && (currentBadges.size() == 0 || nextBadges.hasAll(currentBadges));
+    }
+
     // --- User profile ----------------------------------------------------
 
     match /Users/{userId} {
       allow read:   if isOwner(userId);
-      allow create: if isOwner(userId);
-      allow update: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidProfile();
+      allow update: if isOwner(userId) && isValidProfileUpdate(userId);
       allow delete: if false; // profiles are not deleted from the client
 
       // --- Quiz attempts (append-only history) --------------------------
