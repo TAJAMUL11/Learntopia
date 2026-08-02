@@ -43,10 +43,14 @@ The platform is designed to be fast, accessible, and mobile-friendly, with authe
 
 | Feature | Description |
 |---|---|
+| **Gamified Course Overhaul** | Step-by-step interactive courses designed for kids aged 7-14 with rich learning cards (Story, Concept, Fun Fact, Pro Tip, Example, Activity, Recap). |
+| **LessonPlayer Engine** | Paginated step-by-step lesson player with visual theme cards, progress dots, and code syntax blocks. |
+| **Multi-Type Exercise Engine** | Comprehension challenges featuring Multiple Choice, True/False, Fill-in-the-Blank, and Tap-to-Connect Matching Pairs. |
+| **XP, Levels & Badges** | Earn XP per module (+50 XP) and course (+100 XP). Level up from Rookie Coder to Grandmaster with animated celebration overlays and collectible course badges. |
 | **Course Catalog** | Searchable catalog of multi-module course tracks with enrollment, per-module progress, and course completion tracking. |
 | **Timed Quizzes** | 15-second per-question randomized quizzes with instant feedback, score logging, and per-quiz leaderboards. |
 | **Quiz Completion Indicators** | Done badge and best score on completed quiz cards; Start button becomes Retake. Incomplete attempts are never logged. |
-| **Personal Dashboard** | Consolidated view of enrolled courses, completion status, quiz high scores, total points, and daily streak. |
+| **Personal Dashboard** | Consolidated view of enrolled courses, completion status, XP, Level progress, badges, total points, and daily streak. |
 | **Daily Login Streaks** | Consecutive daily login counter tracked in local timezone using `Date.UTC` integer arithmetic — DST-safe, no floating-point rounding. Resets on a missed day. |
 | **Global Leaderboard** | Public leaderboard ranking all users by total points. Per-quiz leaderboards available for each quiz topic. |
 | **Guest Score Preservation** | Guest quiz scores are automatically saved to the user profile when signing in or registering from the results screen. |

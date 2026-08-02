@@ -9,6 +9,8 @@ import RootLayout from "./layout/RootLayout";
 import { ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "./context/AuthContext";
+import { GamificationProvider } from "./context/GamificationContext";
+import CelebrationOverlay from "./Components/CelebrationOverlay";
 
 // Lazy-load pages so each route ships as its own chunk. While a chunk loads,
 // RootLayout's Suspense boundary shows a PageSkeleton.
@@ -26,6 +28,7 @@ const Terms = lazy(() => import("./pages/Terms"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Leaderboard = lazy(() => import("./pages/Leaderboard"));
 const ThankYou = lazy(() => import("./pages/ThankYou"));
+const Admin = lazy(() => import("./pages/Admin"));
 
 const App = () => {
   const router = createBrowserRouter(
@@ -39,6 +42,7 @@ const App = () => {
         <Route path="signUp" element={<SignUp />} />
         <Route path="login" element={<Login />} />
         <Route path="dashboard" element={<Dashboard />} />
+        <Route path="admin" element={<Admin />} />
         <Route path="doc" element={<Doc />} />
         <Route path="terms" element={<Terms />} />
         <Route path="privacy" element={<Privacy />} />
@@ -51,21 +55,24 @@ const App = () => {
 
   return (
     <AuthProvider>
-      <RouterProvider router={router} />
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-        bodyClassName="toastbody"
-        transition={Slide}
-      />
+      <GamificationProvider>
+        <RouterProvider router={router} />
+        <CelebrationOverlay />
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+          bodyClassName="toastbody"
+          transition={Slide}
+        />
+      </GamificationProvider>
     </AuthProvider>
   );
 };

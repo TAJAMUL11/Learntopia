@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, useBlocker } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useGamification } from "../context/GamificationContext";
 import { db } from "../firebase/firebase";
 import { doc, getDoc, setDoc, deleteField } from "firebase/firestore";
 import { toast } from "react-toastify";
@@ -11,11 +12,14 @@ import Icon from "../Components/ui/Icon";
 import ImageWithSkeleton from "../Components/ui/ImageWithSkeleton";
 import { Skeleton } from "../Components/ui/Skeleton";
 import Modal from "../Components/ui/Modal";
+import LessonPlayer from "../Components/LessonPlayer";
+import ExerciseEngine from "../Components/ExerciseEngine";
 
 const CourseDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { currentUser, loading: authLoading } = useAuth();
+  const { addXP, awardBadge } = useGamification();
 
   const [course, setCourse] = useState(null);
   const [completedModules, setCompletedModules] = useState([]);
@@ -31,6 +35,8 @@ const CourseDetails = () => {
   // Track answers for the current active module's exercises: { exerciseIndex: selectedOption }
   const [currentAnswers, setCurrentAnswers] = useState({});
   const [showErrors, setShowErrors] = useState(false);
+  // Track whether user has completed the lesson phase for the active module
+  const [lessonPhase, setLessonPhase] = useState(true);
 
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [pendingTab, setPendingTab] = useState(null);
@@ -112,23 +118,8 @@ const CourseDetails = () => {
 
   const checkAnswersAndComplete = async (moduleIndex) => {
     if (saving) return;
-    
-    const module = course.syllabus[moduleIndex];
-    let allCorrect = true;
-    
-    for (let i = 0; i < module.exercises.length; i++) {
-      if (currentAnswers[i] !== module.exercises[i].answer) {
-        allCorrect = false;
-        break;
-      }
-    }
 
-    if (!allCorrect) {
-      setShowErrors(true);
-      return;
-    }
-
-    // All correct! Complete the module
+    // ExerciseEngine has already validated all answers are correct
     setSaving(true);
     const newCompleted = [...completedModules, moduleIndex];
     try {
@@ -140,8 +131,12 @@ const CourseDetails = () => {
       setCompletedModules(newCompleted);
       setCurrentAnswers({});
       setShowErrors(false);
+      setLessonPhase(true);
       setExpandedIndex(newCompleted.length < total ? newCompleted.length : moduleIndex);
-      toast.success("Module complete! 🎉 You unlocked the next one!");
+      
+      const xpEarned = course.xpPerModule || 50;
+      addXP(xpEarned, `Completed Module ${moduleIndex + 1}!`);
+      toast.success(`Module complete! 🎉 +${xpEarned} XP!`);
     } catch (err) {
       console.error("Error saving progress:", err);
       toast.error("Couldn't save your progress. Please try again.");
@@ -165,6 +160,12 @@ const CourseDetails = () => {
         { merge: true }
       );
       setIsCompleted(true);
+
+      if (course.badge) {
+        awardBadge(course.badge);
+      }
+      addXP(100, `Finished ${course.title}!`);
+
       toast.success("Course completed! Amazing work! 🏆");
     } catch (err) {
       console.error("Error completing course:", err);
@@ -232,7 +233,7 @@ const CourseDetails = () => {
 
         {/* Header Revamp */}
         <div className="mb-10 flex flex-col items-center gap-8 md:flex-row md:items-start md:text-left text-center">
-          <div className="relative flex h-48 w-64 flex-none items-center justify-center overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.08] to-white/[0.02] p-6 shadow-2xl">
+          <div className="relative flex h-48 w-full max-w-[260px] sm:w-64 flex-none items-center justify-center overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.08] to-white/[0.02] p-6 shadow-2xl">
             <div className="pointer-events-none absolute left-1/2 top-4 h-24 w-32 -translate-x-1/2 rounded-full bg-violet-500/20 blur-3xl transition-all duration-700 hover:scale-150" />
             <ImageWithSkeleton
               src={course.image}
@@ -420,6 +421,7 @@ const CourseDetails = () => {
                         if (active) {
                           setCurrentAnswers({});
                           setShowErrors(false);
+                          setLessonPhase(true);
                         }
                       }
                     }}
@@ -457,131 +459,44 @@ const CourseDetails = () => {
                   {open && (
                     <div className="border-t border-white/[0.07] bg-white/[0.01] p-5 md:p-8">
                       
-                      {/* Rich Content Sections */}
-                      <div className="space-y-6 mb-10">
-                        {module.contentSections?.map((section, idx) => {
-                          if (section.type === 'fact') {
-                            return (
-                              <div key={idx} className="rounded-2xl border border-sky/30 bg-sky/10 p-5 shadow-inner">
-                                <h4 className="mb-2 flex items-center gap-2 text-lg font-bold text-sky">
-                                  <Icon name="star" size={20} className="fill-sky text-sky" />
-                                  {section.title}
-                                </h4>
-                                <p className="text-sm font-medium leading-relaxed text-sky-100/90">{section.content}</p>
-                              </div>
-                            );
-                          }
-                          return (
-                            <div key={idx} className="rounded-2xl border border-white/[0.03] bg-white/[0.02] p-5">
-                              <h4 className="mb-3 text-lg font-bold text-violet-300">{section.title}</h4>
-                              <p className="text-base leading-relaxed text-ink-low">{section.content}</p>
-                            </div>
-                          );
-                        })}
-                      </div>
-
-                      {/* Exercises */}
-                      <div className="rounded-3xl border border-violet-500/20 bg-gradient-to-br from-violet-500/5 to-transparent p-5 shadow-inner md:p-8">
-                        <div className="mb-6 border-b border-white/[0.08] pb-4">
-                          <h4 className="flex items-center gap-3 text-xl font-extrabold text-ink-hi">
-                            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-violet-500 text-white shadow-[0_0_10px_rgba(139,92,246,0.5)]">
-                              <Icon name="edit-3" size={16} />
-                            </span>
-                            Module Challenge
-                          </h4>
-                          <p className="mt-2 text-sm text-ink-low">Answer all questions correctly to unlock the next module.</p>
+                      {/* Step-by-step Lesson Player (active modules only) */}
+                      {active && lessonPhase && module.contentSections?.length > 0 && (
+                        <div className="mb-10">
+                          <LessonPlayer
+                            sections={module.contentSections}
+                            moduleName={module.title}
+                            onComplete={() => setLessonPhase(false)}
+                          />
                         </div>
-                        
-                        <div className="space-y-8">
-                          {module.exercises?.map((exercise, exIndex) => {
-                            const isExDone = done;
-                            const currentSel = isExDone ? exercise.answer : (active ? currentAnswers[exIndex] : null);
-                            
-                            return (
-                              <div key={exIndex} className="animate-fade-up" style={{ animationDelay: `${exIndex * 100}ms`}}>
-                                <p className="mb-4 text-sm font-bold text-ink-hi">
-                                  <span className="text-violet-400 mr-2">Q{exIndex + 1}.</span> 
-                                  {exercise.question}
-                                </p>
-                                <div className="grid gap-3 sm:grid-cols-2">
-                                  {exercise.options.map((option) => {
-                                    const isCorrect = option === exercise.answer;
-                                    const isSelected = currentSel === option;
-                                    
-                                    let style = "border-white/[0.08] bg-white/[0.02] hover:border-violet-500/50 hover:bg-white/[0.05]";
-                                    
-                                    if (isExDone) {
-                                      if (isCorrect) style = "border-state-success bg-state-success/15 text-emerald-200 shadow-[0_0_10px_rgba(34,197,94,0.1)]";
-                                      else style = "border-white/[0.03] opacity-40";
-                                    } else if (active) {
-                                      if (isSelected) {
-                                        style = "border-violet-500 bg-violet-500/20 text-white shadow-[0_0_15px_rgba(139,92,246,0.3)]";
-                                        if (showErrors && isCorrect) style = "border-state-success bg-state-success/20 text-emerald-200 shadow-[0_0_10px_rgba(34,197,94,0.2)]";
-                                        if (showErrors && !isCorrect) style = "border-state-danger bg-state-danger/20 text-rose-200 shadow-[0_0_10px_rgba(244,63,94,0.2)]";
-                                      } else if (showErrors && isCorrect) {
-                                         style = "border-state-success/50 bg-state-success/10 text-emerald-200";
-                                      }
-                                    }
+                      )}
 
-                                    return (
-                                      <button
-                                        key={option}
-                                        type="button"
-                                        disabled={isExDone || saving || showErrors}
-                                        onClick={() => handleSelectAnswer(exIndex, option)}
-                                        className={`flex min-h-[64px] items-center justify-between rounded-xl border px-5 py-3 text-left text-sm font-medium transition-all duration-300 ${style}`}
-                                      >
-                                        <span>{option}</span>
-                                        {((isExDone && isCorrect) || (active && showErrors && isSelected && isCorrect)) && (
-                                          <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-state-success/20 text-xs font-bold text-state-success"><Icon name="check" size={14} /></span>
-                                        )}
-                                        {(active && showErrors && isSelected && !isCorrect) && (
-                                          <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-state-danger/20 text-xs font-bold text-state-danger"><Icon name="x" size={14} /></span>
-                                        )}
-                                      </button>
-                                    );
-                                  })}
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                        
-                        {active && (
-                           <div className="mt-8 border-t border-white/[0.08] pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-                              {showErrors ? (
-                                <p className="text-sm font-bold text-state-danger flex items-center gap-2 animate-bounce">
-                                  <Icon name="alert-circle" size={18} /> Review your answers and try again!
-                                </p>
-                              ) : (
-                                <p className="text-sm text-ink-low">Answer all questions to proceed.</p>
-                              )}
-                              
-                              {showErrors ? (
-                                <Button onClick={() => setShowErrors(false)} variant="secondary">
-                                  Try Again
-                                </Button>
-                              ) : (
-                                <Button 
-                                  onClick={() => checkAnswersAndComplete(moduleIndex)} 
-                                  disabled={Object.keys(currentAnswers).length < module.exercises.length || saving}
-                                  loading={saving}
-                                  className="w-full sm:w-auto px-8"
-                                >
-                                  Submit Answers
-                                </Button>
-                              )}
-                           </div>
-                        )}
-                        
-                        {done && (
-                          <div className="mt-8 rounded-xl bg-state-success/10 p-4 border border-state-success/20 text-center animate-fade-in">
-                            <p className="flex items-center justify-center gap-2 text-lg font-bold text-state-success">
-                              <Icon name="check-circle" size={24} /> Module Mastered!
-                            </p>
+                      {/* For completed modules, show a compact content summary */}
+                      {done && (
+                        <div className="space-y-4 mb-10">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Icon name="book-open" size={18} className="text-violet-400" />
+                            <span className="text-sm font-bold text-ink-low">Lesson content ({module.contentSections?.length || 0} steps completed)</span>
                           </div>
-                        )}
-                      </div>
+                          <div className="grid gap-2 sm:grid-cols-2">
+                            {module.contentSections?.map((section, idx) => (
+                              <div key={idx} className="flex items-center gap-2 rounded-xl border border-white/[0.05] bg-white/[0.02] px-4 py-3 text-sm text-ink-low">
+                                <Icon name="check-circle" size={14} className="text-state-success flex-none" />
+                                <span className="truncate">{section.title}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Exercises — shown after lesson phase is complete or for completed modules */}
+                      {(!active || !lessonPhase || !module.contentSections?.length) && (
+                        <ExerciseEngine
+                          exercises={module.exercises || []}
+                          isCompleted={done}
+                          saving={saving}
+                          onAllCorrect={() => checkAnswersAndComplete(moduleIndex)}
+                        />
+                      )}
                     </div>
                   )}
                 </Card>
