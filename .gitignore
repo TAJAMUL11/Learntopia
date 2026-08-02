@@ -32,3 +32,6 @@ dist-ssr
 # Agent instruction and configuration files
 .agents
 .agents/
+
+# Private Product Roadmap & Suggestions Tracking
+PRODUCT_ROADMAP_SUGGESTIONS.md
