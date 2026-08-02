@@ -143,25 +143,25 @@ const Doc = () => {
 
             {/* Courses & Modules */}
             <section id="courses">
-              <h2 className="text-2xl font-bold text-ink-hi border-b border-white/[0.06] pb-3 mb-5">Courses &amp; Modules</h2>
-              <p className="text-ink-low leading-relaxed">Each course is divided into a series of modules. Modules must be completed in order — there is no way to skip ahead.</p>
+              <h2 className="text-2xl font-bold text-ink-hi border-b border-white/[0.06] pb-3 mb-5">Gamified Courses &amp; Modules</h2>
+              <p className="text-ink-low leading-relaxed">Each course is designed for learners aged 7-14 with a gamified, step-by-step lesson experience. Modules must be completed sequentially to unlock the next challenge.</p>
 
               <div className="mt-6 rounded-xl border border-white/[0.07] overflow-hidden">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-white/[0.07] bg-white/[0.02]">
-                      <th className="px-5 py-3.5 text-left font-semibold text-ink-hi">Concept</th>
-                      <th className="px-5 py-3.5 text-left font-semibold text-ink-hi">Behaviour</th>
+                      <th className="px-5 py-3.5 text-left font-semibold text-ink-hi">Feature / Component</th>
+                      <th className="px-5 py-3.5 text-left font-semibold text-ink-hi">Description &amp; Behavior</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/[0.04]">
                     {[
-                      { concept: "Module completion", behaviour: "Answer the module's comprehension question correctly. Incorrect answers can be retried immediately." },
-                      { concept: "Course completion", behaviour: "All modules must be completed. The course is marked Done and moves to your Completed Courses list." },
-                      { concept: "Progress bar", behaviour: "Reflects the percentage of modules completed. Updates in real time as you finish modules." },
-                      { concept: "Course reset", behaviour: "Available for 100%-complete courses via the Start Again button in the course detail view. Resets all module progress." },
-                      { concept: "Unenrollment", behaviour: "Use the trash icon on the dashboard. Removes the course and all associated progress from your profile." },
-                      { concept: "Focus protection", behaviour: "Navigating away mid-module triggers a blocking dialog. Confirming exit does not save partial module attempts." },
+                      { concept: "Step-by-Step Lesson Player", behaviour: "Presents module content one card at a time with distinct visual themes (Story, Concept, Fun Fact, Pro Tip, Example, Activity, Recap) and code syntax highlighting." },
+                      { concept: "Multi-Type Exercise Engine", behaviour: "Tests understanding using 4 interactive formats: Multiple Choice (MCQ), True/False, Fill-in-the-Blank, and Tap-to-Connect Matching Pairs." },
+                      { concept: "Gamification & Level System", behaviour: "Earn +50 XP per completed module and +100 XP per completed course. Level up from Rookie Coder (Level 1) to Grandmaster (Level 5)." },
+                      { concept: "Badges & Celebrations", behaviour: "Unlocks unique course badges (e.g. Python Pioneer 🐍, Math Wizard 🔮) with celebratory full-screen overlays upon achievement." },
+                      { concept: "Course progress", behaviour: "Tracks completed modules in real time with progress bars and Firebase persistence. Resume anytime from your Student Dashboard." },
+                      { concept: "Course reset", behaviour: "Reset completed courses anytime via the Start Again button to replay lessons and re-earn practice." },
                     ].map((row) => (
                       <tr key={row.concept}>
                         <td className="px-5 py-3.5 font-medium text-ink-hi whitespace-nowrap">{row.concept}</td>
