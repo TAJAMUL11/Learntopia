@@ -16,6 +16,7 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
   // Handle Google Sign-In
@@ -56,72 +57,80 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
-      
-      if (user) {
-        try {
-          const userRef = doc(db, "Users", user.uid);
-          const userSnap = await getDoc(userRef);
-          
-          const today = new Date();
-          const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-          
-          if (!userSnap.exists()) {
-            // User document doesn't exist yet, initialize it to prevent empty/broken states
-            await setDoc(userRef, {
-              email: user.email || "",
-              fullName: user.displayName || "New User",
-              totalPoints: 0,
-              badges: ["Newcomer"],
-              streak: 1,
-              lastLoginDate: todayStr,
-            });
-            
+
+      if (!user) {
+        setIsAdmin(false);
+        setLoading(false);
+        return;
+      }
+
+      // Determine admin from the custom claim on the ID token — no email or PII
+      // in the client. The admin/owner is never written to the public leaderboard.
+      let admin = false;
+      try {
+        const tokenResult = await user.getIdTokenResult();
+        admin = tokenResult.claims.admin === true;
+      } catch (err) {
+        console.error("Error reading auth claims:", err);
+      }
+      setIsAdmin(admin);
+
+      try {
+        const userRef = doc(db, "Users", user.uid);
+        const userSnap = await getDoc(userRef);
+
+        const today = new Date();
+        const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+        if (!userSnap.exists()) {
+          // Initialize the private profile (email lives here, admin-readable only).
+          await setDoc(userRef, {
+            email: user.email || "",
+            fullName: user.displayName || "New User",
+            totalPoints: 0,
+            badges: ["Newcomer"],
+            streak: 1,
+            lastLoginDate: todayStr,
+          });
+
+          // Public mirror = DISPLAY data only (no email). Admin is never published.
+          if (!admin) {
             const publicRef = doc(db, "PublicLeaderboard", user.uid);
             await setDoc(publicRef, {
               uid: user.uid,
               fullName: user.displayName || "Learner",
-              email: user.email || "",
               totalPoints: 0,
               streak: 1,
               badges: ["Newcomer"],
               updatedAt: new Date()
             }, { merge: true });
-          } else {
-            const data = userSnap.data();
-            const lastDateStr = data.lastLoginDate;
+          }
+        } else {
+          const data = userSnap.data();
+          const lastDateStr = data.lastLoginDate;
 
-            // Only update if the user hasn't been credited for today yet
-            if (lastDateStr !== todayStr) {
-              let newStreak;
+          // Only update if the user hasn't been credited for today yet
+          if (lastDateStr !== todayStr) {
+            let newStreak;
 
-              if (lastDateStr) {
-                // Reliable integer calendar-day diff: parse year/month/day directly
-                // to avoid any DST or timezone offset issues.
-                const [ly, lm, ld] = lastDateStr.split("-").map(Number);
-                const [ty, tm, td] = todayStr.split("-").map(Number);
-                const lastMidnight = Date.UTC(ly, lm - 1, ld);
-                const todayMidnight = Date.UTC(ty, tm - 1, td);
-                // diffDays is always a clean integer — no rounding needed
-                const diffDays = (todayMidnight - lastMidnight) / (1000 * 60 * 60 * 24);
+            if (lastDateStr) {
+              // Reliable integer calendar-day diff (avoids DST/timezone issues).
+              const [ly, lm, ld] = lastDateStr.split("-").map(Number);
+              const [ty, tm, td] = todayStr.split("-").map(Number);
+              const lastMidnight = Date.UTC(ly, lm - 1, ld);
+              const todayMidnight = Date.UTC(ty, tm - 1, td);
+              const diffDays = (todayMidnight - lastMidnight) / (1000 * 60 * 60 * 24);
+              newStreak = diffDays === 1 ? (data.streak || 0) + 1 : 1;
+            } else {
+              newStreak = 1;
+            }
 
-                if (diffDays === 1) {
-                  // Consecutive day — extend the streak
-                  newStreak = (data.streak || 0) + 1;
-                } else {
-                  // Missed one or more days — reset
-                  newStreak = 1;
-                }
-              } else {
-                // No previous login date recorded — start fresh
-                newStreak = 1;
-              }
+            await updateDoc(userRef, {
+              streak: newStreak,
+              lastLoginDate: todayStr,
+            });
 
-              await updateDoc(userRef, {
-                streak: newStreak,
-                lastLoginDate: todayStr,
-              });
-
-              // Sync updated streak to PublicLeaderboard
+            if (!admin) {
               const publicRef = doc(db, "PublicLeaderboard", user.uid);
               await setDoc(publicRef, {
                 streak: newStreak,
@@ -129,11 +138,11 @@ export function AuthProvider({ children }) {
               }, { merge: true });
             }
           }
-        } catch (err) {
-          console.error("Error updating streak:", err);
         }
+      } catch (err) {
+        console.error("Error updating streak:", err);
       }
-      
+
       setLoading(false);
     });
     return unsubscribe;
@@ -141,6 +150,7 @@ export function AuthProvider({ children }) {
 
   const value = {
     currentUser,
+    isAdmin,
     loading,
     googleSignIn,
     logOut,

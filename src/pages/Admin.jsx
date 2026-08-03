@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import { db } from "../firebase/firebase";
-import { collection, getDocs, doc, setDoc, addDoc, serverTimestamp, query, orderBy } from "firebase/firestore";
+import { collection, getDocs, addDoc, serverTimestamp, query, orderBy } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 import Card from "../Components/ui/Card";
 import Button from "../Components/ui/Button";
@@ -11,11 +10,8 @@ import Modal from "../Components/ui/Modal";
 import NotFound from "./NotFound";
 import { toast } from "react-toastify";
 
-const ADMIN_EMAIL = "thetj4054@gmail.com";
-
 const Admin = () => {
-  const navigate = useNavigate();
-  const { currentUser, loading: authLoading } = useAuth();
+  const { currentUser, isAdmin, loading: authLoading } = useAuth();
 
   const [activeTab, setActiveTab] = useState("students"); // "students" | "messages" | "bugs" | "analytics"
   const [loading, setLoading] = useState(true);
@@ -33,10 +29,6 @@ const Admin = () => {
   const [newBug, setNewBug] = useState({ title: "", description: "", priority: "Medium" });
   const [submittingBug, setSubmittingBug] = useState(false);
 
-  const isAdmin = useMemo(() => {
-    return currentUser && currentUser.email && currentUser.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
-  }, [currentUser]);
-
   useEffect(() => {
     if (authLoading) return;
     if (!isAdmin) {
@@ -47,11 +39,14 @@ const Admin = () => {
     const fetchAdminData = async () => {
       setLoading(true);
       try {
-        // 1. Fetch Students from PublicLeaderboard & Users
-        const usersSnap = await getDocs(collection(db, "PublicLeaderboard"));
+        // 1. Fetch all real user profiles (admin-only read, enforced in rules).
+        //    Source of truth incl. email — exclude the admin's own account so the
+        //    owner is never counted as a student.
+        const usersSnap = await getDocs(collection(db, "Users"));
         const studentList = [];
         usersSnap.forEach((docSnap) => {
-          studentList.push({ id: docSnap.id, ...docSnap.data() });
+          if (docSnap.id === currentUser.uid) return; // owner is not a student
+          studentList.push({ id: docSnap.id, uid: docSnap.id, ...docSnap.data() });
         });
         setStudents(studentList);
 
@@ -94,7 +89,7 @@ const Admin = () => {
     };
 
     fetchAdminData();
-  }, [isAdmin, authLoading]);
+  }, [isAdmin, authLoading, currentUser]);
 
   const handleCreateBugReport = async (e) => {
     e.preventDefault();
@@ -191,7 +186,7 @@ const Admin = () => {
               <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/40 bg-amber-500/15 px-3 py-1 text-xs font-bold uppercase tracking-wider text-amber-300">
                 <Icon name="star" size={14} /> Owner Portal
               </span>
-              <span className="text-xs font-bold text-ink-low">{ADMIN_EMAIL}</span>
+              <span className="text-xs font-bold text-ink-low">{currentUser?.email}</span>
             </div>
             <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-white md:text-4xl">
               Learntopia Control Center
@@ -391,7 +386,7 @@ const Admin = () => {
                     </div>
 
                     <p className="text-sm text-ink-low leading-relaxed line-clamp-3 bg-black/20 rounded-xl p-3 border border-white/[0.03]">
-                      "{msg.message}"
+                      &ldquo;{msg.message}&rdquo;
                     </p>
 
                     <div className="mt-3 flex justify-end">
@@ -423,7 +418,7 @@ const Admin = () => {
               <div className="py-12 text-center text-ink-low">
                 <Icon name="alert-circle" size={40} className="mx-auto mb-3 text-ink-low/30" />
                 <p className="font-semibold text-lg">No bug reports logged</p>
-                <p className="text-sm">Click "+ New Log" to document any issues or system maintenance notes.</p>
+                <p className="text-sm">Click &ldquo;+ New Log&rdquo; to document any issues or system maintenance notes.</p>
               </div>
             ) : (
               <div className="grid gap-4 sm:grid-cols-2">

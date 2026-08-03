@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../firebase/firebase";
 import { useAuth } from "../context/AuthContext";
-import { setDoc, doc, addDoc, collection, updateDoc, increment, getDoc } from "firebase/firestore";
+import { setDoc, doc, addDoc, collection, updateDoc, increment } from "firebase/firestore";
 import { toast } from "react-toastify";
 import Card from "../Components/ui/Card";
 import Button from "../Components/ui/Button";
@@ -97,7 +97,6 @@ const SignUp = () => {
         await setDoc(publicRef, {
           uid: user.uid,
           fullName: userFName || "Learner",
-          email: user.email,
           totalPoints: 0,
           streak: 1,
           badges: ["Newcomer"],

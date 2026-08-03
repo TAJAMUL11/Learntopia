@@ -68,7 +68,6 @@ const Login = () => {
             await setDoc(publicRef, {
               uid: user.uid,
               fullName: uData.fullName || userDisplayName || user.displayName || "Learner",
-              email: user.email,
               totalPoints: uData.totalPoints || pointsEarned,
               streak: uData.streak || 1,
               badges: uData.badges || ["Newcomer"],
