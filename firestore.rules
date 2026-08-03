@@ -18,6 +18,14 @@ service cloud.firestore {
       return request.auth != null;
     }
 
+    // The owner/admin, identified by a custom claim ("admin": true) set on the
+    // account via the Firebase Admin SDK. No email or PII appears in these rules
+    // or in the client bundle — the claim is the sole source of admin authority.
+    // This is the REAL access control behind the hidden admin portal.
+    function isAdmin() {
+      return request.auth != null && request.auth.token.admin == true;
+    }
+
     // Profile documents (Users/{uid}) may hold these known fields.
     function isValidProfile() {
       let d = request.resource.data;
@@ -51,6 +59,14 @@ service cloud.firestore {
               && d.completedModules.size() >= d.totalModules);
     }
 
+    // Public leaderboard entries carry DISPLAY data only — never email/PII.
+    // This shape check makes it impossible to write an email into the
+    // world-readable PublicLeaderboard collection.
+    function isValidPublicEntry() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['uid', 'fullName', 'totalPoints', 'streak', 'badges', 'updatedAt']);
+    }
+
     // Security check for profile updates (cheating prevention)
     function isValidProfileUpdate(userId) {
       let current = resource.data;
@@ -79,25 +95,27 @@ service cloud.firestore {
     // --- User profile ----------------------------------------------------
 
     match /Users/{userId} {
-      allow read:   if isOwner(userId);
+      // Owner reads own profile; admin may read ALL profiles (backend access).
+      allow read:   if isOwner(userId) || isAdmin();
       allow create: if isOwner(userId) && isValidProfile();
       allow update: if isOwner(userId) && isValidProfileUpdate(userId);
       allow delete: if false; // profiles are not deleted from the client
 
       // --- Quiz attempts (append-only history) --------------------------
-      // Owner can read and add attempts, but cannot edit or delete past
-      // ones — this keeps the score record tamper-evident.
+      // Owner can read and add attempts (admin may read any); nobody edits or
+      // deletes past ones — this keeps the score record tamper-evident.
       match /quizAttempts/{attemptId} {
-        allow read:   if isOwner(userId);
+        allow read:   if isOwner(userId) || isAdmin();
         allow create: if isOwner(userId) && isValidAttempt();
         allow update, delete: if false;
       }
 
       // --- Enrolled courses + progress ------------------------------------
-      // Owner-only. Enroll and per-module progress writes are allowed; flagging
-      // the course completed requires all modules done (isValidEnrollment).
+      // Owner-only writes (admin may read any). Enroll and per-module progress
+      // writes are allowed; flagging completed requires all modules done.
       match /enrolledCourses/{courseId} {
-        allow read, delete: if isOwner(userId);
+        allow read:   if isOwner(userId) || isAdmin();
+        allow delete: if isOwner(userId);
         allow create, update: if isOwner(userId) && isValidEnrollment();
       }
     }
@@ -112,10 +130,11 @@ service cloud.firestore {
 
     // --- Public Leaderboard ----------------------------------------------
     // Any authenticated user may read (needed for the Global Leaderboard tab).
-    // A user may only write/update their OWN entry.
+    // A user may only write/update their OWN entry, and the shape check ensures
+    // NO email/PII is ever stored in this world-readable collection.
     match /PublicLeaderboard/{userId} {
       allow read: if isSignedIn();
-      allow write: if isOwner(userId);
+      allow write: if isOwner(userId) && isValidPublicEntry();
     }
 
     // --- Contact Messages ------------------------------------------------
@@ -133,7 +152,15 @@ service cloud.firestore {
 
     match /ContactMessages/{msgId} {
       allow create: if isValidContactMessage();
-      allow read, update, delete: if false;
+      allow read:   if isAdmin();          // admin reviews inquiries in-app
+      allow update, delete: if false;
+    }
+
+    // --- Bug reports / system notes --------------------------------------
+    // Admin-only: the owner logs and reviews technical notes from the portal.
+    match /BugReports/{bugId} {
+      allow read, create, update: if isAdmin();
+      allow delete: if false;
     }
 
     // --- Default deny ----------------------------------------------------
