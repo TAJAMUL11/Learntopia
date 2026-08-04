@@ -7,8 +7,9 @@ class ChunkErrorBoundary extends Component {
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(error) {
-    // Check if the error is a ChunkLoadError (common during code updates or flaky connections)
+  static getDerivedStateFromError() {
+    // Any render error (commonly a ChunkLoadError during code updates or flaky
+    // connections) flips to the fallback UI.
     return { hasError: true };
   }
 
@@ -24,14 +25,14 @@ class ChunkErrorBoundary extends Component {
     if (this.state.hasError) {
       return (
         <div className="container-page flex min-h-[50vh] flex-col items-center justify-center py-16 text-center">
-          <div className="relative mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border border-red-500/20 bg-red-500/10 text-red-400">
+          <div className="relative mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border border-state-danger/20 bg-state-danger/10 text-state-danger">
             <Icon name="warning" size={36} />
           </div>
           <h2 className="text-2xl font-black tracking-tight text-ink-hi sm:text-3xl">
             Connection Interrupted
           </h2>
           <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-ink-low sm:text-base">
-            We couldn't load the required page resources. This usually happens due to a temporary network drop or application update.
+            We couldn&rsquo;t load the required page resources. This usually happens due to a temporary network drop or application update.
           </p>
           <button
             onClick={this.handleReload}

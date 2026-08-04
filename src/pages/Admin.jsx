@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo } from "react";
 import { db } from "../firebase/firebase";
 import { collection, getDocs, addDoc, serverTimestamp, query, orderBy } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
-import Card from "../Components/ui/Card";
 import Button from "../Components/ui/Button";
 import Icon from "../Components/ui/Icon";
 import { Skeleton } from "../Components/ui/Skeleton";
@@ -10,19 +9,31 @@ import Modal from "../Components/ui/Modal";
 import NotFound from "./NotFound";
 import { toast } from "react-toastify";
 
+const NAV_ITEMS = [
+  { id: "overview", label: "Overview", icon: "bar-chart" },
+  { id: "students", label: "Students", icon: "users" },
+  { id: "messages", label: "Messages", icon: "mail" },
+  { id: "bugs", label: "System Logs", icon: "alert-circle" },
+];
+
+const SECTION_META = {
+  overview: { title: "Overview", subtitle: "Platform activity at a glance." },
+  students: { title: "Registered Students", subtitle: "All learners, their points, streaks and badges." },
+  messages: { title: "Contact Inquiries", subtitle: "Messages submitted through the contact form." },
+  bugs: { title: "System Logs", subtitle: "Bug reports and maintenance notes." },
+};
+
 const Admin = () => {
   const { currentUser, isAdmin, loading: authLoading } = useAuth();
 
-  const [activeTab, setActiveTab] = useState("students"); // "students" | "messages" | "bugs" | "analytics"
+  const [activeTab, setActiveTab] = useState("overview");
   const [loading, setLoading] = useState(true);
 
-  // Data states
   const [students, setStudents] = useState([]);
   const [contactMessages, setContactMessages] = useState([]);
   const [bugReports, setBugReports] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Modals
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [showNewBugModal, setShowNewBugModal] = useState(false);
@@ -38,48 +49,49 @@ const Admin = () => {
 
     const fetchAdminData = async () => {
       setLoading(true);
+      let studentCount = 0;
+      let msgCount = 0;
+      let bugCount = 0;
       try {
         // 1. Fetch all real user profiles (admin-only read, enforced in rules).
-        //    Source of truth incl. email — exclude the admin's own account so the
-        //    owner is never counted as a student.
+        //    Exclude the admin's own account so the owner is never a student.
         const usersSnap = await getDocs(collection(db, "Users"));
         const studentList = [];
         usersSnap.forEach((docSnap) => {
-          if (docSnap.id === currentUser.uid) return; // owner is not a student
+          if (docSnap.id === currentUser.uid) return;
           studentList.push({ id: docSnap.id, uid: docSnap.id, ...docSnap.data() });
         });
         setStudents(studentList);
+        studentCount = studentList.length;
 
-        // 2. Fetch Contact Messages
+        // 2. Contact messages
         try {
           const messagesQuery = query(collection(db, "ContactMessages"), orderBy("submittedAt", "desc"));
           const msgSnap = await getDocs(messagesQuery);
           const msgList = [];
-          msgSnap.forEach((docSnap) => {
-            msgList.push({ id: docSnap.id, ...docSnap.data() });
-          });
+          msgSnap.forEach((docSnap) => msgList.push({ id: docSnap.id, ...docSnap.data() }));
           setContactMessages(msgList);
+          msgCount = msgList.length;
         } catch {
-          // Fallback without ordering if index not present
           const msgSnap = await getDocs(collection(db, "ContactMessages"));
           const msgList = [];
-          msgSnap.forEach((docSnap) => {
-            msgList.push({ id: docSnap.id, ...docSnap.data() });
-          });
+          msgSnap.forEach((docSnap) => msgList.push({ id: docSnap.id, ...docSnap.data() }));
           setContactMessages(msgList);
+          msgCount = msgList.length;
         }
 
-        // 3. Fetch Bug Reports / System Notes
+        // 3. Bug reports / system notes
         try {
           const bugSnap = await getDocs(collection(db, "BugReports"));
           const bugList = [];
-          bugSnap.forEach((docSnap) => {
-            bugList.push({ id: docSnap.id, ...docSnap.data() });
-          });
+          bugSnap.forEach((docSnap) => bugList.push({ id: docSnap.id, ...docSnap.data() }));
           setBugReports(bugList);
+          bugCount = bugList.length;
         } catch (err) {
           console.warn("No BugReports collection yet:", err);
         }
+
+        toast.success(`Loaded ${studentCount} student${studentCount === 1 ? "" : "s"} · ${msgCount} message${msgCount === 1 ? "" : "s"} · ${bugCount} log${bugCount === 1 ? "" : "s"}`);
       } catch (err) {
         console.error("Error fetching admin data:", err);
         toast.error("Failed to load some admin data.");
@@ -94,10 +106,9 @@ const Admin = () => {
   const handleCreateBugReport = async (e) => {
     e.preventDefault();
     if (!newBug.title.trim() || !newBug.description.trim()) {
-      toast.error("Please provide both title and description.");
+      toast.error("Please provide both a title and description.");
       return;
     }
-
     setSubmittingBug(true);
     try {
       const bugData = {
@@ -108,21 +119,19 @@ const Admin = () => {
         createdAt: serverTimestamp(),
         createdBy: currentUser.email,
       };
-
       const docRef = await addDoc(collection(db, "BugReports"), bugData);
       setBugReports((prev) => [{ id: docRef.id, ...bugData, createdAt: new Date() }, ...prev]);
       setShowNewBugModal(false);
       setNewBug({ title: "", description: "", priority: "Medium" });
-      toast.success("Bug report logged successfully!");
+      toast.success("System log saved.");
     } catch (err) {
       console.error("Error logging bug report:", err);
-      toast.error("Failed to log bug report.");
+      toast.error("Failed to save the log.");
     } finally {
       setSubmittingBug(false);
     }
   };
 
-  // Search filtering for students
   const filteredStudents = useMemo(() => {
     if (!searchQuery.trim()) return students;
     const q = searchQuery.toLowerCase();
@@ -134,23 +143,28 @@ const Admin = () => {
     );
   }, [students, searchQuery]);
 
-  // Export JSON/CSV helper
+  const totalPoints = useMemo(
+    () => students.reduce((acc, s) => acc + (s.totalPoints || 0), 0),
+    [students]
+  );
+
+  const topStudents = useMemo(
+    () => [...students].sort((a, b) => (b.totalPoints || 0) - (a.totalPoints || 0)).slice(0, 5),
+    [students]
+  );
+
   const exportStudentsCSV = () => {
     if (students.length === 0) {
       toast.error("No student data to export.");
       return;
     }
-
     const headers = "Name,Email,UID,Total Points,Streak,Badges Count\n";
     const rows = students
       .map(
         (s) =>
-          `"${s.fullName || "N/A"}","${s.email || "N/A"}","${s.uid || s.id}",${s.totalPoints || 0},${
-            s.streak || 1
-          },${(s.badges || []).length}`
+          `"${s.fullName || "N/A"}","${s.email || "N/A"}","${s.uid || s.id}",${s.totalPoints || 0},${s.streak || 1},${(s.badges || []).length}`
       )
       .join("\n");
-
     const blob = new Blob([headers + rows], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -158,308 +172,347 @@ const Admin = () => {
     a.download = `Learntopia_Students_${new Date().toISOString().split("T")[0]}.csv`;
     a.click();
     URL.revokeObjectURL(url);
-    toast.success("Exported student list CSV!");
+    toast.success("Student list exported to CSV.");
   };
 
   if (authLoading) {
     return (
-      <div className="container-page py-16 text-center">
-        <Skeleton className="mx-auto h-12 w-48 rounded-xl mb-4" />
-        <Skeleton className="mx-auto h-64 w-full max-w-4xl rounded-3xl" />
+      <div className="container-page py-16">
+        <Skeleton className="mb-4 h-10 w-56 rounded-xl" />
+        <Skeleton className="h-72 w-full rounded-2xl" />
       </div>
     );
   }
 
-  // Stealth protection for non-admin users: render 404 NotFound page with zero redirection
-  if (!isAdmin) {
-    return <NotFound />;
-  }
+  // Stealth: non-admins get a 404, not a redirect.
+  if (!isAdmin) return <NotFound />;
+
+  const counts = {
+    students: students.length,
+    messages: contactMessages.length,
+    bugs: bugReports.length,
+  };
+
+  const KPIS = [
+    { label: "Students", value: students.length, icon: "users", tint: "text-violet-300", ring: "border-violet-500/25 bg-violet-500/[0.06]" },
+    { label: "Messages", value: contactMessages.length, icon: "mail", tint: "text-sky", ring: "border-sky-500/25 bg-sky-500/[0.06]" },
+    { label: "System Logs", value: bugReports.length, icon: "alert-circle", tint: "text-amber-300", ring: "border-amber-500/25 bg-amber-500/[0.06]" },
+    { label: "Total Points", value: totalPoints, icon: "trophy", tint: "text-emerald-300", ring: "border-emerald-500/25 bg-emerald-500/[0.06]" },
+  ];
+
+  const meta = SECTION_META[activeTab];
+
+  // Reusable nav-item renderer (sidebar + mobile share the label/icon/count).
+  const navItem = (item) => {
+    const active = activeTab === item.id;
+    const count = counts[item.id];
+    return (
+      <button
+        key={item.id}
+        onClick={() => setActiveTab(item.id)}
+        className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors ${
+          active ? "bg-violet-500/15 text-violet-200" : "text-ink-low hover:bg-white/[0.04] hover:text-ink-hi"
+        }`}
+      >
+        <Icon name={item.icon} size={17} className={active ? "text-violet-300" : ""} />
+        <span className="flex-1 text-left">{item.label}</span>
+        {count !== undefined && (
+          <span className={`rounded-md px-1.5 py-0.5 text-[11px] font-bold tabular-nums ${active ? "bg-violet-500/25 text-violet-100" : "bg-white/[0.06] text-ink-low"}`}>
+            {count}
+          </span>
+        )}
+      </button>
+    );
+  };
 
   return (
-    <div className="container-page py-12 md:py-16 text-ink-hi">
-      <div className="mx-auto max-w-6xl space-y-8 animate-fade-up">
+    <div className="text-ink-hi">
+      <div className="mx-auto max-w-[1400px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 
-        {/* Admin Header Banner */}
-        <Card className="flex flex-col items-start justify-between gap-6 p-6 sm:flex-row sm:items-center md:p-8 border-violet-500/30 bg-gradient-to-br from-violet-600/20 via-violet-900/10 to-ground-900 shadow-[0_0_30px_rgba(139,92,246,0.15)]">
-          <div>
-            <div className="flex items-center gap-3">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/40 bg-amber-500/15 px-3 py-1 text-xs font-bold uppercase tracking-wider text-amber-300">
-                <Icon name="star" size={14} /> Owner Portal
-              </span>
-              <span className="text-xs font-bold text-ink-low">{currentUser?.email}</span>
-            </div>
-            <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-white md:text-4xl">
-              Learntopia Control Center
-            </h1>
-            <p className="mt-1 text-sm text-ink-low">
-              Manage registered students, review contact inquiries, track bug reports, and inspect platform analytics.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" onClick={exportStudentsCSV} className="gap-2">
-              <Icon name="clipboard" size={16} /> Export CSV
-            </Button>
-            <Button size="sm" onClick={() => setShowNewBugModal(true)} className="gap-2">
-              <Icon name="alert-circle" size={16} /> Log Bug / Note
-            </Button>
-          </div>
-        </Card>
-
-        {/* Quick Analytics Summary Grid */}
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          <div className="rounded-2xl border border-violet-500/20 bg-white/[0.02] p-5 shadow-card">
-            <div className="flex items-center gap-3 text-violet-400">
-              <Icon name="users" size={20} />
-              <h3 className="text-xs font-bold uppercase tracking-wider text-ink-low">Signed Up Students</h3>
-            </div>
-            <p className="mt-3 text-3xl font-extrabold text-white">{students.length}</p>
-          </div>
-
-          <div className="rounded-2xl border border-sky-500/20 bg-white/[0.02] p-5 shadow-card">
-            <div className="flex items-center gap-3 text-sky">
-              <Icon name="mail" size={20} />
-              <h3 className="text-xs font-bold uppercase tracking-wider text-ink-low">Contact Inquiries</h3>
-            </div>
-            <p className="mt-3 text-3xl font-extrabold text-white">{contactMessages.length}</p>
-          </div>
-
-          <div className="rounded-2xl border border-amber-500/20 bg-white/[0.02] p-5 shadow-card">
-            <div className="flex items-center gap-3 text-amber-400">
-              <Icon name="alert-circle" size={20} />
-              <h3 className="text-xs font-bold uppercase tracking-wider text-ink-low">Bug / System Logs</h3>
-            </div>
-            <p className="mt-3 text-3xl font-extrabold text-white">{bugReports.length}</p>
-          </div>
-
-          <div className="rounded-2xl border border-emerald-500/20 bg-white/[0.02] p-5 shadow-card">
-            <div className="flex items-center gap-3 text-emerald-400">
-              <Icon name="trophy" size={20} />
-              <h3 className="text-xs font-bold uppercase tracking-wider text-ink-low">Total Points Logged</h3>
-            </div>
-            <p className="mt-3 text-3xl font-extrabold text-white">
-              {students.reduce((acc, curr) => acc + (curr.totalPoints || 0), 0)}
-            </p>
-          </div>
+        {/* Mobile section nav */}
+        <div className="mb-5 flex gap-2 overflow-x-auto pb-1 lg:hidden">
+          {NAV_ITEMS.map((item) => {
+            const active = activeTab === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => setActiveTab(item.id)}
+                className={`flex flex-none items-center gap-2 rounded-lg border px-3.5 py-2 text-xs font-semibold transition-colors ${
+                  active ? "border-violet-500/40 bg-violet-500/15 text-violet-200" : "border-white/[0.08] bg-white/[0.02] text-ink-low"
+                }`}
+              >
+                <Icon name={item.icon} size={14} /> {item.label}
+                {counts[item.id] !== undefined && <span className="tabular-nums">({counts[item.id]})</span>}
+              </button>
+            );
+          })}
         </div>
 
-        {/* Tab Navigation */}
-        <div className="flex border-b border-white/[0.08] gap-2 overflow-x-auto pb-1">
-          {[
-            { id: "students", label: `Registered Students (${students.length})`, icon: "users" },
-            { id: "messages", label: `Contact Inquiries (${contactMessages.length})`, icon: "mail" },
-            { id: "bugs", label: `Bug & System Notes (${bugReports.length})`, icon: "alert-circle" },
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 border-b-2 px-5 py-3 text-sm font-bold transition-all ${
-                activeTab === tab.id
-                  ? "border-violet-500 text-violet-400 bg-violet-500/10 rounded-t-xl"
-                  : "border-transparent text-ink-low hover:text-ink-hi hover:bg-white/[0.02]"
-              }`}
-            >
-              <Icon name={tab.icon} size={16} />
-              {tab.label}
-            </button>
-          ))}
-        </div>
+        <div className="flex gap-8">
 
-        {/* TAB 1: Registered Students */}
-        {activeTab === "students" && (
-          <Card className="p-6 md:p-8 space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                <Icon name="users" size={20} className="text-violet-400" />
-                Signed Up Students & Learners
-              </h3>
+          {/* ── Sidebar ── */}
+          <aside className="hidden w-60 flex-none lg:block">
+            <div className="sticky top-20">
+              <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-4">
+                <div className="flex items-center gap-2.5">
+                  <div className="grid h-9 w-9 flex-none place-items-center rounded-lg bg-gradient-to-br from-violet-500 to-sky text-ground">
+                    <Icon name="shield" size={18} />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-bold text-white">Owner Portal</p>
+                    <p className="truncate text-[11px] text-ink-low">{currentUser?.email}</p>
+                  </div>
+                </div>
+              </div>
 
-              {/* Search bar */}
-              <div className="relative w-full sm:w-72">
-                <Icon name="search" size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-low" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search student by name or email..."
-                  className="w-full rounded-xl border border-white/[0.1] bg-white/[0.03] pl-10 pr-4 py-2 text-sm text-ink-hi placeholder-ink-low/50 outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500"
-                />
+              <nav className="mt-3 space-y-1 rounded-xl border border-white/[0.08] bg-white/[0.02] p-2">
+                {NAV_ITEMS.map(navItem)}
+              </nav>
+
+              <div className="mt-3 flex items-center gap-1.5 px-2 text-[11px] text-ink-faint">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400" /> Live system
+              </div>
+            </div>
+          </aside>
+
+          {/* ── Main ── */}
+          <main className="min-w-0 flex-1">
+
+            {/* Header */}
+            <div className="flex flex-col gap-4 border-b border-white/[0.08] pb-6 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">{meta.title}</h1>
+                <p className="mt-1 text-sm text-ink-low">{meta.subtitle}</p>
+              </div>
+              <div className="flex flex-none gap-2.5">
+                {(activeTab === "students" || activeTab === "overview") && (
+                  <Button variant="secondary" size="sm" onClick={exportStudentsCSV}>
+                    <Icon name="clipboard" size={15} /> Export CSV
+                  </Button>
+                )}
+                {(activeTab === "bugs" || activeTab === "overview") && (
+                  <Button size="sm" onClick={() => setShowNewBugModal(true)}>
+                    <Icon name="alert-circle" size={15} /> Log note
+                  </Button>
+                )}
               </div>
             </div>
 
-            {loading ? (
-              <div className="space-y-3">
-                <Skeleton className="h-12 w-full rounded-xl" />
-                <Skeleton className="h-12 w-full rounded-xl" />
-                <Skeleton className="h-12 w-full rounded-xl" />
-              </div>
-            ) : filteredStudents.length === 0 ? (
-              <div className="py-12 text-center text-ink-low">
-                <Icon name="users" size={40} className="mx-auto mb-3 text-ink-low/30" />
-                <p className="font-semibold text-lg">No students found</p>
-                <p className="text-sm">Try broadening your search term.</p>
-              </div>
-            ) : (
-              <div className="overflow-x-auto rounded-2xl border border-white/[0.08]">
-                <table className="w-full text-left text-sm">
-                  <thead className="bg-white/[0.03] text-xs font-bold uppercase tracking-wider text-ink-low border-b border-white/[0.08]">
-                    <tr>
-                      <th className="px-5 py-4">Student</th>
-                      <th className="px-5 py-4">Email</th>
-                      <th className="px-5 py-4">Total Points</th>
-                      <th className="px-5 py-4">Streak</th>
-                      <th className="px-5 py-4">Badges</th>
-                      <th className="px-5 py-4 text-right">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/[0.04]">
-                    {filteredStudents.map((student) => (
-                      <tr key={student.id} className="hover:bg-white/[0.02] transition-colors">
-                        <td className="px-5 py-4">
-                          <div className="flex items-center gap-3">
-                            <div className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-tr from-violet-600 to-sky text-sm font-bold text-white">
-                              {student.fullName ? student.fullName.charAt(0).toUpperCase() : "S"}
-                            </div>
-                            <span className="font-bold text-white">{student.fullName || "Learner"}</span>
-                          </div>
-                        </td>
-                        <td className="px-5 py-4 text-ink-low font-mono text-xs">{student.email || "N/A"}</td>
-                        <td className="px-5 py-4 font-extrabold text-amber-300">⚡ {student.totalPoints || 0} pts</td>
-                        <td className="px-5 py-4 font-semibold text-orange-400">🔥 {student.streak || 1} days</td>
-                        <td className="px-5 py-4">
-                          <span className="inline-flex items-center gap-1 rounded-full border border-sky/30 bg-sky/10 px-2.5 py-0.5 text-xs font-bold text-sky">
-                            <Icon name="star" size={12} /> {(student.badges || []).length} Badges
-                          </span>
-                        </td>
-                        <td className="px-5 py-4 text-right">
-                          <Button size="sm" variant="ghost" onClick={() => setSelectedStudent(student)}>
-                            View Info
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </Card>
-        )}
-
-        {/* TAB 2: Contact Messages */}
-        {activeTab === "messages" && (
-          <Card className="p-6 md:p-8 space-y-6">
-            <h3 className="text-xl font-bold text-white flex items-center gap-2">
-              <Icon name="mail" size={20} className="text-sky" />
-              Messages & Contact Form Inquiries
-            </h3>
-
-            {loading ? (
-              <div className="space-y-3">
-                <Skeleton className="h-16 w-full rounded-xl" />
-                <Skeleton className="h-16 w-full rounded-xl" />
-              </div>
-            ) : contactMessages.length === 0 ? (
-              <div className="py-12 text-center text-ink-low">
-                <Icon name="mail" size={40} className="mx-auto mb-3 text-ink-low/30" />
-                <p className="font-semibold text-lg">No contact messages received yet</p>
-                <p className="text-sm">Messages submitted via the /contact page will appear here instantly.</p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {contactMessages.map((msg) => (
-                  <div
-                    key={msg.id}
-                    className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 transition-all hover:border-violet-500/40 hover:bg-white/[0.04]"
-                  >
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
-                      <div>
-                        <h4 className="text-base font-extrabold text-white">{msg.subject || "(No Subject)"}</h4>
-                        <p className="text-xs text-ink-low">
-                          From: <span className="font-semibold text-violet-300">{msg.name}</span> ({msg.email})
-                        </p>
+            {/* ══ OVERVIEW ══ */}
+            {activeTab === "overview" && (
+              <div className="mt-6 space-y-6">
+                {/* KPI cards */}
+                <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+                  {KPIS.map((k) => (
+                    <div key={k.label} className={`rounded-xl border p-5 ${k.ring}`}>
+                      <div className={`flex items-center gap-2 text-xs font-semibold uppercase tracking-wider ${k.tint}`}>
+                        <Icon name={k.icon} size={16} /> {k.label}
                       </div>
-                      <span className="text-xs text-ink-low/70">
-                        {msg.submittedAt?.toDate
-                          ? msg.submittedAt.toDate().toLocaleString()
-                          : "Recently"}
-                      </span>
+                      <p className="mt-3 text-3xl font-extrabold tabular-nums text-white">{loading ? "—" : k.value}</p>
                     </div>
+                  ))}
+                </div>
 
-                    <p className="text-sm text-ink-low leading-relaxed line-clamp-3 bg-black/20 rounded-xl p-3 border border-white/[0.03]">
-                      &ldquo;{msg.message}&rdquo;
-                    </p>
-
-                    <div className="mt-3 flex justify-end">
-                      <Button size="sm" variant="ghost" onClick={() => setSelectedMessage(msg)}>
-                        Read Full Message
-                      </Button>
+                {/* Recent activity split */}
+                <div className="grid gap-6 lg:grid-cols-2">
+                  {/* Top students */}
+                  <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-5">
+                    <div className="mb-4 flex items-center justify-between">
+                      <h3 className="flex items-center gap-2 text-sm font-bold text-white"><Icon name="trophy" size={16} className="text-amber-400" /> Top students</h3>
+                      <button onClick={() => setActiveTab("students")} className="text-xs font-semibold text-violet-400 hover:underline">View all</button>
                     </div>
+                    {loading ? (
+                      <div className="space-y-2">{[...Array(3)].map((_, i) => <Skeleton key={i} className="h-11 rounded-lg" />)}</div>
+                    ) : topStudents.length > 0 ? (
+                      <ul className="space-y-2">
+                        {topStudents.map((s, i) => (
+                          <li key={s.id} className="flex items-center gap-3 rounded-lg border border-white/[0.05] bg-white/[0.02] px-3 py-2.5">
+                            <span className="w-4 flex-none text-center text-xs font-bold text-ink-faint tabular-nums">{i + 1}</span>
+                            <div className="grid h-8 w-8 flex-none place-items-center rounded-full bg-gradient-to-tr from-violet-600 to-sky text-xs font-bold text-white">
+                              {s.fullName ? s.fullName.charAt(0).toUpperCase() : "S"}
+                            </div>
+                            <span className="min-w-0 flex-1 truncate text-sm font-medium text-ink-hi">{s.fullName || "Learner"}</span>
+                            <span className="flex-none text-sm font-bold tabular-nums text-amber-300">{s.totalPoints || 0} pts</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="py-6 text-center text-sm text-ink-low">No students yet.</p>
+                    )}
                   </div>
-                ))}
+
+                  {/* Recent messages */}
+                  <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-5">
+                    <div className="mb-4 flex items-center justify-between">
+                      <h3 className="flex items-center gap-2 text-sm font-bold text-white"><Icon name="mail" size={16} className="text-sky" /> Recent messages</h3>
+                      <button onClick={() => setActiveTab("messages")} className="text-xs font-semibold text-violet-400 hover:underline">View all</button>
+                    </div>
+                    {loading ? (
+                      <div className="space-y-2">{[...Array(3)].map((_, i) => <Skeleton key={i} className="h-11 rounded-lg" />)}</div>
+                    ) : contactMessages.length > 0 ? (
+                      <ul className="space-y-2">
+                        {contactMessages.slice(0, 4).map((m) => (
+                          <li key={m.id}>
+                            <button onClick={() => setSelectedMessage(m)} className="flex w-full items-center gap-3 rounded-lg border border-white/[0.05] bg-white/[0.02] px-3 py-2.5 text-left transition-colors hover:bg-white/[0.05]">
+                              <div className="min-w-0 flex-1">
+                                <p className="truncate text-sm font-semibold text-ink-hi">{m.subject || "(No subject)"}</p>
+                                <p className="truncate text-[11px] text-ink-low">{m.name}</p>
+                              </div>
+                              <Icon name="arrow-right" size={14} className="flex-none text-ink-faint" />
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="py-6 text-center text-sm text-ink-low">No messages received yet.</p>
+                    )}
+                  </div>
+                </div>
               </div>
             )}
-          </Card>
-        )}
 
-        {/* TAB 3: Bug Reports & System Notes */}
-        {activeTab === "bugs" && (
-          <Card className="p-6 md:p-8 space-y-6">
-            <div className="flex items-center justify-between">
-              <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                <Icon name="alert-circle" size={20} className="text-amber-400" />
-                Bug Reports & Technical Notes
-              </h3>
-              <Button size="sm" onClick={() => setShowNewBugModal(true)} className="gap-2">
-                + New Log
-              </Button>
-            </div>
-
-            {bugReports.length === 0 ? (
-              <div className="py-12 text-center text-ink-low">
-                <Icon name="alert-circle" size={40} className="mx-auto mb-3 text-ink-low/30" />
-                <p className="font-semibold text-lg">No bug reports logged</p>
-                <p className="text-sm">Click &ldquo;+ New Log&rdquo; to document any issues or system maintenance notes.</p>
-              </div>
-            ) : (
-              <div className="grid gap-4 sm:grid-cols-2">
-                {bugReports.map((bug) => (
-                  <div key={bug.id} className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-5 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold uppercase tracking-wider text-amber-300">
-                        Priority: {bug.priority || "Medium"}
-                      </span>
-                      <span className="rounded-full bg-amber-500/20 px-2.5 py-0.5 text-[11px] font-bold text-amber-300">
-                        {bug.status || "Open"}
-                      </span>
-                    </div>
-                    <h4 className="text-base font-bold text-white">{bug.title}</h4>
-                    <p className="text-sm text-ink-low">{bug.description}</p>
+            {/* ══ STUDENTS ══ */}
+            {activeTab === "students" && (
+              <div className="mt-6">
+                <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="text-sm text-ink-low">{filteredStudents.length} of {students.length} students</p>
+                  <div className="relative w-full sm:w-72">
+                    <Icon name="search" size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-low" />
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Search by name or email…"
+                      className="w-full rounded-lg border border-white/[0.1] bg-white/[0.03] py-2.5 pl-10 pr-4 text-sm text-ink-hi outline-none placeholder:text-ink-low/60 focus:border-violet-500 focus:ring-1 focus:ring-violet-500/40"
+                    />
                   </div>
-                ))}
+                </div>
+
+                {loading ? (
+                  <div className="space-y-2">{[...Array(5)].map((_, i) => <Skeleton key={i} className="h-14 w-full rounded-xl" />)}</div>
+                ) : filteredStudents.length === 0 ? (
+                  <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] py-14 text-center text-ink-low">
+                    <Icon name="users" size={36} className="mx-auto mb-3 text-ink-faint" />
+                    <p className="font-semibold">No students found</p>
+                    <p className="text-sm">Try a different search term.</p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto rounded-xl border border-white/[0.08]">
+                    <table className="w-full text-left text-sm">
+                      <thead className="border-b border-white/[0.08] bg-white/[0.03] text-xs font-bold uppercase tracking-wider text-ink-low">
+                        <tr>
+                          <th className="px-5 py-3.5">Student</th>
+                          <th className="px-5 py-3.5">Email</th>
+                          <th className="px-5 py-3.5 text-right">Points</th>
+                          <th className="px-5 py-3.5 text-right">Streak</th>
+                          <th className="px-5 py-3.5 text-right">Badges</th>
+                          <th className="px-5 py-3.5 text-right">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-white/[0.04]">
+                        {filteredStudents.map((s) => (
+                          <tr key={s.id} className="transition-colors hover:bg-white/[0.02]">
+                            <td className="px-5 py-3.5">
+                              <div className="flex items-center gap-3">
+                                <div className="grid h-9 w-9 flex-none place-items-center rounded-full bg-gradient-to-tr from-violet-600 to-sky text-sm font-bold text-white">
+                                  {s.fullName ? s.fullName.charAt(0).toUpperCase() : "S"}
+                                </div>
+                                <span className="font-semibold text-white">{s.fullName || "Learner"}</span>
+                              </div>
+                            </td>
+                            <td className="px-5 py-3.5 font-mono text-xs text-ink-low">{s.email || "N/A"}</td>
+                            <td className="px-5 py-3.5 text-right font-bold tabular-nums text-amber-300">{s.totalPoints || 0}</td>
+                            <td className="px-5 py-3.5 text-right font-semibold tabular-nums text-orange-400">{s.streak || 1}d</td>
+                            <td className="px-5 py-3.5 text-right tabular-nums text-sky">{(s.badges || []).length}</td>
+                            <td className="px-5 py-3.5 text-right">
+                              <Button size="sm" variant="ghost" onClick={() => setSelectedStudent(s)}>View</Button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </div>
             )}
-          </Card>
-        )}
 
+            {/* ══ MESSAGES ══ */}
+            {activeTab === "messages" && (
+              <div className="mt-6">
+                {loading ? (
+                  <div className="space-y-3">{[...Array(3)].map((_, i) => <Skeleton key={i} className="h-24 w-full rounded-xl" />)}</div>
+                ) : contactMessages.length === 0 ? (
+                  <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] py-14 text-center text-ink-low">
+                    <Icon name="mail" size={36} className="mx-auto mb-3 text-ink-faint" />
+                    <p className="font-semibold">No messages received yet</p>
+                    <p className="text-sm">Contact-form submissions appear here instantly.</p>
+                  </div>
+                ) : (
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {contactMessages.map((msg) => (
+                      <div key={msg.id} className="flex flex-col rounded-xl border border-white/[0.08] bg-white/[0.02] p-5 transition-colors hover:border-violet-500/30">
+                        <div className="mb-2 flex items-start justify-between gap-2">
+                          <h4 className="font-bold text-white">{msg.subject || "(No subject)"}</h4>
+                          <span className="flex-none text-[11px] text-ink-faint">{msg.submittedAt?.toDate ? msg.submittedAt.toDate().toLocaleDateString() : "Recent"}</span>
+                        </div>
+                        <p className="text-xs text-ink-low">From <span className="font-semibold text-violet-300">{msg.name}</span></p>
+                        <p className="mt-3 line-clamp-2 flex-1 rounded-lg border border-white/[0.03] bg-black/20 p-3 text-sm leading-relaxed text-ink-low">
+                          &ldquo;{msg.message}&rdquo;
+                        </p>
+                        <div className="mt-3 flex justify-end">
+                          <Button size="sm" variant="ghost" onClick={() => setSelectedMessage(msg)}>Read full</Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ══ SYSTEM LOGS ══ */}
+            {activeTab === "bugs" && (
+              <div className="mt-6">
+                {loading ? (
+                  <div className="grid gap-3 sm:grid-cols-2">{[...Array(2)].map((_, i) => <Skeleton key={i} className="h-28 w-full rounded-xl" />)}</div>
+                ) : bugReports.length === 0 ? (
+                  <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] py-14 text-center text-ink-low">
+                    <Icon name="alert-circle" size={36} className="mx-auto mb-3 text-ink-faint" />
+                    <p className="font-semibold">No logs yet</p>
+                    <p className="text-sm">Use &ldquo;Log note&rdquo; to record an issue or maintenance note.</p>
+                  </div>
+                ) : (
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {bugReports.map((bug) => (
+                      <div key={bug.id} className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-5">
+                        <div className="mb-2 flex items-center justify-between">
+                          <span className="text-[11px] font-bold uppercase tracking-wider text-amber-300">{bug.priority || "Medium"} priority</span>
+                          <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-bold uppercase text-emerald-300">{bug.status || "Open"}</span>
+                        </div>
+                        <h4 className="font-bold text-white">{bug.title}</h4>
+                        <p className="mt-1.5 text-sm leading-relaxed text-ink-low">{bug.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+          </main>
+        </div>
       </div>
 
-      {/* MODAL 1: Student Detail Modal */}
+      {/* ── Student detail modal ── */}
       {selectedStudent && (
-        <Modal
-          isOpen={!!selectedStudent}
-          onClose={() => setSelectedStudent(null)}
-          title={`Student Profile: ${selectedStudent.fullName || "Learner"}`}
-        >
+        <Modal isOpen={!!selectedStudent} onClose={() => setSelectedStudent(null)} title={selectedStudent.fullName || "Learner"}>
           <div className="space-y-4 text-sm text-ink-hi">
-            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4 space-y-2">
+            <div className="space-y-2 rounded-xl border border-white/[0.08] bg-white/[0.02] p-4">
               <p><span className="text-ink-low">Email:</span> {selectedStudent.email || "N/A"}</p>
-              <p><span className="text-ink-low">User ID:</span> <code className="text-xs font-mono text-violet-300">{selectedStudent.uid || selectedStudent.id}</code></p>
-              <p><span className="text-ink-low">Total Points:</span> <strong className="text-amber-300">{selectedStudent.totalPoints || 0} XP</strong></p>
-              <p><span className="text-ink-low">Streak:</span> <strong className="text-orange-400">{selectedStudent.streak || 1} Days</strong></p>
+              <p><span className="text-ink-low">User ID:</span> <code className="font-mono text-xs text-violet-300">{selectedStudent.uid || selectedStudent.id}</code></p>
+              <p><span className="text-ink-low">Total points:</span> <strong className="text-amber-300">{selectedStudent.totalPoints || 0}</strong></p>
+              <p><span className="text-ink-low">Streak:</span> <strong className="text-orange-400">{selectedStudent.streak || 1} days</strong></p>
             </div>
-
             <div>
-              <h5 className="font-bold text-white mb-2">Earned Badges:</h5>
+              <h5 className="mb-2 font-bold text-white">Earned badges</h5>
               <div className="flex flex-wrap gap-2">
                 {selectedStudent.badges && selectedStudent.badges.length > 0 ? (
                   selectedStudent.badges.map((b, i) => (
@@ -468,45 +521,38 @@ const Admin = () => {
                     </span>
                   ))
                 ) : (
-                  <span className="text-ink-low text-xs">No badges earned yet.</span>
+                  <span className="text-xs text-ink-low">No badges earned yet.</span>
                 )}
               </div>
             </div>
-
-            <div className="pt-4 flex justify-end">
+            <div className="flex justify-end pt-2">
               <Button variant="ghost" onClick={() => setSelectedStudent(null)}>Close</Button>
             </div>
           </div>
         </Modal>
       )}
 
-      {/* MODAL 2: Full Contact Message Modal */}
+      {/* ── Message detail modal ── */}
       {selectedMessage && (
-        <Modal
-          isOpen={!!selectedMessage}
-          onClose={() => setSelectedMessage(null)}
-          title={`Inquiry from ${selectedMessage.name}`}
-        >
+        <Modal isOpen={!!selectedMessage} onClose={() => setSelectedMessage(null)} title={`Inquiry from ${selectedMessage.name}`}>
           <div className="space-y-4 text-sm text-ink-hi">
-            <div className="rounded-xl bg-white/[0.03] p-4 border border-white/[0.08] space-y-1.5">
-              <p><span className="text-ink-low">Sender Name:</span> <strong>{selectedMessage.name}</strong></p>
-              <p><span className="text-ink-low">Sender Email:</span> <a href={`mailto:${selectedMessage.email}`} className="text-sky underline">{selectedMessage.email}</a></p>
+            <div className="space-y-1.5 rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
+              <p><span className="text-ink-low">Name:</span> <strong>{selectedMessage.name}</strong></p>
+              <p><span className="text-ink-low">Email:</span> <a href={`mailto:${selectedMessage.email}`} className="text-sky underline">{selectedMessage.email}</a></p>
               <p><span className="text-ink-low">Subject:</span> <strong>{selectedMessage.subject}</strong></p>
             </div>
-
             <div>
-              <h5 className="font-bold text-white mb-2">Message Body:</h5>
-              <div className="rounded-xl bg-black/40 p-4 border border-white/[0.06] text-ink-low whitespace-pre-line leading-relaxed">
+              <h5 className="mb-2 font-bold text-white">Message</h5>
+              <div className="whitespace-pre-line rounded-xl border border-white/[0.06] bg-black/40 p-4 leading-relaxed text-ink-low">
                 {selectedMessage.message}
               </div>
             </div>
-
-            <div className="pt-4 flex justify-between items-center">
+            <div className="flex items-center justify-between pt-2">
               <a
                 href={`mailto:${selectedMessage.email}?subject=Re: ${encodeURIComponent(selectedMessage.subject || "Learntopia Support")}`}
-                className="inline-flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2 text-sm font-bold text-white hover:bg-violet-500 transition-colors"
+                className="inline-flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-violet-500"
               >
-                <Icon name="mail" size={16} /> Reply via Email
+                <Icon name="mail" size={16} /> Reply via email
               </a>
               <Button variant="ghost" onClick={() => setSelectedMessage(null)}>Close</Button>
             </div>
@@ -514,28 +560,23 @@ const Admin = () => {
         </Modal>
       )}
 
-      {/* MODAL 3: New Bug Report / System Note Modal */}
+      {/* ── New log modal ── */}
       {showNewBugModal && (
-        <Modal
-          isOpen={showNewBugModal}
-          onClose={() => setShowNewBugModal(false)}
-          title="Log Technical Note / Bug Report"
-        >
+        <Modal isOpen={showNewBugModal} onClose={() => setShowNewBugModal(false)} title="Log a note / bug report">
           <form onSubmit={handleCreateBugReport} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-ink-low mb-1.5">Title / Topic</label>
+              <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-ink-low">Title</label>
               <input
                 type="text"
                 value={newBug.title}
                 onChange={(e) => setNewBug((p) => ({ ...p, title: e.target.value }))}
-                placeholder="e.g. Firebase rule check or quiz timer latency"
+                placeholder="e.g. Quiz timer latency on Safari"
                 className="w-full rounded-xl border border-white/[0.1] bg-white/[0.03] px-4 py-2.5 text-sm text-ink-hi outline-none focus:border-violet-500"
                 required
               />
             </div>
-
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-ink-low mb-1.5">Priority</label>
+              <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-ink-low">Priority</label>
               <select
                 value={newBug.priority}
                 onChange={(e) => setNewBug((p) => ({ ...p, priority: e.target.value }))}
@@ -547,31 +588,24 @@ const Admin = () => {
                 <option value="Critical">Critical</option>
               </select>
             </div>
-
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-ink-low mb-1.5">Description</label>
+              <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-ink-low">Description</label>
               <textarea
                 value={newBug.description}
                 onChange={(e) => setNewBug((p) => ({ ...p, description: e.target.value }))}
-                placeholder="Describe the issue, step to reproduce, or administrative note..."
+                placeholder="Describe the issue, steps to reproduce, or a maintenance note…"
                 rows={4}
                 className="w-full rounded-xl border border-white/[0.1] bg-white/[0.03] px-4 py-2.5 text-sm text-ink-hi outline-none focus:border-violet-500"
                 required
               />
             </div>
-
             <div className="flex justify-end gap-3 pt-2">
-              <Button variant="ghost" type="button" onClick={() => setShowNewBugModal(false)}>
-                Cancel
-              </Button>
-              <Button type="submit" loading={submittingBug}>
-                Save Report
-              </Button>
+              <Button variant="ghost" type="button" onClick={() => setShowNewBugModal(false)}>Cancel</Button>
+              <Button type="submit" loading={submittingBug}>Save log</Button>
             </div>
           </form>
         </Modal>
       )}
-
     </div>
   );
 };

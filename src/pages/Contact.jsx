@@ -11,7 +11,7 @@ const CONTACT_CARDS = [
     label: "Email us directly",
     value: "tajamul.270@gmail.com",
     href: "mailto:tajamul.270@gmail.com",
-    color: "from-violet-500/20 to-purple-600/10 border-violet-500/20",
+    color: "from-violet-500/20 to-violet-600/10 border-violet-500/20",
     iconColor: "text-violet-400",
     glow: "bg-violet-600/10",
   },
@@ -19,7 +19,7 @@ const CONTACT_CARDS = [
     icon: "clock",
     label: "Response time",
     value: "Within 1–2 business days",
-    color: "from-sky-500/20 to-blue-600/10 border-sky-500/20",
+    color: "from-sky-500/20 to-sky/10 border-sky-500/20",
     iconColor: "text-sky-400",
     glow: "bg-sky-600/10",
   },
@@ -101,7 +101,7 @@ const Contact = () => {
      transition-all duration-200 placeholder:text-ink-low focus:bg-white/[0.05] focus:ring-2
      ${
        hasError
-         ? "border-red-500/60 focus:border-red-500 focus:ring-red-500/20"
+         ? "border-state-danger/60 focus:border-state-danger focus:ring-state-danger/20"
          : "border-white/[0.08] focus:border-violet-500 focus:ring-violet-500/25"
      }`;
 
@@ -114,13 +114,13 @@ const Contact = () => {
           <Icon name="message-circle" size={13} /> Get in touch
         </span>
         <h1 className="mt-5 text-4xl font-black tracking-tight text-ink-hi sm:text-5xl">
-          We'd love to{" "}
+          We&rsquo;d love to{" "}
           <span className="bg-gradient-to-r from-violet-400 to-sky bg-clip-text text-transparent">
             hear from you
           </span>
         </h1>
         <p className="mt-4 text-base leading-relaxed text-ink sm:text-lg">
-          Have a question, spotted a bug, or want to suggest a course? Drop us a message and we'll
+          Have a question, spotted a bug, or want to suggest a course? Drop us a message and we&rsquo;ll
           get back to you shortly.
         </p>
       </div>
@@ -181,7 +181,7 @@ const Contact = () => {
           </div>
 
           {errors.form && (
-            <div className="mb-5 flex items-start gap-3 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-400">
+            <div className="mb-5 flex items-start gap-3 rounded-xl border border-state-danger/30 bg-state-danger/10 p-4 text-sm text-state-danger">
               <Icon name="warning" size={16} className="mt-0.5 flex-none" />
               {errors.form}
             </div>
@@ -196,7 +196,7 @@ const Contact = () => {
                   htmlFor="contact-name"
                   className="text-xs font-semibold uppercase tracking-[0.1em] text-ink-low"
                 >
-                  Your name <span className="text-red-400">*</span>
+                  Your name <span className="text-state-danger">*</span>
                 </label>
                 <input
                   id="contact-name"
@@ -209,7 +209,7 @@ const Contact = () => {
                   className={inputBase(!!errors.name)}
                 />
                 {errors.name && (
-                  <span className="flex items-center gap-1 text-xs text-red-400">
+                  <span className="flex items-center gap-1 text-xs text-state-danger">
                     <Icon name="info" size={12} /> {errors.name}
                   </span>
                 )}
@@ -220,7 +220,7 @@ const Contact = () => {
                   htmlFor="contact-email"
                   className="text-xs font-semibold uppercase tracking-[0.1em] text-ink-low"
                 >
-                  Email address <span className="text-red-400">*</span>
+                  Email address <span className="text-state-danger">*</span>
                 </label>
                 <input
                   id="contact-email"
@@ -233,7 +233,7 @@ const Contact = () => {
                   className={inputBase(!!errors.email)}
                 />
                 {errors.email && (
-                  <span className="flex items-center gap-1 text-xs text-red-400">
+                  <span className="flex items-center gap-1 text-xs text-state-danger">
                     <Icon name="info" size={12} /> {errors.email}
                   </span>
                 )}
@@ -269,7 +269,7 @@ const Contact = () => {
                   htmlFor="contact-message"
                   className="text-xs font-semibold uppercase tracking-[0.1em] text-ink-low"
                 >
-                  Your message <span className="text-red-400">*</span>
+                  Your message <span className="text-state-danger">*</span>
                 </label>
                 <span
                   className={`text-xs tabular-nums ${
@@ -289,7 +289,7 @@ const Contact = () => {
                 className={`${inputBase(!!errors.message)} resize-none`}
               />
               {errors.message && (
-                <span className="flex items-center gap-1 text-xs text-red-400">
+                <span className="flex items-center gap-1 text-xs text-state-danger">
                   <Icon name="info" size={12} /> {errors.message}
                 </span>
               )}

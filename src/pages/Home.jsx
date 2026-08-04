@@ -46,8 +46,8 @@ const SUBJECTS = [
 ];
 
 const ICON_GRADIENTS = [
-  "from-violet-500/30 to-purple-600/20 border-violet-500/20",
-  "from-sky-500/30 to-blue-600/20 border-sky-500/20",
+  "from-violet-500/30 to-violet-600/20 border-violet-500/20",
+  "from-sky-500/30 to-sky/20 border-sky-500/20",
   "from-amber-500/30 to-orange-600/20 border-amber-500/20",
 ];
 
@@ -214,12 +214,12 @@ const Home = () => {
           <div className="pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full bg-sky-500/10 blur-3xl" />
 
           {/* Decorative large quote mark */}
-          <span className="pointer-events-none absolute right-7 top-4 select-none text-[7rem] font-black leading-none text-white/[0.04]">"</span>
+          <span className="pointer-events-none absolute right-7 top-4 select-none text-[7rem] font-black leading-none text-white/[0.04]">&ldquo;</span>
 
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-low">Why keep learning</p>
 
           <blockquote className="relative mt-5 text-xl font-semibold italic leading-relaxed text-ink-hi sm:text-2xl">
-            "Continuous learning is the minimum requirement for success in any field."
+            &ldquo;Continuous learning is the minimum requirement for success in any field.&rdquo;
           </blockquote>
 
           <div className="mt-6 flex items-center gap-3">

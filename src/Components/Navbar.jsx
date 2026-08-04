@@ -1,5 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { toast } from "react-toastify";
 import Icon from "./ui/Icon";
 import Button from "./ui/Button";
 import Logo from "./ui/Logo";
@@ -26,9 +27,11 @@ const Navbar = () => {
     try {
       await logOut();
       closeMenu();
+      toast.success("You've been logged out");
       navigate("/");
     } catch (err) {
       console.error(err);
+      toast.error("Couldn't log you out. Please try again.");
     }
   };
 

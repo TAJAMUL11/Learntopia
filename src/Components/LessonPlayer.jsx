@@ -31,15 +31,18 @@ const SECTION_LABELS = {
   recap: "Recap",
 };
 
+// Section-type styling grouped by meaning onto the brand + semantic palette so
+// the whole app stays coherent: learn = violet, info = sky, tip = amber,
+// activity = emerald, recap = neutral.
 const SECTION_STYLES = {
   story: {
-    border: "border-indigo-500/30",
-    bg: "bg-gradient-to-br from-indigo-500/15 to-indigo-900/5",
-    iconBg: "bg-indigo-500/20",
-    iconColor: "text-indigo-400",
-    labelColor: "text-indigo-300",
-    titleColor: "text-indigo-200",
-    glow: "shadow-[0_0_30px_rgba(99,102,241,0.12)]",
+    border: "border-violet-500/30",
+    bg: "bg-gradient-to-br from-violet-500/15 to-violet-900/5",
+    iconBg: "bg-violet-500/20",
+    iconColor: "text-violet-400",
+    labelColor: "text-violet-300",
+    titleColor: "text-violet-200",
+    glow: "shadow-[0_0_30px_rgba(139,99,227,0.12)]",
   },
   concept: {
     border: "border-violet-500/30",
@@ -48,16 +51,16 @@ const SECTION_STYLES = {
     iconColor: "text-violet-400",
     labelColor: "text-violet-300",
     titleColor: "text-violet-200",
-    glow: "shadow-[0_0_30px_rgba(139,92,246,0.12)]",
+    glow: "shadow-[0_0_30px_rgba(139,99,227,0.12)]",
   },
   fact: {
     border: "border-sky/30",
-    bg: "bg-gradient-to-br from-sky/15 to-cyan-900/5",
+    bg: "bg-gradient-to-br from-sky/15 to-sky/5",
     iconBg: "bg-sky/20",
     iconColor: "text-sky",
-    labelColor: "text-sky-300",
-    titleColor: "text-sky-200",
-    glow: "shadow-[0_0_30px_rgba(56,189,248,0.12)]",
+    labelColor: "text-sky",
+    titleColor: "text-sky",
+    glow: "shadow-[0_0_30px_rgba(123,191,242,0.12)]",
   },
   tip: {
     border: "border-amber-500/30",
@@ -66,40 +69,40 @@ const SECTION_STYLES = {
     iconColor: "text-amber-400",
     labelColor: "text-amber-300",
     titleColor: "text-amber-200",
-    glow: "shadow-[0_0_30px_rgba(245,158,11,0.12)]",
+    glow: "shadow-[0_0_30px_rgba(251,191,36,0.12)]",
   },
   example: {
-    border: "border-emerald-500/30",
-    bg: "bg-gradient-to-br from-emerald-500/10 to-emerald-900/5",
-    iconBg: "bg-emerald-500/20",
-    iconColor: "text-emerald-400",
-    labelColor: "text-emerald-300",
-    titleColor: "text-emerald-200",
-    glow: "shadow-[0_0_30px_rgba(16,185,129,0.12)]",
+    border: "border-sky/30",
+    bg: "bg-gradient-to-br from-sky/12 to-sky/5",
+    iconBg: "bg-sky/20",
+    iconColor: "text-sky",
+    labelColor: "text-sky",
+    titleColor: "text-sky",
+    glow: "shadow-[0_0_30px_rgba(123,191,242,0.12)]",
   },
   activity: {
-    border: "border-green-500/30",
-    bg: "bg-gradient-to-br from-green-500/15 to-green-900/5",
-    iconBg: "bg-green-500/20",
-    iconColor: "text-green-400",
-    labelColor: "text-green-300",
-    titleColor: "text-green-200",
-    glow: "shadow-[0_0_30px_rgba(34,197,94,0.12)]",
+    border: "border-state-success/30",
+    bg: "bg-gradient-to-br from-state-success/12 to-emerald-900/5",
+    iconBg: "bg-state-success/20",
+    iconColor: "text-state-success",
+    labelColor: "text-emerald-300",
+    titleColor: "text-emerald-200",
+    glow: "shadow-[0_0_30px_rgba(52,211,153,0.12)]",
   },
   recap: {
-    border: "border-slate-400/30",
-    bg: "bg-gradient-to-br from-slate-500/10 to-slate-800/5",
-    iconBg: "bg-slate-500/20",
-    iconColor: "text-slate-400",
-    labelColor: "text-slate-300",
-    titleColor: "text-slate-200",
-    glow: "shadow-[0_0_20px_rgba(148,163,184,0.08)]",
+    border: "border-white/[0.14]",
+    bg: "bg-gradient-to-br from-white/[0.06] to-white/[0.02]",
+    iconBg: "bg-white/[0.08]",
+    iconColor: "text-ink",
+    labelColor: "text-ink-low",
+    titleColor: "text-ink-hi",
+    glow: "shadow-[0_0_20px_rgba(255,255,255,0.05)]",
   },
 };
 
 const DEFAULT_STYLE = SECTION_STYLES.concept;
 
-const LessonPlayer = ({ sections = [], onComplete, moduleName }) => {
+const LessonPlayer = ({ sections = [], onComplete }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [direction, setDirection] = useState("next"); // "next" or "prev"
@@ -265,19 +268,15 @@ const LessonPlayer = ({ sections = [], onComplete, moduleName }) => {
           }`}
           style={{
             background: `radial-gradient(circle, ${
-              sectionType === "story"
-                ? "rgba(99,102,241,0.3)"
-                : sectionType === "fact"
-                ? "rgba(56,189,248,0.3)"
+              sectionType === "fact" || sectionType === "example"
+                ? "rgba(123,191,242,0.3)"
                 : sectionType === "tip"
-                ? "rgba(245,158,11,0.3)"
-                : sectionType === "example"
-                ? "rgba(16,185,129,0.3)"
+                ? "rgba(251,191,36,0.3)"
                 : sectionType === "activity"
-                ? "rgba(34,197,94,0.3)"
+                ? "rgba(52,211,153,0.3)"
                 : sectionType === "recap"
-                ? "rgba(148,163,184,0.2)"
-                : "rgba(139,92,246,0.3)"
+                ? "rgba(255,255,255,0.12)"
+                : "rgba(139,99,227,0.3)"
             }, transparent)`,
           }}
         />
