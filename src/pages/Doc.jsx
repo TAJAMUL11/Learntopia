@@ -104,7 +104,7 @@ const Doc = () => {
                   { title: "Strict Focus Mode", text: "A custom route blocker detects navigation attempts during active quizzes or module challenges and presents a confirmation dialog to prevent accidental progress loss." },
                   { title: "Course Controls", text: "Unenroll from courses directly from your dashboard. Reset a 100%-completed course to start fresh. Resume in-progress courses exactly where you left off." },
                   { title: "Searchable Catalog", text: "Filter courses by title or subject using the live search field. An informative empty state is shown when no results match the query." },
-                  { title: "Private & Secure", text: "All user data — profile, courses, progress, quiz attempts — is protected by strict Firestore security rules. Only you can read or write your own data. Leaderboard data exposes only name and score, never contact details." },
+                  { title: "Private & Secure", text: "Your data — profile, courses, progress, and quiz attempts — is private to your account. Only you can see or change it, and the leaderboard shows just your name and score, never your email or contact details." },
                 ].map((f) => (
                   <div key={f.title} className="flex gap-4 py-4 border-b border-white/[0.05] last:border-0">
                     <div className="mt-0.5 flex-none">
@@ -160,7 +160,7 @@ const Doc = () => {
                       { concept: "Multi-Type Exercise Engine", behaviour: "Tests understanding using 4 interactive formats: Multiple Choice (MCQ), True/False, Fill-in-the-Blank, and Tap-to-Connect Matching Pairs." },
                       { concept: "Gamification & Level System", behaviour: "Earn +50 XP per completed module and +100 XP per completed course. Level up from Rookie Coder (Level 1) to Grandmaster (Level 5)." },
                       { concept: "Badges & Celebrations", behaviour: "Unlocks unique course badges (e.g. Python Pioneer 🐍, Math Wizard 🔮) with celebratory full-screen overlays upon achievement." },
-                      { concept: "Course progress", behaviour: "Tracks completed modules in real time with progress bars and Firebase persistence. Resume anytime from your Student Dashboard." },
+                      { concept: "Course progress", behaviour: "Tracks completed modules in real time with progress bars, saved automatically. Resume anytime from your Student Dashboard." },
                       { concept: "Course reset", behaviour: "Reset completed courses anytime via the Start Again button to replay lessons and re-earn practice." },
                     ].map((row) => (
                       <tr key={row.concept}>
@@ -223,28 +223,28 @@ const Doc = () => {
             <section id="account">
               <h2 className="text-2xl font-bold text-ink-hi border-b border-white/[0.06] pb-3 mb-5">Account &amp; Security</h2>
               <p className="text-ink-low leading-relaxed">
-                Learntopia uses Firebase Authentication. Accounts can be created with an email/password or via Google OAuth. All user data stored in Firestore is protected by server-side security rules — not just client-side checks.
+                You can create an account with an email and password, or sign in with Google. Your data is kept private to your account and protected by strong, server-enforced access controls.
               </p>
 
               <div className="mt-6 space-y-4">
                 <div className="rounded-xl border border-violet-500/20 bg-violet-500/[0.03] p-5">
-                  <p className="text-sm font-semibold text-violet-300 mb-1.5">Offline Data Persistence</p>
+                  <p className="text-sm font-semibold text-violet-300 mb-1.5">Works Offline</p>
                   <p className="text-sm text-ink-low leading-relaxed">
-                    Firestore offline persistence is enabled automatically. If your internet connection drops while taking a quiz or reading modules, your progress is saved locally in your browser cache. The application automatically syncs this data to the database the moment your connection recovers, avoiding progress loss.
+                    If your internet connection drops while taking a quiz or reading a module, your progress is kept safe on your device and syncs automatically the moment you reconnect — so you never lose your place.
                   </p>
                 </div>
 
                 <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.03] p-5">
-                  <p className="text-sm font-semibold text-emerald-300 mb-1.5">Connection Resilience (Error Boundaries)</p>
+                  <p className="text-sm font-semibold text-emerald-300 mb-1.5">Resilient by Design</p>
                   <p className="text-sm text-ink-low leading-relaxed">
-                    All pages on Learntopia are lazy-loaded to optimize speed and download size. In the event of a network drop that prevents your browser from fetching a page chunk, our built-in Error Boundary catches the error cleanly and offers an interactive reload flow instead of crashing or showing a blank page.
+                    If a page ever fails to load because of a shaky connection, Learntopia shows a friendly reload option instead of a blank screen or a crash — a dropped signal never breaks your session.
                   </p>
                 </div>
 
                 <div className="rounded-xl border border-amber-500/20 bg-amber-500/[0.04] p-5">
-                  <p className="text-sm font-semibold text-amber-300 mb-1.5">Data Isolation & point-cheating guards</p>
+                  <p className="text-sm font-semibold text-amber-300 mb-1.5">Your Data Stays Yours</p>
                   <p className="text-sm text-ink-low leading-relaxed">
-                    Every Firestore read and write is validated server-side. Your profile, enrolled courses, module progress, and quiz attempts are accessible only to your authenticated session. To prevent point manipulation, database rules enforce that profile updates can only increment scores, and caps updates at a maximum of 200 points per transaction. Earned badges are also locked and cannot be deleted from the client side.
+                    Your profile, courses, progress, and quiz history are tied to your account and can&rsquo;t be viewed or changed by anyone else. Behind the scenes, safeguards keep scores and badges fair and tamper-resistant, so the leaderboard stays honest.
                   </p>
                 </div>
               </div>
