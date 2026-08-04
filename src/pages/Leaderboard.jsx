@@ -189,18 +189,13 @@ const Leaderboard = () => {
     return null;
   };
 
+  // Medal colours (gold / silver / bronze) are intentional for a leaderboard;
+  // everything else uses the neutral ink token.
   const getRankColor = (rank) => {
     if (rank === 1) return "text-yellow-400";
     if (rank === 2) return "text-slate-300";
     if (rank === 3) return "text-amber-400";
-    return "text-gray-500";
-  };
-
-  const getRowAccent = (rank) => {
-    if (rank === 1) return "border-l-2 border-l-yellow-400/60";
-    if (rank === 2) return "border-l-2 border-l-slate-400/50";
-    if (rank === 3) return "border-l-2 border-l-amber-500/50";
-    return "border-l-2 border-l-transparent";
+    return "text-ink-faint";
   };
 
   return (
@@ -214,8 +209,8 @@ const Leaderboard = () => {
         <h1 className="text-2xl font-black tracking-tight md:text-5xl text-white">
           Leaderboard
         </h1>
-        <p className="text-sm md:text-base text-gray-400 max-w-lg mx-auto">
-          See who's on top. Filter by quiz to view individual rankings.
+        <p className="text-sm md:text-base text-ink-low max-w-lg mx-auto">
+          See who&rsquo;s on top. Filter by quiz to view individual rankings.
         </p>
       </div>
 
@@ -223,7 +218,7 @@ const Leaderboard = () => {
       <div className="w-full max-w-5xl mb-5">
         {/* Mobile: Dropdown */}
         <div className="block md:hidden">
-          <label className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 mb-1.5 block">Filter by Quiz</label>
+          <label className="text-[11px] font-semibold uppercase tracking-wider text-ink-faint mb-1.5 block">Filter by Quiz</label>
           <div className="relative">
             <select
               value={activeTab}
@@ -236,7 +231,7 @@ const Leaderboard = () => {
                 </option>
               ))}
             </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400">
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-ink-low">
               <Icon name="chevron-down" size={16} />
             </div>
           </div>
@@ -251,7 +246,7 @@ const Leaderboard = () => {
               className={`rounded-lg px-4 py-2 text-xs font-semibold transition-all duration-200 border ${
                 activeTab === tab.id
                   ? "bg-violet-600 border-violet-500 text-white shadow-glow"
-                  : "bg-white/[0.03] border-white/[0.07] text-gray-400 hover:text-white hover:border-white/15 hover:bg-white/[0.06]"
+                  : "bg-white/[0.03] border-white/[0.07] text-ink-low hover:text-white hover:border-white/15 hover:bg-white/[0.06]"
               }`}
             >
               {tab.label}
@@ -263,7 +258,7 @@ const Leaderboard = () => {
       {/* ── Search ── */}
       <div className="w-full max-w-5xl mb-6">
         <div className="relative w-full md:w-72">
-          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-500">
+          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-ink-faint">
             <Icon name="search" size={15} />
           </div>
           <input
@@ -271,12 +266,12 @@ const Leaderboard = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by name..."
-            className="w-full rounded-lg border border-white/10 bg-white/[0.03] pl-10 pr-8 py-2.5 text-sm text-white placeholder-gray-500 focus:border-violet-500/60 focus:ring-1 focus:ring-violet-500/40 focus:outline-none transition-all"
+            className="w-full rounded-lg border border-white/10 bg-white/[0.03] pl-10 pr-8 py-2.5 text-sm text-white placeholder-ink-faint focus:border-violet-500/60 focus:ring-1 focus:ring-violet-500/40 focus:outline-none transition-all"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
-              className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-white transition-colors"
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-ink-faint hover:text-white transition-colors"
             >
               <Icon name="x" size={14} />
             </button>
@@ -297,7 +292,7 @@ const Leaderboard = () => {
             <Icon name="award" size={26} />
           </div>
           <h3 className="text-base font-bold text-white">No Rankings Yet</h3>
-          <p className="mt-2 text-sm text-gray-400">
+          <p className="mt-2 text-sm text-ink-low">
             {searchQuery
               ? `No results for "${searchQuery}".`
               : activeTab === "all"
@@ -337,7 +332,7 @@ const Leaderboard = () => {
                     rank === 1 ? "border-yellow-400/50 bg-yellow-400/15 text-yellow-300" :
                     rank === 2 ? "border-slate-300/50 bg-slate-300/15 text-slate-200" :
                     rank === 3 ? "border-amber-500/50 bg-amber-500/15 text-amber-300" :
-                    "border-white/10 bg-white/5 text-gray-400"
+                    "border-white/10 bg-white/5 text-ink-low"
                   }`}>
                     {item.userName?.charAt(0).toUpperCase() || "U"}
                   </div>
@@ -345,7 +340,7 @@ const Leaderboard = () => {
                   {/* Name + Quiz */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5">
-                      <span className={`text-sm font-semibold truncate ${rank <= 3 ? "text-white" : "text-gray-200"}`}>
+                      <span className={`text-sm font-semibold truncate ${rank <= 3 ? "text-white" : "text-ink"}`}>
                         {item.userName}
                       </span>
                       {isYou && (
@@ -355,7 +350,7 @@ const Leaderboard = () => {
                       )}
                     </div>
                     {activeTab === "all" && (
-                      <p className="text-[11px] text-gray-500 mt-0.5 truncate">{item.quizTitle}</p>
+                      <p className="text-[11px] text-ink-faint mt-0.5 truncate">{item.quizTitle}</p>
                     )}
                   </div>
 
@@ -364,7 +359,7 @@ const Leaderboard = () => {
                     <span className={`text-sm font-bold tabular-nums ${rank <= 3 ? getRankColor(rank) : "text-violet-400"}`}>
                       {item.score}
                     </span>
-                    <span className="ml-0.5 text-[9px] font-medium text-gray-500 uppercase">pts</span>
+                    <span className="ml-0.5 text-[9px] font-medium text-ink-faint uppercase">pts</span>
                   </div>
                 </div>
               );
@@ -372,10 +367,10 @@ const Leaderboard = () => {
 
             {/* Mobile footer */}
             <div className="flex items-center justify-between px-2 pt-2">
-              <span className="text-[11px] text-gray-500">
+              <span className="text-[11px] text-ink-faint">
                 {filteredEntries.length} {filteredEntries.length === 1 ? "entry" : "entries"}
               </span>
-              <span className="text-[11px] text-gray-500">
+              <span className="text-[11px] text-ink-faint">
                 {activeTab === "all" ? "All quizzes" : TABS.find((t) => t.id === activeTab)?.label}
               </span>
             </div>
@@ -388,12 +383,12 @@ const Leaderboard = () => {
               {/* Header */}
               <thead>
                 <tr className="border-b-2 border-white/10 bg-white/[0.03]">
-                  <th className="py-4 pl-7 pr-3 text-xs font-bold uppercase tracking-wider text-gray-400 w-20">Rank</th>
-                  <th className="py-4 px-5 text-xs font-bold uppercase tracking-wider text-gray-400">Student</th>
+                  <th className="py-4 pl-7 pr-3 text-xs font-bold uppercase tracking-wider text-ink-low w-20">Rank</th>
+                  <th className="py-4 px-5 text-xs font-bold uppercase tracking-wider text-ink-low">Student</th>
                   {activeTab === "all" && (
-                    <th className="py-4 px-5 text-xs font-bold uppercase tracking-wider text-gray-400">Quiz</th>
+                    <th className="py-4 px-5 text-xs font-bold uppercase tracking-wider text-ink-low">Quiz</th>
                   )}
-                  <th className="py-4 pl-5 pr-7 text-xs font-bold uppercase tracking-wider text-gray-400 text-right">Score</th>
+                  <th className="py-4 pl-5 pr-7 text-xs font-bold uppercase tracking-wider text-ink-low text-right">Score</th>
                 </tr>
               </thead>
 
@@ -433,12 +428,12 @@ const Leaderboard = () => {
                             rank === 1 ? "border-yellow-400/60 bg-yellow-400/15 text-yellow-300" :
                             rank === 2 ? "border-slate-300/60 bg-slate-300/15 text-slate-200" :
                             rank === 3 ? "border-amber-500/60 bg-amber-500/15 text-amber-300" :
-                            "border-white/10 bg-white/[0.04] text-gray-400"
+                            "border-white/10 bg-white/[0.04] text-ink-low"
                           }`}>
                             {item.userName?.charAt(0).toUpperCase() || "U"}
                           </div>
                           <div className="flex items-center gap-2.5 min-w-0">
-                            <span className={`text-[15px] font-semibold truncate ${rank <= 3 ? "text-white" : "text-gray-200"}`}>
+                            <span className={`text-[15px] font-semibold truncate ${rank <= 3 ? "text-white" : "text-ink"}`}>
                               {item.userName}
                             </span>
                             {isYou && (
@@ -453,7 +448,7 @@ const Leaderboard = () => {
                       {/* Quiz */}
                       {activeTab === "all" && (
                         <td className="py-5 px-5">
-                          <span className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
+                          <span className="text-sm text-ink-low group-hover:text-ink transition-colors">
                             {item.quizTitle}
                           </span>
                         </td>
@@ -464,7 +459,7 @@ const Leaderboard = () => {
                         <span className={`text-base font-bold tabular-nums ${rank <= 3 ? getRankColor(rank) : "text-violet-400"}`}>
                           {item.score}
                         </span>
-                        <span className="ml-1.5 text-[11px] font-medium text-gray-500 uppercase">pts</span>
+                        <span className="ml-1.5 text-[11px] font-medium text-ink-faint uppercase">pts</span>
                       </td>
                     </tr>
                   );
@@ -474,10 +469,10 @@ const Leaderboard = () => {
 
             {/* Desktop footer */}
             <div className="border-t border-white/[0.06] bg-white/[0.02] px-7 py-3.5 flex items-center justify-between">
-              <span className="text-xs font-medium text-gray-500">
+              <span className="text-xs font-medium text-ink-faint">
                 Top {filteredEntries.length} {filteredEntries.length === 1 ? "entry" : "entries"}
               </span>
-              <span className="text-xs font-medium text-gray-500">
+              <span className="text-xs font-medium text-ink-faint">
                 {activeTab === "all" ? "All quizzes" : TABS.find((t) => t.id === activeTab)?.label}
               </span>
             </div>
