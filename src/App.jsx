@@ -10,6 +10,7 @@ import { ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "./context/AuthContext";
 import { GamificationProvider } from "./context/GamificationContext";
+import { SoundProvider } from "./context/SoundContext";
 import CelebrationOverlay from "./Components/CelebrationOverlay";
 
 // Lazy-load pages so each route ships as its own chunk. While a chunk loads,
@@ -56,22 +57,24 @@ const App = () => {
   return (
     <AuthProvider>
       <GamificationProvider>
-        <RouterProvider router={router} />
-        <CelebrationOverlay />
-        <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="colored"
-          bodyClassName="toastbody"
-          transition={Slide}
-        />
+        <SoundProvider>
+          <RouterProvider router={router} />
+          <CelebrationOverlay />
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="colored"
+            bodyClassName="toastbody"
+            transition={Slide}
+          />
+        </SoundProvider>
       </GamificationProvider>
     </AuthProvider>
   );
