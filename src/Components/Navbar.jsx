@@ -5,6 +5,7 @@ import Icon from "./ui/Icon";
 import Button from "./ui/Button";
 import Logo from "./ui/Logo";
 import { useAuth } from "../context/AuthContext";
+import { useSound } from "../context/SoundContext";
 
 // Primary navigation. Documentation is intentionally kept out of the main nav
 // (it's reference material) and lives in the footer instead.
@@ -20,6 +21,15 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const { currentUser, logOut } = useAuth();
+  const { isMuted, toggleMute, playClick } = useSound();
+
+  const handleSoundToggle = () => {
+    toggleMute();
+    if (isMuted) {
+      // If it was muted, unmuting will trigger sound
+      soundEffects?.click?.();
+    }
+  };
 
   const closeMenu = () => setIsMenuOpen(false);
 
@@ -58,8 +68,22 @@ const Navbar = () => {
           ))}
         </ul>
 
-        {/* Desktop auth */}
+        {/* Desktop auth & sound controls */}
         <div className="hidden items-center gap-3 md:flex">
+          {/* Global Sound Toggle Button */}
+          <button
+            onClick={toggleMute}
+            className={`grid h-9 w-9 place-items-center rounded-lg border transition-colors ${
+              isMuted
+                ? "border-red-500/20 bg-red-500/10 text-red-400 hover:bg-red-500/20"
+                : "border-sky/20 bg-sky/10 text-sky hover:bg-sky/20"
+            }`}
+            title={isMuted ? "Sound: Muted (Click to Unmute)" : "Sound: Enabled (Click to Mute)"}
+            aria-label={isMuted ? "Unmute sound effects" : "Mute sound effects"}
+          >
+            <Icon name={isMuted ? "volume-x" : "volume-2"} size={18} />
+          </button>
+
           {currentUser ? (
             <div className="flex items-center gap-4">
               <div onClick={() => navigate("/dashboard")} className="flex items-center gap-2 cursor-pointer transition-opacity hover:opacity-80">
@@ -90,21 +114,36 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* Mobile toggle */}
-        <button
-          className="grid h-10 w-10 place-items-center rounded-lg text-ink-hi transition-colors hover:bg-white/5 md:hidden"
-          onClick={() => setIsMenuOpen((v) => !v)}
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={isMenuOpen}
-        >
-          <Icon name={isMenuOpen ? "close" : "menu"} size={22} />
-        </button>
+        {/* Mobile sound toggle & menu button */}
+        <div className="flex items-center gap-2 md:hidden">
+          <button
+            onClick={toggleMute}
+            className={`grid h-9 w-9 place-items-center rounded-lg border transition-colors ${
+              isMuted
+                ? "border-red-500/20 bg-red-500/10 text-red-400 hover:bg-red-500/20"
+                : "border-sky/20 bg-sky/10 text-sky hover:bg-sky/20"
+            }`}
+            title={isMuted ? "Sound: Muted" : "Sound: Enabled"}
+            aria-label={isMuted ? "Unmute sound effects" : "Mute sound effects"}
+          >
+            <Icon name={isMuted ? "volume-x" : "volume-2"} size={18} />
+          </button>
+
+          <button
+            className="grid h-10 w-10 place-items-center rounded-lg text-ink-hi transition-colors hover:bg-white/5"
+            onClick={() => setIsMenuOpen((v) => !v)}
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMenuOpen}
+          >
+            <Icon name={isMenuOpen ? "close" : "menu"} size={22} />
+          </button>
+        </div>
       </nav>
 
       {/* Mobile drawer */}
       <div
         className={`overflow-hidden border-t border-white/[0.06] bg-ground-900/95 backdrop-blur-xl transition-[max-height,opacity] duration-300 ease-out md:hidden ${
-          isMenuOpen ? "max-h-[420px] opacity-100" : "max-h-0 opacity-0"
+          isMenuOpen ? "max-h-[460px] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <ul className="container-page flex flex-col gap-1 py-4">
@@ -124,7 +163,26 @@ const Navbar = () => {
               </NavLink>
             </li>
           ))}
-          <li className="mt-3">
+
+          {/* Mobile Sound Control Bar */}
+          <li className="my-2 rounded-lg border border-white/10 bg-white/5 p-3 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Icon name={isMuted ? "volume-x" : "volume-2"} size={18} className={isMuted ? "text-red-400" : "text-sky"} />
+              <span className="text-sm font-medium text-ink-hi">Sound Effects</span>
+            </div>
+            <button
+              onClick={toggleMute}
+              className={`px-3 py-1 text-xs font-semibold rounded-md border transition-colors ${
+                isMuted
+                  ? "border-red-500/30 bg-red-500/20 text-red-300"
+                  : "border-sky/30 bg-sky/20 text-sky"
+              }`}
+            >
+              {isMuted ? "MUTED" : "ON"}
+            </button>
+          </li>
+
+          <li className="mt-2">
             {currentUser ? (
               <div className="flex flex-col gap-3">
                 <div onClick={() => { closeMenu(); navigate("/dashboard"); }} className="flex items-center gap-3 rounded-lg bg-white/5 p-3 cursor-pointer transition-colors hover:bg-white/10">
