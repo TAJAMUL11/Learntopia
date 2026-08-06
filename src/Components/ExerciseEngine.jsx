@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Icon from "./ui/Icon";
 import Button from "./ui/Button";
+import { useSound } from "../context/SoundContext";
 
 /**
  * ExerciseEngine — Renders different exercise types with validation & feedback.
@@ -18,16 +19,20 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, isCompleted = false, sav
   const [matchState, setMatchState] = useState({}); // Track match exercise state
   const [currentQuestion, setCurrentQuestion] = useState(0);
 
+  const { playClick, playCorrect, playIncorrect, playModuleComplete } = useSound();
+
   const totalQ = exercises.length;
 
   const handleSelectMCQ = (qIndex, option) => {
     if (submitted || saving || isCompleted) return;
+    playClick();
     setAnswers(prev => ({ ...prev, [qIndex]: option }));
     setShowFeedback(prev => ({ ...prev, [qIndex]: false }));
   };
 
   const handleTrueFalse = (qIndex, value) => {
     if (submitted || saving || isCompleted) return;
+    playClick();
     setAnswers(prev => ({ ...prev, [qIndex]: value }));
     setShowFeedback(prev => ({ ...prev, [qIndex]: false }));
   };
@@ -119,7 +124,10 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, isCompleted = false, sav
     setShowFeedback(feedback);
 
     if (allCorrect) {
+      playModuleComplete();
       onAllCorrect?.();
+    } else {
+      playIncorrect();
     }
   };
 

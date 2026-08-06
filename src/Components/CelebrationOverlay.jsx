@@ -1,19 +1,22 @@
 import { useEffect } from "react";
 import { useGamification } from "../context/GamificationContext";
+import { useSound } from "../context/SoundContext";
 import Icon from "./ui/Icon";
 import Button from "./ui/Button";
 
 const CelebrationOverlay = () => {
   const { celebration, closeCelebration } = useGamification();
+  const { playLevelUp, playBadgeUnlock } = useSound();
 
   useEffect(() => {
     if (celebration) {
-      const timer = setTimeout(() => {
-        // Auto-close after 5 seconds if not closed manually
-      }, 5000);
-      return () => clearTimeout(timer);
+      if (celebration.type === "level" || celebration.type === "course") {
+        playLevelUp();
+      } else if (celebration.type === "badge") {
+        playBadgeUnlock();
+      }
     }
-  }, [celebration]);
+  }, [celebration, playLevelUp, playBadgeUnlock]);
 
   if (!celebration) return null;
 
