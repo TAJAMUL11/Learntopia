@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useSound } from "../context/SoundContext";
 import { db } from "../firebase/firebase";
 import { setDoc, doc, collection, getDocs } from "firebase/firestore";
 import { toast } from "react-toastify";
@@ -17,6 +18,7 @@ import star from "../assets/CourseImg/star.png";
 const Courses = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
+  const { playBadgeUnlock, playClick } = useSound();
   const [query, setQuery] = useState("");
   const [enrolledIds, setEnrolledIds] = useState([]);
   const [enrollingId, setEnrollingId] = useState(null);
@@ -38,6 +40,7 @@ const Courses = () => {
 
   const handleEnroll = async (course) => {
     if (!currentUser) {
+      playClick();
       toast.info("Please log in to enroll and view course details.");
       navigate("/login", { state: { returnTo: `/course/${course.id}` } });
       return;
@@ -45,11 +48,13 @@ const Courses = () => {
 
     const isEnrolled = enrolledIds.includes(course.id.toString());
     if (isEnrolled) {
+      playClick();
       navigate(`/course/${course.id}`);
       return;
     }
 
     try {
+      playBadgeUnlock();
       await setDoc(
         doc(db, "Users", currentUser.uid, "enrolledCourses", course.id.toString()),
         {

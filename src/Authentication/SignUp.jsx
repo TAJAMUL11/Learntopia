@@ -18,6 +18,7 @@ const SignUp = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { googleSignIn, currentUser } = useAuth();
+  const { playLevelUp, playIncorrect } = useSound();
 
   const returnTo = location.state?.returnTo || "/dashboard";
 
@@ -57,16 +58,22 @@ const SignUp = () => {
           await setDoc(globalScoreRef, {
             score: pointsEarned,
             rawScore: score,
-            userFullName: userDisplayName || user.displayName || "User",
+            userFullName: userDisplayName || user.displayName || userFName || "User",
             userId: user.uid,
             completedAt: new Date()
           }, { merge: true });
 
-          const publicRef = doc(db, "PublicLeaderboard", user.uid);
-          await setDoc(publicRef, {
-            totalPoints: increment(pointsEarned),
-            updatedAt: new Date()
-          }, { merge: true });
+          const userSnap = await getDoc(doc(db, "Users", user.uid));
+          if (userSnap.exists()) {
+            const uData = userSnap.data();
+            const publicRef = doc(db, "PublicLeaderboard", user.uid);
+            await setDoc(publicRef, {
+              uid: user.uid,
+              fullName: uData.fullName || userDisplayName || user.displayName || userFName || "Learner",
+              totalPoints: (uData.totalPoints || 0) + pointsEarned,
+              updatedAt: new Date()
+            }, { merge: true });
+          }
         }
         toast.success("Saved your quiz score!");
       } catch (err) {
@@ -105,9 +112,11 @@ const SignUp = () => {
 
         await handlePendingQuizResult(user, userFName);
       }
+      playLevelUp();
       toast.success("Account created successfully");
       navigate(returnTo, { replace: true });
     } catch (err) {
+      playIncorrect();
       let message = "Couldn't create your account. Please try again.";
       if (err.code === "auth/email-already-in-use") message = "That email is already registered. Try logging in.";
       else if (err.code === "auth/invalid-email") message = "That email address looks incomplete.";
@@ -125,9 +134,11 @@ const SignUp = () => {
       if (user) {
         await handlePendingQuizResult(user, user.displayName);
       }
+      playLevelUp();
       toast.success("Signed in with Google successfully");
       navigate(returnTo, { replace: true });
     } catch (err) {
+      playIncorrect();
       console.error("Google sign-in error:", err);
       toast.error("Google sign-in failed. Please try again.");
     }
