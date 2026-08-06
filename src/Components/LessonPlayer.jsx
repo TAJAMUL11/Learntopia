@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import Icon from "./ui/Icon";
 import Button from "./ui/Button";
+import { useSound } from "../context/SoundContext";
 
 /**
  * LessonPlayer — Renders a module's contentSections one step at a time
@@ -58,9 +59,9 @@ const SECTION_STYLES = {
     bg: "bg-gradient-to-br from-sky/15 to-sky/5",
     iconBg: "bg-sky/20",
     iconColor: "text-sky",
-    labelColor: "text-sky",
-    titleColor: "text-sky",
-    glow: "shadow-[0_0_30px_rgba(123,191,242,0.12)]",
+    labelColor: "text-sky-300",
+    titleColor: "text-sky-200",
+    glow: "shadow-[0_0_30px_rgba(56,189,248,0.12)]",
   },
   tip: {
     border: "border-amber-500/30",
@@ -69,22 +70,22 @@ const SECTION_STYLES = {
     iconColor: "text-amber-400",
     labelColor: "text-amber-300",
     titleColor: "text-amber-200",
-    glow: "shadow-[0_0_30px_rgba(251,191,36,0.12)]",
+    glow: "shadow-[0_0_30px_rgba(245,158,11,0.12)]",
   },
   example: {
-    border: "border-sky/30",
-    bg: "bg-gradient-to-br from-sky/12 to-sky/5",
-    iconBg: "bg-sky/20",
-    iconColor: "text-sky",
-    labelColor: "text-sky",
-    titleColor: "text-sky",
-    glow: "shadow-[0_0_30px_rgba(123,191,242,0.12)]",
+    border: "border-violet-500/30",
+    bg: "bg-gradient-to-br from-violet-500/10 to-transparent",
+    iconBg: "bg-violet-500/20",
+    iconColor: "text-violet-400",
+    labelColor: "text-violet-300",
+    titleColor: "text-violet-200",
+    glow: "shadow-[0_0_30px_rgba(139,99,227,0.12)]",
   },
   activity: {
-    border: "border-state-success/30",
-    bg: "bg-gradient-to-br from-state-success/12 to-emerald-900/5",
-    iconBg: "bg-state-success/20",
-    iconColor: "text-state-success",
+    border: "border-emerald-500/30",
+    bg: "bg-gradient-to-br from-emerald-500/15 to-emerald-900/5",
+    iconBg: "bg-emerald-500/20",
+    iconColor: "text-emerald-400",
     labelColor: "text-emerald-300",
     titleColor: "text-emerald-200",
     glow: "shadow-[0_0_30px_rgba(52,211,153,0.12)]",
@@ -108,6 +109,7 @@ const LessonPlayer = ({ sections = [], onComplete }) => {
   const [direction, setDirection] = useState("next"); // "next" or "prev"
   const [canProceed, setCanProceed] = useState(false);
   const contentRef = useRef(null);
+  const { playClick } = useSound();
 
   const total = sections.length;
   const isLastStep = currentStep === total - 1;
@@ -133,6 +135,7 @@ const LessonPlayer = ({ sections = [], onComplete }) => {
 
   const goNext = () => {
     if (isAnimating || !canProceed) return;
+    playClick();
 
     if (isLastStep) {
       onComplete?.();

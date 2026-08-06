@@ -18,6 +18,7 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { googleSignIn, currentUser } = useAuth();
+  const { playLevelUp, playIncorrect } = useSound();
 
   const returnTo = location.state?.returnTo || "/dashboard";
 
@@ -68,14 +69,11 @@ const Login = () => {
             await setDoc(publicRef, {
               uid: user.uid,
               fullName: uData.fullName || userDisplayName || user.displayName || "Learner",
-              totalPoints: uData.totalPoints || pointsEarned,
-              streak: uData.streak || 1,
-              badges: uData.badges || ["Newcomer"],
+              totalPoints: (uData.totalPoints || 0) + pointsEarned,
               updatedAt: new Date()
             }, { merge: true });
           }
         }
-        toast.success("Saved your quiz score!");
       } catch (err) {
         console.error("Error saving pending quiz score:", err);
       }
@@ -89,9 +87,11 @@ const Login = () => {
       const userCredential = await signInWithEmailAndPassword(auth, userEmail, userPassword);
       const user = userCredential.user;
       await handlePendingQuizResult(user, null);
+      playLevelUp();
       toast.success("Successfully logged in");
       navigate(returnTo, { replace: true });
     } catch (err) {
+      playIncorrect();
       let message = "Invalid email or password.";
       if (err.code === "auth/user-not-found") message = "No account found for this email.";
       else if (err.code === "auth/wrong-password") message = "Incorrect password. Please try again.";
@@ -109,9 +109,11 @@ const Login = () => {
       if (user) {
         await handlePendingQuizResult(user, user.displayName);
       }
+      playLevelUp();
       toast.success("Successfully logged in with Google");
       navigate(returnTo, { replace: true });
     } catch (err) {
+      playIncorrect();
       console.error("Google sign-in error:", err);
       toast.error("Google sign-in failed. Please try again.");
     }

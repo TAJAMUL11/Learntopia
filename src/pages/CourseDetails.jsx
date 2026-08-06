@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate, useBlocker } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useGamification } from "../context/GamificationContext";
+import { useSound } from "../context/SoundContext";
 import { db } from "../firebase/firebase";
 import { doc, getDoc, setDoc, deleteField } from "firebase/firestore";
 import { toast } from "react-toastify";
@@ -20,6 +21,7 @@ const CourseDetails = () => {
   const navigate = useNavigate();
   const { currentUser, loading: authLoading } = useAuth();
   const { addXP, awardBadge } = useGamification();
+  const { playClick } = useSound();
 
   const [course, setCourse] = useState(null);
   const [completedModules, setCompletedModules] = useState([]);
@@ -47,6 +49,7 @@ const CourseDetails = () => {
   );
 
   const handleTabSwitch = (tab) => {
+    playClick();
     if (activeTab === "syllabus" && tab !== "syllabus") {
       setPendingTab(tab);
       setShowLeaveModal(true);

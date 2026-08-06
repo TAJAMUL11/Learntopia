@@ -5,6 +5,7 @@ import { db } from "../firebase/firebase";
 import { collection, addDoc, getDocs, doc, updateDoc, increment, setDoc } from "firebase/firestore";
 import { quizzes } from "../data/quizData";
 import { useAuth } from "../context/AuthContext";
+import { useSound } from "../context/SoundContext";
 import Card from "../Components/ui/Card";
 import Button from "../Components/ui/Button";
 import Badge from "../Components/ui/Badge";
@@ -14,15 +15,24 @@ import Modal from "../Components/ui/Modal";
 import { Skeleton } from "../Components/ui/Skeleton";
 
 const Quiz = () => {
+  const { playClick, playCorrect, playIncorrect, playLevelUp, playTimerTick, playTimerUrgent } = useSound();
+
   // Core game state
   const [screen, setScreen] = useState("selection"); // 'selection' | 'active' | 'results'
   const [activeQuiz, setActiveQuiz] = useState(null);
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [isAnswerSubmitted, setIsAnswerSubmitted] = useState(false);
-  const [score, setScore] = useState(0);
+  const [userAnswers, setUserAnswers] = useState({});
 
   const [showQuitModal, setShowQuitModal] = useState(false);
+
+  // Compute exact score dynamically from userAnswers map (no stale closure bug)
+  const score = activeQuiz
+    ? activeQuiz.questions.reduce((acc, q, idx) => {
+        return userAnswers[idx] === q.correctAnswer ? acc + 1 : acc;
+      }, 0)
+    : 0;
 
   // Block navigation when a quiz is active
   const blocker = useBlocker(
@@ -39,8 +49,9 @@ const Quiz = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [loadingScores, setLoadingScores] = useState(false);
 
-  // Save score to Firestore
+  // Save score to Firestore with fail-safe merge
   const saveScore = async (finalScore) => {
+    if (!currentUser || !activeQuiz) return;
     setIsSaving(true);
     try {
       const attempt = {
@@ -55,11 +66,11 @@ const Quiz = () => {
       const pointsEarned = finalScore * 10;
       if (pointsEarned > 0) {
         const userRef = doc(db, "Users", currentUser.uid);
-        await updateDoc(userRef, {
+        await setDoc(userRef, {
           totalPoints: increment(pointsEarned)
-        });
+        }, { merge: true });
         
-        // Also sync to global QuizLeaderboard
+        // Sync to global QuizLeaderboard
         const globalScoreRef = doc(db, "QuizLeaderboards", activeQuiz.id, "Scores", currentUser.uid);
         await setDoc(globalScoreRef, {
           score: pointsEarned,
@@ -67,6 +78,15 @@ const Quiz = () => {
           userFullName: currentUser.displayName || "User",
           userId: currentUser.uid,
           completedAt: new Date()
+        }, { merge: true });
+
+        // Sync to PublicLeaderboard
+        const publicRef = doc(db, "PublicLeaderboard", currentUser.uid);
+        await setDoc(publicRef, {
+          uid: currentUser.uid,
+          fullName: currentUser.displayName || "Learner",
+          totalPoints: increment(pointsEarned),
+          updatedAt: new Date()
         }, { merge: true });
       }
 
@@ -93,9 +113,12 @@ const Quiz = () => {
 
       setSelectedAnswer(option);
       setIsAnswerSubmitted(true);
+      setUserAnswers((prev) => ({ ...prev, [currentQuestionIdx]: option }));
 
       if (isCorrect) {
-        setScore((prev) => prev + 1);
+        playCorrect();
+      } else {
+        playIncorrect();
       }
 
       if (isTimeout) {
@@ -104,10 +127,11 @@ const Quiz = () => {
         });
       }
     },
-    [isAnswerSubmitted, activeQuiz, currentQuestionIdx]
+    [isAnswerSubmitted, activeQuiz, currentQuestionIdx, playCorrect, playIncorrect]
   );
 
   const startQuiz = (quiz) => {
+    playClick();
     const QUESTIONS_PER_QUIZ = 10;
     const shuffledQuestions = [...quiz.questions].sort(() => 0.5 - Math.random());
     const selectedQuestions = shuffledQuestions.slice(0, QUESTIONS_PER_QUIZ);
@@ -119,7 +143,7 @@ const Quiz = () => {
 
     setActiveQuiz(sessionQuiz);
     setCurrentQuestionIdx(0);
-    setScore(0);
+    setUserAnswers({});
     setSelectedAnswer(null);
     setIsAnswerSubmitted(false);
     setScreen("active");
@@ -128,13 +152,18 @@ const Quiz = () => {
   const handleNext = () => {
     const nextIdx = currentQuestionIdx + 1;
     if (nextIdx < activeQuiz.questions.length) {
+      playClick();
       setCurrentQuestionIdx(nextIdx);
       setSelectedAnswer(null);
       setIsAnswerSubmitted(false);
     } else {
+      playLevelUp();
+      const finalScore = activeQuiz.questions.reduce((acc, q, idx) => {
+        return userAnswers[idx] === q.correctAnswer ? acc + 1 : acc;
+      }, 0);
       setScreen("results");
       if (currentUser) {
-        saveScore(score);
+        saveScore(finalScore);
       }
     }
   };
@@ -187,12 +216,21 @@ const Quiz = () => {
           handleAnswerSelect(null, true); // timeout
           return 0;
         }
-        return prev - 1;
+
+        const nextVal = prev - 1;
+        if (nextVal <= 5) {
+          if (nextVal <= 3) {
+            playTimerUrgent();
+          } else {
+            playTimerTick();
+          }
+        }
+        return nextVal;
       });
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [screen, currentQuestionIdx, isAnswerSubmitted, activeQuiz, handleAnswerSelect]);
+  }, [screen, currentQuestionIdx, isAnswerSubmitted, activeQuiz, handleAnswerSelect, playTimerTick, playTimerUrgent]);
 
   const urgent = timeLeft <= 5;
 
