@@ -44,6 +44,7 @@ The platform is designed to be fast, accessible, and mobile-friendly, with authe
 | Feature | Description |
 |---|---|
 | **Gamified Course Overhaul** | Step-by-step interactive courses designed for kids aged 7-14 with rich learning cards (Story, Concept, Fun Fact, Pro Tip, Example, Activity, Recap). |
+| **Web Audio SFX System** | Native Web Audio API sound synthesizer ($0 cost, 0 dependencies) playing audio feedback for clicks, correct answers, module finishes, level-ups, and badge unlocks with persistent mute toggle. |
 | **LessonPlayer Engine** | Paginated step-by-step lesson player with visual theme cards, progress dots, and code syntax blocks. |
 | **Multi-Type Exercise Engine** | Comprehension challenges featuring Multiple Choice, True/False, Fill-in-the-Blank, and Tap-to-Connect Matching Pairs. |
 | **XP, Levels & Badges** | Earn XP per module (+50 XP) and course (+100 XP). Level up from Rookie Coder to Grandmaster with animated celebration overlays and collectible course badges. |
