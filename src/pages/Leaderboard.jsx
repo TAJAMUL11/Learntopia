@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { collection, query, orderBy, limit, getDocs, doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { quizzes } from "../data/quizData";
@@ -16,11 +17,18 @@ const TABS = [
 ];
 
 const Leaderboard = () => {
+  const navigate = useNavigate();
   const { currentUser } = useAuth();
   const [allEntries, setAllEntries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    if (!currentUser) {
+      navigate("/login", { state: { returnTo: "/leaderboard" }, replace: true });
+    }
+  }, [currentUser, navigate]);
 
   // ── Fetch leaderboard data dynamically based on activeTab ──
   useEffect(() => {

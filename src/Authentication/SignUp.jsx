@@ -18,7 +18,7 @@ import signUpImage from "../assets/Icons/auth-image.jpg";
 const SignUp = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { googleSignIn, currentUser } = useAuth();
+  const { googleSignIn, currentUser, logOut } = useAuth();
   const { playLevelUp, playIncorrect } = useSound();
 
   const returnTo = location.state?.returnTo || "/dashboard";
@@ -31,10 +31,17 @@ const SignUp = () => {
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [userFName, setUserFName] = useState("");
-  const [userEmail, setUserEmail] = useState("");
+  const [userEmail, setUserEmail] = useState(location.state?.email || "");
   const [userPassword, setUserPassword] = useState("");
   const [agreed, setAgreed] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [alreadyExistsEmail, setAlreadyExistsEmail] = useState(null);
+
+  useEffect(() => {
+    if (location.state?.email) {
+      setUserEmail(location.state.email);
+    }
+  }, [location.state?.email]);
 
   const handlePendingQuizResult = async (user, userDisplayName) => {
     if (location.state?.pendingQuizResult) {
@@ -83,13 +90,33 @@ const SignUp = () => {
     }
   };
 
+  const ADMIN_EMAIL = (import.meta.env.VITE_ADMIN_EMAIL || "thetj4054@gmail.com").toLowerCase();
+
   const handleRegister = async (e) => {
     e.preventDefault();
+
+    if (userEmail.trim().toLowerCase() === ADMIN_EMAIL) {
+      playIncorrect();
+      toast.warning("Administrator account detected. Please sign in via the Admin Portal at /admin.", { autoClose: 4000 });
+      setUserPassword("");
+      navigate("/admin");
+      return;
+    }
+
     setLoading(true);
     try {
       await createUserWithEmailAndPassword(auth, userEmail, userPassword);
       const user = auth.currentUser;
       if (user) {
+        if (user.email && user.email.toLowerCase() === ADMIN_EMAIL) {
+          await logOut();
+          playIncorrect();
+          toast.warning("Administrator account detected. Please sign in via the Admin Portal at /admin.", { autoClose: 4000 });
+          setUserPassword("");
+          navigate("/admin");
+          return;
+        }
+
         const today = new Date();
         const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
         await setDoc(doc(db, "Users", user.uid), {
@@ -118,11 +145,16 @@ const SignUp = () => {
       navigate(returnTo, { replace: true });
     } catch (err) {
       playIncorrect();
-      let message = "Couldn't create your account. Please try again.";
-      if (err.code === "auth/email-already-in-use") message = "That email is already registered. Try logging in.";
-      else if (err.code === "auth/invalid-email") message = "That email address looks incomplete.";
-      else if (err.code === "auth/weak-password") message = "Use a stronger password (at least 6 characters).";
-      toast.error(message);
+      if (err.code === "auth/email-already-in-use") {
+        setAlreadyExistsEmail(userEmail);
+        toast.info("That email is already registered.", { autoClose: 3000 });
+      } else if (err.code === "auth/invalid-email") {
+        toast.error("That email address looks incomplete.");
+      } else if (err.code === "auth/weak-password") {
+        toast.error("Use a stronger password (at least 6 characters).");
+      } else {
+        toast.error("Couldn't create your account. Please try again.");
+      }
       setUserPassword("");
     } finally {
       setLoading(false);
@@ -132,6 +164,13 @@ const SignUp = () => {
   const handleGoogleSignIn = async () => {
     try {
       const user = await googleSignIn();
+      if (user && user.email && user.email.toLowerCase() === ADMIN_EMAIL) {
+        await logOut();
+        playIncorrect();
+        toast.warning("Administrator account detected. Please sign in via the Admin Portal at /admin.", { autoClose: 4000 });
+        navigate("/admin");
+        return;
+      }
       if (user) {
         await handlePendingQuizResult(user, user.displayName);
       }
@@ -147,6 +186,47 @@ const SignUp = () => {
 
   return (
     <div className="container-page flex min-h-[80vh] items-center justify-center py-12">
+      {/* Account Already Exists Smart Guidance Modal */}
+      {alreadyExistsEmail && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm">
+          <Card className="w-full max-w-md border-violet-500/30 p-6 shadow-2xl">
+            <div className="mb-4 flex items-center gap-3">
+              <div className="grid h-11 w-11 place-items-center rounded-xl bg-violet-500/15 text-violet-400 border border-violet-500/30">
+                <Icon name="mail" size={22} />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-ink-hi">Account Already Exists</h3>
+                <p className="text-xs text-violet-400 font-medium">Smart Authentication Assistant</p>
+              </div>
+            </div>
+
+            <p className="mb-6 text-xs md:text-sm text-ink-low leading-relaxed">
+              An account is already registered under <strong className="text-violet-400 font-semibold">{alreadyExistsEmail}</strong>. Would you like to sign in instead?
+            </p>
+
+            <div className="flex flex-col gap-3">
+              <Button
+                fullWidth
+                onClick={() => {
+                  const emailToPass = alreadyExistsEmail;
+                  setAlreadyExistsEmail(null);
+                  navigate("/login", { state: { email: emailToPass, returnTo } });
+                }}
+              >
+                Log In with {alreadyExistsEmail}
+              </Button>
+              <button
+                type="button"
+                onClick={() => setAlreadyExistsEmail(null)}
+                className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2.5 text-xs font-semibold text-ink-low transition-colors hover:bg-white/[0.08] hover:text-ink-hi"
+              >
+                Use a Different Email
+              </button>
+            </div>
+          </Card>
+        </div>
+      )}
+
       <div className="grid w-full max-w-5xl items-center gap-10 lg:grid-cols-2">
         {/* Banner */}
         <div className="relative hidden aspect-[4/5] max-h-[560px] overflow-hidden rounded-3xl border border-white/[0.06] shadow-card lg:block">
@@ -246,7 +326,11 @@ const SignUp = () => {
 
           <p className="mt-6 text-center text-xs text-ink-low">
             Already have an account?{" "}
-            <button onClick={() => navigate("/login")} className="font-bold text-sky hover:underline">
+            <button
+              type="button"
+              onClick={() => navigate("/login", { state: { email: userEmail, returnTo } })}
+              className="font-bold text-sky hover:underline"
+            >
               Sign in
             </button>
           </p>

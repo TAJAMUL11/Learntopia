@@ -33,6 +33,8 @@ const Navbar = () => {
 
   const closeMenu = () => setIsMenuOpen(false);
 
+  const navItems = NAV_ITEMS.filter((item) => item.to !== "/leaderboard" || currentUser);
+
   const handleLogout = async () => {
     try {
       await logOut();
@@ -55,7 +57,7 @@ const Navbar = () => {
 
         {/* Desktop links */}
         <ul className="hidden items-center gap-7 md:flex">
-          {NAV_ITEMS.map((item) => (
+          {navItems.map((item) => (
             <li key={item.to}>
               <NavLink
                 to={item.to}
@@ -147,7 +149,7 @@ const Navbar = () => {
         }`}
       >
         <ul className="container-page flex flex-col gap-1 py-4">
-          {NAV_ITEMS.map((item) => (
+          {navItems.map((item) => (
             <li key={item.to}>
               <NavLink
                 to={item.to}

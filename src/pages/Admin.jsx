@@ -1,13 +1,29 @@
 import { useState, useEffect, useMemo } from "react";
-import { db } from "../firebase/firebase";
+import { Link, useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth, db } from "../firebase/firebase";
 import { collection, getDocs, addDoc, serverTimestamp, query, orderBy } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
+import { useSound } from "../context/SoundContext";
 import Button from "../Components/ui/Button";
 import Icon from "../Components/ui/Icon";
+import Card from "../Components/ui/Card";
 import { Skeleton } from "../Components/ui/Skeleton";
 import Modal from "../Components/ui/Modal";
-import NotFound from "./NotFound";
 import { toast } from "react-toastify";
+import google from "../assets/Icons/google.png";
+
+/* ── Live Clock Hook ── */
+const useLiveClock = () => {
+  const [now, setNow] = useState(new Date());
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  return now;
+};
+
+const ADMIN_EMAIL = (import.meta.env.VITE_ADMIN_EMAIL || "thetj4054@gmail.com").toLowerCase();
 
 const NAV_ITEMS = [
   { id: "overview", label: "Overview", icon: "bar-chart" },
@@ -24,10 +40,13 @@ const SECTION_META = {
 };
 
 const Admin = () => {
-  const { currentUser, isAdmin, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
+  const { currentUser, isAdmin, loading: authLoading, googleSignIn, logOut } = useAuth();
+  const { playLevelUp, playIncorrect } = useSound();
 
   const [activeTab, setActiveTab] = useState("overview");
   const [loading, setLoading] = useState(true);
+  const [adminLoading, setAdminLoading] = useState(false);
 
   const [students, setStudents] = useState([]);
   const [contactMessages, setContactMessages] = useState([]);
@@ -39,6 +58,39 @@ const Admin = () => {
   const [showNewBugModal, setShowNewBugModal] = useState(false);
   const [newBug, setNewBug] = useState({ title: "", description: "", priority: "Medium" });
   const [submittingBug, setSubmittingBug] = useState(false);
+
+  const handleAdminGoogleAuth = async () => {
+    setAdminLoading(true);
+    try {
+      const user = await googleSignIn();
+      if (!user || !user.email || user.email.toLowerCase() !== ADMIN_EMAIL) {
+        await logOut();
+        playIncorrect();
+        toast.error("Access Denied: Administrator credentials required.", { autoClose: 4000 });
+        navigate("/login");
+        return;
+      }
+
+      playLevelUp();
+      toast.success("Welcome, Administrator");
+    } catch (err) {
+      playIncorrect();
+      console.error("Admin Google auth error:", err);
+      toast.error("Google authentication failed.");
+    } finally {
+      setAdminLoading(false);
+    }
+  };
+
+  const handleAdminLogout = async () => {
+    try {
+      await logOut();
+      toast.success("Logged out from Admin Operations Center");
+    } catch (err) {
+      console.error("Admin logout error:", err);
+      toast.error("Failed to log out.");
+    }
+  };
 
   useEffect(() => {
     if (authLoading) return;
@@ -53,13 +105,14 @@ const Admin = () => {
       let msgCount = 0;
       let bugCount = 0;
       try {
-        // 1. Fetch all real user profiles (admin-only read, enforced in rules).
-        //    Exclude the admin's own account so the owner is never a student.
+        // 1. Fetch all real user profiles. Exclude admin.
         const usersSnap = await getDocs(collection(db, "Users"));
         const studentList = [];
         usersSnap.forEach((docSnap) => {
           if (docSnap.id === currentUser.uid) return;
-          studentList.push({ id: docSnap.id, uid: docSnap.id, ...docSnap.data() });
+          const data = docSnap.data();
+          if (data.email && data.email.toLowerCase() === ADMIN_EMAIL) return;
+          studentList.push({ id: docSnap.id, uid: docSnap.id, ...data });
         });
         setStudents(studentList);
         studentCount = studentList.length;
@@ -117,7 +170,7 @@ const Admin = () => {
         priority: newBug.priority,
         status: "Open",
         createdAt: serverTimestamp(),
-        createdBy: currentUser.email,
+        createdBy: currentUser?.email || ADMIN_EMAIL,
       };
       const docRef = await addDoc(collection(db, "BugReports"), bugData);
       setBugReports((prev) => [{ id: docRef.id, ...bugData, createdAt: new Date() }, ...prev]);
@@ -175,17 +228,77 @@ const Admin = () => {
     toast.success("Student list exported to CSV.");
   };
 
+  /* eslint-disable react-hooks/rules-of-hooks */
+  const clock = useLiveClock();
+  const timeStr = clock.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true });
+  const dateStr = clock.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" });
+  /* eslint-enable react-hooks/rules-of-hooks */
+
   if (authLoading) {
     return (
-      <div className="container-page py-16">
+      <div className="flex min-h-screen flex-col items-center justify-center">
         <Skeleton className="mb-4 h-10 w-56 rounded-xl" />
-        <Skeleton className="h-72 w-full rounded-2xl" />
+        <Skeleton className="h-72 w-full max-w-lg rounded-2xl" />
       </div>
     );
   }
 
-  // Stealth: non-admins get a 404, not a redirect.
-  if (!isAdmin) return <NotFound />;
+  // Dedicated Admin Portal Login Screen when not authenticated as Admin
+  if (!isAdmin || !currentUser) {
+    return (
+      <div className="flex min-h-screen flex-col">
+        {/* ── Minimal Top Bar (Login State) ── */}
+        <header className="flex items-center justify-between border-b border-white/[0.06] bg-surface-primary/80 px-5 py-3 backdrop-blur-md">
+          <div className="flex items-center gap-2.5">
+            <div className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-violet-600 to-sky text-white shadow-md">
+              <Icon name="shield" size={16} />
+            </div>
+            <span className="text-sm font-bold tracking-tight text-white">Learntopia <span className="text-violet-300">Admin</span></span>
+          </div>
+          <div className="hidden items-center gap-3 text-[11px] text-ink-faint sm:flex">
+            <span>{dateStr}</span>
+            <span className="font-mono tabular-nums">{timeStr}</span>
+          </div>
+        </header>
+
+        {/* ── Login Card ── */}
+        <div className="flex flex-1 items-center justify-center px-4 py-12">
+          <Card className="w-full max-w-md border-violet-500/30 p-6 md:p-8 shadow-2xl">
+            <div className="mb-6 flex flex-col items-center text-center">
+              <div className="mb-3 grid h-14 w-14 place-items-center rounded-2xl bg-violet-500/15 text-violet-400 border border-violet-500/30 shadow-[0_0_20px_rgba(139,92,246,0.25)]">
+                <Icon name="shield" size={28} />
+              </div>
+              <span className="inline-block rounded-md border border-violet-500/30 bg-violet-500/10 px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-widest text-violet-300 mb-2">
+                System Administrator Portal
+              </span>
+              <h2 className="text-2xl font-extrabold text-ink-hi">Admin Operations</h2>
+              <p className="mt-1 text-xs text-ink-low leading-relaxed">
+                Restricted Access &middot; Executive Google Authentication required.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <button
+                type="button"
+                disabled={adminLoading}
+                onClick={handleAdminGoogleAuth}
+                className="flex w-full items-center justify-center gap-3 rounded-xl border border-violet-500/40 bg-violet-500/10 p-3.5 text-xs font-bold uppercase tracking-wider text-violet-200 transition-colors hover:bg-violet-500/20 disabled:opacity-50 shadow-lg"
+              >
+                <img src={google} alt="" className="h-5 w-5 object-contain" />
+                {adminLoading ? "Authenticating Admin…" : "Authenticate Admin with Google"}
+              </button>
+            </div>
+
+            <div className="mt-6 border-t border-white/[0.06] pt-4 text-center">
+              <Link to="/" className="text-xs text-ink-low transition-colors hover:text-sky hover:underline">
+                &larr; Back to Learntopia Main Platform
+              </Link>
+            </div>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   const counts = {
     students: students.length,
@@ -202,7 +315,6 @@ const Admin = () => {
 
   const meta = SECTION_META[activeTab];
 
-  // Reusable nav-item renderer (sidebar + mobile share the label/icon/count).
   const navItem = (item) => {
     const active = activeTab === item.id;
     const count = counts[item.id];
@@ -226,8 +338,43 @@ const Admin = () => {
   };
 
   return (
-    <div className="text-ink-hi">
-      <div className="mx-auto max-w-[1400px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+    <div className="flex min-h-screen flex-col text-ink-hi">
+      {/* ── Executive Top Bar ── */}
+      <header className="sticky top-0 z-30 flex items-center justify-between border-b border-white/[0.06] bg-surface-primary/80 px-5 py-3 backdrop-blur-md">
+        <div className="flex items-center gap-2.5">
+          <div className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-violet-600 to-sky text-white shadow-md">
+            <Icon name="shield" size={16} />
+          </div>
+          <span className="text-sm font-bold tracking-tight text-white">Learntopia <span className="text-violet-300">Admin</span></span>
+          <span className="ml-2 hidden rounded-md border border-violet-500/30 bg-violet-500/10 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-violet-300 sm:inline-block">Operations Center</span>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <div className="hidden items-center gap-3 text-[11px] text-ink-faint md:flex">
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            <span>{dateStr}</span>
+            <span className="font-mono tabular-nums">{timeStr}</span>
+          </div>
+
+          <div className="hidden items-center gap-2 sm:flex">
+            <div className="flex items-center gap-1.5 rounded-lg border border-violet-500/30 bg-violet-500/10 px-2.5 py-1">
+              <Icon name="shield" size={12} className="text-violet-400" />
+              <span className="text-[11px] font-bold text-violet-200 truncate max-w-[120px]">{currentUser?.displayName || "Admin"}</span>
+            </div>
+          </div>
+
+          <button
+            onClick={handleAdminLogout}
+            className="flex items-center gap-1.5 rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-1.5 text-[11px] font-semibold text-red-400 transition-colors hover:bg-red-500/20"
+          >
+            <Icon name="log-out" size={13} />
+            <span className="hidden sm:inline">Exit</span>
+          </button>
+        </div>
+      </header>
+
+      <div className="flex-1">
+        <div className="mx-auto max-w-[1400px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
 
         {/* Mobile section nav */}
         <div className="mb-5 flex gap-2 overflow-x-auto pb-1 lg:hidden">
@@ -253,14 +400,19 @@ const Admin = () => {
           {/* ── Sidebar ── */}
           <aside className="hidden w-60 flex-none lg:block">
             <div className="sticky top-20">
-              <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-4">
-                <div className="flex items-center gap-2.5">
-                  <div className="grid h-9 w-9 flex-none place-items-center rounded-lg bg-gradient-to-br from-violet-500 to-sky text-ground">
-                    <Icon name="shield" size={18} />
+              <div className="rounded-xl border border-violet-500/30 bg-violet-500/[0.04] p-4 shadow-card">
+                <div className="flex items-center gap-3">
+                  <div className="grid h-10 w-10 flex-none place-items-center rounded-xl bg-gradient-to-br from-violet-600 to-sky text-white shadow-md">
+                    <Icon name="shield" size={20} />
                   </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-bold text-white">Owner Portal</p>
-                    <p className="truncate text-[11px] text-ink-low">{currentUser?.email}</p>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-bold text-white truncate">
+                      {currentUser?.displayName || "Tajamul Wani"}
+                    </p>
+                    <div className="mt-1 inline-flex items-center gap-1 rounded-md border border-violet-500/40 bg-violet-500/20 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest text-violet-300 shadow-[0_0_10px_rgba(139,92,246,0.25)]">
+                      <Icon name="shield" size={11} className="text-violet-400" />
+                      ADMIN
+                    </div>
                   </div>
                 </div>
               </div>
@@ -268,6 +420,13 @@ const Admin = () => {
               <nav className="mt-3 space-y-1 rounded-xl border border-white/[0.08] bg-white/[0.02] p-2">
                 {NAV_ITEMS.map(navItem)}
               </nav>
+
+              <button
+                onClick={handleAdminLogout}
+                className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-red-500/20 bg-red-500/10 py-2.5 text-xs font-semibold text-red-400 hover:bg-red-500/20 transition-colors"
+              >
+                <Icon name="log-out" size={14} /> Exit Admin Portal
+              </button>
 
               <div className="mt-3 flex items-center gap-1.5 px-2 text-[11px] text-ink-faint">
                 <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400" /> Live system
@@ -499,7 +658,6 @@ const Admin = () => {
 
           </main>
         </div>
-      </div>
 
       {/* ── Student detail modal ── */}
       {selectedStudent && (
@@ -606,6 +764,8 @@ const Admin = () => {
           </form>
         </Modal>
       )}
+        </div>
+      </div>
     </div>
   );
 };

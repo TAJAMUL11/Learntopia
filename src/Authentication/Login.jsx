@@ -18,7 +18,7 @@ import signUpImage from "../assets/Icons/auth-image.jpg";
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { googleSignIn, currentUser } = useAuth();
+  const { googleSignIn, currentUser, logOut } = useAuth();
   const { playLevelUp, playIncorrect } = useSound();
 
   const returnTo = location.state?.returnTo || "/dashboard";
@@ -30,10 +30,17 @@ const Login = () => {
   }, [currentUser, navigate, returnTo]);
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [userEmail, setUserEmail] = useState("");
+  const [userEmail, setUserEmail] = useState(location.state?.email || "");
   const [userPassword, setUserPassword] = useState("");
   const [agreed, setAgreed] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [notFoundEmail, setNotFoundEmail] = useState(null);
+
+  useEffect(() => {
+    if (location.state?.email) {
+      setUserEmail(location.state.email);
+    }
+  }, [location.state?.email]);
 
   const handlePendingQuizResult = async (user, userDisplayName) => {
     if (location.state?.pendingQuizResult) {
@@ -81,23 +88,47 @@ const Login = () => {
     }
   };
 
+  const ADMIN_EMAIL = (import.meta.env.VITE_ADMIN_EMAIL || "thetj4054@gmail.com").toLowerCase();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (userEmail.trim().toLowerCase() === ADMIN_EMAIL) {
+      playIncorrect();
+      toast.warning("Administrator account detected. Please sign in via the Admin Portal at /admin.", { autoClose: 4000 });
+      setUserPassword("");
+      navigate("/admin");
+      return;
+    }
+
     setLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(auth, userEmail, userPassword);
       const user = userCredential.user;
+      if (user.email && user.email.toLowerCase() === ADMIN_EMAIL) {
+        await logOut();
+        playIncorrect();
+        toast.warning("Administrator account detected. Please sign in via the Admin Portal at /admin.", { autoClose: 4000 });
+        setUserPassword("");
+        navigate("/admin");
+        return;
+      }
       await handlePendingQuizResult(user, null);
       playLevelUp();
       toast.success("Successfully logged in");
       navigate(returnTo, { replace: true });
     } catch (err) {
       playIncorrect();
-      let message = "Invalid email or password.";
-      if (err.code === "auth/user-not-found") message = "No account found for this email.";
-      else if (err.code === "auth/wrong-password") message = "Incorrect password. Please try again.";
-      else if (err.code === "auth/invalid-email") message = "That email address looks incomplete.";
-      toast.error(message);
+      if (err.code === "auth/user-not-found" || err.code === "auth/invalid-credential") {
+        setNotFoundEmail(userEmail);
+        toast.info("No account found for this email address.", { autoClose: 3000 });
+      } else if (err.code === "auth/wrong-password") {
+        toast.error("Incorrect password. Please try again.");
+      } else if (err.code === "auth/invalid-email") {
+        toast.error("That email address looks incomplete.");
+      } else {
+        toast.error("Invalid email or password.");
+      }
       setUserPassword("");
     } finally {
       setLoading(false);
@@ -107,6 +138,13 @@ const Login = () => {
   const handleGoogleSignIn = async () => {
     try {
       const user = await googleSignIn();
+      if (user && user.email && user.email.toLowerCase() === ADMIN_EMAIL) {
+        await logOut();
+        playIncorrect();
+        toast.warning("Administrator account detected. Please sign in via the Admin Portal at /admin.", { autoClose: 4000 });
+        navigate("/admin");
+        return;
+      }
       if (user) {
         await handlePendingQuizResult(user, user.displayName);
       }
@@ -122,6 +160,47 @@ const Login = () => {
 
   return (
     <div className="container-page flex min-h-[80vh] items-center justify-center py-12">
+      {/* Account Not Found Smart Guidance Modal */}
+      {notFoundEmail && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm">
+          <Card className="w-full max-w-md border-sky/30 p-6 shadow-2xl">
+            <div className="mb-4 flex items-center gap-3">
+              <div className="grid h-11 w-11 place-items-center rounded-xl bg-sky/15 text-sky border border-sky/30">
+                <Icon name="user" size={22} />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-ink-hi">Account Not Found</h3>
+                <p className="text-xs text-sky font-medium">Smart Authentication Assistant</p>
+              </div>
+            </div>
+
+            <p className="mb-6 text-xs md:text-sm text-ink-low leading-relaxed">
+              We couldn&rsquo;t find an account registered under <strong className="text-sky font-semibold">{notFoundEmail}</strong>. Would you like to create a new account now?
+            </p>
+
+            <div className="flex flex-col gap-3">
+              <Button
+                fullWidth
+                onClick={() => {
+                  const emailToPass = notFoundEmail;
+                  setNotFoundEmail(null);
+                  navigate("/signUp", { state: { email: emailToPass, returnTo } });
+                }}
+              >
+                Create Account with {notFoundEmail}
+              </Button>
+              <button
+                type="button"
+                onClick={() => setNotFoundEmail(null)}
+                className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2.5 text-xs font-semibold text-ink-low transition-colors hover:bg-white/[0.08] hover:text-ink-hi"
+              >
+                Try Another Email or Password
+              </button>
+            </div>
+          </Card>
+        </div>
+      )}
+
       <div className="grid w-full max-w-5xl items-center gap-10 lg:grid-cols-2">
         {/* Banner */}
         <div className="relative hidden aspect-[4/5] max-h-[560px] overflow-hidden rounded-3xl border border-white/[0.06] shadow-card lg:block">
@@ -208,7 +287,11 @@ const Login = () => {
 
           <p className="mt-6 text-center text-xs text-ink-low">
             Don&rsquo;t have an account?{" "}
-            <button onClick={() => navigate("/signUp")} className="font-bold text-sky hover:underline">
+            <button
+              type="button"
+              onClick={() => navigate("/signUp", { state: { email: userEmail, returnTo } })}
+              className="font-bold text-sky hover:underline"
+            >
               Register here
             </button>
           </p>

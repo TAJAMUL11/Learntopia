@@ -6,6 +6,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import RootLayout from "./layout/RootLayout";
+import AdminLayout from "./layout/AdminLayout";
 import { ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "./context/AuthContext";
@@ -34,23 +35,30 @@ const Admin = lazy(() => import("./pages/Admin"));
 const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
+      <>
+        {/* ── Student / Public shell ── */}
         <Route path="/" element={<RootLayout />}>
-        <Route index element={<Home />} />
-        <Route path="courses" element={<Courses />} />
-        <Route path="course/:id" element={<CourseDetails />} />
-        <Route path="quiz" element={<Quiz />} />
-        <Route path="contact" element={<Contact />} />
-        <Route path="signUp" element={<SignUp />} />
-        <Route path="login" element={<Login />} />
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="admin" element={<Admin />} />
-        <Route path="doc" element={<Doc />} />
-        <Route path="terms" element={<Terms />} />
-        <Route path="privacy" element={<Privacy />} />
-        <Route path="leaderboard" element={<Leaderboard />} />
-        <Route path="thank-you" element={<ThankYou />} />
-        <Route path="*" element={<NotFound />} />
-      </Route>
+          <Route index element={<Home />} />
+          <Route path="courses" element={<Courses />} />
+          <Route path="course/:id" element={<CourseDetails />} />
+          <Route path="quiz" element={<Quiz />} />
+          <Route path="contact" element={<Contact />} />
+          <Route path="signUp" element={<SignUp />} />
+          <Route path="login" element={<Login />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="doc" element={<Doc />} />
+          <Route path="terms" element={<Terms />} />
+          <Route path="privacy" element={<Privacy />} />
+          <Route path="leaderboard" element={<Leaderboard />} />
+          <Route path="thank-you" element={<ThankYou />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+
+        {/* ── Isolated Admin shell (no student Navbar/Footer) ── */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Admin />} />
+        </Route>
+      </>
     )
   );
 

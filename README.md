@@ -53,12 +53,14 @@ The platform is designed to be fast, accessible, and mobile-friendly, with authe
 | **Quiz Completion Indicators** | Done badge and best score on completed quiz cards; Start button becomes Retake. Incomplete attempts are never logged. |
 | **Personal Dashboard** | Consolidated view of enrolled courses, completion status, XP, Level progress, badges, total points, and daily streak. |
 | **Daily Login Streaks** | Consecutive daily login counter tracked in local timezone using `Date.UTC` integer arithmetic — DST-safe, no floating-point rounding. Resets on a missed day. |
-| **Global Leaderboard** | Public leaderboard ranking all users by total points. Per-quiz leaderboards available for each quiz topic. |
+| **Global Leaderboard** | Public leaderboard ranking all users by total points and quiz scores. Access restricted exclusively to authenticated users. |
 | **Guest Score Preservation** | Guest quiz scores are automatically saved to the user profile when signing in or registering from the results screen. |
 | **AI Tutors** | Each course has a personality-driven AI tutor to guide learners through the subject matter. |
 | **Strict Focus Mode** | Route-level navigation blocker prevents accidental loss of quiz or module progress. |
 | **Course Controls** | Unenroll, resume, or reset completed courses directly from the dashboard. |
 | **Google OAuth** | One-tap sign-in with Google alongside standard email/password authentication. |
+| **Smart Auth Guidance** | Interactive account guidance modals and seamless email pre-filling when transitioning between `/login` and `/signUp`. |
+| **Admin Operations Portal** | Fully isolated `/admin` shell with dedicated `AdminLayout` (no student Navbar/Footer), executive top bar with live clock, one-tap Google Auth, single-email enforcement, and `[ ADMIN ]` badge. |
 | **Firestore Security Rules** | Server-side rules enforce per-user data isolation. Leaderboard exposes name and score only — never private data. |
 | **SEO & Meta** | Canonical links, Open Graph, JSON-LD schema, geographic meta, and custom favicon/meta image on every page. |
 | **Fully Responsive** | Mobile, tablet, and desktop layouts. Dynamic viewport height and custom overscroll colours for native-feel scrolling. |
@@ -180,23 +182,6 @@ Learntopia is deployed to **Firebase Hosting** with automatic continuous deploym
 # Manual deploy (if needed)
 firebase deploy --only hosting
 ```
-
-Firestore security rules are also managed in the repository:
-
-```bash
-# Deploy rules only
-firebase deploy --only firestore:rules
-```
-
----
-
-## Security
-
-- **Authentication**: Firebase Authentication handles all auth flows. Passwords are never stored in the application.
-- **Firestore Rules**: All reads and writes are validated server-side. Users can only access their own profile, courses, and quiz attempts. Leaderboard data is public-readable but owner-write only.
-- **No secrets in code**: All config lives in `.env` (excluded from git). Production secrets are configured in the Firebase and hosting panels directly.
-- **No sensitive files committed**: Agent config, skill files, and internal planning documents are excluded via `.gitignore`.
-
 ---
 
 ## Contributing
