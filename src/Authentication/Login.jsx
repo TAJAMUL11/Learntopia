@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../firebase/firebase";
 import { useAuth } from "../context/AuthContext";
+import { useSound } from "../context/SoundContext";
 import { setDoc, doc, addDoc, collection, updateDoc, increment, getDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import Card from "../Components/ui/Card";
