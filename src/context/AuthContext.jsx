@@ -14,6 +14,8 @@ export function useAuth() {
   return useContext(AuthContext);
 }
 
+const ADMIN_EMAIL = (import.meta.env.VITE_ADMIN_EMAIL || "thetj4054@gmail.com").toLowerCase();
+
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -25,13 +27,16 @@ export function AuthProvider({ children }) {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
       
-      // Check if user document already exists in Firestore
+      const isConfiguredAdmin = user.email && user.email.toLowerCase() === ADMIN_EMAIL;
+      if (isConfiguredAdmin) {
+        return user;
+      }
+
+      // Check if user document already exists in Firestore for student users
       const userRef = doc(db, "Users", user.uid);
       const userSnap = await getDoc(userRef);
 
       if (!userSnap.exists()) {
-        // Create new user document if they are logging in for the first time
-        // Use local calendar date (not UTC) to stay consistent with streak logic
         const _t = new Date();
         const todayStr = `${_t.getFullYear()}-${String(_t.getMonth() + 1).padStart(2, "0")}-${String(_t.getDate()).padStart(2, "0")}`;
         await setDoc(userRef, {
@@ -64,16 +69,23 @@ export function AuthProvider({ children }) {
         return;
       }
 
-      // Determine admin from the custom claim on the ID token — no email or PII
-      // in the client. The admin/owner is never written to the public leaderboard.
-      let admin = false;
-      try {
-        const tokenResult = await user.getIdTokenResult();
-        admin = tokenResult.claims.admin === true;
-      } catch (err) {
-        console.error("Error reading auth claims:", err);
+      const isConfiguredAdmin = user.email && user.email.toLowerCase() === ADMIN_EMAIL;
+      let admin = isConfiguredAdmin;
+      if (!admin) {
+        try {
+          const tokenResult = await user.getIdTokenResult();
+          admin = tokenResult.claims.admin === true;
+        } catch (err) {
+          console.error("Error reading auth claims:", err);
+        }
       }
       setIsAdmin(admin);
+
+      // SECURITY GUARD: Never create or update student profile or leaderboard for the Administrator
+      if (admin) {
+        setLoading(false);
+        return;
+      }
 
       try {
         const userRef = doc(db, "Users", user.uid);
@@ -83,7 +95,7 @@ export function AuthProvider({ children }) {
         const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
         if (!userSnap.exists()) {
-          // Initialize the private profile (email lives here, admin-readable only).
+          // Initialize private student profile
           await setDoc(userRef, {
             email: user.email || "",
             fullName: user.displayName || "New User",
@@ -93,18 +105,15 @@ export function AuthProvider({ children }) {
             lastLoginDate: todayStr,
           });
 
-          // Public mirror = DISPLAY data only (no email). Admin is never published.
-          if (!admin) {
-            const publicRef = doc(db, "PublicLeaderboard", user.uid);
-            await setDoc(publicRef, {
-              uid: user.uid,
-              fullName: user.displayName || "Learner",
-              totalPoints: 0,
-              streak: 1,
-              badges: ["Newcomer"],
-              updatedAt: new Date()
-            }, { merge: true });
-          }
+          const publicRef = doc(db, "PublicLeaderboard", user.uid);
+          await setDoc(publicRef, {
+            uid: user.uid,
+            fullName: user.displayName || "Learner",
+            totalPoints: 0,
+            streak: 1,
+            badges: ["Newcomer"],
+            updatedAt: new Date()
+          }, { merge: true });
         } else {
           const data = userSnap.data();
           const lastDateStr = data.lastLoginDate;
@@ -114,7 +123,6 @@ export function AuthProvider({ children }) {
             let newStreak;
 
             if (lastDateStr) {
-              // Reliable integer calendar-day diff (avoids DST/timezone issues).
               const [ly, lm, ld] = lastDateStr.split("-").map(Number);
               const [ty, tm, td] = todayStr.split("-").map(Number);
               const lastMidnight = Date.UTC(ly, lm - 1, ld);
@@ -130,13 +138,11 @@ export function AuthProvider({ children }) {
               lastLoginDate: todayStr,
             });
 
-            if (!admin) {
-              const publicRef = doc(db, "PublicLeaderboard", user.uid);
-              await setDoc(publicRef, {
-                streak: newStreak,
-                updatedAt: new Date(),
-              }, { merge: true });
-            }
+            const publicRef = doc(db, "PublicLeaderboard", user.uid);
+            await setDoc(publicRef, {
+              streak: newStreak,
+              updatedAt: new Date(),
+            }, { merge: true });
           }
         }
       } catch (err) {
