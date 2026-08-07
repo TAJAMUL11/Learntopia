@@ -98,7 +98,7 @@ const Doc = () => {
                   { title: "Web Audio SFX System", text: "Enjoy interactive sound effects for correct/wrong answers, module completion, level-up fanfares, and badge unlocks synthesized 100% free offline in your browser. Easily toggle audio muted/unmuted in the header navigation." },
                   { title: "Personal Dashboard", text: "View your enrolled and completed courses, per-course progress bars, quiz high scores, total points earned, and your current daily streak — all consolidated in one place." },
                   { title: "Daily Login Streaks", text: "Your streak increments each calendar day you log in. If you miss a day, the streak resets. Streaks are calculated in your local timezone and displayed in the dashboard header and metrics grid." },
-                  { title: "Global & Per-Quiz Leaderboards", text: "The Global Leaderboard ranks all users by total points. Per-quiz leaderboards show top scores for each individual quiz. Leaderboard data is publicly readable for authenticated users but is separate from your private profile." },
+                  { title: "Global & Per-Quiz Leaderboards", text: "The Leaderboard ranks users by total points and individual quiz scores. The Leaderboard tab and page are visible exclusively to logged-in users to protect community rankings." },
                   { title: "Quiz Completion Indicators", text: "Completed quiz cards display a green Done badge and your best score. The Start button becomes a Retake button. Abandoning a quiz mid-way does not count as an attempt — scores are logged only on the results screen." },
                   { title: "Guest Quiz Score Preservation", text: "Take a quiz as a guest and finish it, then use the Log In or Sign Up link on the results screen. Your score is automatically saved to your profile on authentication without any data loss." },
                   { title: "AI Tutors", text: "Each course is accompanied by a specialized AI tutor with a distinct persona designed to guide learners through the subject matter." },
@@ -228,6 +228,20 @@ const Doc = () => {
               </p>
 
               <div className="mt-6 space-y-4">
+                <div className="rounded-xl border border-violet-500/20 bg-violet-500/[0.03] p-5">
+                  <p className="text-sm font-semibold text-violet-300 mb-1.5">Isolated Admin Operations Portal</p>
+                  <p className="text-sm text-ink-low leading-relaxed">
+                    Administrative platform controls operate through a dedicated, fully isolated portal at <code className="text-violet-300 font-mono text-xs">/admin</code> with its own executive layout shell — no student navigation, footer, or gamification overlays. One-tap Google Authentication with strict single-email enforcement ensures only authorized administrators can access the operations center.
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-sky-500/20 bg-sky-500/[0.03] p-5">
+                  <p className="text-sm font-semibold text-sky-300 mb-1.5">Smart Auth Guidance</p>
+                  <p className="text-sm text-ink-low leading-relaxed">
+                    Attempting to log in with an unregistered email automatically presents an interactive option to create a new account, pre-filling your entered email on the registration form. Similarly, registering with an existing email provides a 1-click option to log in without re-typing credentials.
+                  </p>
+                </div>
+
                 <div className="rounded-xl border border-violet-500/20 bg-violet-500/[0.03] p-5">
                   <p className="text-sm font-semibold text-violet-300 mb-1.5">Works Offline</p>
                   <p className="text-sm text-ink-low leading-relaxed">
