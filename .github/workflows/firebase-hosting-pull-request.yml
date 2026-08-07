@@ -21,11 +21,13 @@ jobs:
           echo "VITE_MESSAGING_SENDER_ID=${{ secrets.VITE_MESSAGING_SENDER_ID }}" >> .env
           echo "VITE_APP_ID=${{ secrets.VITE_APP_ID }}" >> .env
           npm ci && npm run build
+      # Deploy the PR preview via the official Firebase action (fast, reliable).
+      # Omitting channelId makes the action create a per-PR preview channel and
+      # comment the preview URL on the PR. Direct `npx firebase-tools` CLI in CI
+      # socket-hangs on upload — do not switch back to it.
       - name: Deploy Preview to Firebase Hosting
-        env:
-          FIREBASE_SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_LEARNTOPIA_REACT }}
-        run: |
-          printf '%s' "$FIREBASE_SA" > "$RUNNER_TEMP/gcp-key.json"
-          export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/gcp-key.json"
-          npx --yes firebase-tools hosting:channel:deploy pr-${{ github.event.number }} --project learntopia-react --non-interactive
-          rm -f "$RUNNER_TEMP/gcp-key.json"
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_LEARNTOPIA_REACT }}
+          projectId: learntopia-react
