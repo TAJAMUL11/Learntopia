@@ -67,6 +67,8 @@ The platform is designed to be fast, accessible, and mobile-friendly, with authe
 | **Contact Form** | Redesigned contact page with Firestore-backed submissions (`ContactMessages` collection). No third-party form services — messages are owned entirely and reviewable in the Firebase Console. |
 | **Thank You Page** | Dedicated `/thank-you` page after contact form submission with personalised greeting, animated check icon, and quick-nav cards to Courses and Quizzes. |
 | **Toast Notifications** | Fully styled error/success/warning toasts — solid high-contrast colours, full-width on mobile with readable padding. |
+| **Mobile Docs & Navigation** | Mobile jump pill bar on documentation page (`/doc`), responsive scrollable tables (`overflow-x-auto`), and flex-col layout conversions for seamless small-screen reading. |
+| **Delete Profile Control** | Destructive profile deletion feature in Student Dashboard with a warning modal, confirmation safety check ("DELETE"), full Firestore record wiping, and Firebase Auth account deletion. |
 
 ---
 
