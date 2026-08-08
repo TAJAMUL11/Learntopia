@@ -44,6 +44,7 @@ export const SoundProvider = ({ children }) => {
   const playStreakBurn = useCallback(() => playSound('streakBurn'), [playSound]);
   const playTimerTick = useCallback(() => playSound('timerTick'), [playSound]);
   const playTimerUrgent = useCallback(() => playSound('timerUrgent'), [playSound]);
+  const playWarningAlert = useCallback(() => playSound('warningAlert'), [playSound]);
 
   return (
     <SoundContext.Provider
@@ -60,6 +61,7 @@ export const SoundProvider = ({ children }) => {
         playStreakBurn,
         playTimerTick,
         playTimerUrgent,
+        playWarningAlert,
       }}
     >
       {children}
