@@ -1,10 +1,12 @@
 import { db } from "../firebase/firebase";
 import { getDoc, doc, collection, getDocs, deleteDoc, updateDoc, setDoc } from "firebase/firestore";
+import { deleteUser } from "firebase/auth";
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
 import { useGamification } from "../context/GamificationContext";
+import { useSound } from "../context/SoundContext";
 import Card from "./ui/Card";
 import Button from "./ui/Button";
 import Icon from "./ui/Icon";
@@ -18,6 +20,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const { currentUser, isAdmin, logOut } = useAuth();
   const { xp, levelInfo, badges: gamificationBadges } = useGamification();
+  const { playWarningAlert } = useSound();
 
   const [userDetails, setUserDetails] = useState(null);
   const [enrolledCourses, setEnrolledCourses] = useState([]);
@@ -25,6 +28,11 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [courseToUnenroll, setCourseToUnenroll] = useState(null);
   const [unenrollLoading, setUnenrollLoading] = useState(false);
+
+  // Destructive profile deletion states
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   // The owner is not a student — send them to the dedicated hidden admin portal.
   useEffect(() => {
@@ -134,6 +142,64 @@ const Dashboard = () => {
       toast.error("Failed to unenroll. Please try again.");
     } finally {
       setUnenrollLoading(false);
+    }
+  };
+
+  const handleDeleteProfile = async () => {
+    if (deleteConfirmText.trim().toUpperCase() !== "DELETE") {
+      toast.error('Please type "DELETE" to confirm profile deletion');
+      return;
+    }
+    setDeleteLoading(true);
+    try {
+      const uid = currentUser.uid;
+
+      // 1. Delete user's enrolledCourses subcollection documents
+      const coursesRef = collection(db, "Users", uid, "enrolledCourses");
+      const coursesSnap = await getDocs(coursesRef);
+      const courseDeletePromises = [];
+      coursesSnap.forEach((docSnap) => {
+        courseDeletePromises.push(deleteDoc(doc(db, "Users", uid, "enrolledCourses", docSnap.id)));
+      });
+      await Promise.all(courseDeletePromises);
+
+      // 2. Delete user's quizAttempts subcollection documents
+      const quizRef = collection(db, "Users", uid, "quizAttempts");
+      const quizSnap = await getDocs(quizRef);
+      const quizDeletePromises = [];
+      quizSnap.forEach((docSnap) => {
+        quizDeletePromises.push(deleteDoc(doc(db, "Users", uid, "quizAttempts", docSnap.id)));
+      });
+      await Promise.all(quizDeletePromises);
+
+      // 3. Delete user document from Users collection
+      await deleteDoc(doc(db, "Users", uid));
+
+      // 4. Delete user document from PublicLeaderboard collection
+      await deleteDoc(doc(db, "PublicLeaderboard", uid)).catch(() => {});
+
+      // 5. Delete Firebase Auth account
+      try {
+        await deleteUser(currentUser);
+      } catch (authErr) {
+        console.warn("Auth deletion note:", authErr);
+        if (authErr.code === "auth/requires-recent-login") {
+          await logOut().catch(() => {});
+          toast.info("Database records wiped. For security, please log in and request account deletion again.");
+          navigate("/login", { replace: true });
+          return;
+        }
+        await logOut().catch(() => {});
+      }
+
+      toast.success("Your profile and all learning records have been permanently deleted.");
+      setShowDeleteModal(false);
+      navigate("/", { replace: true });
+    } catch (err) {
+      console.error("Error deleting profile:", err);
+      toast.error(err.message || "Failed to delete profile. Please try again.");
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -345,17 +411,115 @@ const Dashboard = () => {
             </Card>
           </div>
         </div>
+
+        {/* ── Danger Zone / Profile Deletion ── */}
+        <Card className="border-red-500/20 bg-red-500/[0.02] p-5 md:p-6 mt-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h3 className="text-sm font-bold text-red-400 flex items-center gap-2">
+                <Icon name="alert-triangle" size={16} className="text-red-400" />
+                Account Control — Danger Zone
+              </h3>
+              <p className="text-xs text-ink-low mt-1 leading-relaxed max-w-xl">
+                Permanently delete your student profile, course enrollments, earned XP, badges, quiz high scores, and remove your score from the global leaderboard.
+              </p>
+            </div>
+            <Button
+              variant="danger"
+              size="sm"
+              onClick={() => {
+                playWarningAlert();
+                setShowDeleteModal(true);
+              }}
+              className="flex-none self-start sm:self-center border border-red-500/40 bg-red-500/10 hover:bg-red-500/20 text-red-300"
+            >
+              <Icon name="trash-2" size={14} />
+              Delete My Profile
+            </Button>
+          </div>
+        </Card>
       </div>
 
       {/* Unenroll confirmation */}
       {courseToUnenroll && (
-        <Modal isOpen={!!courseToUnenroll} onClose={() => setCourseToUnenroll(null)} title="Unenroll from course?">
+        <Modal 
+          isOpen={!!courseToUnenroll} 
+          onClose={() => setCourseToUnenroll(null)} 
+          title="Unenroll from course?"
+          onAction={handleUnenroll}
+          actionText="Unenroll"
+          actionVariant="danger"
+          loading={unenrollLoading}
+        >
           <p className="text-sm text-ink-low">
             Are you sure you want to unenroll from <span className="font-semibold text-ink-hi">{courseToUnenroll.title}</span>? Your progress for this course will be reset.
           </p>
-          <div className="mt-5 flex justify-end gap-2">
-            <Button variant="ghost" size="sm" onClick={() => setCourseToUnenroll(null)}>Cancel</Button>
-            <Button variant="danger" size="sm" loading={unenrollLoading} onClick={handleUnenroll}>Unenroll</Button>
+        </Modal>
+      )}
+
+      {/* Delete Profile Destructive Confirmation Modal */}
+      {showDeleteModal && (
+        <Modal
+          isOpen={showDeleteModal}
+          onClose={() => {
+            if (!deleteLoading) {
+              setShowDeleteModal(false);
+              setDeleteConfirmText("");
+            }
+          }}
+          title="Permanently Delete Your Profile?"
+          icon="alert-octagon"
+          isDestructive={true}
+          onAction={handleDeleteProfile}
+          actionText="Delete Profile Permanently"
+          actionVariant="danger"
+          loading={deleteLoading}
+          actionDisabled={deleteConfirmText.trim().toUpperCase() !== "DELETE"}
+        >
+          <div className="space-y-4">
+            <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-xs leading-relaxed text-red-200">
+              <p className="font-bold text-red-300 mb-1 flex items-center gap-1.5">
+                THIS IS A DESTRUCTIVE &amp; PERMANENT DECISION!
+              </p>
+              <p>
+                Deleting your profile will immediately erase all your data from Learntopia. Once confirmed, this action cannot be undone or recovered.
+              </p>
+            </div>
+
+            <div className="space-y-2 text-xs text-ink-low">
+              <p className="font-semibold text-ink-hi text-xs uppercase tracking-wider">The following will be deleted forever:</p>
+              <ul className="space-y-1.5 pl-1">
+                <li className="flex items-center gap-2 text-red-300">
+                  <Icon name="x-circle" size={14} className="text-red-400 flex-none" /> All course enrollments &amp; module progress
+                </li>
+                <li className="flex items-center gap-2 text-red-300">
+                  <Icon name="x-circle" size={14} className="text-red-400 flex-none" /> Total XP, Level progression &amp; earned badges
+                </li>
+                <li className="flex items-center gap-2 text-red-300">
+                  <Icon name="x-circle" size={14} className="text-red-400 flex-none" /> Quiz high scores and attempt records
+                </li>
+                <li className="flex items-center gap-2 text-red-300">
+                  <Icon name="x-circle" size={14} className="text-red-400 flex-none" /> Public Leaderboard ranking &amp; profile entry
+                </li>
+                <li className="flex items-center gap-2 text-red-300">
+                  <Icon name="x-circle" size={14} className="text-red-400 flex-none" /> Firebase User Account &amp; profile credentials
+                </li>
+              </ul>
+            </div>
+
+            <div className="pt-3 border-t border-white/10">
+              <label className="block text-xs font-semibold text-ink-hi mb-1.5">
+                To confirm, type <span className="text-red-400 font-mono font-bold">DELETE</span> below:
+              </label>
+              <input
+                type="text"
+                value={deleteConfirmText}
+                onChange={(e) => setDeleteConfirmText(e.target.value)}
+                placeholder='Type "DELETE" to confirm'
+                disabled={deleteLoading}
+                className="w-full rounded-lg border border-red-500/30 bg-white/5 px-3 py-2 text-xs font-mono text-white placeholder-ink-low/40 focus:border-red-500 focus:outline-none"
+              />
+            </div>
           </div>
         </Modal>
       )}
