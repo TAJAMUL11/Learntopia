@@ -87,20 +87,30 @@ const Navbar = () => {
           </button>
 
           {currentUser ? (
-            <div className="flex items-center gap-4">
-              <div onClick={() => navigate("/dashboard")} className="flex items-center gap-2 cursor-pointer transition-opacity hover:opacity-80">
+            <div className="flex items-center gap-3">
+              <div
+                onClick={() => navigate("/dashboard")}
+                title="View your profile & dashboard"
+                className="group flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 cursor-pointer transition-all hover:border-sky/50 hover:bg-sky/10"
+              >
                 {currentUser.photoURL ? (
-                  <img src={currentUser.photoURL} alt="Profile" referrerPolicy="no-referrer" className="h-8 w-8 rounded-full border border-white/10" />
+                  <img
+                    src={currentUser.photoURL}
+                    alt="Profile"
+                    referrerPolicy="no-referrer"
+                    className="h-6 w-6 rounded-full border border-white/20 object-cover"
+                  />
                 ) : (
-                  <div className="grid h-8 w-8 place-items-center rounded-full border border-white/10 bg-white/5 text-ink-low">
-                    <Icon name="user" size={16} />
+                  <div className="grid h-6 w-6 place-items-center rounded-full border border-white/20 bg-sky/20 text-sky">
+                    <Icon name="user" size={13} />
                   </div>
                 )}
-                <span className="text-sm font-medium text-ink-hi">
-                  Dashboard
+                <span className="text-xs font-semibold text-ink-hi group-hover:text-sky transition-colors">
+                  My Profile
                 </span>
               </div>
-              <Button variant="ghost" size="sm" onClick={handleLogout}>
+
+              <Button variant="ghost" size="sm" onClick={handleLogout} className="text-xs text-ink-low hover:text-red-400">
                 Log out
               </Button>
             </div>
@@ -145,7 +155,7 @@ const Navbar = () => {
       {/* Mobile drawer */}
       <div
         className={`overflow-hidden border-t border-white/[0.06] bg-ground-900/95 backdrop-blur-xl transition-[max-height,opacity] duration-300 ease-out md:hidden ${
-          isMenuOpen ? "max-h-[460px] opacity-100" : "max-h-0 opacity-0"
+          isMenuOpen ? "max-h-[480px] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <ul className="container-page flex flex-col gap-1 py-4">
@@ -187,19 +197,38 @@ const Navbar = () => {
           <li className="mt-2">
             {currentUser ? (
               <div className="flex flex-col gap-3">
-                <div onClick={() => { closeMenu(); navigate("/dashboard"); }} className="flex items-center gap-3 rounded-lg bg-white/5 p-3 cursor-pointer transition-colors hover:bg-white/10">
-                  {currentUser.photoURL ? (
-                    <img src={currentUser.photoURL} alt="Profile" referrerPolicy="no-referrer" className="h-10 w-10 rounded-full border border-white/10" />
-                  ) : (
-                    <div className="grid h-10 w-10 flex-none place-items-center rounded-full border border-white/10 bg-white/5 text-ink-low">
-                      <Icon name="user" size={20} />
+                <div
+                  onClick={() => { closeMenu(); navigate("/dashboard"); }}
+                  className="group flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.04] p-3 cursor-pointer transition-all hover:bg-white/[0.08]"
+                >
+                  <div className="flex items-center gap-3">
+                    {currentUser.photoURL ? (
+                      <img
+                        src={currentUser.photoURL}
+                        alt="Profile"
+                        referrerPolicy="no-referrer"
+                        className="h-9 w-9 rounded-full border border-white/20 object-cover"
+                      />
+                    ) : (
+                      <div className="grid h-9 w-9 flex-none place-items-center rounded-full border border-white/20 bg-sky/10 text-sky">
+                        <Icon name="user" size={18} />
+                      </div>
+                    )}
+
+                    <div className="flex flex-col leading-tight">
+                      <span className="text-sm font-semibold text-ink-hi group-hover:text-sky transition-colors">
+                        My Profile
+                      </span>
+                      <span className="text-xs text-ink-low mt-0.5">
+                        {currentUser.displayName || currentUser.email}
+                      </span>
                     </div>
-                  )}
-                  <span className="text-sm font-semibold text-ink-hi">
-                    Dashboard
-                  </span>
+                  </div>
+
+                  <Icon name="chevron-right" size={18} className="text-ink-low group-hover:text-sky transition-colors" />
                 </div>
-                <Button variant="ghost" fullWidth onClick={handleLogout}>
+
+                <Button variant="ghost" fullWidth onClick={handleLogout} className="text-red-400 hover:bg-red-500/10">
                   Log out
                 </Button>
               </div>

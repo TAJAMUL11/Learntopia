@@ -175,4 +175,10 @@ export const soundEffects = {
   timerUrgent() {
     playTone({ freq: 950, duration: 0.06, type: 'sine', startGain: 0.15 });
   },
+
+  // Distinct low dual-tone alert chime for critical warnings & destructive actions
+  warningAlert() {
+    playTone({ freq: 280, duration: 0.18, type: 'sawtooth', startGain: 0.18, delay: 0 });
+    playTone({ freq: 210, duration: 0.25, type: 'sawtooth', startGain: 0.2, delay: 0.12 });
+  },
 };

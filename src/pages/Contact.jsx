@@ -8,8 +8,8 @@ import Icon from "../Components/ui/Icon";
 const CONTACT_CARDS = [
   {
     icon: "mail",
-    label: "Email us directly",
-    value: "tajamul.270@gmail.com",
+    label: "Direct Email",
+    value: "Send us an email →",
     href: "mailto:tajamul.270@gmail.com",
     color: "from-violet-500/20 to-violet-600/10 border-violet-500/20",
     iconColor: "text-violet-400",
@@ -128,8 +128,8 @@ const Contact = () => {
       {/* ── Main grid ── */}
       <div className="mx-auto mt-14 grid max-w-6xl gap-8 lg:grid-cols-[1fr_1.5fr]">
 
-        {/* ── Left: info sidebar ── */}
-        <div className="flex flex-col gap-4">
+        {/* ── Info sidebar (second on mobile, first/left on lg+) ── */}
+        <div className="order-2 lg:order-1 flex flex-col gap-4">
           {CONTACT_CARDS.map((card) => (
             <div
               key={card.label}
@@ -167,8 +167,8 @@ const Contact = () => {
           ))}
         </div>
 
-        {/* ── Right: form ── */}
-        <div className="relative overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.03] p-7 backdrop-blur-md md:p-9">
+        {/* ── Contact form (first on mobile, second/right on lg+) ── */}
+        <div className="order-1 lg:order-2 relative overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.03] p-7 backdrop-blur-md md:p-9">
           {/* Ambient glows */}
           <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-violet-600/8 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-sky-600/6 blur-3xl" />

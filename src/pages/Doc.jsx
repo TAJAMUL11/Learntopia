@@ -38,9 +38,9 @@ const Doc = () => {
           <p className="mt-2 text-xs text-ink-low/60">Last updated: {LAST_UPDATED}</p>
         </div>
 
-        <div className="flex gap-12">
+        <div className="xl:flex xl:gap-12">
 
-          {/* Left sidebar nav */}
+          {/* Left sidebar nav for desktop */}
           <aside className="hidden w-56 flex-none xl:block">
             <div className="sticky top-24">
               <p className="mb-3 text-[11px] font-bold uppercase tracking-widest text-ink-low/50">On this page</p>
@@ -57,6 +57,22 @@ const Doc = () => {
               </nav>
             </div>
           </aside>
+
+          {/* Mobile / Tablet horizontal nav pills */}
+          <div className="xl:hidden mb-8 overflow-x-auto pb-2 scrollbar-none">
+            <p className="mb-2 text-[11px] font-bold uppercase tracking-widest text-ink-low/50">Quick jump</p>
+            <div className="flex items-center gap-2 w-max">
+              {NAV.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => scrollTo(item.id)}
+                  className="rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 text-xs font-medium text-ink-low hover:border-violet-500/50 hover:bg-violet-500/10 hover:text-ink-hi transition-all"
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </div>
 
           {/* Main content */}
           <main className="min-w-0 flex-1 space-y-14">
@@ -147,30 +163,32 @@ const Doc = () => {
               <h2 className="text-2xl font-bold text-ink-hi border-b border-white/[0.06] pb-3 mb-5">Gamified Courses &amp; Modules</h2>
               <p className="text-ink-low leading-relaxed">Each course is designed for learners aged 7-14 with a gamified, step-by-step lesson experience. Modules must be completed sequentially to unlock the next challenge.</p>
 
-              <div className="mt-6 rounded-xl border border-white/[0.07] overflow-hidden">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b border-white/[0.07] bg-white/[0.02]">
-                      <th className="px-5 py-3.5 text-left font-semibold text-ink-hi">Feature / Component</th>
-                      <th className="px-5 py-3.5 text-left font-semibold text-ink-hi">Description &amp; Behavior</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/[0.04]">
-                    {[
-                      { concept: "Step-by-Step Lesson Player", behaviour: "Presents module content one card at a time with distinct visual themes (Story, Concept, Fun Fact, Pro Tip, Example, Activity, Recap) and code syntax highlighting." },
-                      { concept: "Multi-Type Exercise Engine", behaviour: "Tests understanding using 4 interactive formats: Multiple Choice (MCQ), True/False, Fill-in-the-Blank, and Tap-to-Connect Matching Pairs." },
-                      { concept: "Gamification & Level System", behaviour: "Earn +50 XP per completed module and +100 XP per completed course. Level up from Rookie Coder (Level 1) to Grandmaster (Level 5)." },
-                      { concept: "Badges & Celebrations", behaviour: "Unlocks unique course badges (e.g. Python Pioneer 🐍, Math Wizard 🔮) with celebratory full-screen overlays upon achievement." },
-                      { concept: "Course progress", behaviour: "Tracks completed modules in real time with progress bars, saved automatically. Resume anytime from your Student Dashboard." },
-                      { concept: "Course reset", behaviour: "Reset completed courses anytime via the Start Again button to replay lessons and re-earn practice." },
-                    ].map((row) => (
-                      <tr key={row.concept}>
-                        <td className="px-5 py-3.5 font-medium text-ink-hi whitespace-nowrap">{row.concept}</td>
-                        <td className="px-5 py-3.5 text-ink-low">{row.behaviour}</td>
+              <div className="mt-6 rounded-xl border border-white/[0.07] overflow-hidden bg-white/[0.01]">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm min-w-[500px]">
+                    <thead>
+                      <tr className="border-b border-white/[0.07] bg-white/[0.02]">
+                        <th className="px-5 py-3.5 text-left font-semibold text-ink-hi w-2/5 sm:w-1/3">Feature / Component</th>
+                        <th className="px-5 py-3.5 text-left font-semibold text-ink-hi w-3/5 sm:w-2/3">Description &amp; Behavior</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="divide-y divide-white/[0.04]">
+                      {[
+                        { concept: "Step-by-Step Lesson Player", behaviour: "Presents module content one card at a time with distinct visual themes (Story, Concept, Fun Fact, Pro Tip, Example, Activity, Recap) and code syntax highlighting." },
+                        { concept: "Multi-Type Exercise Engine", behaviour: "Tests understanding using 4 interactive formats: Multiple Choice (MCQ), True/False, Fill-in-the-Blank, and Tap-to-Connect Matching Pairs." },
+                        { concept: "Gamification & Level System", behaviour: "Earn +50 XP per completed module and +100 XP per completed course. Level up from Rookie Coder (Level 1) to Grandmaster (Level 5)." },
+                        { concept: "Badges & Celebrations", behaviour: "Unlocks unique course badges (e.g. Python Pioneer 🐍, Math Wizard 🔮) with celebratory full-screen overlays upon achievement." },
+                        { concept: "Course progress", behaviour: "Tracks completed modules in real time with progress bars, saved automatically. Resume anytime from your Student Dashboard." },
+                        { concept: "Course reset", behaviour: "Reset completed courses anytime via the Start Again button to replay lessons and re-earn practice." },
+                      ].map((row) => (
+                        <tr key={row.concept}>
+                          <td className="px-5 py-3.5 font-medium text-ink-hi align-top">{row.concept}</td>
+                          <td className="px-5 py-3.5 text-ink-low align-top leading-relaxed">{row.behaviour}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </section>
 
@@ -192,8 +210,8 @@ const Doc = () => {
                   { label: "Guest attempts", value: "Guests can take any quiz. On the results screen, links allow login or signup with automatic score transfer." },
                   { label: "Retake", value: "Completed quizzes show a Retake button. High scores are tracked — only your best score per quiz is displayed." },
                 ].map((item) => (
-                  <div key={item.label} className="flex gap-4 rounded-lg border border-white/[0.05] bg-white/[0.015] px-5 py-3.5">
-                    <span className="w-36 flex-none text-xs font-semibold uppercase tracking-wider text-ink-low/60 pt-0.5">{item.label}</span>
+                  <div key={item.label} className="flex flex-col sm:flex-row gap-1.5 sm:gap-4 rounded-lg border border-white/[0.05] bg-white/[0.015] px-4 sm:px-5 py-3.5">
+                    <span className="sm:w-36 flex-none text-xs font-semibold uppercase tracking-wider text-violet-400 sm:text-ink-low/60 pt-0.5">{item.label}</span>
                     <span className="text-sm text-ink-low leading-relaxed">{item.value}</span>
                   </div>
                 ))}
@@ -211,6 +229,7 @@ const Doc = () => {
                   "Active courses — lists in-progress courses with a live progress bar and a Continue button.",
                   "Completed courses — lists all fully completed courses.",
                   "Quiz high scores — shows your best score per quiz across all attempts.",
+                  "Delete Profile — option to permanently delete your account and all learning data anytime.",
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-3 text-sm text-ink-low">
                     <Icon name="arrow-right" size={14} className="mt-1 flex-none text-violet-400" />
@@ -229,9 +248,9 @@ const Doc = () => {
 
               <div className="mt-6 space-y-4">
                 <div className="rounded-xl border border-violet-500/20 bg-violet-500/[0.03] p-5">
-                  <p className="text-sm font-semibold text-violet-300 mb-1.5">Isolated Admin Operations Portal</p>
+                  <p className="text-sm font-semibold text-violet-300 mb-1.5">Strict Account Privacy &amp; Data Isolation</p>
                   <p className="text-sm text-ink-low leading-relaxed">
-                    Administrative platform controls operate through a dedicated, fully isolated portal at <code className="text-violet-300 font-mono text-xs">/admin</code> with its own executive layout shell — no student navigation, footer, or gamification overlays. One-tap Google Authentication with strict single-email enforcement ensures only authorized administrators can access the operations center.
+                    Learntopia uses enterprise-grade encryption and strict account isolation to keep your student profile safe. Your personal learning history, course notes, and account settings can only be accessed by you when signed in.
                   </p>
                 </div>
 

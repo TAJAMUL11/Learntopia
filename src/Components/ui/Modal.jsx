@@ -14,7 +14,9 @@ const Modal = ({
   onAction, 
   actionVariant = "primary", 
   isDestructive = false,
-  loading = false
+  loading = false,
+  actionDisabled = false,
+  showFooter = true
 }) => {
   useEffect(() => {
     if (isOpen) {
@@ -28,6 +30,8 @@ const Modal = ({
   }, [isOpen]);
 
   if (!isOpen) return null;
+
+  const shouldRenderFooter = showFooter && Boolean(onAction);
 
   return createPortal(
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
@@ -55,18 +59,26 @@ const Modal = ({
           </button>
         </div>
         
-        <div className="mb-8 text-ink">
+        <div className="mb-6 text-ink">
           {children}
         </div>
         
-        <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-          <Button variant="secondary" onClick={onClose} disabled={loading} className="w-full sm:w-auto">
-            Cancel
-          </Button>
-          <Button variant={actionVariant} onClick={onAction} loading={loading} className="w-full sm:w-auto">
-            {actionText}
-          </Button>
-        </div>
+        {shouldRenderFooter && (
+          <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+            <Button variant="secondary" onClick={onClose} disabled={loading} className="w-full sm:w-auto">
+              Cancel
+            </Button>
+            <Button 
+              variant={actionVariant} 
+              onClick={onAction} 
+              loading={loading} 
+              disabled={actionDisabled || loading} 
+              className="w-full sm:w-auto"
+            >
+              {actionText}
+            </Button>
+          </div>
+        )}
       </Card>
     </div>,
     document.body

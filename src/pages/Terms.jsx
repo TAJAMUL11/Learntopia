@@ -161,7 +161,7 @@ const Terms = () => (
         <p className="mt-1.5 text-sm text-ink-low">
           Contact us at{" "}
           <a href="mailto:tajamul.270@gmail.com" className="text-violet-400 hover:underline underline-offset-2">
-            tajamul.270@gmail.com
+            Email Support
           </a>
           {" "}or review our{" "}
           <Link to="/privacy" className="text-violet-400 hover:underline underline-offset-2">Privacy Policy</Link>.
