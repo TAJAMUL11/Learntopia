@@ -1,12 +1,14 @@
 import { useEffect } from "react";
 import { useGamification } from "../context/GamificationContext";
 import { useSound } from "../context/SoundContext";
+import { useLanguage } from "../context/LanguageContext";
 import Icon from "./ui/Icon";
 import Button from "./ui/Button";
 
 const CelebrationOverlay = () => {
   const { celebration, closeCelebration } = useGamification();
   const { playLevelUp, playBadgeUnlock } = useSound();
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (celebration) {
@@ -70,7 +72,7 @@ const CelebrationOverlay = () => {
             className="w-full shadow-[0_0_20px_rgba(139,92,246,0.4)] hover:shadow-[0_0_30px_rgba(139,92,246,0.6)]"
             onClick={closeCelebration}
           >
-            Awesome! 🚀
+            {t("gamification.close")}
           </Button>
         </div>
       </div>

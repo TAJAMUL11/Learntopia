@@ -4,6 +4,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../firebase/firebase";
 import { useAuth } from "../context/AuthContext";
 import { useSound } from "../context/SoundContext";
+import { useLanguage } from "../context/LanguageContext";
 import { setDoc, doc, addDoc, collection, updateDoc, increment, getDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import Card from "../Components/ui/Card";
@@ -20,6 +21,7 @@ const SignUp = () => {
   const location = useLocation();
   const { googleSignIn, currentUser, logOut } = useAuth();
   const { playLevelUp, playIncorrect } = useSound();
+  const { t } = useLanguage();
 
   const returnTo = location.state?.returnTo || "/dashboard";
 
@@ -245,9 +247,9 @@ const SignUp = () => {
         <Card className="w-full p-6 md:p-8">
           <div className="mb-7 flex flex-col items-center text-center">
             <img src={signUp} alt="" className="mb-2 max-w-[56px]" />
-            <h2 className="text-2xl font-extrabold text-ink-hi md:text-3xl">Create an account</h2>
+            <h2 className="text-2xl font-extrabold text-ink-hi md:text-3xl">{t("auth.signUpTitle")}</h2>
             <p className="mt-1 text-sm text-ink-low">
-              Join the <span className="font-semibold text-sky">Learntopia</span> community.
+              {t("auth.signUpSubtitle")}
             </p>
           </div>
 
@@ -257,25 +259,25 @@ const SignUp = () => {
               id="fullName"
               type="text"
               icon="user"
-              placeholder="Enter your full name"
+              placeholder="Enter your name"
               required
               value={userFName}
               onChange={(e) => setUserFName(e.target.value)}
             />
 
             <Field
-              label="Email"
+              label={t("auth.emailLabel")}
               id="email"
               type="email"
               icon="mail"
-              placeholder="Enter your email"
+              placeholder="name@example.com"
               required
               value={userEmail}
               onChange={(e) => setUserEmail(e.target.value)}
             />
 
             <Field
-              label="Password"
+              label={t("auth.passwordLabel")}
               id="password"
               type={isPasswordVisible ? "text" : "password"}
               placeholder="6+ characters"
@@ -306,12 +308,12 @@ const SignUp = () => {
               <span>
                 I agree to the{" "}
                 <Link to="/terms" target="_blank" rel="noreferrer" className="text-sky hover:underline">Terms of Service</Link>,{" "}
-                <Link to="/privacy" target="_blank" rel="noreferrer" className="text-sky hover:underline">Privacy Policy</Link>, and Notification settings.
+                <Link to="/privacy" target="_blank" rel="noreferrer" className="text-sky hover:underline">Privacy Policy</Link>.
               </span>
             </label>
 
             <Button type="submit" fullWidth loading={loading} className="mt-1">
-              {loading ? "Creating account…" : "Create account"}
+              {loading ? "..." : t("nav.signUp")}
             </Button>
           </form>
 
@@ -321,17 +323,17 @@ const SignUp = () => {
             className="mt-4 flex w-full items-center justify-center gap-3 rounded-xl border border-white/[0.1] bg-white/[0.04] p-3 text-xs font-semibold uppercase tracking-wider text-ink-hi transition-colors hover:bg-white/[0.08]"
           >
             <img src={google} alt="" className="h-5 w-5 object-contain" />
-            Sign up with Google
+            {t("auth.googleAuth")}
           </button>
 
           <p className="mt-6 text-center text-xs text-ink-low">
-            Already have an account?{" "}
+            {t("auth.alreadyHaveAccount")}{" "}
             <button
               type="button"
               onClick={() => navigate("/login", { state: { email: userEmail, returnTo } })}
               className="font-bold text-sky hover:underline"
             >
-              Sign in
+              {t("auth.signInHere")}
             </button>
           </p>
         </Card>

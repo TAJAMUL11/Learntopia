@@ -4,6 +4,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../firebase/firebase";
 import { useAuth } from "../context/AuthContext";
 import { useSound } from "../context/SoundContext";
+import { useLanguage } from "../context/LanguageContext";
 import { setDoc, doc, addDoc, collection, updateDoc, increment, getDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import Card from "../Components/ui/Card";
@@ -20,6 +21,7 @@ const Login = () => {
   const location = useLocation();
   const { googleSignIn, currentUser, logOut } = useAuth();
   const { playLevelUp, playIncorrect } = useSound();
+  const { t } = useLanguage();
 
   const returnTo = location.state?.returnTo || "/dashboard";
 
@@ -219,29 +221,29 @@ const Login = () => {
         <Card className="w-full p-6 md:p-8">
           <div className="mb-7 flex flex-col items-center text-center">
             <img src={signIn} alt="" className="mb-2 max-w-[56px]" />
-            <h2 className="text-2xl font-extrabold text-ink-hi md:text-3xl">Welcome back</h2>
+            <h2 className="text-2xl font-extrabold text-ink-hi md:text-3xl">{t("auth.loginTitle")}</h2>
             <p className="mt-1 text-sm text-ink-low">
-              We&rsquo;re <span className="font-semibold text-sky">happy</span> to see you again.
+              {t("auth.loginSubtitle")}
             </p>
           </div>
 
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <Field
-              label="Email"
+              label={t("auth.emailLabel")}
               id="email"
               type="email"
               icon="mail"
-              placeholder="Enter your email"
+              placeholder="name@example.com"
               required
               value={userEmail}
               onChange={(e) => setUserEmail(e.target.value)}
             />
 
             <Field
-              label="Password"
+              label={t("auth.passwordLabel")}
               id="password"
               type={isPasswordVisible ? "text" : "password"}
-              placeholder="Your password"
+              placeholder="••••••••"
               required
               minLength={6}
               value={userPassword}
@@ -272,28 +274,28 @@ const Login = () => {
             </div>
 
             <Button type="submit" fullWidth loading={loading} className="mt-1">
-              {loading ? "Signing in…" : "Log in"}
+              {loading ? "..." : t("nav.login")}
             </Button>
           </form>
 
           <button
             type="button"
             onClick={handleGoogleSignIn}
-            className="mt-4 flex w-full items-center justify-center gap-3 rounded-xl border border-white/[0.1] bg-white/[0.04] p-3 text-xs font-semibold uppercase tracking-wider text-ink-hi transition-colors hover:bg-white/[0.08]"
+            className="mt-3 flex w-full items-center justify-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.03] py-3 text-sm font-semibold text-ink-hi transition-colors hover:bg-white/[0.07]"
           >
-            <img src={google} alt="" className="h-5 w-5 object-contain" />
-            Log in with Google
+            <img src={google} alt="" className="h-5 w-5" />
+            {t("auth.googleAuth")}
           </button>
 
           <p className="mt-6 text-center text-xs text-ink-low">
-            Don&rsquo;t have an account?{" "}
-            <button
-              type="button"
-              onClick={() => navigate("/signUp", { state: { email: userEmail, returnTo } })}
-              className="font-bold text-sky hover:underline"
+            {t("auth.dontHaveAccount")}{" "}
+            <Link
+              to="/signUp"
+              state={{ returnTo }}
+              className="font-semibold text-sky transition-colors hover:underline"
             >
-              Register here
-            </button>
+              {t("auth.registerHere")}
+            </Link>
           </p>
         </Card>
       </div>
