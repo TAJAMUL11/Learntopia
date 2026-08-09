@@ -3,6 +3,7 @@ import Button from "../Components/ui/Button";
 import Badge from "../Components/ui/Badge";
 import Icon from "../Components/ui/Icon";
 import StatsSection from "../Components/StatsSection";
+import { useLanguage } from "../context/LanguageContext";
 
 import solution from "../assets/Icons/solution.png";
 import atoms from "../assets/Icons/atoms.png";
@@ -22,16 +23,19 @@ const VALUE_PROPS = [
     icon: "book",
     title: "Interactive courses",
     text: "Learn practical, industry-relevant skills through focused, beginner-friendly course tracks.",
+    to: "/courses",
   },
   {
     icon: "clock",
     title: "Timed quiz challenges",
     text: "Test yourself against the clock with instant feedback and clear, honest scoring.",
+    to: "/quiz",
   },
   {
     icon: "trophy",
     title: "Track your progress",
     text: "Sign in to save every attempt and watch your personal high scores climb over time.",
+    to: "/dashboard",
   },
 ];
 
@@ -56,6 +60,7 @@ const GLOW_COLORS = ["via-violet-500/60", "via-sky-500/60", "via-amber-500/60"];
 
 const Home = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   return (
     <div className="container-page py-16 md:py-24">
@@ -63,16 +68,16 @@ const Home = () => {
       {/* ── HERO ── */}
       <section className="mx-auto flex max-w-4xl flex-col items-center text-center">
         <div className="animate-fade-up">
-          <Badge variant="sky">Interactive e-learning platform</Badge>
+          <Badge variant="sky">{t("hero.badge")}</Badge>
         </div>
 
         <h1
-          className="mt-6 animate-fade-up text-balance text-4xl font-black leading-[1.1] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
+          className="mt-6 animate-fade-up text-balance text-4xl font-black leading-[1.15] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
           style={{ animationDelay: "0.05s" }}
         >
-          <span className="text-ink-hi">Build your </span>
-          <span className="text-gradient">skills</span>
-          <span className="text-ink-hi"> online</span>
+          <span className="text-ink-hi">{t("hero.titleStart")} </span>
+          <span className="text-gradient">{t("hero.titleAccent")}</span>
+          <span className="text-ink-hi"> {t("hero.titleEnd")}</span>
         </h1>
 
         {/* Feature icon chips */}
@@ -94,21 +99,20 @@ const Home = () => {
           className="mt-6 max-w-2xl animate-fade-up text-base leading-relaxed text-ink sm:mt-8 sm:text-lg md:text-xl"
           style={{ animationDelay: "0.15s" }}
         >
-          Learn and sharpen your skills with interactive courses and real-time skill tests, built for
-          people serious about growing into future professionals.
+          {t("hero.subtitle")}
         </p>
 
-        {/* CTA buttons — full-width when stacked on mobile, auto width side-by-side on sm+ */}
+        {/* CTA buttons */}
         <div
           className="mt-10 flex w-full animate-fade-up flex-col items-center gap-3 sm:w-auto sm:flex-row"
           style={{ animationDelay: "0.2s" }}
         >
           <Button size="lg" onClick={() => navigate("/courses")} className="w-full sm:w-auto">
-            Explore courses
+            {t("hero.exploreCourses")}
             <Icon name="arrow" size={18} />
           </Button>
           <Button variant="secondary" size="lg" onClick={() => navigate("/quiz")} className="w-full sm:w-auto">
-            Take a quiz
+            {t("hero.takeQuiz")}
           </Button>
         </div>
 
@@ -132,7 +136,7 @@ const Home = () => {
               <img src={star} alt="" className="h-4 w-4" /> 4.8
             </span>
             <span className="text-ink-low">·</span>
-            <span>Loved by 2,000+ learners</span>
+            <span>{t("home.lovedBy")}</span>
           </div>
         </div>
       </section>
@@ -143,38 +147,42 @@ const Home = () => {
       {/* ── VALUE PROPS ── */}
       <section className="mt-24 md:mt-32">
         <div className="mb-10 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-low">Why Learntopia</p>
-          <h2 className="mt-2 text-2xl font-bold text-ink-hi sm:text-3xl">Everything you need to grow</h2>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-low">{t("home.whyEyebrow")}</p>
+          <h2 className="mt-2 text-2xl font-bold text-ink-hi sm:text-3xl">{t("home.whyTitle")}</h2>
         </div>
 
         <div className="grid gap-5 md:grid-cols-3">
-          {VALUE_PROPS.map((v, i) => (
-            <div
-              key={v.title}
-              className="group relative overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.03] p-7 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-white/[0.13] hover:shadow-[0_0_40px_-8px_rgba(139,99,227,0.25)]"
-            >
-              {/* Top glow line on hover */}
-              <div className={`absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent ${GLOW_COLORS[i]} to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100`} />
+          {VALUE_PROPS.map((v, i) => {
+            const propKey = i === 0 ? "val1" : i === 1 ? "val2" : "val3";
+            return (
+              <div
+                key={v.to}
+                onClick={() => navigate(v.to)}
+                className="group relative cursor-pointer overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.03] p-7 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-white/[0.13] hover:shadow-[0_0_40px_-8px_rgba(139,99,227,0.25)]"
+              >
+                {/* Top glow line on hover */}
+                <div className={`absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent ${GLOW_COLORS[i]} to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100`} />
 
-              {/* Number accent */}
-              <span className="absolute right-6 top-5 select-none text-5xl font-black leading-none text-white/[0.04]">
-                0{i + 1}
-              </span>
+                {/* Number accent */}
+                <span className="absolute right-6 top-5 select-none text-5xl font-black leading-none text-white/[0.04]">
+                  0{i + 1}
+                </span>
 
-              {/* Icon */}
-              <div className={`grid h-12 w-12 place-items-center rounded-xl border bg-gradient-to-br ${ICON_GRADIENTS[i]} ${ICON_COLORS[i]} transition-transform duration-300 group-hover:scale-110`}>
-                <Icon name={v.icon} size={22} />
+                {/* Icon */}
+                <div className={`grid h-12 w-12 place-items-center rounded-xl border bg-gradient-to-br ${ICON_GRADIENTS[i]} ${ICON_COLORS[i]} transition-transform duration-300 group-hover:scale-110`}>
+                  <Icon name={v.icon} size={22} />
+                </div>
+
+                <h3 className="mt-5 text-lg font-bold text-ink-hi">{t(`home.${propKey}Title`)}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-ink-low">{t(`home.${propKey}Text`)}</p>
+
+                {/* Bottom CTA hint */}
+                <div className={`mt-5 flex items-center gap-1.5 text-xs font-semibold ${ICON_COLORS[i]} opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100`}>
+                  {t("home.learnMore")} <span>→</span>
+                </div>
               </div>
-
-              <h3 className="mt-5 text-lg font-bold text-ink-hi">{v.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-ink-low">{v.text}</p>
-
-              {/* Bottom CTA hint */}
-              <div className={`mt-5 flex items-center gap-1.5 text-xs font-semibold ${ICON_COLORS[i]} opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100`}>
-                Learn more <span>→</span>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -185,27 +193,30 @@ const Home = () => {
         <div className="relative overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.03] p-8 backdrop-blur-md">
           <div className="pointer-events-none absolute -bottom-12 -left-12 h-48 w-48 rounded-full bg-violet-600/10 blur-3xl" />
 
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-low">Subject fields</p>
-          <h3 className="mt-1.5 text-lg font-bold text-ink-hi">What do you want to learn?</h3>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-low">{t("home.subjectEyebrow")}</p>
+          <h3 className="mt-1.5 text-lg font-bold text-ink-hi">{t("home.subjectTitle")}</h3>
 
           <div className="mt-5 flex flex-wrap gap-2.5">
-            {SUBJECTS.map((s) => (
-              <button
-                key={s.label}
-                onClick={() => navigate("/courses")}
-                className="flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.04] px-4 py-2 text-sm font-medium text-ink transition-all duration-200 hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-ink-hi"
-              >
-                <span>{s.emoji}</span>
-                {s.label}
-              </button>
-            ))}
+            {SUBJECTS.map((s, i) => {
+              const subKeys = ["Science", "Tech", "Marketing", "Arts", "Finance", "Languages", "Media"];
+              return (
+                <button
+                  key={s.label}
+                  onClick={() => navigate("/courses")}
+                  className="flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.04] px-4 py-2 text-sm font-medium text-ink transition-all duration-200 hover:border-violet-500/40 hover:bg-violet-500/10 hover:text-ink-hi"
+                >
+                  <span>{s.emoji}</span>
+                  {t(`home.subject${subKeys[i]}`)}
+                </button>
+              );
+            })}
           </div>
 
           <button
             onClick={() => navigate("/courses")}
             className="mt-6 flex items-center gap-2 text-sm font-semibold text-violet-400 transition-all duration-200 hover:gap-3 hover:text-violet-300"
           >
-            Browse all courses <span>→</span>
+            {t("home.browseAll")} <span>→</span>
           </button>
         </div>
 
@@ -216,21 +227,21 @@ const Home = () => {
           {/* Decorative large quote mark */}
           <span className="pointer-events-none absolute right-7 top-4 select-none text-[7rem] font-black leading-none text-white/[0.04]">&ldquo;</span>
 
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-low">Why keep learning</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-low">{t("home.quoteEyebrow")}</p>
 
           <blockquote className="relative mt-5 text-xl font-semibold italic leading-relaxed text-ink-hi sm:text-2xl">
-            &ldquo;Continuous learning is the minimum requirement for success in any field.&rdquo;
+            &ldquo;{t("home.quoteText")}&rdquo;
           </blockquote>
 
           <div className="mt-6 flex items-center gap-3">
             <div className="h-px flex-1 bg-gradient-to-r from-violet-500/30 to-transparent" />
             <p className="bg-gradient-to-r from-violet-400 to-sky bg-clip-text text-sm font-bold tracking-wide text-transparent">
-              — Brian Tracy
+              — {t("home.quoteAuthor")}
             </p>
           </div>
 
           <p className="mt-4 text-sm leading-relaxed text-ink-low">
-            Every course you complete brings you one step closer to the professional you want to become.
+            {t("home.quoteSubtext")}
           </p>
         </div>
       </section>

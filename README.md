@@ -43,6 +43,7 @@ The platform is designed to be fast, accessible, and mobile-friendly, with authe
 
 | Feature | Description |
 |---|---|
+| **Multi-Language Translator (i18n)** | Global localization switcher supporting English 🇺🇸, Spanish 🇪🇸, French 🇫🇷, German 🇩🇪, and Arabic 🇦🇪 with dynamic RTL layout rendering. |
 | **Gamified Course Overhaul** | Step-by-step interactive courses designed for kids aged 7-14 with rich learning cards (Story, Concept, Fun Fact, Pro Tip, Example, Activity, Recap). |
 | **Web Audio SFX System** | Native Web Audio API sound synthesizer ($0 cost, 0 dependencies) playing audio feedback for clicks, correct answers, module finishes, level-ups, and badge unlocks with persistent mute toggle. |
 | **LessonPlayer Engine** | Paginated step-by-step lesson player with visual theme cards, progress dots, and code syntax blocks. |

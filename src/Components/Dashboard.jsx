@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
 import { useGamification } from "../context/GamificationContext";
 import { useSound } from "../context/SoundContext";
+import { useLanguage } from "../context/LanguageContext";
 import Card from "./ui/Card";
 import Button from "./ui/Button";
 import Icon from "./ui/Icon";
@@ -21,6 +22,7 @@ const Dashboard = () => {
   const { currentUser, isAdmin, logOut } = useAuth();
   const { xp, levelInfo, badges: gamificationBadges } = useGamification();
   const { playWarningAlert } = useSound();
+  const { t } = useLanguage();
 
   const [userDetails, setUserDetails] = useState(null);
   const [enrolledCourses, setEnrolledCourses] = useState([]);
@@ -122,15 +124,16 @@ const Dashboard = () => {
   const handleLogout = async () => {
     try {
       await logOut();
-      toast.success("You've been logged out");
-      navigate("/login", { replace: true });
-    } catch (error) {
-      toast.error(error.message);
+      toast.success("Logged out safely!");
+      navigate("/", { replace: true });
+    } catch (err) {
+      console.error("Logout failed:", err);
+      toast.error("Failed to log out.");
     }
   };
 
-  const handleUnenroll = async () => {
-    if (!courseToUnenroll) return;
+  const handleUnenrollConfirm = async () => {
+    if (!courseToUnenroll || !currentUser) return;
     setUnenrollLoading(true);
     try {
       await deleteDoc(doc(db, "Users", currentUser.uid, "enrolledCourses", courseToUnenroll.courseId.toString()));
@@ -147,56 +150,23 @@ const Dashboard = () => {
 
   const handleDeleteProfile = async () => {
     if (deleteConfirmText.trim().toUpperCase() !== "DELETE") {
-      toast.error('Please type "DELETE" to confirm profile deletion');
+      playWarningAlert();
+      toast.error("Please type DELETE to confirm profile removal.");
       return;
     }
+
     setDeleteLoading(true);
     try {
       const uid = currentUser.uid;
-
-      // 1. Delete user's enrolledCourses subcollection documents
-      const coursesRef = collection(db, "Users", uid, "enrolledCourses");
-      const coursesSnap = await getDocs(coursesRef);
-      const courseDeletePromises = [];
-      coursesSnap.forEach((docSnap) => {
-        courseDeletePromises.push(deleteDoc(doc(db, "Users", uid, "enrolledCourses", docSnap.id)));
-      });
-      await Promise.all(courseDeletePromises);
-
-      // 2. Delete user's quizAttempts subcollection documents
-      const quizRef = collection(db, "Users", uid, "quizAttempts");
-      const quizSnap = await getDocs(quizRef);
-      const quizDeletePromises = [];
-      quizSnap.forEach((docSnap) => {
-        quizDeletePromises.push(deleteDoc(doc(db, "Users", uid, "quizAttempts", docSnap.id)));
-      });
-      await Promise.all(quizDeletePromises);
-
-      // 3. Delete user document from Users collection
-      await deleteDoc(doc(db, "Users", uid));
-
-      // 4. Delete user document from PublicLeaderboard collection
-      await deleteDoc(doc(db, "PublicLeaderboard", uid)).catch(() => {});
-
-      // 5. Delete Firebase Auth account
-      try {
-        await deleteUser(currentUser);
-      } catch (authErr) {
-        console.warn("Auth deletion note:", authErr);
-        if (authErr.code === "auth/requires-recent-login") {
-          await logOut().catch(() => {});
-          toast.info("Database records wiped. For security, please log in and request account deletion again.");
-          navigate("/login", { replace: true });
-          return;
-        }
-        await logOut().catch(() => {});
-      }
-
-      toast.success("Your profile and all learning records have been permanently deleted.");
-      setShowDeleteModal(false);
+      await Promise.all([
+        deleteDoc(doc(db, "Users", uid)).catch(() => {}),
+        deleteDoc(doc(db, "PublicLeaderboard", uid)).catch(() => {}),
+      ]);
+      await deleteUser(currentUser);
+      toast.success("Profile deleted successfully. We're sad to see you go!");
       navigate("/", { replace: true });
     } catch (err) {
-      console.error("Error deleting profile:", err);
+      console.error("Profile deletion error:", err);
       toast.error(err.message || "Failed to delete profile. Please try again.");
     } finally {
       setDeleteLoading(false);
@@ -234,7 +204,7 @@ const Dashboard = () => {
             icon="user"
             title="No active profile"
             description="Please log in to view your dashboard."
-            action={<Button onClick={() => navigate("/login")}>Log in now</Button>}
+            action={<Button onClick={() => navigate("/login")}>{t("nav.login")}</Button>}
           />
         </Card>
       </div>
@@ -242,10 +212,10 @@ const Dashboard = () => {
   }
 
   const METRICS = [
-    { icon: "zap", emoji: null, label: "Total XP", value: xp, tint: "text-violet-300", ring: "border-violet-500/20 bg-violet-500/[0.07]" },
-    { icon: null, emoji: "🔥", label: "Day Streak", value: streak, tint: "text-orange-300", ring: "border-orange-500/20 bg-orange-500/[0.06]" },
-    { icon: "book", emoji: null, label: "Enrolled", value: enrolledCourses.length, tint: "text-sky", ring: "border-white/[0.08] bg-white/[0.02]" },
-    { icon: "check-circle", emoji: null, label: "Completed", value: completedCourses.length, tint: "text-emerald-400", ring: "border-white/[0.08] bg-white/[0.02]" },
+    { icon: "zap", emoji: null, label: t("dashboard.totalXp"), value: xp, tint: "text-violet-300", ring: "border-violet-500/20 bg-violet-500/[0.07]" },
+    { icon: null, emoji: "🔥", label: t("dashboard.dayStreak"), value: streak, tint: "text-orange-300", ring: "border-orange-500/20 bg-orange-500/[0.06]" },
+    { icon: "book", emoji: null, label: t("dashboard.enrolled"), value: enrolledCourses.length, tint: "text-sky", ring: "border-white/[0.08] bg-white/[0.02]" },
+    { icon: "check-circle", emoji: null, label: t("dashboard.completed"), value: completedCourses.length, tint: "text-emerald-400", ring: "border-white/[0.08] bg-white/[0.02]" },
   ];
 
   return (
@@ -266,10 +236,10 @@ const Dashboard = () => {
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <h1 className="truncate text-xl font-bold text-white sm:text-2xl">
-                    {userDetails?.fullName || currentUser.displayName || "Student"}
+                    {userDetails?.fullName || currentUser.displayName || t("dashboard.profile")}
                   </h1>
                   <span className="inline-flex items-center gap-1 rounded-full border border-violet-500/30 bg-violet-500/20 px-2.5 py-0.5 text-xs font-semibold text-violet-300">
-                    <span>{levelInfo.icon}</span> Lvl {levelInfo.level} · {levelInfo.name}
+                    <span>{levelInfo.icon}</span> {t("dashboard.level")} {levelInfo.level} · {levelInfo.name}
                   </span>
                 </div>
                 <p className="mt-1 truncate text-xs text-ink-low">{userDetails?.email}</p>
@@ -278,7 +248,7 @@ const Dashboard = () => {
                 <div className="mt-3 max-w-sm">
                   <div className="mb-1 flex justify-between text-[10px] font-semibold text-ink-low">
                     <span>{xp} XP</span>
-                    <span>{levelInfo.nextLevel ? `${levelInfo.nextLevel.minXP} XP → Lvl ${levelInfo.nextLevel.level}` : "Max level reached"}</span>
+                    <span>{levelInfo.nextLevel ? `${levelInfo.nextLevel.minXP} XP → ${t("dashboard.level")} ${levelInfo.nextLevel.level}` : t("dashboard.maxLevel")}</span>
                   </div>
                   <div className="h-2 w-full overflow-hidden rounded-full bg-white/10">
                     <div className="h-full rounded-full bg-gradient-to-r from-violet-500 to-sky transition-[width] duration-700" style={{ width: `${levelInfo.progressPct}%` }} />
@@ -288,14 +258,14 @@ const Dashboard = () => {
             </div>
 
             <Button variant="danger" size="sm" onClick={handleLogout} className="flex-none self-start">
-              <Icon name="logout" size={14} /> Log out
+              <Icon name="logout" size={14} /> {t("dashboard.logout")}
             </Button>
           </div>
 
           {/* Badges */}
           {gamificationBadges.length > 0 && (
             <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-white/[0.06] pt-4">
-              <span className="text-xs font-semibold text-ink-low">Badges</span>
+              <span className="text-xs font-semibold text-ink-low">{t("dashboard.badges")}</span>
               {gamificationBadges.map((badge, idx) => (
                 <span key={idx} className="inline-flex items-center gap-1 rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-xs font-bold text-amber-300">
                   <span>{badge.emoji || "🏆"}</span> {badge.name}
@@ -324,7 +294,7 @@ const Dashboard = () => {
           {/* Active courses */}
           <Card className="p-5 md:p-6">
             <h2 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
-              <Icon name="play" size={16} className="text-sky" /> Active courses
+              <Icon name="play" size={16} className="text-sky" /> {t("dashboard.activeCourses")}
             </h2>
             {activeCourses.length > 0 ? (
               <ul className="space-y-3">
@@ -339,7 +309,7 @@ const Dashboard = () => {
                           type="button"
                           onClick={() => setCourseToUnenroll(c)}
                           className="flex-none p-1 text-ink-low transition-colors hover:text-rose-400"
-                          title="Unenroll"
+                          title={t("dashboard.unenroll")}
                           aria-label={`Unenroll from ${c.title}`}
                         >
                           <Icon name="trash-2" size={15} />
@@ -350,7 +320,7 @@ const Dashboard = () => {
                           <div className="h-full rounded-full bg-gradient-to-r from-violet-500 to-sky" style={{ width: `${pct}%` }} />
                         </div>
                         <span className="w-9 flex-none text-right text-[11px] font-semibold tabular-nums text-ink-low">{pct}%</span>
-                        <Button size="sm" onClick={() => navigate(`/course/${c.courseId}`)}>Resume</Button>
+                        <Button size="sm" onClick={() => navigate(`/course/${c.courseId}`)}>{t("courses.continueLearning")}</Button>
                       </div>
                     </li>
                   );
@@ -359,9 +329,9 @@ const Dashboard = () => {
             ) : (
               <EmptyState
                 icon="book"
-                title="No active courses"
-                description="Enrol in a course to start learning and track your progress here."
-                action={<Button size="sm" onClick={() => navigate("/courses")}>Browse catalog</Button>}
+                title={t("dashboard.noCoursesTitle")}
+                description={t("dashboard.noCoursesDesc")}
+                action={<Button size="sm" onClick={() => navigate("/courses")}>{t("dashboard.exploreBtn")}</Button>}
                 className="py-8"
               />
             )}
@@ -371,7 +341,7 @@ const Dashboard = () => {
           <div className="space-y-6">
             <Card className="p-5 md:p-6">
               <h2 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
-                <Icon name="check-circle" size={16} className="text-emerald-400" /> Completed courses
+                <Icon name="check-circle" size={16} className="text-emerald-400" /> {t("dashboard.completedCourses")}
               </h2>
               {completedCourses.length > 0 ? (
                 <ul className="space-y-2.5">

@@ -6,6 +6,7 @@ import { collection, addDoc, getDocs, doc, updateDoc, increment, setDoc } from "
 import { quizzes } from "../data/quizData";
 import { useAuth } from "../context/AuthContext";
 import { useSound } from "../context/SoundContext";
+import { useLanguage } from "../context/LanguageContext";
 import Card from "../Components/ui/Card";
 import Button from "../Components/ui/Button";
 import Badge from "../Components/ui/Badge";
@@ -16,6 +17,7 @@ import { Skeleton } from "../Components/ui/Skeleton";
 
 const Quiz = () => {
   const { playClick, playCorrect, playIncorrect, playLevelUp, playTimerTick, playTimerUrgent } = useSound();
+  const { t } = useLanguage();
 
   // Core game state
   const [screen, setScreen] = useState("selection"); // 'selection' | 'active' | 'results'
@@ -61,15 +63,19 @@ const Quiz = () => {
         totalQuestions: activeQuiz.questions.length,
         completedAt: new Date(),
       };
-      await addDoc(collection(db, "Users", currentUser.uid, "quizAttempts"), attempt);
-      
+
+      await addDoc(
+        collection(db, "Users", currentUser.uid, "quizAttempts"),
+        attempt
+      );
+
       const pointsEarned = finalScore * 10;
       if (pointsEarned > 0) {
         const userRef = doc(db, "Users", currentUser.uid);
         await setDoc(userRef, {
           totalPoints: increment(pointsEarned)
         }, { merge: true });
-        
+
         // Sync to global QuizLeaderboard
         const globalScoreRef = doc(db, "QuizLeaderboards", activeQuiz.id, "Scores", currentUser.uid);
         await setDoc(globalScoreRef, {
@@ -240,8 +246,8 @@ const Quiz = () => {
       {screen === "selection" && (
         <div className="w-full max-w-5xl animate-fade-in">
           <div className="mb-10 text-center">
-            <h1 className="text-3xl font-bold tracking-tight md:text-4xl">Quiz Center</h1>
-            <p className="mt-2 text-ink-low">Test your knowledge and verify your skills in real time.</p>
+            <h1 className="text-3xl font-bold tracking-tight md:text-4xl">{t("quiz.title")}</h1>
+            <p className="mt-2 text-ink-low">{t("quiz.subtitle")}</p>
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -370,7 +376,7 @@ const Quiz = () => {
             </Button>
             {isAnswerSubmitted ? (
               <Button onClick={handleNext}>
-                {currentQuestionIdx + 1 === activeQuiz.questions.length ? "Finish quiz" : "Next question"}
+                {currentQuestionIdx + 1 === activeQuiz.questions.length ? t("quiz.submitQuiz") : t("quiz.nextQuestion")}
                 <Icon name="arrow" size={16} />
               </Button>
             ) : (
@@ -414,7 +420,7 @@ const Quiz = () => {
                     }}
                     className="font-semibold text-sky underline"
                   >
-                    Log in
+                    {t("nav.login")}
                   </Link>
                   <Link
                     to="/signUp"
@@ -429,7 +435,7 @@ const Quiz = () => {
                     }}
                     className="font-semibold text-sky underline"
                   >
-                    Sign up
+                    {t("nav.signUp")}
                   </Link>
                 </div>
               </Alert>
@@ -440,24 +446,24 @@ const Quiz = () => {
                 <p className="animate-pulse text-sm text-ink-low">Saving score to your profile…</p>
               ) : (
                 <p className="flex items-center justify-center gap-1.5 text-sm font-semibold text-state-success">
-                  <Icon name="check-circle" size={16} /> Score saved to your profile
+                  <Icon name="check-circle" size={16} /> {t("quiz.resultsTitle")}
                 </p>
               )}
             </div>
           )}
 
           <div className="flex justify-center gap-3">
-            <Button variant="secondary" onClick={() => startQuiz(activeQuiz)}>Try again</Button>
-            <Button onClick={() => setScreen("selection")}>Back to quizzes</Button>
+            <Button variant="secondary" onClick={() => startQuiz(activeQuiz)}>{t("quiz.tryAgain")}</Button>
+            <Button onClick={() => setScreen("selection")}>{t("quiz.backToQuizzes")}</Button>
           </div>
         </Card>
       )}
 
       {/* Modals */}
       <Modal
-        isOpen={showQuitModal || blocker.state === "blocked"}
+        isOpen={showQuitModal || blocker?.state === "blocked"}
         onClose={() => {
-          if (blocker.state === "blocked") blocker.reset();
+          if (blocker?.state === "blocked") blocker.reset();
           setShowQuitModal(false);
         }}
         title="Quit Quiz?"
@@ -466,7 +472,7 @@ const Quiz = () => {
         actionVariant="danger"
         isDestructive={true}
         onAction={() => {
-          if (blocker.state === "blocked") {
+          if (blocker?.state === "blocked") {
             blocker.proceed();
           } else {
             setScreen("selection");
