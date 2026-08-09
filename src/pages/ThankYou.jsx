@@ -1,6 +1,7 @@
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useEffect } from "react";
 import Icon from "../Components/ui/Icon";
+import { useLanguage } from "../context/LanguageContext";
 
 // Decorative particle positions — static so they don't re-render
 const PARTICLES = [
@@ -15,6 +16,7 @@ const PARTICLES = [
 const ThankYou = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const name = location.state?.name || null;
 
   // Guard: if someone navigates here directly without submitting, send them back
@@ -56,33 +58,18 @@ const ThankYou = () => {
 
         {/* Heading */}
         <h1 className="text-4xl font-black tracking-tight text-ink-hi sm:text-5xl">
-          {name ? (
-            <>
-              Thanks,{" "}
-              <span className="bg-gradient-to-r from-violet-400 to-sky bg-clip-text text-transparent">
-                {name}!
-              </span>
-            </>
-          ) : (
-            <>
-              Message{" "}
-              <span className="bg-gradient-to-r from-violet-400 to-sky bg-clip-text text-transparent">
-                received!
-              </span>
-            </>
-          )}
+          {name ? `${t("thankYou.title")} ${name}!` : t("thankYou.title")}
         </h1>
 
         <p className="mx-auto mt-5 max-w-md text-base leading-relaxed text-ink sm:text-lg">
-          Your message has been saved and we'll get back to you within{" "}
-          <span className="font-semibold text-ink-hi">1–2 business days</span>. Keep an eye on your inbox.
+          {t("thankYou.subtitle")}
         </p>
 
         {/* Divider */}
         <div className="mx-auto mt-8 flex items-center gap-4">
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/[0.08] to-transparent" />
           <span className="text-xs font-semibold uppercase tracking-[0.15em] text-ink-low">
-            What's next?
+            {t("thankYou.whatsNext")}
           </span>
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/[0.08] to-transparent" />
         </div>
@@ -96,8 +83,8 @@ const ThankYou = () => {
             <div className="grid h-10 w-10 place-items-center rounded-xl border border-white/[0.08] bg-sky-500/10 text-sky-400 transition-transform duration-200 group-hover:scale-110">
               <Icon name="book" size={18} />
             </div>
-            <span className="text-sm font-semibold text-ink-hi">Courses</span>
-            <span className="text-xs text-ink-low">Keep learning</span>
+            <span className="text-sm font-semibold text-ink-hi">{t("nav.courses")}</span>
+            <span className="text-xs text-ink-low">{t("thankYou.exploreDesc")}</span>
           </Link>
 
           <Link
@@ -107,8 +94,8 @@ const ThankYou = () => {
             <div className="grid h-10 w-10 place-items-center rounded-xl border border-white/[0.08] bg-amber-500/10 text-amber-400 transition-transform duration-200 group-hover:scale-110">
               <Icon name="zap" size={18} />
             </div>
-            <span className="text-sm font-semibold text-ink-hi">Quizzes</span>
-            <span className="text-xs text-ink-low">Test yourself</span>
+            <span className="text-sm font-semibold text-ink-hi">{t("nav.quizzes")}</span>
+            <span className="text-xs text-ink-low">{t("thankYou.quizDesc")}</span>
           </Link>
         </div>
 
@@ -118,15 +105,8 @@ const ThankYou = () => {
           className="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-violet-500 px-6 py-3.5 text-sm font-bold text-white shadow-[0_4px_20px_-4px_rgba(139,99,227,0.5)] transition-all duration-200 hover:brightness-110 hover:shadow-[0_4px_28px_-4px_rgba(139,99,227,0.65)]"
         >
           <Icon name="arrow-left" size={17} />
-          Back to Home
+          {t("thankYou.backHome")}
         </button>
-
-        <p className="mt-5 text-xs text-ink-low">
-          Didn't mean to send that?{" "}
-          <Link to="/contact" className="text-violet-400 transition-colors hover:text-violet-300">
-            Send another message
-          </Link>
-        </p>
       </div>
     </div>
   );

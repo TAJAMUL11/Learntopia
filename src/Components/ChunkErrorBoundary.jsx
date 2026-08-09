@@ -17,7 +17,14 @@ class ChunkErrorBoundary extends Component {
     console.error("ChunkErrorBoundary caught an error:", error, errorInfo);
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.state.hasError && prevProps.children !== this.props.children) {
+      this.setState({ hasError: false });
+    }
+  }
+
   handleReload = () => {
+    this.setState({ hasError: false });
     window.location.reload();
   };
 

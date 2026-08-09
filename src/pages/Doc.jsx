@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import Icon from "../Components/ui/Icon";
 
-const LAST_UPDATED = "July 27, 2026";
+const LAST_UPDATED = "August 9, 2026";
 
 const NAV = [
   { id: "overview", label: "Overview" },
@@ -58,15 +58,15 @@ const Doc = () => {
             </div>
           </aside>
 
-          {/* Mobile / Tablet horizontal nav pills */}
-          <div className="xl:hidden mb-8 overflow-x-auto pb-2 scrollbar-none">
-            <p className="mb-2 text-[11px] font-bold uppercase tracking-widest text-ink-low/50">Quick jump</p>
-            <div className="flex items-center gap-2 w-max">
+          {/* Mobile / Tablet wrapped nav pills (2-3 rows, zero scrolling) */}
+          <div className="xl:hidden mb-8 rounded-2xl border border-white/10 bg-white/[0.02] p-4">
+            <p className="mb-3 text-[11px] font-bold uppercase tracking-widest text-ink-low/50">Quick jump</p>
+            <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
               {NAV.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => scrollTo(item.id)}
-                  className="rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 text-xs font-medium text-ink-low hover:border-violet-500/50 hover:bg-violet-500/10 hover:text-ink-hi transition-all"
+                  className="rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 text-xs font-semibold text-ink-low hover:border-violet-500/50 hover:bg-violet-500/10 hover:text-ink-hi active:scale-95 transition-all"
                 >
                   {item.label}
                 </button>
@@ -109,6 +109,7 @@ const Doc = () => {
               <h2 className="text-2xl font-bold text-ink-hi border-b border-white/[0.06] pb-3 mb-5">Features</h2>
               <div className="space-y-4">
                 {[
+                  { title: "Multi-Language Translator (i18n)", text: "Switch the platform UI seamlessly between English, Spanish, French, German, and Arabic. Language preferences are stored locally, and selecting Arabic automatically activates Right-to-Left (RTL) layout rendering." },
                   { title: "Interactive Courses", text: "Enroll in kid-friendly course tracks. Each module contains a short reading and a comprehension question. You must answer correctly to unlock the next module — progress cannot be faked." },
                   { title: "Dynamic Timed Quizzes", text: "Test your knowledge with a 15-second countdown per question. Questions are drawn from a large pool and randomized on every attempt. Instant feedback is shown after each answer." },
                   { title: "Web Audio SFX System", text: "Enjoy interactive sound effects for correct/wrong answers, module completion, level-up fanfares, and badge unlocks synthesized 100% free offline in your browser. Easily toggle audio muted/unmuted in the header navigation." },

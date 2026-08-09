@@ -3,53 +3,54 @@ import { Link, useNavigate } from "react-router-dom";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import Icon from "../Components/ui/Icon";
-
-// ─── Static data ─────────────────────────────────────────────────────────────
-const CONTACT_CARDS = [
-  {
-    icon: "mail",
-    label: "Direct Email",
-    value: "Send us an email →",
-    href: "mailto:tajamul.270@gmail.com",
-    color: "from-violet-500/20 to-violet-600/10 border-violet-500/20",
-    iconColor: "text-violet-400",
-    glow: "bg-violet-600/10",
-  },
-  {
-    icon: "clock",
-    label: "Response time",
-    value: "Within 1–2 business days",
-    color: "from-sky-500/20 to-sky/10 border-sky-500/20",
-    iconColor: "text-sky-400",
-    glow: "bg-sky-600/10",
-  },
-  {
-    icon: "book",
-    label: "Documentation",
-    value: "Read the docs →",
-    to: "/doc",
-    color: "from-emerald-500/20 to-teal-600/10 border-emerald-500/20",
-    iconColor: "text-emerald-400",
-    glow: "bg-emerald-600/10",
-  },
-  {
-    icon: "shield",
-    label: "Data privacy",
-    value: "Your message is stored securely on our servers — never shared.",
-    color: "from-amber-500/20 to-orange-600/10 border-amber-500/20",
-    iconColor: "text-amber-400",
-    glow: "bg-amber-600/10",
-  },
-];
+import { useLanguage } from "../context/LanguageContext";
 
 const MAX_MSG = 1000;
 
 // ─── Component ────────────────────────────────────────────────────────────────
 const Contact = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const CONTACT_CARDS = [
+    {
+      icon: "mail",
+      label: t("contact.emailCardTitle"),
+      value: t("contact.emailCardSub"),
+      href: "mailto:tajamul.270@gmail.com",
+      color: "from-violet-500/20 to-violet-600/10 border-violet-500/20",
+      iconColor: "text-violet-400",
+      glow: "bg-violet-600/10",
+    },
+    {
+      icon: "clock",
+      label: t("contact.responseTitle"),
+      value: t("contact.responseSub"),
+      color: "from-sky-500/20 to-sky/10 border-sky-500/20",
+      iconColor: "text-sky-400",
+      glow: "bg-sky-600/10",
+    },
+    {
+      icon: "book",
+      label: t("contact.docTitle"),
+      value: t("contact.docSub"),
+      to: "/doc",
+      color: "from-emerald-500/20 to-teal-600/10 border-emerald-500/20",
+      iconColor: "text-emerald-400",
+      glow: "bg-emerald-600/10",
+    },
+    {
+      icon: "shield",
+      label: t("contact.privacyTitle"),
+      value: t("contact.privacySub"),
+      color: "from-amber-500/20 to-orange-600/10 border-amber-500/20",
+      iconColor: "text-amber-400",
+      glow: "bg-amber-600/10",
+    },
+  ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -111,17 +112,13 @@ const Contact = () => {
       {/* ── Page header ── */}
       <div className="mx-auto max-w-2xl text-center">
         <span className="inline-flex items-center gap-2 rounded-full border border-violet-500/25 bg-violet-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.15em] text-violet-400">
-          <Icon name="message-circle" size={13} /> Get in touch
+          <Icon name="message-circle" size={13} /> {t("contact.eyebrow")}
         </span>
         <h1 className="mt-5 text-4xl font-black tracking-tight text-ink-hi sm:text-5xl">
-          We&rsquo;d love to{" "}
-          <span className="bg-gradient-to-r from-violet-400 to-sky bg-clip-text text-transparent">
-            hear from you
-          </span>
+          {t("contact.title")}
         </h1>
         <p className="mt-4 text-base leading-relaxed text-ink sm:text-lg">
-          Have a question, spotted a bug, or want to suggest a course? Drop us a message and we&rsquo;ll
-          get back to you shortly.
+          {t("contact.subtitle")}
         </p>
       </div>
 
@@ -196,7 +193,7 @@ const Contact = () => {
                   htmlFor="contact-name"
                   className="text-xs font-semibold uppercase tracking-[0.1em] text-ink-low"
                 >
-                  Your name <span className="text-state-danger">*</span>
+                  {t("contact.nameLabel")} <span className="text-state-danger">*</span>
                 </label>
                 <input
                   id="contact-name"
@@ -220,7 +217,7 @@ const Contact = () => {
                   htmlFor="contact-email"
                   className="text-xs font-semibold uppercase tracking-[0.1em] text-ink-low"
                 >
-                  Email address <span className="text-state-danger">*</span>
+                  {t("contact.emailLabel")} <span className="text-state-danger">*</span>
                 </label>
                 <input
                   id="contact-email"
@@ -246,16 +243,13 @@ const Contact = () => {
                 htmlFor="contact-subject"
                 className="text-xs font-semibold uppercase tracking-[0.1em] text-ink-low"
               >
-                Subject{" "}
-                <span className="text-[10px] normal-case tracking-normal text-ink-low/50">
-                  (optional)
-                </span>
+                {t("contact.subjectLabel")}
               </label>
               <input
                 id="contact-subject"
                 name="subject"
                 type="text"
-                placeholder="e.g. Course suggestion, Bug report…"
+                placeholder="Subject..."
                 value={formData.subject}
                 onChange={handleChange}
                 className={inputBase(false)}
@@ -269,7 +263,7 @@ const Contact = () => {
                   htmlFor="contact-message"
                   className="text-xs font-semibold uppercase tracking-[0.1em] text-ink-low"
                 >
-                  Your message <span className="text-state-danger">*</span>
+                  {t("contact.messageLabel")} <span className="text-state-danger">*</span>
                 </label>
                 <span
                   className={`text-xs tabular-nums ${
@@ -283,7 +277,7 @@ const Contact = () => {
                 id="contact-message"
                 name="message"
                 rows={6}
-                placeholder="Describe your question or feedback in detail…"
+                placeholder="..."
                 value={formData.message}
                 onChange={handleChange}
                 className={`${inputBase(!!errors.message)} resize-none`}
@@ -327,12 +321,12 @@ const Contact = () => {
                       d="M4 12a8 8 0 0 1 8-8v4a4 4 0 0 0-4 4H4z"
                     />
                   </svg>
-                  Sending…
+                  {t("contact.sending")}
                 </>
               ) : (
                 <>
                   <Icon name="arrow" size={17} />
-                  Send message
+                  {t("contact.sendBtn")}
                 </>
               )}
             </button>

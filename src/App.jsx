@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "./context/AuthContext";
 import { GamificationProvider } from "./context/GamificationContext";
 import { SoundProvider } from "./context/SoundContext";
+import { LanguageProvider } from "./context/LanguageContext";
 import CelebrationOverlay from "./Components/CelebrationOverlay";
 
 // Lazy-load pages so each route ships as its own chunk. While a chunk loads,
@@ -32,56 +33,59 @@ const Leaderboard = lazy(() => import("./pages/Leaderboard"));
 const ThankYou = lazy(() => import("./pages/ThankYou"));
 const Admin = lazy(() => import("./pages/Admin"));
 
+// Declare router outside App function so it remains stable across component re-renders
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <>
+      {/* ── Student / Public shell ── */}
+      <Route path="/" element={<RootLayout />}>
+        <Route index element={<Home />} />
+        <Route path="courses" element={<Courses />} />
+        <Route path="course/:id" element={<CourseDetails />} />
+        <Route path="quiz" element={<Quiz />} />
+        <Route path="contact" element={<Contact />} />
+        <Route path="signUp" element={<SignUp />} />
+        <Route path="login" element={<Login />} />
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="doc" element={<Doc />} />
+        <Route path="terms" element={<Terms />} />
+        <Route path="privacy" element={<Privacy />} />
+        <Route path="leaderboard" element={<Leaderboard />} />
+        <Route path="thank-you" element={<ThankYou />} />
+        <Route path="*" element={<NotFound />} />
+      </Route>
+
+      {/* ── Isolated Admin shell (no student Navbar/Footer) ── */}
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route index element={<Admin />} />
+      </Route>
+    </>
+  )
+);
+
 const App = () => {
-  const router = createBrowserRouter(
-    createRoutesFromElements(
-      <>
-        {/* ── Student / Public shell ── */}
-        <Route path="/" element={<RootLayout />}>
-          <Route index element={<Home />} />
-          <Route path="courses" element={<Courses />} />
-          <Route path="course/:id" element={<CourseDetails />} />
-          <Route path="quiz" element={<Quiz />} />
-          <Route path="contact" element={<Contact />} />
-          <Route path="signUp" element={<SignUp />} />
-          <Route path="login" element={<Login />} />
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="doc" element={<Doc />} />
-          <Route path="terms" element={<Terms />} />
-          <Route path="privacy" element={<Privacy />} />
-          <Route path="leaderboard" element={<Leaderboard />} />
-          <Route path="thank-you" element={<ThankYou />} />
-          <Route path="*" element={<NotFound />} />
-        </Route>
-
-        {/* ── Isolated Admin shell (no student Navbar/Footer) ── */}
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<Admin />} />
-        </Route>
-      </>
-    )
-  );
-
   return (
     <AuthProvider>
       <GamificationProvider>
         <SoundProvider>
-          <RouterProvider router={router} />
-          <CelebrationOverlay />
-          <ToastContainer
-            position="top-right"
-            autoClose={3000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="colored"
-            bodyClassName="toastbody"
-            transition={Slide}
-          />
+          <LanguageProvider>
+            <RouterProvider router={router} />
+            <CelebrationOverlay />
+            <ToastContainer
+              position="top-right"
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="colored"
+              bodyClassName="toastbody"
+              transition={Slide}
+            />
+          </LanguageProvider>
         </SoundProvider>
       </GamificationProvider>
     </AuthProvider>
