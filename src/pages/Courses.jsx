@@ -2,6 +2,7 @@ import { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useSound } from "../context/SoundContext";
+import { useLanguage } from "../context/LanguageContext";
 import { db } from "../firebase/firebase";
 import { setDoc, doc, collection, getDocs } from "firebase/firestore";
 import { toast } from "react-toastify";
@@ -19,6 +20,7 @@ const Courses = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const { playBadgeUnlock, playClick } = useSound();
+  const { t } = useLanguage();
   const [query, setQuery] = useState("");
   const [enrolledIds, setEnrolledIds] = useState([]);
   const [enrollingId, setEnrollingId] = useState(null);
@@ -95,9 +97,9 @@ const Courses = () => {
     <div className="container-page py-16 md:py-20">
       <SectionHeading
         centered
-        eyebrow="Kids Course Catalog"
-        title="Start Your Learning Adventure!"
-        description="Explore fun, interactive courses designed specifically for kids. Learn to code, draw, and solve puzzles!"
+        eyebrow={t("nav.courses")}
+        title={t("courses.title")}
+        description={t("courses.subtitle")}
       />
 
       {/* Search */}
@@ -106,7 +108,7 @@ const Courses = () => {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onClear={() => setQuery("")}
-          placeholder="Search by course or subject…"
+          placeholder={t("courses.searchPlaceholder")}
         />
         {query && (
           <p className="mt-3 text-center text-sm text-ink-low">
@@ -131,7 +133,7 @@ const Courses = () => {
                     {isEnrolled && (
                       <span className="flex items-center gap-1 text-xs font-bold text-state-success bg-state-success/10 px-2 py-0.5 rounded-md border border-state-success/20">
                         <Icon name="check-circle" size={12} />
-                        Enrolled
+                        {t("courses.enrolledBadge")}
                       </span>
                     )}
                     <span className="flex items-center gap-1.5 rounded-full border border-white/[0.13] bg-white/[0.06] px-3 py-1 text-xs font-bold text-ink-hi">
@@ -160,7 +162,7 @@ const Courses = () => {
                         <img key={i} src={a} alt="" className="h-6 w-6 rounded-full border-2 border-ground-800 object-cover" />
                       ))}
                     </div>
-                    <p className="mt-1.5 text-xs text-ink-low">{course.students} students</p>
+                    <p className="mt-1.5 text-xs text-ink-low">{course.students} {String(t("stats.studentsLegend") || "").toLowerCase()}</p>
                   </div>
                   {isEnrolled ? (
                     <Button 
@@ -169,11 +171,11 @@ const Courses = () => {
                       onClick={() => handleEnroll(course)}
                       className="border-state-success/30 bg-state-success/[0.08] text-state-success hover:bg-state-success/[0.15]"
                     >
-                      Resume Course
+                      {t("courses.continueLearning")}
                     </Button>
                   ) : (
                     <Button size="sm" onClick={() => handleEnroll(course)}>
-                      Enroll
+                      {t("courses.startLearning")}
                     </Button>
                   )}
                 </div>
@@ -206,8 +208,7 @@ const Courses = () => {
               <Icon name="star" size={40} className="text-white fill-white" />
             </div>
           </div>
-          <h2 className="mt-8 text-3xl font-extrabold text-white tracking-tight animate-pulse">Powering up your course...</h2>
-          <p className="mt-2 text-sky font-medium text-lg">Getting the AI tutors ready!</p>
+          <h2 className="mt-8 text-3xl font-extrabold text-white tracking-tight animate-pulse">{t("courses.enrolling")}</h2>
         </div>
       )}
 

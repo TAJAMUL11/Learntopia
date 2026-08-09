@@ -9,20 +9,21 @@ import { Skeleton } from "../Components/ui/Skeleton";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useAuth } from "../context/AuthContext";
-
-// Tab definitions — "all" + one per quiz
-const TABS = [
-  { id: "all", label: "Global Leaderboard" },
-  ...quizzes.map((q) => ({ id: q.id, label: q.title })),
-];
+import { useLanguage } from "../context/LanguageContext";
 
 const Leaderboard = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
+  const { t } = useLanguage();
   const [allEntries, setAllEntries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+
+  const TABS = useMemo(() => [
+    { id: "all", label: t("leaderboard.allQuizzes") },
+    ...quizzes.map((q) => ({ id: q.id, label: q.title })),
+  ], [t]);
 
   useEffect(() => {
     if (!currentUser) {
@@ -212,13 +213,13 @@ const Leaderboard = () => {
       {/* ── Header ── */}
       <div className="w-full max-w-5xl text-center space-y-3 mb-8 animate-fade-in">
         <div className="inline-flex items-center gap-2 rounded-full border border-yellow-500/30 bg-yellow-500/10 px-4 py-1 text-xs font-bold uppercase tracking-widest text-yellow-400">
-          <Icon name="trophy" size={14} /> Learntopia Rankings
+          <Icon name="trophy" size={14} /> {t("leaderboard.badge")}
         </div>
         <h1 className="text-2xl font-black tracking-tight md:text-5xl text-white">
-          Leaderboard
+          {t("leaderboard.title")}
         </h1>
         <p className="text-sm md:text-base text-ink-low max-w-lg mx-auto">
-          See who&rsquo;s on top. Filter by quiz to view individual rankings.
+          {t("leaderboard.subtitle")}
         </p>
       </div>
 
@@ -226,7 +227,7 @@ const Leaderboard = () => {
       <div className="w-full max-w-5xl mb-5">
         {/* Mobile: Dropdown */}
         <div className="block md:hidden">
-          <label className="text-[11px] font-semibold uppercase tracking-wider text-ink-faint mb-1.5 block">Filter by Quiz</label>
+          <label className="text-[11px] font-semibold uppercase tracking-wider text-ink-faint mb-1.5 block">{t("leaderboard.filterByQuiz")}</label>
           <div className="relative">
             <select
               value={activeTab}
@@ -273,7 +274,7 @@ const Leaderboard = () => {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search by name..."
+            placeholder={t("leaderboard.searchPlaceholder")}
             className="w-full rounded-lg border border-white/10 bg-white/[0.03] pl-10 pr-8 py-2.5 text-sm text-white placeholder-ink-faint focus:border-violet-500/60 focus:ring-1 focus:ring-violet-500/40 focus:outline-none transition-all"
           />
           {searchQuery && (
@@ -299,12 +300,12 @@ const Leaderboard = () => {
           <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-xl border border-violet-500/30 bg-violet-500/10 text-violet-400">
             <Icon name="award" size={26} />
           </div>
-          <h3 className="text-base font-bold text-white">No Rankings Yet</h3>
+          <h3 className="text-base font-bold text-white">{t("leaderboard.noRankings")}</h3>
           <p className="mt-2 text-sm text-ink-low">
             {searchQuery
               ? `No results for "${searchQuery}".`
               : activeTab === "all"
-                ? "Complete a quiz to appear on the leaderboard!"
+                ? t("leaderboard.noRankingsDesc")
                 : `No one has attempted "${TABS.find((t) => t.id === activeTab)?.label}" yet.`}
           </p>
         </Card>
@@ -353,7 +354,7 @@ const Leaderboard = () => {
                       </span>
                       {isYou && (
                         <span className="shrink-0 rounded-full bg-sky/15 border border-sky/30 px-1.5 py-px text-[9px] font-bold uppercase text-sky">
-                          You
+                          {t("leaderboard.youBadge")}
                         </span>
                       )}
                     </div>
@@ -376,10 +377,10 @@ const Leaderboard = () => {
             {/* Mobile footer */}
             <div className="flex items-center justify-between px-2 pt-2">
               <span className="text-[11px] text-ink-faint">
-                {filteredEntries.length} {filteredEntries.length === 1 ? "entry" : "entries"}
+                {filteredEntries.length} {filteredEntries.length === 1 ? t("leaderboard.entry") : t("leaderboard.entries")}
               </span>
               <span className="text-[11px] text-ink-faint">
-                {activeTab === "all" ? "All quizzes" : TABS.find((t) => t.id === activeTab)?.label}
+                {activeTab === "all" ? t("leaderboard.allQuizzes") : TABS.find((t) => t.id === activeTab)?.label}
               </span>
             </div>
           </div>
@@ -391,12 +392,12 @@ const Leaderboard = () => {
               {/* Header */}
               <thead>
                 <tr className="border-b-2 border-white/10 bg-white/[0.03]">
-                  <th className="py-4 pl-7 pr-3 text-xs font-bold uppercase tracking-wider text-ink-low w-20">Rank</th>
-                  <th className="py-4 px-5 text-xs font-bold uppercase tracking-wider text-ink-low">Student</th>
+                  <th className="py-4 pl-7 pr-3 text-xs font-bold uppercase tracking-wider text-ink-low w-20">{t("leaderboard.rank")}</th>
+                  <th className="py-4 px-5 text-xs font-bold uppercase tracking-wider text-ink-low">{t("leaderboard.student")}</th>
                   {activeTab === "all" && (
-                    <th className="py-4 px-5 text-xs font-bold uppercase tracking-wider text-ink-low">Quiz</th>
+                    <th className="py-4 px-5 text-xs font-bold uppercase tracking-wider text-ink-low">{t("leaderboard.quizCol")}</th>
                   )}
-                  <th className="py-4 pl-5 pr-7 text-xs font-bold uppercase tracking-wider text-ink-low text-right">Score</th>
+                  <th className="py-4 pl-5 pr-7 text-xs font-bold uppercase tracking-wider text-ink-low text-right">{t("leaderboard.score")}</th>
                 </tr>
               </thead>
 
