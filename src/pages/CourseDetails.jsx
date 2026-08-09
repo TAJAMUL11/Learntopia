@@ -3,6 +3,7 @@ import { useParams, useNavigate, useBlocker } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useGamification } from "../context/GamificationContext";
 import { useSound } from "../context/SoundContext";
+import { useLanguage } from "../context/LanguageContext";
 import { db } from "../firebase/firebase";
 import { doc, getDoc, setDoc, deleteField } from "firebase/firestore";
 import { toast } from "react-toastify";
@@ -22,6 +23,7 @@ const CourseDetails = () => {
   const { currentUser, loading: authLoading } = useAuth();
   const { addXP, awardBadge } = useGamification();
   const { playClick } = useSound();
+  const { t } = useLanguage();
 
   const [course, setCourse] = useState(null);
   const [completedModules, setCompletedModules] = useState([]);
@@ -103,15 +105,17 @@ const CourseDetails = () => {
       }
     };
     load();
-  }, [authLoading, currentUser, id, navigate]);
+  }, [currentUser, authLoading, id, navigate]);
 
-  const total = course ? course.syllabus.length : 0;
-  const currentIndex = completedModules.length;
-  const allDone = total > 0 && currentIndex >= total;
+  const total = course?.syllabus?.length || 0;
   const progressPct = total ? Math.round((completedModules.length / total) * 100) : 0;
+  const currentIndex = completedModules.length;
+  const allDone = completedModules.length >= total && total > 0;
 
-  const courseRef = () =>
-    doc(db, "Users", currentUser.uid, "enrolledCourses", course.id.toString());
+  const courseRef = () => {
+    if (!currentUser?.uid || !course?.id) return null;
+    return doc(db, "Users", currentUser.uid, "enrolledCourses", course.id.toString());
+  };
 
   const handleSelectAnswer = (exerciseIndex, option) => {
     if (saving) return;
@@ -121,13 +125,15 @@ const CourseDetails = () => {
 
   const checkAnswersAndComplete = async (moduleIndex) => {
     if (saving) return;
+    const ref = courseRef();
+    if (!ref) return;
 
     // ExerciseEngine has already validated all answers are correct
     setSaving(true);
     const newCompleted = [...completedModules, moduleIndex];
     try {
       await setDoc(
-        courseRef(),
+        ref,
         { completedModules: newCompleted, totalModules: total, progressUpdatedAt: new Date() },
         { merge: true }
       );
@@ -137,7 +143,7 @@ const CourseDetails = () => {
       setLessonPhase(true);
       setExpandedIndex(newCompleted.length < total ? newCompleted.length : moduleIndex);
       
-      const xpEarned = course.xpPerModule || 50;
+      const xpEarned = course?.xpPerModule || 50;
       addXP(xpEarned, `Completed Module ${moduleIndex + 1}!`);
       toast.success(`Module complete! 🎉 +${xpEarned} XP!`);
     } catch (err) {
@@ -150,24 +156,26 @@ const CourseDetails = () => {
 
   const markCourseComplete = async () => {
     if (!allDone || saving) return;
+    const ref = courseRef();
+    if (!ref) return;
     setSaving(true);
     try {
       await setDoc(
-        courseRef(),
+        ref,
         {
           completed: true,
           completedAt: new Date(),
-          completedModules: course.syllabus.map((_, i) => i),
+          completedModules: course?.syllabus ? course.syllabus.map((_, i) => i) : [],
           totalModules: total,
         },
         { merge: true }
       );
       setIsCompleted(true);
 
-      if (course.badge) {
+      if (course?.badge) {
         awardBadge(course.badge);
       }
-      addXP(100, `Finished ${course.title}!`);
+      addXP(100, `Finished ${course?.title || "Course"}!`);
 
       toast.success("Course completed! Amazing work! 🏆");
     } catch (err) {
@@ -180,10 +188,12 @@ const CourseDetails = () => {
 
   const resetCourse = async () => {
     if (saving) return;
+    const ref = courseRef();
+    if (!ref) return;
     setSaving(true);
     try {
       await setDoc(
-        courseRef(),
+        ref,
         {
           completed: false,
           completedAt: deleteField(),
@@ -231,7 +241,7 @@ const CourseDetails = () => {
           className="group mb-8 flex items-center gap-2 text-sm font-bold text-ink-low transition-colors hover:text-sky"
         >
           <Icon name="arrow-left" size={16} className="transition-transform group-hover:-translate-x-1" />
-          Back to Courses
+          {t("courseDetails.backToCourses")}
         </button>
 
         {/* Header Revamp */}
@@ -269,7 +279,7 @@ const CourseDetails = () => {
               </div>
               <div className="flex items-center gap-2 rounded-xl bg-white/[0.03] px-3.5 py-2 text-sm font-medium text-ink-hi border border-white/[0.05]">
                 <Icon name="users" size={16} className="text-violet-400" />
-                {course.students} enrolled
+                {course.students} {t("courses.enrolledBadge").toLowerCase()}
               </div>
             </div>
           </div>
@@ -278,9 +288,9 @@ const CourseDetails = () => {
         {/* Progress bar */}
         <Card className="mb-10 p-5 md:p-6 shadow-xl">
           <div className="mb-3 flex items-center justify-between text-sm">
-            <span className="font-semibold text-ink-hi">Your progress</span>
+            <span className="font-semibold text-ink-hi">{t("dashboard.enrolled")}</span>
             <span className="font-bold tabular-nums text-sky">
-              {completedModules.length} / {total} modules · {progressPct}%
+              {completedModules.length} / {total} {t("courses.modules").toLowerCase()} · {progressPct}%
             </span>
           </div>
           <div className="h-3 overflow-hidden rounded-full bg-white/[0.06] border border-white/[0.05]">
@@ -305,7 +315,7 @@ const CourseDetails = () => {
                 : "text-ink-low hover:text-ink-hi hover:bg-white/[0.02] rounded-t-lg"
             }`}
           >
-            Overview
+            {t("courseDetails.overview")}
             {activeTab === "overview" && (
               <div className="absolute bottom-[-1px] left-0 right-0 h-[2px] bg-violet-500 rounded-t-full shadow-[0_0_10px_rgba(139,92,246,0.5)]" />
             )}
@@ -318,7 +328,7 @@ const CourseDetails = () => {
                 : "text-ink-low hover:text-ink-hi hover:bg-white/[0.02] rounded-t-lg"
             }`}
           >
-            Syllabus & Exercises
+            {t("courseDetails.curriculum")}
             {activeTab === "syllabus" && (
               <div className="absolute bottom-[-1px] left-0 right-0 h-[2px] bg-violet-500 rounded-t-full shadow-[0_0_10px_rgba(139,92,246,0.5)]" />
             )}
@@ -333,7 +343,7 @@ const CourseDetails = () => {
           <div className="grid gap-10 md:grid-cols-3 animate-fade-in">
             <div className="space-y-10 md:col-span-2">
               <section>
-                <h3 className="mb-5 text-2xl font-bold text-ink-hi">What you'll learn</h3>
+                <h3 className="mb-5 text-2xl font-bold text-ink-hi">{t("courseDetails.takeaways")}</h3>
                 <div className="grid gap-4 sm:grid-cols-2">
                   {course.learningObjectives?.map((obj, i) => (
                     <div key={i} className="flex items-start gap-3 rounded-2xl border border-white/[0.05] bg-white/[0.02] p-5 transition-colors hover:bg-white/[0.04]">
@@ -345,7 +355,7 @@ const CourseDetails = () => {
               </section>
 
               <section>
-                <h3 className="mb-5 text-2xl font-bold text-ink-hi">Prerequisites</h3>
+                <h3 className="mb-5 text-2xl font-bold text-ink-hi">{t("courseDetails.prerequisites")}</h3>
                 <ul className="space-y-3 rounded-2xl border border-white/[0.05] bg-white/[0.01] p-6">
                   {course.prerequisites?.map((req, i) => (
                     <li key={i} className="flex items-center gap-3 text-sm font-medium text-ink-low">
@@ -553,9 +563,9 @@ const CourseDetails = () => {
       </div>
 
       <Modal
-        isOpen={showLeaveModal || blocker.state === "blocked"}
+        isOpen={showLeaveModal || blocker?.state === "blocked"}
         onClose={() => {
-          if (blocker.state === "blocked") blocker.reset();
+          if (blocker?.state === "blocked") blocker.reset();
           setShowLeaveModal(false);
           setPendingTab(null);
         }}
@@ -565,7 +575,7 @@ const CourseDetails = () => {
         actionVariant="danger"
         isDestructive={true}
         onAction={() => {
-          if (blocker.state === "blocked") {
+          if (blocker?.state === "blocked") {
             blocker.proceed();
           } else if (pendingTab) {
             setActiveTab(pendingTab);
@@ -609,7 +619,7 @@ const CourseDetails = () => {
       <Modal
         isOpen={showAIModal}
         onClose={() => setShowAIModal(false)}
-        title={`Chat with ${course.aiTutor?.name}`}
+        title={`Chat with ${course?.aiTutor?.name || "AI Tutor"}`}
         icon="cpu"
         actionText="Got it!"
         actionVariant="primary"
@@ -618,7 +628,7 @@ const CourseDetails = () => {
         <div className="flex flex-col items-center text-center p-4">
           <div className="relative mb-6">
             <div className="absolute -inset-4 rounded-full bg-violet-500/20 blur-xl animate-pulse" />
-            <img src={course.aiTutor?.avatar} alt="AI" className="relative h-32 w-32 rounded-full border-4 border-violet-500 object-cover shadow-2xl" />
+            <img src={course?.aiTutor?.avatar} alt="AI" className="relative h-32 w-32 rounded-full border-4 border-violet-500 object-cover shadow-2xl" />
           </div>
           <h3 className="text-2xl font-bold text-ink-hi mb-2">I'm booting up!</h3>
           <p className="text-base text-ink-low leading-relaxed">
