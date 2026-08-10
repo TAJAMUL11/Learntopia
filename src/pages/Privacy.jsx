@@ -104,19 +104,24 @@ const SECTIONS = [
   },
 ];
 
-const Privacy = () => (
-  <div className="container-page py-12 md:py-16">
-    <div className="mx-auto max-w-3xl">
+import { useLanguage } from "../context/LanguageContext";
 
-      {/* Header */}
-      <div className="border-b border-white/[0.08] pb-8 mb-10">
-        <span className="inline-block rounded-md border border-white/10 bg-white/[0.04] px-2.5 py-1 text-xs font-semibold uppercase tracking-widest text-ink-low mb-3">Legal</span>
-        <h1 className="text-3xl font-bold tracking-tight text-ink-hi">Privacy Policy</h1>
-        <p className="mt-2 text-sm text-ink-low/60">Last updated: {LAST_UPDATED}</p>
-        <p className="mt-4 text-ink-low leading-relaxed text-sm border-l-2 border-violet-500/40 pl-4">
-          <strong className="text-ink-hi font-medium">Summary:</strong> We collect only what we need — your name, email, and learning progress — and store it securely with Google Firebase so that only you can access it. We never sell your data or show you ads.
-        </p>
-      </div>
+const Privacy = () => {
+  const { t } = useLanguage();
+
+  return (
+    <div className="container-page py-12 md:py-16">
+      <div className="mx-auto max-w-3xl">
+
+        {/* Header */}
+        <div className="border-b border-white/[0.08] pb-8 mb-10">
+          <span className="inline-block rounded-md border border-white/10 bg-white/[0.04] px-2.5 py-1 text-xs font-semibold uppercase tracking-widest text-ink-low mb-3">{t("privacy.badge")}</span>
+          <h1 className="text-3xl font-bold tracking-tight text-ink-hi">{t("privacy.title")}</h1>
+          <p className="mt-2 text-sm text-ink-low/60">{t("privacy.lastUpdated")}</p>
+          <p className="mt-4 text-ink-low leading-relaxed text-sm border-l-2 border-violet-500/40 pl-4">
+            {t("privacy.subtitle")}
+          </p>
+        </div>
 
       {/* Sections */}
       <div className="space-y-10">
@@ -153,8 +158,9 @@ const Privacy = () => (
         </p>
       </div>
 
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default Privacy;

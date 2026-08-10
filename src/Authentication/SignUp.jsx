@@ -190,20 +190,14 @@ const SignUp = () => {
     <div className="container-page flex min-h-[80vh] items-center justify-center py-12">
       {/* Account Already Exists Smart Guidance Modal */}
       {alreadyExistsEmail && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm animate-fade-in">
           <Card className="w-full max-w-md border-violet-500/30 p-6 shadow-2xl">
-            <div className="mb-4 flex items-center gap-3">
-              <div className="grid h-11 w-11 place-items-center rounded-xl bg-violet-500/15 text-violet-400 border border-violet-500/30">
-                <Icon name="mail" size={22} />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-ink-hi">Account Already Exists</h3>
-                <p className="text-xs text-violet-400 font-medium">Smart Authentication Assistant</p>
-              </div>
+            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/15 text-amber-400">
+              <Icon name="alert-circle" size={24} />
             </div>
-
-            <p className="mb-6 text-xs md:text-sm text-ink-low leading-relaxed">
-              An account is already registered under <strong className="text-violet-400 font-semibold">{alreadyExistsEmail}</strong>. Would you like to sign in instead?
+            <h3 className="text-xl font-bold text-ink-hi mb-2">{t("authGuidance.alreadyExistsTitle")}</h3>
+            <p className="text-sm text-ink-low leading-relaxed mb-6">
+              {t("authGuidance.alreadyExistsMsg", { email: alreadyExistsEmail })}
             </p>
 
             <div className="flex flex-col gap-3">
@@ -215,14 +209,14 @@ const SignUp = () => {
                   navigate("/login", { state: { email: emailToPass, returnTo } });
                 }}
               >
-                Log In with {alreadyExistsEmail}
+                {t("authGuidance.signInBtn")}
               </Button>
               <button
                 type="button"
                 onClick={() => setAlreadyExistsEmail(null)}
                 className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2.5 text-xs font-semibold text-ink-low transition-colors hover:bg-white/[0.08] hover:text-ink-hi"
               >
-                Use a Different Email
+                {t("common.cancel")}
               </button>
             </div>
           </Card>

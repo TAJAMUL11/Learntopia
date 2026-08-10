@@ -164,20 +164,14 @@ const Login = () => {
     <div className="container-page flex min-h-[80vh] items-center justify-center py-12">
       {/* Account Not Found Smart Guidance Modal */}
       {notFoundEmail && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm">
-          <Card className="w-full max-w-md border-sky/30 p-6 shadow-2xl">
-            <div className="mb-4 flex items-center gap-3">
-              <div className="grid h-11 w-11 place-items-center rounded-xl bg-sky/15 text-sky border border-sky/30">
-                <Icon name="user" size={22} />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-ink-hi">Account Not Found</h3>
-                <p className="text-xs text-sky font-medium">Smart Authentication Assistant</p>
-              </div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm animate-fade-in">
+          <Card className="w-full max-w-md p-6 border-violet-500/30 bg-ground-800 shadow-2xl">
+            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/15 text-amber-400">
+              <Icon name="alert-circle" size={24} />
             </div>
-
-            <p className="mb-6 text-xs md:text-sm text-ink-low leading-relaxed">
-              We couldn&rsquo;t find an account registered under <strong className="text-sky font-semibold">{notFoundEmail}</strong>. Would you like to create a new account now?
+            <h3 className="text-xl font-bold text-ink-hi mb-2">{t("authGuidance.noAccountTitle")}</h3>
+            <p className="text-sm text-ink-low leading-relaxed mb-6">
+              {t("authGuidance.noAccountMsg", { email: notFoundEmail })}
             </p>
 
             <div className="flex flex-col gap-3">
@@ -189,14 +183,14 @@ const Login = () => {
                   navigate("/signUp", { state: { email: emailToPass, returnTo } });
                 }}
               >
-                Create Account with {notFoundEmail}
+                {t("authGuidance.createAccountBtn")}
               </Button>
               <button
                 type="button"
                 onClick={() => setNotFoundEmail(null)}
                 className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2.5 text-xs font-semibold text-ink-low transition-colors hover:bg-white/[0.08] hover:text-ink-hi"
               >
-                Try Another Email or Password
+                {t("common.cancel")}
               </button>
             </div>
           </Card>
