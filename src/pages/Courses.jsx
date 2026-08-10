@@ -14,6 +14,7 @@ import SectionHeading from "../Components/ui/SectionHeading";
 import EmptyState from "../Components/ui/EmptyState";
 import Icon from "../Components/ui/Icon";
 import { COURSES } from "../data/coursesData";
+import { getLocalizedCourse } from "../utils/localizationUtils";
 import star from "../assets/CourseImg/star.png";
 
 const Courses = () => {
@@ -85,13 +86,17 @@ const Courses = () => {
     }
   };
 
+  const localizedCourses = useMemo(() => {
+    return COURSES.map((c) => getLocalizedCourse(c, t));
+  }, [t]);
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return COURSES;
-    return COURSES.filter(
+    if (!q) return localizedCourses;
+    return localizedCourses.filter(
       (c) => c.title.toLowerCase().includes(q) || c.category.toLowerCase().includes(q)
     );
-  }, [query]);
+  }, [query, localizedCourses]);
 
   return (
     <div className="container-page py-16 md:py-20">
@@ -112,7 +117,9 @@ const Courses = () => {
         />
         {query && (
           <p className="mt-3 text-center text-sm text-ink-low">
-            {filtered.length} {filtered.length === 1 ? "result" : "results"} for “{query}”
+            {filtered.length === 1
+              ? t("courses.searchResultsSingle", { count: filtered.length, query })
+              : t("courses.searchResultsPlural", { count: filtered.length, query })}
           </p>
         )}
       </div>
@@ -187,11 +194,11 @@ const Courses = () => {
         <div className="mt-12">
           <EmptyState
             icon="search"
-            title={`No courses match “${query}”`}
-            description="Try a broader term, or browse the full catalog."
+            title={t("courses.noResults", { query })}
+            description={t("courses.noResultsDesc")}
             action={
               <Button variant="secondary" size="sm" onClick={() => setQuery("")}>
-                Clear search
+                {t("courses.clearSearch")}
               </Button>
             }
           />
