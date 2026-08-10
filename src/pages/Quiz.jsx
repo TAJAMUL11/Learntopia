@@ -360,10 +360,10 @@ const Quiz = () => {
                 >
                   <span>{option}</span>
                   {isAnswerSubmitted && isCorrectAnswer && (
-                    <span className="text-xs font-bold uppercase text-state-success">✓ Correct</span>
+                    <span className="text-xs font-bold uppercase text-state-success">✓ {t("exerciseEngine.correctTitle")}</span>
                   )}
                   {isAnswerSubmitted && isSelected && !isCorrectAnswer && (
-                    <span className="text-xs font-bold uppercase text-state-danger">✗ Wrong</span>
+                    <span className="text-xs font-bold uppercase text-state-danger">✗ {t("exerciseEngine.incorrectTitle")}</span>
                   )}
                 </button>
               );
@@ -372,7 +372,7 @@ const Quiz = () => {
 
           <div className="mt-8 flex items-center justify-between">
             <Button variant="danger" onClick={() => setShowQuitModal(true)}>
-              Quit Quiz
+              {t("quiz.quitBtn")}
             </Button>
             {isAnswerSubmitted ? (
               <Button onClick={handleNext}>

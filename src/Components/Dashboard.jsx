@@ -301,16 +301,17 @@ const Dashboard = () => {
                 {activeCourses.map((c) => {
                   const done = c.completedModules ? c.completedModules.length : 0;
                   const pct = c.totalModules ? Math.round((done / c.totalModules) * 100) : 0;
+                  const localizedTitle = t(`courseData.${c.courseId}.title`, c.title);
                   return (
                     <li key={c.courseId} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 transition-colors hover:bg-white/[0.04]">
                       <div className="flex items-start justify-between gap-3">
-                        <p className="min-w-0 font-semibold text-sm text-white">{c.title}</p>
+                        <p className="min-w-0 font-semibold text-sm text-white">{localizedTitle}</p>
                         <button
                           type="button"
                           onClick={() => setCourseToUnenroll(c)}
                           className="flex-none p-1 text-ink-low transition-colors hover:text-rose-400"
                           title={t("dashboard.unenroll")}
-                          aria-label={`Unenroll from ${c.title}`}
+                          aria-label={`Unenroll from ${localizedTitle}`}
                         >
                           <Icon name="trash-2" size={15} />
                         </button>
@@ -345,38 +346,45 @@ const Dashboard = () => {
               </h2>
               {completedCourses.length > 0 ? (
                 <ul className="space-y-2.5">
-                  {completedCourses.map((c) => (
-                    <li key={c.courseId} className="flex items-center justify-between gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4">
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold text-white">{c.title}</p>
-                        <p className="text-[11px] font-medium text-emerald-400">Completed 🏆</p>
-                      </div>
-                      <Button size="sm" variant="ghost" onClick={() => navigate(`/course/${c.courseId}`)}>Review</Button>
-                    </li>
-                  ))}
+                  {completedCourses.map((c) => {
+                    const localizedTitle = t(`courseData.${c.courseId}.title`, c.title);
+                    return (
+                      <li key={c.courseId} className="flex items-center justify-between gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4">
+                        <div className="min-w-0">
+                          <p className="font-semibold text-sm text-white">{localizedTitle}</p>
+                        </div>
+                        <span className="flex-none rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-bold text-emerald-300 border border-emerald-500/30">
+                          {t("courses.courseCompleted")}
+                        </span>
+                      </li>
+                    );
+                  })}
                 </ul>
               ) : (
-                <p className="py-3 text-sm text-ink-low">No completed courses yet — finish a course to earn a badge.</p>
+                <p className="py-3 text-sm text-ink-low">{t("dashboard.noCoursesTitle")}</p>
               )}
             </Card>
 
             <Card className="p-5 md:p-6">
               <h2 className="mb-4 flex items-center gap-2 text-base font-bold text-white">
-                <Icon name="trophy" size={16} className="text-amber-400" /> Quiz high scores
+                <Icon name="trophy" size={16} className="text-amber-400" /> {t("dashboard.quizHistory")}
               </h2>
               {quizScores.length > 0 ? (
                 <ul className="space-y-2.5">
-                  {quizScores.map((q) => (
-                    <li key={q.title} className="flex items-center justify-between gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5">
-                      <span className="min-w-0 truncate text-sm text-ink">{q.title}</span>
-                      <span className="flex-none rounded-lg bg-violet-500/15 px-2.5 py-1 text-xs font-bold tabular-nums text-violet-300">
-                        {q.score} <span className="font-medium text-violet-400/80">best</span>
-                      </span>
-                    </li>
-                  ))}
+                  {quizScores.map((q) => {
+                    const localizedTitle = t(`quizzesData.${q.quizId}.title`, q.title);
+                    return (
+                      <li key={q.title} className="flex items-center justify-between gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5">
+                        <span className="min-w-0 truncate text-sm text-ink">{localizedTitle}</span>
+                        <span className="flex-none rounded-lg bg-violet-500/15 px-2.5 py-1 text-xs font-bold tabular-nums text-violet-300">
+                          {q.score} <span className="font-medium text-violet-400/80">best</span>
+                        </span>
+                      </li>
+                    );
+                  })}
                 </ul>
               ) : (
-                <p className="py-3 text-sm text-ink-low">No quiz attempts yet — <button onClick={() => navigate("/quiz")} className="font-semibold text-sky hover:underline">take a quiz</button> to set a high score.</p>
+                <p className="py-3 text-sm text-ink-low">{t("dashboard.noQuizTitle")}</p>
               )}
             </Card>
           </div>
@@ -388,10 +396,10 @@ const Dashboard = () => {
             <div>
               <h3 className="text-sm font-bold text-red-400 flex items-center gap-2">
                 <Icon name="alert-triangle" size={16} className="text-red-400" />
-                Account Control — Danger Zone
+                {t("dashboard.dangerZoneTitle")}
               </h3>
               <p className="text-xs text-ink-low mt-1 leading-relaxed max-w-xl">
-                Permanently delete your student profile, course enrollments, earned XP, badges, quiz high scores, and remove your score from the global leaderboard.
+                {t("dashboard.dangerZoneDesc")}
               </p>
             </div>
             <Button
@@ -404,7 +412,7 @@ const Dashboard = () => {
               className="flex-none self-start sm:self-center border border-red-500/40 bg-red-500/10 hover:bg-red-500/20 text-red-300"
             >
               <Icon name="trash-2" size={14} />
-              Delete My Profile
+              {t("dashboard.deleteProfileBtn")}
             </Button>
           </div>
         </Card>
@@ -415,14 +423,14 @@ const Dashboard = () => {
         <Modal 
           isOpen={!!courseToUnenroll} 
           onClose={() => setCourseToUnenroll(null)} 
-          title="Unenroll from course?"
+          title={t("dashboard.unenrollModalTitle")}
           onAction={handleUnenroll}
-          actionText="Unenroll"
+          actionText={t("dashboard.unenrollBtn")}
           actionVariant="danger"
           loading={unenrollLoading}
         >
           <p className="text-sm text-ink-low">
-            Are you sure you want to unenroll from <span className="font-semibold text-ink-hi">{courseToUnenroll.title}</span>? Your progress for this course will be reset.
+            {t("dashboard.unenrollModalText", { title: courseToUnenroll.title })}
           </p>
         </Modal>
       )}
@@ -437,11 +445,11 @@ const Dashboard = () => {
               setDeleteConfirmText("");
             }
           }}
-          title="Permanently Delete Your Profile?"
+          title={t("dashboard.deleteModalTitle")}
           icon="alert-octagon"
           isDestructive={true}
           onAction={handleDeleteProfile}
-          actionText="Delete Profile Permanently"
+          actionText={t("dashboard.deleteConfirmBtn")}
           actionVariant="danger"
           loading={deleteLoading}
           actionDisabled={deleteConfirmText.trim().toUpperCase() !== "DELETE"}
@@ -449,43 +457,43 @@ const Dashboard = () => {
           <div className="space-y-4">
             <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-xs leading-relaxed text-red-200">
               <p className="font-bold text-red-300 mb-1 flex items-center gap-1.5">
-                THIS IS A DESTRUCTIVE &amp; PERMANENT DECISION!
+                {t("dashboard.deleteWarningTitle")}
               </p>
               <p>
-                Deleting your profile will immediately erase all your data from Learntopia. Once confirmed, this action cannot be undone or recovered.
+                {t("dashboard.deleteWarningText")}
               </p>
             </div>
 
             <div className="space-y-2 text-xs text-ink-low">
-              <p className="font-semibold text-ink-hi text-xs uppercase tracking-wider">The following will be deleted forever:</p>
+              <p className="font-semibold text-ink-hi text-xs uppercase tracking-wider">{t("dashboard.deleteListHeading")}</p>
               <ul className="space-y-1.5 pl-1">
                 <li className="flex items-center gap-2 text-red-300">
-                  <Icon name="x-circle" size={14} className="text-red-400 flex-none" /> All course enrollments &amp; module progress
+                  <Icon name="x-circle" size={14} className="text-red-400 flex-none" /> {t("dashboard.deleteList1")}
                 </li>
                 <li className="flex items-center gap-2 text-red-300">
-                  <Icon name="x-circle" size={14} className="text-red-400 flex-none" /> Total XP, Level progression &amp; earned badges
+                  <Icon name="x-circle" size={14} className="text-red-400 flex-none" /> {t("dashboard.deleteList2")}
                 </li>
                 <li className="flex items-center gap-2 text-red-300">
-                  <Icon name="x-circle" size={14} className="text-red-400 flex-none" /> Quiz high scores and attempt records
+                  <Icon name="x-circle" size={14} className="text-red-400 flex-none" /> {t("dashboard.deleteList3")}
                 </li>
                 <li className="flex items-center gap-2 text-red-300">
-                  <Icon name="x-circle" size={14} className="text-red-400 flex-none" /> Public Leaderboard ranking &amp; profile entry
+                  <Icon name="x-circle" size={14} className="text-red-400 flex-none" /> {t("dashboard.deleteList4")}
                 </li>
                 <li className="flex items-center gap-2 text-red-300">
-                  <Icon name="x-circle" size={14} className="text-red-400 flex-none" /> Firebase User Account &amp; profile credentials
+                  <Icon name="x-circle" size={14} className="text-red-400 flex-none" /> {t("dashboard.deleteList5")}
                 </li>
               </ul>
             </div>
 
             <div className="pt-3 border-t border-white/10">
               <label className="block text-xs font-semibold text-ink-hi mb-1.5">
-                To confirm, type <span className="text-red-400 font-mono font-bold">DELETE</span> below:
+                {t("dashboard.deleteConfirmLabel", { keyword: "" })} <span className="text-red-400 font-mono font-bold">DELETE</span>
               </label>
               <input
                 type="text"
                 value={deleteConfirmText}
                 onChange={(e) => setDeleteConfirmText(e.target.value)}
-                placeholder='Type "DELETE" to confirm'
+                placeholder={t("dashboard.deleteConfirmPlaceholder")}
                 disabled={deleteLoading}
                 className="w-full rounded-lg border border-red-500/30 bg-white/5 px-3 py-2 text-xs font-mono text-white placeholder-ink-low/40 focus:border-red-500 focus:outline-none"
               />
@@ -498,3 +506,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+

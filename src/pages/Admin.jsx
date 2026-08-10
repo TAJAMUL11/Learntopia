@@ -5,6 +5,7 @@ import { auth, db } from "../firebase/firebase";
 import { collection, getDocs, addDoc, serverTimestamp, query, orderBy } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 import { useSound } from "../context/SoundContext";
+import { useLanguage } from "../context/LanguageContext";
 import Button from "../Components/ui/Button";
 import Icon from "../Components/ui/Icon";
 import Card from "../Components/ui/Card";
