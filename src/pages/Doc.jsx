@@ -1,20 +1,20 @@
 import { Link } from "react-router-dom";
 import Icon from "../Components/ui/Icon";
-
-const LAST_UPDATED = "August 9, 2026";
-
-const NAV = [
-  { id: "overview", label: "Overview" },
-  { id: "features", label: "Features" },
-  { id: "getting-started", label: "Getting Started" },
-  { id: "courses", label: "Courses & Modules" },
-  { id: "quizzes", label: "Quizzes" },
-  { id: "dashboard", label: "Dashboard" },
-  { id: "account", label: "Account & Security" },
-  { id: "faq", label: "FAQ" },
-];
+import { useLanguage } from "../context/LanguageContext";
 
 const Doc = () => {
+  const { t } = useLanguage();
+
+  const NAV = [
+    { id: "overview", label: t("doc.secOverview") },
+    { id: "features", label: t("doc.secFeatures") },
+    { id: "getting-started", label: t("doc.secGettingStarted") },
+    { id: "courses", label: t("doc.cardCourses") },
+    { id: "quizzes", label: t("doc.cardQuizzes") },
+    { id: "dashboard", label: t("nav.dashboard") },
+    { id: "account", label: t("dashboard.accountSettings") },
+    { id: "faq", label: t("doc.secFaq") },
+  ];
 
   const scrollTo = (id) => {
     const el = document.getElementById(id);
@@ -30,12 +30,12 @@ const Doc = () => {
 
         {/* Page header */}
         <div className="border-b border-white/[0.08] pb-8 mb-10">
-          <span className="inline-block rounded-md border border-violet-500/30 bg-violet-500/10 px-2.5 py-1 text-xs font-semibold uppercase tracking-widest text-violet-400 mb-3">Documentation</span>
-          <h1 className="text-4xl font-bold tracking-tight text-ink-hi">Learntopia Documentation</h1>
+          <span className="inline-block rounded-md border border-violet-500/30 bg-violet-500/10 px-2.5 py-1 text-xs font-semibold uppercase tracking-widest text-violet-400 mb-3">{t("doc.badge")}</span>
+          <h1 className="text-4xl font-bold tracking-tight text-ink-hi">{t("doc.title")}</h1>
           <p className="mt-3 max-w-2xl text-ink-low leading-relaxed">
-            Complete reference for the Learntopia platform — features, workflows, and answers to common questions.
+            {t("doc.subtitle")}
           </p>
-          <p className="mt-2 text-xs text-ink-low/60">Last updated: {LAST_UPDATED}</p>
+          <p className="mt-2 text-xs text-ink-low/60">{t("doc.lastUpdated")}</p>
         </div>
 
         <div className="xl:flex xl:gap-12">
@@ -43,7 +43,7 @@ const Doc = () => {
           {/* Left sidebar nav for desktop */}
           <aside className="hidden w-56 flex-none xl:block">
             <div className="sticky top-24">
-              <p className="mb-3 text-[11px] font-bold uppercase tracking-widest text-ink-low/50">On this page</p>
+              <p className="mb-3 text-[11px] font-bold uppercase tracking-widest text-ink-low/50">{t("doc.onThisPage")}</p>
               <nav className="space-y-0.5">
                 {NAV.map((item) => (
                   <button
@@ -60,7 +60,7 @@ const Doc = () => {
 
           {/* Mobile / Tablet wrapped nav pills (2-3 rows, zero scrolling) */}
           <div className="xl:hidden mb-8 rounded-2xl border border-white/10 bg-white/[0.02] p-4">
-            <p className="mb-3 text-[11px] font-bold uppercase tracking-widest text-ink-low/50">Quick jump</p>
+            <p className="mb-3 text-[11px] font-bold uppercase tracking-widest text-ink-low/50">{t("doc.quickJump")}</p>
             <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
               {NAV.map((item) => (
                 <button
@@ -79,19 +79,19 @@ const Doc = () => {
 
             {/* Overview */}
             <section id="overview">
-              <h2 className="text-2xl font-bold text-ink-hi border-b border-white/[0.06] pb-3 mb-5">Overview</h2>
+              <h2 className="text-2xl font-bold text-ink-hi border-b border-white/[0.06] pb-3 mb-5">{t("doc.secOverview")}</h2>
               <p className="text-ink-low leading-relaxed">
-                Learntopia is an interactive e-learning platform built for children and teenagers. It provides structured course tracks, timed knowledge quizzes, and a personal dashboard to track learning progress — all backed by a secure, private cloud database.
+                {t("doc.secOverviewBody1")}
               </p>
               <p className="mt-4 text-ink-low leading-relaxed">
-                The platform is entirely free to use. You can explore courses and take quizzes as a guest, or create an account to save progress, earn points, and appear on the leaderboard.
+                {t("doc.secOverviewBody2")}
               </p>
 
               <div className="mt-6 grid gap-4 sm:grid-cols-3">
                 {[
-                  { icon: "book", title: "Structured Courses", text: "Topic-specific learning tracks with module-by-module progression." },
-                  { icon: "clock", title: "Timed Quizzes", text: "15-second per-question quizzes with instant right/wrong feedback." },
-                  { icon: "bar-chart", title: "Progress Tracking", text: "Personal dashboard, streaks, points, and a global leaderboard." },
+                  { icon: "book", title: t("doc.cardCourses"), text: t("doc.cardCoursesDesc") },
+                  { icon: "clock", title: t("doc.cardQuizzes"), text: t("doc.cardQuizzesDesc") },
+                  { icon: "bar-chart", title: t("doc.cardTracking"), text: t("doc.cardTrackingDesc") },
                 ].map((item) => (
                   <div key={item.title} className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-5">
                     <div className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-lg bg-violet-500/15 text-violet-400">

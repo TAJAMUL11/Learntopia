@@ -56,7 +56,7 @@ The platform is designed to be fast, accessible, and mobile-friendly, with authe
 | **Daily Login Streaks** | Consecutive daily login counter tracked in local timezone using `Date.UTC` integer arithmetic — DST-safe, no floating-point rounding. Resets on a missed day. |
 | **Global Leaderboard** | Public leaderboard ranking all users by total points and quiz scores. Access restricted exclusively to authenticated users. |
 | **Guest Score Preservation** | Guest quiz scores are automatically saved to the user profile when signing in or registering from the results screen. |
-| **AI Tutors** | Each course has a personality-driven AI tutor to guide learners through the subject matter. |
+| **Google Gemini AI Tutor** | Interactive slide-out AI assistant powered by Google Gemini (`AIChatDrawer.jsx`). Each course features a persona-driven AI tutor (*Robo-Py, Count AI-Cula, etc.*) providing kid-friendly, course-contextual responses and hints in real-time. |
 | **Strict Focus Mode** | Route-level navigation blocker prevents accidental loss of quiz or module progress. |
 | **Course Controls** | Unenroll, resume, or reset completed courses directly from the dashboard. |
 | **Google OAuth** | One-tap sign-in with Google alongside standard email/password authentication. |

@@ -28,10 +28,10 @@ export const LanguageProvider = ({ children }) => {
   };
 
   /**
-   * Helper function to fetch nested translation string by key path
-   * e.g., t('nav.home') => "Home" or "Inicio"
+   * Helper function to fetch nested translation string by key path with optional interpolation parameters
+   * e.g., t('quiz.questionCount', { current: 1, total: 10 }) => "Question 1 of 10"
    */
-  const t = (path) => {
+  const t = (path, params = {}) => {
     if (!path) return '';
     const keys = path.split('.');
     
@@ -46,22 +46,27 @@ export const LanguageProvider = ({ children }) => {
       }
     }
 
-    if (result !== null && typeof result === 'string') {
-      return result;
-    }
-
-    // Fallback to English dictionary if key is missing in active language
-    let fallback = translations['en'];
-    for (const key of keys) {
-      if (fallback && fallback[key] !== undefined) {
-        fallback = fallback[key];
-      } else {
-        fallback = path; // Return key path itself if not found
-        break;
+    if (result === null || typeof result !== 'string') {
+      // Fallback to English dictionary if key is missing in active language
+      let fallback = translations['en'];
+      for (const key of keys) {
+        if (fallback && fallback[key] !== undefined) {
+          fallback = fallback[key];
+        } else {
+          fallback = path; // Return key path itself if not found
+          break;
+        }
       }
+      result = typeof fallback === 'string' ? fallback : path;
     }
 
-    return typeof fallback === 'string' ? fallback : path;
+    if (typeof result === 'string' && params && typeof params === 'object') {
+      Object.keys(params).forEach(paramKey => {
+        result = result.replace(new RegExp(`\\{${paramKey}\\}`, 'g'), params[paramKey]);
+      });
+    }
+
+    return result;
   };
 
   return (
