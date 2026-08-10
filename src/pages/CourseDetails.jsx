@@ -8,6 +8,7 @@ import { db } from "../firebase/firebase";
 import { doc, getDoc, setDoc, deleteField } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { COURSES } from "../data/coursesData";
+import { getLocalizedCourse } from "../utils/localizationUtils";
 import Card from "../Components/ui/Card";
 import Button from "../Components/ui/Button";
 import Icon from "../Components/ui/Icon";
@@ -16,6 +17,7 @@ import { Skeleton } from "../Components/ui/Skeleton";
 import Modal from "../Components/ui/Modal";
 import LessonPlayer from "../Components/LessonPlayer";
 import ExerciseEngine from "../Components/ExerciseEngine";
+import AIChatDrawer from "../Components/AIChatDrawer";
 
 const CourseDetails = () => {
   const { id } = useParams();
@@ -32,7 +34,7 @@ const CourseDetails = () => {
   const [loadingData, setLoadingData] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showResetModal, setShowResetModal] = useState(false);
-  const [showAIModal, setShowAIModal] = useState(false);
+  const [showAIDrawer, setShowAIDrawer] = useState(false);
   
   const [activeTab, setActiveTab] = useState("overview");
 
@@ -73,7 +75,8 @@ const CourseDetails = () => {
       navigate("/courses", { replace: true });
       return;
     }
-    setCourse(c);
+    const localized = getLocalizedCourse(c, t);
+    setCourse(localized);
 
     const load = async () => {
       const total = c.syllabus.length;
@@ -105,7 +108,7 @@ const CourseDetails = () => {
       }
     };
     load();
-  }, [currentUser, authLoading, id, navigate]);
+  }, [currentUser, authLoading, id, navigate, t]);
 
   const total = course?.syllabus?.length || 0;
   const progressPct = total ? Math.round((completedModules.length / total) * 100) : 0;
@@ -390,7 +393,7 @@ const CourseDetails = () => {
                   <p className="mt-2 text-sm leading-relaxed text-ink-low">
                     I am powered by AI and I'm here to help you master this course!
                   </p>
-                  <Button variant="primary" className="mt-4 w-full gap-2 shadow-[0_0_15px_rgba(139,92,246,0.4)] hover:shadow-[0_0_25px_rgba(139,92,246,0.6)]" onClick={() => setShowAIModal(true)}>
+                  <Button variant="primary" className="mt-4 w-full gap-2 shadow-[0_0_15px_rgba(139,92,246,0.4)] hover:shadow-[0_0_25px_rgba(139,92,246,0.6)]" onClick={() => setShowAIDrawer(true)}>
                     <Icon name="message-circle" size={16} /> Ask {course.aiTutor?.name}
                   </Button>
                 </div>
@@ -616,27 +619,12 @@ const CourseDetails = () => {
         </div>
       </Modal>
 
-      <Modal
-        isOpen={showAIModal}
-        onClose={() => setShowAIModal(false)}
-        title={`Chat with ${course?.aiTutor?.name || "AI Tutor"}`}
-        icon="cpu"
-        actionText="Got it!"
-        actionVariant="primary"
-        onAction={() => setShowAIModal(false)}
-      >
-        <div className="flex flex-col items-center text-center p-4">
-          <div className="relative mb-6">
-            <div className="absolute -inset-4 rounded-full bg-violet-500/20 blur-xl animate-pulse" />
-            <img src={course?.aiTutor?.avatar} alt="AI" className="relative h-32 w-32 rounded-full border-4 border-violet-500 object-cover shadow-2xl" />
-          </div>
-          <h3 className="text-2xl font-bold text-ink-hi mb-2">I'm booting up!</h3>
-          <p className="text-base text-ink-low leading-relaxed">
-            I am currently configuring my neural networks to become the best AI tutor for you. 
-            The interactive chat feature is coming very soon!
-          </p>
-        </div>
-      </Modal>
+      <AIChatDrawer
+        isOpen={showAIDrawer}
+        onClose={() => setShowAIDrawer(false)}
+        course={course}
+        currentModule={course?.syllabus?.[expandedIndex]}
+      />
 
     </div>
   );
