@@ -8,6 +8,17 @@ export const LANGUAGES = [
 
 export const translations = {
   en: {
+    aiTutor: {
+          "yourTutor": "Your AI Tutor",
+          "askTutor": "Ask {name}",
+          "typeMessage": "Ask a question about this course...",
+          "thinking": "Thinking...",
+          "errorMessage": "Oops! Couldn't reach your AI tutor. Please try again.",
+          "rateLimitError": "Your AI tutor is taking a quick break! Please wait a moment.",
+          "clearChat": "Clear chat history",
+          "poweredBy": "Powered by Google Gemini 2.0 Flash • Kid-Safe AI",
+          "chatGreeting": "Hi there! 👋 I'm {name}, your {subject} buddy! Ask me anything about this course, and let's learn together!"
+    },
     nav: {
       home: "Home",
       courses: "Courses",
@@ -89,6 +100,12 @@ export const translations = {
       searchPlaceholder: "Search by course or subject…",
       enrolling: "Enrolling...",
       enrolledBadge: "Enrolled"
+    ,
+      searchResultsSingle: "{count} result for “{query}”",
+      searchResultsPlural: "{count} results for “{query}”",
+      noResults: "No courses match “{query}”",
+      noResultsDesc: "Try a broader term, or browse the full catalog.",
+      clearSearch: "Clear search"
     },
     courseDetails: {
       overview: "Overview",
@@ -109,6 +126,35 @@ export const translations = {
       backToCourses: "Back to Courses",
       module: "Module"
     },
+    lessonPlayer: {
+      story: "Story Time",
+      concept: "Learn",
+      fact: "Fun Fact",
+      tip: "Pro Tip",
+      example: "Example",
+      activity: "Activity",
+      recap: "Recap",
+      stepCount: "Step {current} of {total}",
+      prevStep: "Previous Step",
+      nextStep: "Next Step",
+      startPractice: "Start Interactive Exercises 🚀",
+      completeModule: "Complete & Practice 🎯"
+    },
+    exerciseEngine: {
+      header: "Interactive Practice",
+      qCounter: "Question {current} of {total}",
+      trueBtn: "True",
+      falseBtn: "False",
+      fillPlaceholder: "Type your answer here...",
+      matchingHelp: "Click an item on the left, then click its match on the right!",
+      checkAnswer: "Check Answer",
+      correctTitle: "All Correct! +50 XP",
+      incorrectTitle: "Not quite right yet!",
+      tryAgain: "Try Again",
+      nextQ: "Next Challenge",
+      completeBtn: "Complete Module 🎉",
+      saving: "Saving progress..."
+    },
     quiz: {
       title: "Quiz Center",
       subtitle: "Test your knowledge and verify your skills in real time.",
@@ -124,7 +170,11 @@ export const translations = {
       backToTopics: "Back to Topics",
       backToQuizzes: "Back to Quizzes",
       questionCountLabel: "Question",
-      of: "of"
+      of: "of",
+      quitConfirmTitle: "Quit Active Quiz?",
+      quitConfirmMsg: "Your current progress in this quiz will be lost.",
+      quitBtn: "Yes, Quit Quiz",
+      stayBtn: "Resume Quiz"
     },
     leaderboard: {
       badge: "Learntopia Rankings",
@@ -167,13 +217,49 @@ export const translations = {
       accountSettings: "Account Settings",
       deleteAccount: "Delete Account",
       logout: "Log out",
-      profile: "Student Profile"
+      profile: "Student Profile",
+      earnedOn: "Earned on {date}"
+    ,
+      dangerZoneTitle: "Account Control — Danger Zone",
+      dangerZoneDesc: "Permanently delete your student profile, course enrollments, earned XP, badges, quiz high scores, and remove your score from the global leaderboard.",
+      deleteProfileBtn: "Delete My Profile",
+      unenrollModalTitle: "Unenroll from course?",
+      unenrollModalText: "Are you sure you want to unenroll from {title}? Your progress for this course will be reset.",
+      unenrollBtn: "Unenroll",
+      deleteModalTitle: "Permanently Delete Your Profile?",
+      deleteWarningTitle: "THIS IS A DESTRUCTIVE & PERMANENT DECISION!",
+      deleteWarningText: "Deleting your profile will immediately erase all your data from Learntopia. Once confirmed, this action cannot be undone or recovered.",
+      deleteListHeading: "The following will be deleted forever:",
+      deleteList1: "All course enrollments & module progress",
+      deleteList2: "Total XP, Level progression & earned badges",
+      deleteList3: "Quiz high scores and attempt records",
+      deleteList4: "Public Leaderboard ranking & profile entry",
+      deleteList5: "User Account & profile credentials",
+      deleteConfirmLabel: "To confirm, type {keyword} below:",
+      deleteConfirmPlaceholder: "Type \"DELETE\" to confirm",
+      deleteConfirmBtn: "Delete Profile Permanently"
     },
     gamification: {
       levelUp: "LEVEL UP!",
       badgeUnlocked: "BADGE UNLOCKED!",
       congrats: "Awesome Work!",
-      close: "Awesome! 🚀"
+      close: "Awesome! 🚀",
+      earnedBadge: "{name} Badge"
+    },
+    levelNames: {
+      level1: "Rookie Coder",
+      level2: "Code Explorer",
+      level3: "Byte Master",
+      level4: "Logic Legend",
+      level5: "Grandmaster"
+    },
+    badgeNames: {
+      python: "Python Pioneer",
+      math: "Math Wizard",
+      finance: "Cash Master",
+      marketing: "Brand Genius",
+      web: "Web Architect",
+      art: "Digital Picasso"
     },
     auth: {
       loginTitle: "Welcome Back to Learntopia",
@@ -187,6 +273,14 @@ export const translations = {
       dontHaveAccount: "Don't have an account?",
       signInHere: "Sign in here",
       registerHere: "Register here"
+    },
+    authGuidance: {
+      noAccountTitle: "Account Not Found",
+      noAccountMsg: "We couldn't find an account registered with {email}. Would you like to create a new account?",
+      createAccountBtn: "Create New Account",
+      alreadyExistsTitle: "Account Already Exists",
+      alreadyExistsMsg: "An account with {email} is already registered. Would you like to sign in instead?",
+      signInBtn: "Sign In Now"
     },
     contact: {
       eyebrow: "Get in touch",
@@ -218,6 +312,89 @@ export const translations = {
       subtitle: "Oops! The page you are looking for doesn't exist or has been moved.",
       goHome: "Return to Home"
     },
+    doc: {
+      badge: "Documentation",
+      title: "Learntopia Documentation",
+      subtitle: "Complete reference for the Learntopia platform — features, workflows, and answers to common questions.",
+      lastUpdated: "Last updated: August 2026",
+      onThisPage: "On this page",
+      quickJump: "Quick jump",
+      secOverview: "Overview",
+      secOverviewBody1: "Learntopia is an interactive e-learning platform built for children and teenagers. It provides structured course tracks, timed knowledge quizzes, and a personal dashboard to track learning progress — all backed by a secure, private cloud database.",
+      secOverviewBody2: "The platform is entirely free to use. You can explore courses and take quizzes as a guest, or create an account to save progress, earn points, and appear on the leaderboard.",
+      cardCourses: "Structured Courses",
+      cardCoursesDesc: "Topic-specific learning tracks with module-by-module progression.",
+      cardQuizzes: "Timed Quizzes",
+      cardQuizzesDesc: "15-second per-question quizzes with instant right/wrong feedback.",
+      cardTracking: "Progress Tracking",
+      cardTrackingDesc: "Personal dashboard, streaks, points, and a global leaderboard.",
+      secFeatures: "Features",
+      feat1: "Interactive Courses: Step-by-step syllabi with interactive cards, examples, and practice exercises.",
+      feat2: "Timed Quiz Engine: 10 random questions per topic, 15-second countdown timer per question, instant score summaries.",
+      feat3: "Gamification & XP: Earn XP for completing modules and quizzes. Level up from Rookie Coder to Grandmaster.",
+      feat4: "Badges & Achievements: Unlock collectible digital badges for mastering subjects.",
+      feat5: "Global Leaderboard: Compete with fellow learners on overall scores or filter by individual quiz topics.",
+      feat6: "Multi-Language Support: Full support for English, Spanish, French, German, and Arabic with RTL layout support.",
+      secGettingStarted: "Getting Started",
+      gsStep1Title: "1. Create an Account",
+      gsStep1Desc: "Click 'Get Started' in the header to register with your email or sign in with Google in one tap.",
+      gsStep2Title: "2. Choose a Subject Track",
+      gsStep2Desc: "Browse our course catalog covering Python Programming, Math, Finance, Marketing, Web Development, and Digital Art.",
+      gsStep3Title: "3. Complete Modules & Earn XP",
+      gsStep3Desc: "Read step-by-step lessons, solve exercises, complete course tracks, and watch your level rise on your dashboard!",
+      secFaq: "Frequently Asked Questions",
+      faq1Q: "Is Learntopia really 100% free?",
+      faq1A: "Yes! Learntopia is completely free for all kids and learners worldwide. There are no subscriptions, microtransactions, or hidden fees.",
+      faq2Q: "Do I need an account to use Learntopia?",
+      faq2A: "You can browse courses and take quizzes as a guest. However, creating an account allows you to save your progress, track your XP, earn badges, and join the leaderboard.",
+      faq3Q: "Is my personal data safe?",
+      faq3A: "Absolutely. We follow strict COPPA & privacy guidelines. We only store essential account information (display name, email, XP, course progress). We never sell your data or display third-party ads."
+    },
+    privacy: {
+      badge: "Legal & Safety",
+      title: "Privacy Policy",
+      subtitle: "Learn how we collect, protect, and respect your personal data on Learntopia.",
+      lastUpdated: "Last updated: July 2026",
+      sec1Title: "1. Introduction",
+      sec1Body: "Learntopia is dedicated to providing a safe, educational environment for learners of all ages. This Privacy Policy outlines our transparent data practices.",
+      sec2Title: "2. Information We Collect",
+      sec2Item1: "Account Details: Display name and email address provided during sign up or Google authentication.",
+      sec2Item2: "Progress Data: Enrolled courses, module completions, quiz scores, XP points, and daily login streaks.",
+      sec3Title: "3. How We Protect Your Data",
+      sec3Body: "Your data is stored securely using Firebase Authentication and Firestore database rules. We never share or sell personal information to third parties.",
+      sec4Title: "4. Children's Privacy",
+      sec4Body: "Learntopia complies strictly with COPPA guidelines. We do not collect unnecessary personal details, track location, or display third-party advertisements."
+    },
+    terms: {
+      badge: "Terms of Service",
+      title: "Terms of Service",
+      subtitle: "Please read these terms carefully before using Learntopia.",
+      lastUpdated: "Last updated: July 2026",
+      sec1Title: "1. Acceptance of Terms",
+      sec1Body: "By accessing or using Learntopia, you agree to be bound by these Terms of Service. If you do not agree, please do not use the platform.",
+      sec2Title: "2. User Conduct & Safety",
+      sec2Body: "Learntopia is a positive learning community. Users must treat others with respect and refrain from inappropriate conduct or attempting to disrupt the service.",
+      sec3Title: "3. Educational Content",
+      sec3Body: "All course materials, quizzes, and digital assets on Learntopia are provided for educational purposes."
+    },
+    admin: {
+      badge: "Operations Center",
+      title: "Learntopia Admin Portal",
+      subtitle: "Executive dashboard & student directory control panel.",
+      liveClock: "Live System Clock",
+      adminBadge: "ADMIN",
+      exitPortal: "Exit Portal",
+      totalStudents: "Total Registered Students",
+      activeQuizzes: "Active Quiz Attempts",
+      totalXpGranted: "Total XP Granted",
+      directoryTitle: "Student Directory",
+      directorySubtitle: "View registered learners and performance metrics.",
+      colStudent: "Student",
+      colEmail: "Email",
+      colXp: "Total XP",
+      colStreak: "Streak",
+      colJoined: "Joined Date"
+    },
     footer: {
       tagline: "Empowering the next generation of creators, coders, and thinkers with free gamified education.",
       quickLinks: "Quick Links",
@@ -226,6 +403,200 @@ export const translations = {
       privacy: "Privacy Policy",
       rights: "All rights reserved. Made for kids & teens worldwide."
     },
+    courseData: {
+      "1": {
+            "title": "Python for Kids: Build Your First Game!",
+            "desc": "Learn to code by building real games. Perfect for beginners aged 7-14. Dive into Python fundamentals and game mechanics!",
+            "category": "Programming",
+            "difficulty": "Beginner",
+            "modules": [
+                  {
+                        "title": "Module 1: Hello Python!",
+                        "desc": "Learn what Python is and write your first lines of code."
+                  },
+                  {
+                        "title": "Module 2: Variables & Data Boxes",
+                        "desc": "Store numbers, text, and player scores in variables."
+                  },
+                  {
+                        "title": "Module 3: Making Decisions with IF",
+                        "desc": "Use logic and conditions to control game choices."
+                  },
+                  {
+                        "title": "Module 4: Loops & Repeating Actions",
+                        "desc": "Repeat code automatically with FOR and WHILE loops."
+                  },
+                  {
+                        "title": "Module 5: Functions & Code Tools",
+                        "desc": "Package your code into reusable helper functions."
+                  },
+                  {
+                        "title": "Module 6: Final Boss: Build Your Game!",
+                        "desc": "Combine everything to build a playable text adventure game!"
+                  }
+            ]
+      },
+      "2": {
+            "title": "Math Magic: Puzzles & Logic Fun!",
+            "desc": "Master fun math sequences, 3D geometry shapes, and logical thinking puzzles!",
+            "category": "Mathematics",
+            "difficulty": "Beginner",
+            "modules": [
+                  {
+                        "title": "Module 1: Number Sequences",
+                        "desc": "Spot hidden rules and predict upcoming numbers."
+                  },
+                  {
+                        "title": "Module 2: 2D & 3D Geometry",
+                        "desc": "Explore shapes, angles, cubes, and spheres."
+                  },
+                  {
+                        "title": "Module 3: Logic Puzzles",
+                        "desc": "Use deductive reasoning to solve tricky brain teasers."
+                  },
+                  {
+                        "title": "Module 4: Algorithms & Step Thinking",
+                        "desc": "Break big problems into step-by-step instructions."
+                  },
+                  {
+                        "title": "Module 5: Patterns in Nature",
+                        "desc": "Discover Fibonacci numbers in flowers and shells."
+                  },
+                  {
+                        "title": "Module 6: Math Wizard Challenge",
+                        "desc": "Put all your puzzle skills to the test!"
+                  }
+            ]
+      },
+      "3": {
+            "title": "Money Smart: Money & Budgeting for Kids!",
+            "desc": "Understand how money works, budgeting, saving, and earning through interactive simulations.",
+            "category": "Finance",
+            "difficulty": "Beginner",
+            "modules": [
+                  {
+                        "title": "Module 1: History of Money",
+                        "desc": "From trading chickens to using digital coins."
+                  },
+                  {
+                        "title": "Module 2: Income vs. Expenses",
+                        "desc": "Learn where money comes from and where it goes."
+                  },
+                  {
+                        "title": "Module 3: Building a Smart Budget",
+                        "desc": "Allocate your funds for needs, wants, and savings."
+                  },
+                  {
+                        "title": "Module 4: The Power of Interest",
+                        "desc": "Watch your savings grow in a bank account."
+                  },
+                  {
+                        "title": "Module 5: Smart Shopping",
+                        "desc": "Compare prices and avoid impulse buying."
+                  },
+                  {
+                        "title": "Module 6: Junior Tycoon Game",
+                        "desc": "Run your own virtual lemonade stand business!"
+                  }
+            ]
+      },
+      "4": {
+            "title": "Brand Genius: Marketing & Media Basics!",
+            "desc": "Discover how brands design logos, create viral ads, and talk to audiences.",
+            "category": "Marketing",
+            "difficulty": "Beginner",
+            "modules": [
+                  {
+                        "title": "Module 1: What is a Brand?",
+                        "desc": "Logos, colors, slogans, and brand personality."
+                  },
+                  {
+                        "title": "Module 2: Target Audience",
+                        "desc": "Identify who your product is made for."
+                  },
+                  {
+                        "title": "Module 3: Visual Design & Color",
+                        "desc": "Choose colors that trigger emotions and trust."
+                  },
+                  {
+                        "title": "Module 4: Creating Catchy Ads",
+                        "desc": "Write headlines and design eye-catching posters."
+                  },
+                  {
+                        "title": "Module 5: Digital Media & Socials",
+                        "desc": "Understand video ads, sponsors, and online media."
+                  },
+                  {
+                        "title": "Module 6: Product Launch Campaign",
+                        "desc": "Launch your own imaginary toy or game product!"
+                  }
+            ]
+      },
+      "5": {
+            "title": "Web Creator: Build Websites with HTML & CSS!",
+            "desc": "Turn your ideas into real webpages with colorful styles, buttons, and layouts.",
+            "category": "Web Design",
+            "difficulty": "Intermediate",
+            "modules": [
+                  {
+                        "title": "Module 1: HTML Building Blocks",
+                        "desc": "Headings, paragraphs, tags, and page structure."
+                  },
+                  {
+                        "title": "Module 2: Adding Images & Links",
+                        "desc": "Connect pages and add vibrant graphics."
+                  },
+                  {
+                        "title": "Module 3: Styling with CSS",
+                        "desc": "Change fonts, text colors, and background gradients."
+                  },
+                  {
+                        "title": "Module 4: Buttons & Hover Effects",
+                        "desc": "Make buttons pop with animations and hover states."
+                  },
+                  {
+                        "title": "Module 5: Responsive Layouts",
+                        "desc": "Design pages that look great on phones and tablets."
+                  },
+                  {
+                        "title": "Module 6: Personal Portfolio Website",
+                        "desc": "Build and publish your personal portfolio page!"
+                  }
+            ]
+      },
+      "6": {
+            "title": "Digital Artist: Create Graphics & Digital Art!",
+            "desc": "Master colors, shapes, layers, and digital illustration tools.",
+            "category": "Digital Art",
+            "difficulty": "Beginner",
+            "modules": [
+                  {
+                        "title": "Module 1: Pixels & Canvas",
+                        "desc": "Understand resolution, canvas size, and digital tools."
+                  },
+                  {
+                        "title": "Module 2: Color Theory & Palettes",
+                        "desc": "Combine primary, warm, and cool colors."
+                  },
+                  {
+                        "title": "Module 3: Working with Layers",
+                        "desc": "Stack objects, backgrounds, and shading easily."
+                  },
+                  {
+                        "title": "Module 4: Drawing Character Avatars",
+                        "desc": "Sketch cute cartoon characters step-by-step."
+                  },
+                  {
+                        "title": "Module 5: Digital Painting Tricks",
+                        "desc": "Use brushes, gradients, and lighting effects."
+                  },
+                  {
+                        "title": "Module 6: Art Showcase Exhibition",
+                        "desc": "Create a final poster masterpiece!"
+                  }
+            ]
+      }
+},
     common: {
       soundOn: "Sound On",
       soundOff: "Sound Muted",
@@ -233,11 +604,25 @@ export const translations = {
       close: "Close",
       cancel: "Cancel",
       confirm: "Confirm",
-      back: "Back"
+      back: "Back",
+      loading: "Loading...",
+      saving: "Saving...",
+      error: "An error occurred"
     }
   },
 
   es: {
+    aiTutor: {
+          "yourTutor": "Tu Tutor IA",
+          "askTutor": "Preguntar a {name}",
+          "typeMessage": "Haz una pregunta sobre este curso...",
+          "thinking": "Pensando...",
+          "errorMessage": "¡Ups! No se pudo contactar con tu tutor IA. Inténtalo de nuevo.",
+          "rateLimitError": "¡Tu tutor IA está tomando un breve descanso! Espera un momento.",
+          "clearChat": "Limpiar historial de chat",
+          "poweredBy": "Desarrollado por Google Gemini 2.0 Flash • IA Segura para Niños",
+          "chatGreeting": "¡Hola! 👋 Soy {name}, ¡tu compañero de {subject}! Pregúntame lo que quieras sobre este curso, ¡y aprendamos juntos!"
+    },
     nav: {
       home: "Inicio",
       courses: "Cursos",
@@ -253,7 +638,7 @@ export const translations = {
     },
     hero: {
       badge: "100% Gratis y Seguro para Niños",
-      titleStart: "Construye tus",
+      titleStart: "Desarrolla tus",
       titleAccent: "habilidades",
       titleEnd: "en línea",
       subtitle: "Aprende y perfecciona tus habilidades con cursos interactivos y evaluaciones en tiempo real.",
@@ -298,7 +683,7 @@ export const translations = {
       quizzes: "Rutas de cuestionario",
       rating: "Calificación promedio",
       chartTitle: "Inscripciones por materia",
-      chartSubtitle: "Dónde se enfocan nuestros estudiantes en este momento.",
+      chartSubtitle: "En lo que nuestros estudiantes se enfocan ahora.",
       studentsLegend: "Estudiantes",
       frontend: "Frontend",
       finance: "Finanzas",
@@ -308,27 +693,33 @@ export const translations = {
       marketing: "Marketing"
     },
     courses: {
-      title: "¡Comienza tu aventura de aprendizaje!",
-      subtitle: "Explora cursos divertidos e interactivos diseñados para jóvenes. ¡Aprende a programar, dibujar y resolver acertijos!",
+      title: "¡Comienza tu Aventura de Aprendizaje!",
+      subtitle: "Explora cursos divertidos e interactivos diseñados para niños y jóvenes. ¡Aprende a programar, dibujar y resolver acertijos!",
       eyebrow: "Catálogo de Cursos",
       level: "Nivel",
       modules: "Módulos",
-      startLearning: "Comenzar a Aprender",
+      startLearning: "Comenzar Curso",
       continueLearning: "Continuar Curso",
       courseCompleted: "Completado 🎉",
-      searchPlaceholder: "Buscar por nombre o tema…",
+      searchPlaceholder: "Buscar por curso o materia…",
       enrolling: "Inscribiendo...",
       enrolledBadge: "Inscrito"
+    ,
+      searchResultsSingle: "{count} resultado para “{query}”",
+      searchResultsPlural: "{count} resultados para “{query}”",
+      noResults: "Ningún curso coincide con “{query}”",
+      noResultsDesc: "Prueba con un término más amplio o explora el catálogo completo.",
+      clearSearch: "Limpiar búsqueda"
     },
     courseDetails: {
-      overview: "Visión General",
-      curriculum: "Plan de Estudios",
-      takeaways: "Conclusiones Clave",
+      overview: "Resumen",
+      curriculum: "Plan de Cursos",
+      takeaways: "Puntos Clave",
       prerequisites: "Requisitos Previos",
       targetAudience: "A Quién Va Dirigido",
       certificateTitle: "Certificado de Finalización",
       certificateText: "¡Completa todos los módulos para ganar tu insignia digital verificada!",
-      enrollNow: "Inscribirse en el Curso",
+      enrollNow: "Inscribirse al Curso",
       enrolledBadge: "Estás Inscrito",
       continueBtn: "Continuar Aprendiendo",
       completedBadge: "Curso Completado 🎉",
@@ -339,9 +730,38 @@ export const translations = {
       backToCourses: "Volver a Cursos",
       module: "Módulo"
     },
+    lessonPlayer: {
+      story: "Hora de Historia",
+      concept: "Aprender",
+      fact: "Dato Curioso",
+      tip: "Consejo Pro",
+      example: "Ejemplo",
+      activity: "Actividad",
+      recap: "Resumen",
+      stepCount: "Paso {current} de {total}",
+      prevStep: "Paso Anterior",
+      nextStep: "Siguiente Paso",
+      startPractice: "Iniciar Ejercicios Interactivos 🚀",
+      completeModule: "Completar y Practicar 🎯"
+    },
+    exerciseEngine: {
+      header: "Práctica Interactiva",
+      qCounter: "Pregunta {current} de {total}",
+      trueBtn: "Verdadero",
+      falseBtn: "Falso",
+      fillPlaceholder: "Escribe tu respuesta aquí...",
+      matchingHelp: "¡Haz clic en un elemento de la izquierda y conéctalo con la derecha!",
+      checkAnswer: "Comprobar Respuesta",
+      correctTitle: "¡Todo Correcto! +50 XP",
+      incorrectTitle: "¡Aún no es correcto!",
+      tryAgain: "Intentar de Nuevo",
+      nextQ: "Siguiente Desafío",
+      completeBtn: "Completar Módulo 🎉",
+      saving: "Guardando progreso..."
+    },
     quiz: {
       title: "Centro de Cuestionarios",
-      subtitle: "Pon a prueba tus conocimientos y verifica tus habilidades en tiempo real.",
+      subtitle: "Pon a prueba tus conocimientos y comprueba tus habilidades en tiempo real.",
       selectTopic: "Elige un Tema",
       questionsCount: "10 Preguntas Aleatorias",
       timer: "Tiempo Restante",
@@ -354,20 +774,24 @@ export const translations = {
       backToTopics: "Volver a Temas",
       backToQuizzes: "Volver a Cuestionarios",
       questionCountLabel: "Pregunta",
-      of: "de"
+      of: "de",
+      quitConfirmTitle: "¿Salir del Cuestionario?",
+      quitConfirmMsg: "Se perderá el progreso de esta sesión.",
+      quitBtn: "Sí, Salir",
+      stayBtn: "Continuar Cuestionario"
     },
     leaderboard: {
       badge: "Clasificación Learntopia",
-      title: "Tabla de Clasificación",
-      subtitle: "Mira quién está en la cima. Filtra por cuestionario para ver clasificaciones individuales.",
+      title: "Tabla de Posiciones",
+      subtitle: "Descubre quién está en la cima. Filtra por cuestionario para ver clasificaciones individuales.",
       filterByQuiz: "Filtrar por Cuestionario",
       allQuizzes: "Puntos Totales",
-      rank: "Rango",
+      rank: "Puesto",
       student: "Estudiante",
       score: "Puntuación",
       quizCol: "Cuestionario",
       youBadge: "Tú",
-      noRankings: "Sin clasificaciones aún",
+      noRankings: "Aún sin Clasificaciones",
       noRankingsDesc: "¡Completa un cuestionario para aparecer en la tabla!",
       searchPlaceholder: "Buscar por nombre...",
       entries: "entradas",
@@ -377,36 +801,72 @@ export const translations = {
       welcome: "Bienvenido de nuevo",
       level: "Nivel",
       totalXp: "XP Total",
-      dayStreak: "Racha Diaria",
-      enrolled: "Inscrito",
+      dayStreak: "Racha de Días",
+      enrolled: "Inscritos",
       completed: "Completados",
       badges: "Insignias y Logros",
       activeCourses: "Cursos activos",
       completedCourses: "Cursos completados",
-      quizHistory: "Historial Reciente de Cuestionarios",
-      noCoursesTitle: "No hay cursos activos",
+      quizHistory: "Historial de Cuestionarios",
+      noCoursesTitle: "Sin cursos activos",
       noCoursesDesc: "¡Explora nuestro catálogo interactivo y comienza tu aventura!",
-      noQuizTitle: "Aún no se han completado cuestionarios",
-      noQuizDesc: "¡Haz tu primer cuestionario para rastrear tus puntuaciones aquí!",
+      noQuizTitle: "Aún no has completado cuestionarios",
+      noQuizDesc: "¡Completa tu primer cuestionario para ver tus resultados aquí!",
       exploreBtn: "Explorar Cursos",
-      takeQuizBtn: "Tomar un Cuestionario",
-      unenroll: "Cancelar Inscripción",
-      confirmUnenroll: "¿Estás seguro de que deseas cancelar la inscripción a este curso?",
+      takeQuizBtn: "Hacer un Cuestionario",
+      unenroll: "Desinscribirse",
+      confirmUnenroll: "¿Seguro que deseas desinscribirte de este curso?",
       maxLevel: "Nivel máximo alcanzado",
       xpToNext: "XP → Nvl",
-      accountSettings: "Configuración de la Cuenta",
+      accountSettings: "Configuración de Cuenta",
       deleteAccount: "Eliminar Cuenta",
-      logout: "Cerrar Sesión",
-      profile: "Perfil del Estudiante"
+      logout: "Cerrar sesión",
+      profile: "Perfil de Estudiante",
+      earnedOn: "Ganado el {date}"
+    ,
+      dangerZoneTitle: "Control de Cuenta — Zona de Peligro",
+      dangerZoneDesc: "Elimina permanentemente tu perfil de estudiante, inscripciones, XP ganado, insignias, puntuaciones y tu posición en la clasificación.",
+      deleteProfileBtn: "Eliminar Mi Perfil",
+      unenrollModalTitle: "¿Desinscribirse del curso?",
+      unenrollModalText: "¿Estás seguro de que quieres desinscribirte de {title}? Tu progreso en este curso se reiniciará.",
+      unenrollBtn: "Desinscribir",
+      deleteModalTitle: "¿Eliminar Tu Perfil Permanentemente?",
+      deleteWarningTitle: "¡ESTA ES UNA DECISIÓN DESTRUCTIVA Y PERMANENTE!",
+      deleteWarningText: "Eliminar tu perfil borrará inmediatamente todos tus datos de Learntopia. Una vez confirmado, esta acción no se puede deshacer ni recuperar.",
+      deleteListHeading: "Lo siguiente se eliminará para siempre:",
+      deleteList1: "Todas las inscripciones y progreso de módulos",
+      deleteList2: "XP total, progresión de nivel e insignias obtenidas",
+      deleteList3: "Puntuaciones altas y registros de cuestionarios",
+      deleteList4: "Clasificación pública y entrada de perfil",
+      deleteList5: "Cuenta de usuario y credenciales de perfil",
+      deleteConfirmLabel: "Para confirmar, escribe {keyword} abajo:",
+      deleteConfirmPlaceholder: "Escribe \"DELETE\" para confirmar",
+      deleteConfirmBtn: "Eliminar Perfil Permanentemente"
     },
     gamification: {
-      levelUp: "¡NIVEL SUPERADO!",
+      levelUp: "¡NIVEL ALCANZADO!",
       badgeUnlocked: "¡INSIGNIA DESBLOQUEADA!",
       congrats: "¡Excelente Trabajo!",
-      close: "¡Genial! 🚀"
+      close: "¡Fantástico! 🚀",
+      earnedBadge: "Insignia {name}"
+    },
+    levelNames: {
+      level1: "Novato Coder",
+      level2: "Explorador de Código",
+      level3: "Maestro Byte",
+      level4: "Leyenda de Lógica",
+      level5: "Gran Maestro"
+    },
+    badgeNames: {
+      python: "Pionero Python",
+      math: "Mago de Matemáticas",
+      finance: "Maestro del Dinero",
+      marketing: "Genio de Marca",
+      web: "Arquitecto Web",
+      art: "Picasso Digital"
     },
     auth: {
-      loginTitle: "Bienvenido de Nuevo a Learntopia",
+      loginTitle: "Bienvenido de nuevo a Learntopia",
       loginSubtitle: "Inicia sesión para continuar tu aventura de aprendizaje",
       signUpTitle: "Únete a Learntopia Hoy",
       signUpSubtitle: "Comienza a aprender 100% gratis con tu avatar personalizado",
@@ -418,10 +878,18 @@ export const translations = {
       signInHere: "Inicia sesión aquí",
       registerHere: "Regístrate aquí"
     },
+    authGuidance: {
+      noAccountTitle: "Cuenta No Encontrada",
+      noAccountMsg: "No encontramos una cuenta registrada con {email}. ¿Te gustaría crear una nueva?",
+      createAccountBtn: "Crear Nueva Cuenta",
+      alreadyExistsTitle: "La Cuenta Ya Existe",
+      alreadyExistsMsg: "Una cuenta con {email} ya está registrada. ¿Deseas iniciar sesión?",
+      signInBtn: "Iniciar Sesión Ahora"
+    },
     contact: {
       eyebrow: "Ponte en contacto",
-      title: "Nos encantaría saber de ti",
-      subtitle: "¿Tienes alguna pregunta, comentario o necesitas ayuda? Envíanos un mensaje y te responderemos pronto.",
+      title: "Nos encantaría escucharte",
+      subtitle: "¿Tienes alguna pregunta o necesitas ayuda? Envíanos un mensaje y te responderemos pronto.",
       nameLabel: "Tu Nombre",
       emailLabel: "Correo Electrónico",
       subjectLabel: "Asunto (opcional)",
@@ -433,9 +901,9 @@ export const translations = {
       responseTitle: "Tiempo de respuesta",
       responseSub: "En 1 a 2 días hábiles",
       docTitle: "Documentación",
-      docSub: "Leer los documentos →",
+      docSub: "Leer documentos →",
       privacyTitle: "Privacidad de datos",
-      privacySub: "Tu mensaje se almacena de forma segura — nunca se comparte."
+      privacySub: "Tu mensaje está guardado de forma segura — nunca se comparte."
     },
     thankYou: {
       title: "¡Mensaje Enviado con Éxito!",
@@ -448,6 +916,89 @@ export const translations = {
       subtitle: "¡Ups! La página que buscas no existe o ha sido movida.",
       goHome: "Volver al Inicio"
     },
+    doc: {
+      badge: "Documentación",
+      title: "Documentación de Learntopia",
+      subtitle: "Referencia completa de la plataforma Learntopia — funciones, flujo y preguntas frecuentes.",
+      lastUpdated: "Última actualización: Agosto 2026",
+      onThisPage: "En esta página",
+      quickJump: "Salto rápido",
+      secOverview: "Resumen",
+      secOverviewBody1: "Learntopia es una plataforma educativa interactiva diseñada para niños y jóvenes con cursos estructurados, cuestionarios con tiempo y perfil personalizado.",
+      secOverviewBody2: "Es 100% gratuita. Puedes explorar los cursos como invitado o crear una cuenta para guardar tu progreso e insignias.",
+      cardCourses: "Cursos Estructurados",
+      cardCoursesDesc: "Rutas de aprendizaje por temas con progresión módulo por módulo.",
+      cardQuizzes: "Cuestionarios con Tiempo",
+      cardQuizzesDesc: "Preguntas de 15 segundos con retroalimentación inmediata.",
+      cardTracking: "Seguimiento de Progreso",
+      cardTrackingDesc: "Perfil personal, rachas diarias, puntos XP y clasificación global.",
+      secFeatures: "Características",
+      feat1: "Cursos Interactivos: Lecciones paso a paso con tarjetas y ejercicios prácticos.",
+      feat2: "Motor de Cuestionarios: 10 preguntas aleatorias por tema y temporizador de 15s.",
+      feat3: "Gamificación y XP: Gana XP para subir de nivel de Novato Coder a Gran Maestro.",
+      feat4: "Insignias y Logros: Desbloquea insignias digitales al dominar materias.",
+      feat5: "Clasificación Global: Compite con compañeros en puntos generales o por cuestionario.",
+      feat6: "Soporte Multilingüe: Soporte completo en español, inglés, francés, alemán y árabe.",
+      secGettingStarted: "Primeros Pasos",
+      gsStep1Title: "1. Crea una Cuenta",
+      gsStep1Desc: "Haz clic en 'Comenzar' en el menú para registrarte con tu correo o Google.",
+      gsStep2Title: "2. Elige una Materia",
+      gsStep2Desc: "Explora nuestros cursos de Python, Matemáticas, Finanzas, Marketing y Arte Digital.",
+      gsStep3Title: "3. Completa Módulos y Gana XP",
+      gsStep3Desc: "¡Lee las lecciones, resuelve ejercicios y mira tu nivel subir en tu perfil!",
+      secFaq: "Preguntas Frecuentes",
+      faq1Q: "¿Es Learntopia realmente 100% gratis?",
+      faq1A: "¡Sí! Learntopia es completamente gratis sin suscripciones ni cobros ocultos.",
+      faq2Q: "¿Necesito una cuenta para usar Learntopia?",
+      faq2A: "Puedes explorar como invitado. Al crear una cuenta puedes guardar tu progreso y unirte a la tabla de posiciones.",
+      faq3Q: "¿Están seguros mis datos personales?",
+      faq3A: "Absolutamente. Seguimos normas estrictas de privacidad infantil sin publicidad de terceros."
+    },
+    privacy: {
+      badge: "Legal y Seguridad",
+      title: "Política de Privacidad",
+      subtitle: "Conoce cómo recopilamos, protegemos y respetamos tus datos personales en Learntopia.",
+      lastUpdated: "Última actualización: Julio 2026",
+      sec1Title: "1. Introducción",
+      sec1Body: "Learntopia se dedica a proporcionar un entorno educativo seguro para estudiantes de todas las edades.",
+      sec2Title: "2. Información que Recopilamos",
+      sec2Item1: "Detalles de cuenta: Nombre de usuario y correo proporcionado al registrarte.",
+      sec2Item2: "Datos de progreso: Cursos inscritos, cuestionarios y puntos XP.",
+      sec3Title: "3. Cómo Protegemos tus Datos",
+      sec3Body: "Tus datos se almacenan de forma segura en Google Firebase. Nunca compartimos ni vendemos tu información personal.",
+      sec4Title: "4. Privacidad Infantil",
+      sec4Body: "Cumplimos estrictamente con las normas COPPA sin anuncios de terceros."
+    },
+    terms: {
+      badge: "Términos de Servicio",
+      title: "Términos de Servicio",
+      subtitle: "Por favor lee detenidamente estos términos antes de usar Learntopia.",
+      lastUpdated: "Última actualización: Julio 2026",
+      sec1Title: "1. Aceptación de Términos",
+      sec1Body: "Al acceder o usar Learntopia, aceptas estos Términos de Servicio.",
+      sec2Title: "2. Conducta del Usuario",
+      sec2Body: "Learntopia es una comunidad de aprendizaje respetuosa e inspiradora.",
+      sec3Title: "3. Contenido Educativo",
+      sec3Body: "Todos los materiales de curso son para uso educativo."
+    },
+    admin: {
+      badge: "Centro de Operaciones",
+      title: "Portal de Administración Learntopia",
+      subtitle: "Panel ejecutivo y directorio de estudiantes.",
+      liveClock: "Reloj del Sistema",
+      adminBadge: "ADMIN",
+      exitPortal: "Salir del Portal",
+      totalStudents: "Estudiantes Registrados",
+      activeQuizzes: "Intentos de Cuestionario",
+      totalXpGranted: "XP Total Otorgado",
+      directoryTitle: "Directorio de Estudiantes",
+      directorySubtitle: "Visualiza a los estudiantes y métricas de rendimiento.",
+      colStudent: "Estudiante",
+      colEmail: "Correo",
+      colXp: "XP Total",
+      colStreak: "Racha",
+      colJoined: "Fecha de Registro"
+    },
     footer: {
       tagline: "Empoderando a la próxima generación de creadores y pensadores con educación gratuita.",
       quickLinks: "Enlaces Rápidos",
@@ -456,6 +1007,92 @@ export const translations = {
       privacy: "Política de Privacidad",
       rights: "Todos los derechos reservados. Hecho para estudiantes de todo el mundo."
     },
+    courseData: {
+      "1": {
+        "title": "Python para Niños: ¡Crea tu Primer Juego!",
+        "desc": "Aprende a programar creando juegos reales. ¡Perfecto para principiantes de 7 a 14 años!",
+        "category": "Programación",
+        "difficulty": "Principiante",
+        "modules": [
+          { "title": "Módulo 1: ¡Hola Python!", "desc": "Aprende qué es Python y escribe tus primeras líneas de código." },
+          { "title": "Módulo 2: Variables y Cajas de Datos", "desc": "Guarda números, texto y puntuaciones en variables." },
+          { "title": "Módulo 3: Tomar Decisiones con IF", "desc": "Usa lógica y condiciones para controlar tu juego." },
+          { "title": "Módulo 4: Bucles y Acciones Repetidas", "desc": "Repite código automáticamente con bucles FOR y WHILE." },
+          { "title": "Módulo 5: Funciones y Herramientas", "desc": "Empaqueta tu código en funciones reutilizables." },
+          { "title": "Módulo 6: Proyecto Final: ¡Tu Juego!", "desc": "¡Combina todo para crear tu juego de aventuras!" }
+        ]
+      },
+      "2": {
+        "title": "Magia de las Matemáticas: ¡Acertijos y Lógica!",
+        "desc": "¡Domina secuencias matemáticas divertidas, geometría 3D y acertijos lógicos!",
+        "category": "Matemáticas",
+        "difficulty": "Principiante",
+        "modules": [
+          { "title": "Módulo 1: Secuencias Numéricas", "desc": "Descubre reglas ocultas y predice los siguientes números." },
+          { "title": "Módulo 2: Geometría 2D y 3D", "desc": "Explora formas, ángulos, cubos y esferas." },
+          { "title": "Módulo 3: Acertijos Lógicos", "desc": "Utiliza el razonamiento deductivo para resolver enigmas." },
+          { "title": "Módulo 4: Algoritmos y Pasos", "desc": "Divide grandes problemas en instrucciones sencillas." },
+          { "title": "Módulo 5: Patrones en la Naturaleza", "desc": "Descubre los números de Fibonacci en flores y galaxias." },
+          { "title": "Módulo 6: Desafío Mago Matemático", "desc": "¡Pon a prueba tus habilidades de acertijo!" }
+        ]
+      },
+      "3": {
+        "title": "Dinero Inteligente: ¡Presupuestos para Niños!",
+        "desc": "Comprende cómo funciona el dinero, los presupuestos y el ahorro mediante simulaciones interactivas.",
+        "category": "Finanzas",
+        "difficulty": "Principiante",
+        "modules": [
+          { "title": "Módulo 1: Historia del Dinero", "desc": "Del trueque a las monedas digitales." },
+          { "title": "Módulo 2: Ingresos vs. Gastos", "desc": "Aprende de dónde viene el dinero y a dónde va." },
+          { "title": "Módulo 3: Tu Primer Presupuesto", "desc": "Distribuye tu dinero para necesidades, deseos y ahorro." },
+          { "title": "Módulo 4: El Poder del Interés", "desc": "Mira cómo crecen tus ahorros en el banco." },
+          { "title": "Módulo 5: Compras Inteligentes", "desc": "Compara precios y evita compras impulsivas." },
+          { "title": "Módulo 6: Juego del Pequeño Empresario", "desc": "¡Dirige tu propio puesto de limonada virtual!" }
+        ]
+      },
+      "4": {
+        "title": "Genio de Marca: ¡Marketing y Medios!",
+        "desc": "¡Descubre cómo las marcas diseñan logotipos, crean anuncios virales y conectan con el público!",
+        "category": "Marketing",
+        "difficulty": "Principiante",
+        "modules": [
+          { "title": "Módulo 1: ¿Qué es una Marca?", "desc": "Logotipos, colores, lemas y personalidad de marca." },
+          { "title": "Módulo 2: Público Objetivo", "desc": "Identifica para quién está hecho tu producto." },
+          { "title": "Módulo 3: Diseño Visual y Color", "desc": "Elige colores que generen emociones y confianza." },
+          { "title": "Módulo 4: Anuncios Atractivos", "desc": "Escribe titulares y diseña carteles llamativos." },
+          { "title": "Módulo 5: Medios Digitales", "desc": "Entiende anuncios de video, patrocinadores y redes sociales." },
+          { "title": "Módulo 6: Lanzamiento de Producto", "desc": "¡Lanza tu propio producto o juguete imaginario!" }
+        ]
+      },
+      "5": {
+        "title": "Creador Web: ¡Sitios Web con HTML y CSS!",
+        "desc": "Convierte tus ideas en páginas web reales con estilos coloridos, botones y diseños.",
+        "category": "Diseño Web",
+        "difficulty": "Intermedio",
+        "modules": [
+          { "title": "Módulo 1: Estructura HTML", "desc": "Títulos, párrafos, etiquetas y estructura básica." },
+          { "title": "Módulo 2: Imágenes y Enlaces", "desc": "Conecta páginas y añade imágenes vibrantes." },
+          { "title": "Módulo 3: Estilos con CSS", "desc": "Cambia fuentes, colores de texto y degradados." },
+          { "title": "Módulo 4: Botones y Efectos Hover", "desc": "Haz que los botones destaquen con animaciones." },
+          { "title": "Módulo 5: Diseños Adaptables", "desc": "Diseña páginas que luzcan bien en teléfonos y tabletas." },
+          { "title": "Módulo 6: Tu Portafolio Web", "desc": "¡Crea y publica tu sitio web personal!" }
+        ]
+      },
+      "6": {
+        "title": "Artista Digital: ¡Gráficos y Arte Digital!",
+        "desc": "Domina colores, formas, capas y herramientas de ilustración digital.",
+        "category": "Arte Digital",
+        "difficulty": "Principiante",
+        "modules": [
+          { "title": "Módulo 1: Píxeles y Lienzo", "desc": "Comprende la resolución y las herramientas digitales." },
+          { "title": "Módulo 2: Teoría del Color", "desc": "Combina colores primarios, cálidos y fríos." },
+          { "title": "Módulo 3: Trabajando con Capas", "desc": "Organiza objetos, fondos y sombreados fácilmente." },
+          { "title": "Módulo 4: Dibujo de Personajes", "desc": "Dibuja divertidos avatares paso a paso." },
+          { "title": "Módulo 5: Pintura Digital", "desc": "Usa pinceles, degradados y luces." },
+          { "title": "Módulo 6: Exposición de Arte", "desc": "¡Crea una obra maestra digital!" }
+        ]
+      }
+    },
     common: {
       soundOn: "Sonido Activado",
       soundOff: "Sonido Silenciado",
@@ -463,11 +1100,25 @@ export const translations = {
       close: "Cerrar",
       cancel: "Cancelar",
       confirm: "Confirmar",
-      back: "Atrás"
+      back: "Volver",
+      loading: "Cargando...",
+      saving: "Guardando...",
+      error: "Ocurrió un error"
     }
   },
 
   fr: {
+    aiTutor: {
+          "yourTutor": "Votre Tuteur IA",
+          "askTutor": "Demander à {name}",
+          "typeMessage": "Posez une question sur ce cours...",
+          "thinking": "Réflexion...",
+          "errorMessage": "Oups ! Impossible de joindre votre tuteur IA. Veuillez réessayer.",
+          "rateLimitError": "Votre tuteur IA fait une courte pause ! Veuillez patienter un instant.",
+          "clearChat": "Effacer l'historique du chat",
+          "poweredBy": "Propulsé par Google Gemini 2.0 Flash • IA Sécurisée pour Enfants",
+          "chatGreeting": "Bonjour ! 👋 Je suis {name}, votre compagnon de {subject} ! Posez-moi vos questions sur ce cours, et apprenons ensemble !"
+    },
     nav: {
       home: "Accueil",
       courses: "Cours",
@@ -486,80 +1137,86 @@ export const translations = {
       titleStart: "Développez vos",
       titleAccent: "compétences",
       titleEnd: "en ligne",
-      subtitle: "Apprenez et perfectionnez vos compétences grâce à des cours interactifs et des tests en temps réel.",
+      subtitle: "Apprenez et améliorez vos compétences avec des cours interactifs et des quiz en temps réel.",
       exploreCourses: "Explorer les Cours",
       takeQuiz: "Jouer au Quiz",
-      statsStudents: "Élèves Actifs",
+      statsStudents: "Apprenants Actifs",
       statsCourses: "Cours Interactifs",
-      statsCost: "Gratuit Toujours"
+      statsCost: "Gratuit pour Toujours"
     },
     home: {
-      lovedBy: "Apprécié par plus de 2 000 étudiants",
+      lovedBy: "Adopté par plus de 2 000 apprenants",
       whyEyebrow: "Pourquoi Learntopia",
       whyTitle: "Tout ce dont vous avez besoin pour grandir",
-      subjectEyebrow: "Domaines d'études",
+      subjectEyebrow: "Domaines d'étude",
       subjectTitle: "Que voulez-vous apprendre ?",
       browseAll: "Parcourir tous les cours",
       quoteEyebrow: "Pourquoi continuer à apprendre",
-      quoteText: "L'apprentissage continu est le prérequis minimal pour réussir dans n'importe quel domaine.",
+      quoteText: "L'apprentissage continu est la condition minimale du succès dans tous les domaines.",
       quoteAuthor: "Brian Tracy",
       quoteSubtext: "Chaque cours terminé vous rapproche du professionnel que vous souhaitez devenir.",
       val1Title: "Cours interactifs",
-      val1Text: "Acquérez des compétences pratiques grâce à des parcours d'apprentissage structurés.",
-      val2Title: "Défis de quiz chronométrés",
-      val2Text: "Testez-vous contre la montre avec un retour instantané et un score équitable.",
+      val1Text: "Apprenez des compétences pratiques grâce à des parcours ciblés et adaptés aux débutants.",
+      val2Title: "Quiz chronométrés",
+      val2Text: "Testez-vous contre la montre avec un retour instantané et un score clair.",
       val3Title: "Suivez vos progrès",
-      val3Text: "Connectez-vous pour enregistrer chaque tentative et voir vos meilleurs scores grimper.",
+      val3Text: "Connectez-vous pour enregistrer chaque tentative et voir vos scores augmenter.",
       learnMore: "En savoir plus",
-      subjectScience: "Science",
+      subjectScience: "Sciences",
       subjectTech: "Technologie",
       subjectMarketing: "Marketing",
-      subjectArts: "Art",
+      subjectArts: "Arts",
       subjectFinance: "Finance",
       subjectLanguages: "Langues",
       subjectMedia: "Médias"
     },
     stats: {
       eyebrow: "En chiffres",
-      title: "Un apprentissage mesurable",
-      description: "Une communauté en croissance, des cours riches et des progrès mesurables d'un coup d'œil.",
-      learners: "Élèves actifs",
-      courses: "Cours spécialisés",
-      quizzes: "Parcours de quiz",
+      title: "Un apprentissage qui compte",
+      description: "Une communauté grandissante, de vrais cours et des progrès mesurables.",
+      learners: "Apprenants actifs",
+      courses: "Cours d'experts",
+      quizzes: "Parcours quiz",
       rating: "Note moyenne",
-      chartTitle: "Inscriptions par matière",
-      chartSubtitle: "Où se concentrent nos étudiants actuellement.",
-      studentsLegend: "Étudiants",
+      chartTitle: "Inscriptions par sujet",
+      chartSubtitle: "Où se concentrent nos apprenants actuellement.",
+      studentsLegend: "Élèves",
       frontend: "Frontend",
       finance: "Finance",
       python: "Python",
-      arts: "Art",
-      maths: "Mathématiques",
+      arts: "Arts",
+      maths: "Maths",
       marketing: "Marketing"
     },
     courses: {
-      title: "Commencez votre aventure d'apprentissage !",
-      subtitle: "Découvrez des cours interactifs et amusants pour jeunes. Apprenez à coder, dessiner et résoudre des énigmes !",
+      title: "Commencez Votre Aventure d'Apprentissage !",
+      subtitle: "Découvrez des cours ludiques conçus pour les enfants et ados. Apprenez à coder, dessiner et résoudre des énigmes !",
       eyebrow: "Catalogue de Cours",
       level: "Niveau",
       modules: "Modules",
-      startLearning: "Commencer",
+      startLearning: "Commencer le Cours",
       continueLearning: "Continuer le Cours",
       courseCompleted: "Terminé 🎉",
-      searchPlaceholder: "Rechercher par nom ou sujet…",
+      searchPlaceholder: "Rechercher par cours ou sujet…",
       enrolling: "Inscription...",
       enrolledBadge: "Inscrit"
+    ,
+      searchResultsSingle: "{count} résultat pour « {query} »",
+      searchResultsPlural: "{count} résultats pour « {query} »",
+      noResults: "Aucun cours ne correspond à « {query} »",
+      noResultsDesc: "Essayez un terme plus large ou parcourez le catalogue complet.",
+      clearSearch: "Effacer la recherche"
     },
     courseDetails: {
-      overview: "Aperçu Général",
+      overview: "Aperçu",
       curriculum: "Programme du Cours",
       takeaways: "Points Clés",
       prerequisites: "Prérequis",
-      targetAudience: "À Qui S'adresse Ce Cours",
+      targetAudience: "À Qui S'adresse ce Cours",
       certificateTitle: "Certificat de Réussite",
-      certificateText: "Complétez tous les modules pour obtenir votre badge numérique vérifié !",
+      certificateText: "Terminez tous les modules pour obtenir votre badge numérique vérifié !",
       enrollNow: "S'inscrire au Cours",
-      enrolledBadge: "Vous êtes Inscrit",
+      enrolledBadge: "Vous Êtes Inscrit",
       continueBtn: "Continuer l'Apprentissage",
       completedBadge: "Cours Terminé 🎉",
       modulesCount: "Modules",
@@ -568,6 +1225,35 @@ export const translations = {
       category: "Catégorie",
       backToCourses: "Retour aux Cours",
       module: "Module"
+    },
+    lessonPlayer: {
+      story: "Histoire",
+      concept: "Apprendre",
+      fact: "Le Saviez-Vous",
+      tip: "Astuce Pro",
+      example: "Exemple",
+      activity: "Activité",
+      recap: "Récapitulatif",
+      stepCount: "Étape {current} sur {total}",
+      prevStep: "Étape Précédente",
+      nextStep: "Étape Suivante",
+      startPractice: "Lancer les Exercices Interactifs 🚀",
+      completeModule: "Terminer et Pratiquer 🎯"
+    },
+    exerciseEngine: {
+      header: "Pratique Interactive",
+      qCounter: "Question {current} sur {total}",
+      trueBtn: "Vrai",
+      falseBtn: "Faux",
+      fillPlaceholder: "Tapez votre réponse ici...",
+      matchingHelp: "Cliquez sur un élément à gauche puis associez-le à droite !",
+      checkAnswer: "Vérifier la Réponse",
+      correctTitle: "Tout est Correct ! +50 XP",
+      incorrectTitle: "Pas tout à fait correct !",
+      tryAgain: "Réessayer",
+      nextQ: "Défi Suivant",
+      completeBtn: "Valider le Module 🎉",
+      saving: "Sauvegarde en cours..."
     },
     quiz: {
       title: "Centre de Quiz",
@@ -584,21 +1270,25 @@ export const translations = {
       backToTopics: "Retour aux Sujets",
       backToQuizzes: "Retour aux Quiz",
       questionCountLabel: "Question",
-      of: "sur"
+      of: "sur",
+      quitConfirmTitle: "Quitter le Quiz en cours ?",
+      quitConfirmMsg: "Votre progression actuelle sera perdue.",
+      quitBtn: "Oui, Quitter",
+      stayBtn: "Continuer le Quiz"
     },
     leaderboard: {
       badge: "Classement Learntopia",
-      title: "Tableau de Classement",
-      subtitle: "Consultez les meilleurs élèves. Filtrez par quiz pour voir les scores individuels.",
+      title: "Tableau des Leaders",
+      subtitle: "Découvrez qui est au sommet. Filtrez par quiz pour voir le classement individuel.",
       filterByQuiz: "Filtrer par Quiz",
       allQuizzes: "Points Globaux",
       rank: "Rang",
-      student: "Étudiant",
+      student: "Élève",
       score: "Score",
       quizCol: "Quiz",
       youBadge: "Vous",
-      noRankings: "Pas encore de classement",
-      noRankingsDesc: "Complétez un quiz pour apparaître sur le classement !",
+      noRankings: "Pas encore de Classement",
+      noRankingsDesc: "Terminez un quiz pour apparaître sur le classement !",
       searchPlaceholder: "Rechercher par nom...",
       entries: "entrées",
       entry: "entrée"
@@ -607,51 +1297,95 @@ export const translations = {
       welcome: "Bon retour",
       level: "Niveau",
       totalXp: "XP Total",
-      dayStreak: "Série Quotidienne",
-      enrolled: "Inscrit",
+      dayStreak: "Série de Jours",
+      enrolled: "Inscrits",
       completed: "Terminés",
-      badges: "Badges et Récompenses",
+      badges: "Badges & Succès",
       activeCourses: "Cours actifs",
       completedCourses: "Cours terminés",
-      quizHistory: "Historique Récent des Quiz",
+      quizHistory: "Historique des Quiz",
       noCoursesTitle: "Aucun cours actif",
-      noCoursesDesc: "Découvrez notre catalogue interactif et commencez votre aventure d'apprentissage !",
+      noCoursesDesc: "Découvrez notre catalogue interactif et commencez votre aventure !",
       noQuizTitle: "Aucun quiz terminé",
-      noQuizDesc: "Faites votre premier quiz pour suivre vos scores ici !",
+      noQuizDesc: "Relevez votre premier défi quiz pour suivre vos scores ici !",
       exploreBtn: "Explorer les Cours",
       takeQuizBtn: "Faire un Quiz",
-      unenroll: "Se Désinscrire",
-      confirmUnenroll: "Êtes-vous sûr de vouloir vous désinscrire de ce cours ?",
+      unenroll: "Se désinscrire",
+      confirmUnenroll: "Voulez-vous vraiment vous désinscrire de ce cours ?",
       maxLevel: "Niveau maximum atteint",
-      xpToNext: "XP → Niv",
+      xpToNext: "XP → Nv",
       accountSettings: "Paramètres du Compte",
       deleteAccount: "Supprimer le Compte",
-      logout: "Déconnexion",
-      profile: "Profil Étudiant"
+      logout: "Se déconnecter",
+      profile: "Profil Élève",
+      earnedOn: "Obtenu le {date}"
+    ,
+      dangerZoneTitle: "Contrôle du Compte — Zone Dangereuse",
+      dangerZoneDesc: "Supprimez définitivement votre profil d'étudiant, vos inscriptions, XP gagnés, badges, scores et votre classement.",
+      deleteProfileBtn: "Supprimer Mon Profil",
+      unenrollModalTitle: "Se désinscrire du cours ?",
+      unenrollModalText: "Êtes-vous sûr de vouloir vous désinscrire de {title} ? Votre progression pour ce cours sera réinitialisée.",
+      unenrollBtn: "Se désinscrire",
+      deleteModalTitle: "Supprimer Votre Profil Définitivement ?",
+      deleteWarningTitle: "CECI EST UNE DÉCISION DESTRUCTIVE ET PERMANENTE !",
+      deleteWarningText: "La suppression de votre profil effacera immédiatement toutes vos données de Learntopia. Une fois confirmée, cette action est irréversible.",
+      deleteListHeading: "Les éléments suivants seront supprimés définitivement :",
+      deleteList1: "Toutes les inscriptions aux cours et la progression des modules",
+      deleteList2: "XP total, progression de niveau et badges obtenus",
+      deleteList3: "Meilleurs scores et historique des quiz",
+      deleteList4: "Classement public et entrée de profil",
+      deleteList5: "Compte utilisateur et identifiants de profil",
+      deleteConfirmLabel: "Pour confirmer, tapez {keyword} ci-dessous :",
+      deleteConfirmPlaceholder: "Tapez \"DELETE\" pour confirmer",
+      deleteConfirmBtn: "Supprimer le Profil Définitivement"
     },
     gamification: {
       levelUp: "NIVEAU SUPÉRIEUR !",
       badgeUnlocked: "BADGE DÉBLOQUÉ !",
-      congrats: "Super Travail !",
-      close: "Génial ! 🚀"
+      congrats: "Super travail !",
+      close: "Génial ! 🚀",
+      earnedBadge: "Badge {name}"
+    },
+    levelNames: {
+      level1: "Débutant Codeur",
+      level2: "Explorateur de Code",
+      level3: "Maître Byte",
+      level4: "Légende de la Logique",
+      level5: "Grand Maître"
+    },
+    badgeNames: {
+      python: "Pionnier Python",
+      math: "Sorcier des Maths",
+      finance: "Maître des Finances",
+      marketing: "Génie de la Marque",
+      web: "Architecte Web",
+      art: "Picasso Numérique"
     },
     auth: {
-      loginTitle: "Bon retour sur Learntopia",
+      loginTitle: "Bienvenue sur Learntopia",
       loginSubtitle: "Connectez-vous pour continuer votre aventure d'apprentissage",
       signUpTitle: "Rejoignez Learntopia Aujourd'hui",
-      signUpSubtitle: "Commencez à apprendre 100% gratuitement avec votre avatar",
+      signUpSubtitle: "Apprenez 100% gratuitement avec votre avatar personnalisé",
       emailLabel: "Adresse E-mail",
-      passwordLabel: "Mot de Passe",
+      passwordLabel: "Mot de passe",
       googleAuth: "Continuer avec Google",
       alreadyHaveAccount: "Vous avez déjà un compte ?",
       dontHaveAccount: "Vous n'avez pas de compte ?",
-      signInHere: "Connectez-vous ici",
-      registerHere: "Inscrivez-vous ici"
+      signInHere: "Se connecter ici",
+      registerHere: "S'inscrire ici"
+    },
+    authGuidance: {
+      noAccountTitle: "Compte Introuvable",
+      noAccountMsg: "Aucun compte n'est enregistré avec {email}. Souhaitez-vous créer un compte ?",
+      createAccountBtn: "Créer un Nouveau Compte",
+      alreadyExistsTitle: "Le Compte Existe Déjà",
+      alreadyExistsMsg: "Un compte avec {email} existe déjà. Souhaitez-vous vous connecter ?",
+      signInBtn: "Se Connecter Maintenant"
     },
     contact: {
       eyebrow: "Contactez-nous",
       title: "Nous aimerions avoir de vos nouvelles",
-      subtitle: "Une question ou besoin d'aide ? Envoyez-nous un message et notre équipe vous répondra.",
+      subtitle: "Une question ou un besoin d'aide ? Envoyez-nous un message et notre équipe vous répondra.",
       nameLabel: "Votre Nom",
       emailLabel: "Adresse E-mail",
       subjectLabel: "Sujet (optionnel)",
@@ -659,17 +1393,17 @@ export const translations = {
       sendBtn: "Envoyer le Message",
       sending: "Envoi en cours...",
       emailCardTitle: "E-mail Direct",
-      emailCardSub: "Envoyer un e-mail →",
+      emailCardSub: "Envoyez-nous un e-mail →",
       responseTitle: "Délai de réponse",
       responseSub: "Sous 1 à 2 jours ouvrés",
       docTitle: "Documentation",
-      docSub: "Lire la doc →",
-      privacyTitle: "Confidentialité",
-      privacySub: "Vos données sont stockées en toute sécurité — jamais partagées."
+      docSub: "Consulter la doc →",
+      privacyTitle: "Confidentialité des données",
+      privacySub: "Votre message est stocké en toute sécurité."
     },
     thankYou: {
       title: "Message Envoyé avec Succès !",
-      subtitle: "Merci d'avoir contacté Learntopia. Nous avons bien reçu votre message et vous répondrons sous peu.",
+      subtitle: "Merci d'avoir contacté Learntopia. Nous vous répondrons très prochainement.",
       backHome: "Retour à l'Accueil",
       exploreCourses: "Explorer les Cours"
     },
@@ -678,26 +1412,209 @@ export const translations = {
       subtitle: "Oups ! La page que vous cherchez n'existe pas ou a été déplacée.",
       goHome: "Retour à l'Accueil"
     },
+    doc: {
+      badge: "Documentation",
+      title: "Documentation Learntopia",
+      subtitle: "Guide complet de la plateforme Learntopia — fonctionnalités et réponses à vos questions.",
+      lastUpdated: "Dernière mise à jour : Août 2026",
+      onThisPage: "Sur cette page",
+      quickJump: "Navigation rapide",
+      secOverview: "Aperçu",
+      secOverviewBody1: "Learntopia est une plateforme d'apprentissage interactive conçue pour les enfants et adolescents.",
+      secOverviewBody2: "La plateforme est 100% gratuite. Explorez les cours et quiz en toute liberté.",
+      cardCourses: "Cours Structurés",
+      cardCoursesDesc: "Parcours d'apprentissage thématiques avec progression étape par étape.",
+      cardQuizzes: "Quiz Chronométrés",
+      cardQuizzesDesc: "Questions de 15 secondes avec corrections instantanées.",
+      cardTracking: "Suivi de Progression",
+      cardTrackingDesc: "Tableau de bord personnel, séries de jours et classement mondial.",
+      secFeatures: "Fonctionnalités",
+      feat1: "Cours Interactifs : Leçons guidées avec exemples et exercices d'application.",
+      feat2: "Moteur de Quiz : 10 questions aléatoires par sujet avec compte à rebours.",
+      feat3: "Gamification & XP : Gagnez des points XP et passez au niveau supérieur.",
+      feat4: "Badges & Succès : Débloquez des badges numériques pour vos réussites.",
+      feat5: "Classement Mondial : Comparez vos scores avec d'autres apprenants.",
+      feat6: "Support Multilingue : Disponible en français, anglais, espagnol, allemand et arabe.",
+      secGettingStarted: "Pour Commencer",
+      gsStep1Title: "1. Créez un Compte",
+      gsStep1Desc: "Cliquez sur 'Commencer' pour vous inscrire par e-mail ou via Google.",
+      gsStep2Title: "2. Choisissez un Parcours",
+      gsStep2Desc: "Explorez nos cours en Python, Maths, Finance, Marketing et Art Numérique.",
+      gsStep3Title: "3. Gagnez de l'XP et Progressez",
+      gsStep3Desc: "Complétez les leçons et regardez votre niveau monter sur votre profil !",
+      secFaq: "Foire Aux Questions",
+      faq1Q: "Learntopia est-il vraiment 100% gratuit ?",
+      faq1A: "Oui ! Learntopia est entièrement gratuit sans aucun frais caché.",
+      faq2Q: "Faut-il créer un compte ?",
+      faq2A: "Vous pouvez explorer en mode invité. Un compte vous permet de sauvegarder votre progression.",
+      faq3Q: "Mes données personnelles sont-elles protégées ?",
+      faq3A: "Absolument. Nous respectons strictement la confidentialité des enfants sans aucune publicité."
+    },
+    privacy: {
+      badge: "Sécurité & Légalité",
+      title: "Politique de Confidentialité",
+      subtitle: "Découvrez comment nous protégeons vos données personnelles sur Learntopia.",
+      lastUpdated: "Dernière mise à jour : Juillet 2026",
+      sec1Title: "1. Introduction",
+      sec1Body: "Learntopia s'engage à offrir un environnement éducatif sécurisé pour tous.",
+      sec2Title: "2. Informations Collectées",
+      sec2Item1: "Compte : Nom d'affichage et e-mail fournis lors de l'inscription.",
+      sec2Item2: "Progression : Cours suivis, quiz et points d'expérience XP.",
+      sec3Title: "3. Protection des Données",
+      sec3Body: "Vos données sont stockées de façon sécurisée sur Google Firebase.",
+      sec4Title: "4. Protection des Enfants",
+      sec4Body: "Nous respectons rigoureusement les normes COPPA sans publicité de tiers."
+    },
+    terms: {
+      badge: "Conditions d'Utilisation",
+      title: "Conditions d'Utilisation",
+      subtitle: "Veuillez lire attentivement ces conditions avant d'utiliser Learntopia.",
+      lastUpdated: "Dernière mise à jour : Juillet 2026",
+      sec1Title: "1. Acceptation des Conditions",
+      sec1Body: "En utilisant Learntopia, vous acceptez les présentes conditions d'utilisation.",
+      sec2Title: "2. Conduite de l'Utilisateur",
+      sec2Body: "Learntopia est une communauté bienveillante d'apprentissage.",
+      sec3Title: "3. Contenu Éducatif",
+      sec3Body: "Tous les cours sont fournis uniquement à des fins éducatives."
+    },
+    admin: {
+      badge: "Centre d'Opérations",
+      title: "Portail Administrateur Learntopia",
+      subtitle: "Tableau de bord exécutif et gestion des étudiants.",
+      liveClock: "Horloge Système",
+      adminBadge: "ADMIN",
+      exitPortal: "Quitter le Portail",
+      totalStudents: "Élèves Inscrits",
+      activeQuizzes: "Tentatives de Quiz",
+      totalXpGranted: "Total XP Accordé",
+      directoryTitle: "Annuaire des Élèves",
+      directorySubtitle: "Liste des apprenants et statistiques de performance.",
+      colStudent: "Élève",
+      colEmail: "E-mail",
+      colXp: "Total XP",
+      colStreak: "Série",
+      colJoined: "Inscrit le"
+    },
     footer: {
-      tagline: "Offrir à la prochaine génération de créateurs et penseurs une éducation gratuite.",
+      tagline: "Former la prochaine génération de créateurs et penseurs avec une éducation ludique gratuite.",
       quickLinks: "Liens Rapides",
-      legal: "Légal et Sécurité",
+      legal: "Sécurité & Légalité",
       terms: "Conditions d'Utilisation",
       privacy: "Politique de Confidentialité",
-      rights: "Tous droits réservés. Conçu pour les apprenants du monde entier."
+      rights: "Tous droits réservés. Conçu pour les enfants et ados du monde entier."
+    },
+    courseData: {
+      "1": {
+        "title": "Python pour Enfants : Créez Votre Premier Jeu !",
+        "desc": "Apprenez à coder en créant de vrais jeux. Parfait pour les débutants de 7 à 14 ans !",
+        "category": "Programmation",
+        "difficulty": "Débutant",
+        "modules": [
+          { "title": "Module 1 : Salut Python !", "desc": "Découvrez Python et écrivez vos premières lignes de code." },
+          { "title": "Module 2 : Variables et Boîtes de Données", "desc": "Stockez des nombres, du texte et des scores." },
+          { "title": "Module 3 : Décisions avec IF", "desc": "Utilisez la logique et les conditions dans vos jeux." },
+          { "title": "Module 4 : Boucles et Répétitions", "desc": "Répétez du code automatiquement avec FOR et WHILE." },
+          { "title": "Module 5 : Fonctions et Outils", "desc": "Structurez votre code en fonctions réutilisables." },
+          { "title": "Module 6 : Projet Final : Votre Jeu !", "desc": "Assemblez le tout pour créer votre jeu d'aventure !" }
+        ]
+      },
+      "2": {
+        "title": "Magie des Maths : Énigmes et Logique !",
+        "desc": "Maîtrisez les suites mathématiques, la géométrie 3D et les énigmes logiques !",
+        "category": "Mathématiques",
+        "difficulty": "Débutant",
+        "modules": [
+          { "title": "Module 1 : Suites Numériques", "desc": "Repérez les règles cachées et devinez la suite." },
+          { "title": "Module 2 : Géométrie 2D et 3D", "desc": "Explorez les formes, les angles, cubes et sphères." },
+          { "title": "Module 3 : Énigmes Logiques", "desc": "Utilisez la déduction pour résoudre des casse-têtes." },
+          { "title": "Module 4 : Algorithmes et Étapes", "desc": "Décomposez les problèmes en étapes simples." },
+          { "title": "Module 5 : Motifs Naturels", "desc": "Découvrez la suite de Fibonacci dans la nature." },
+          { "title": "Module 6 : Défi Sorcier des Maths", "desc": "Testez toutes vos compétences en énigmes !" }
+        ]
+      },
+      "3": {
+        "title": "Gestion de l'Argent : Budget pour Enfants !",
+        "desc": "Comprenez le fonctionnement de l'argent et du budget grâce à des simulations !",
+        "category": "Finance",
+        "difficulty": "Débutant",
+        "modules": [
+          { "title": "Module 1 : Histoire de l'Argent", "desc": "Du troc aux monnaies numériques." },
+          { "title": "Module 2 : Revenus vs Dépenses", "desc": "Comprenez d'où vient l'argent et où il va." },
+          { "title": "Module 3 : Votre Premier Budget", "desc": "Répartissez votre argent entre besoins et épargne." },
+          { "title": "Module 4 : Le Pouvoir des Intérêts", "desc": "Regardez vos économies grandir à la banque." },
+          { "title": "Module 5 : Achats Intelligents", "desc": "Comparez les prix et évitez les achats impulsifs." },
+          { "title": "Module 6 : Jeu du Jeune Entrepreneur", "desc": "Gérez votre stand de limonade virtuel !" }
+        ]
+      },
+      "4": {
+        "title": "Génie de la Marque : Marketing et Médias !",
+        "desc": "Découvrez comment les marques créent des logos et des publicités virales !",
+        "category": "Marketing",
+        "difficulty": "Débutant",
+        "modules": [
+          { "title": "Module 1 : Qu'est-ce qu'une Marque ?", "desc": "Logos, couleurs, slogans et identité." },
+          { "title": "Module 2 : Public Cible", "desc": "Identifiez les personnes destinataires de vos produits." },
+          { "title": "Module 3 : Design Visuel", "desc": "Choisissez des couleurs captivantes." },
+          { "title": "Module 4 : Créer des Pubs", "desc": "Rédigez des titres percutants et créez des affiches." },
+          { "title": "Module 5 : Médias Numériques", "desc": "Comprenez les pubs vidéo et réseaux sociaux." },
+          { "title": "Module 6 : Lancement de Produit", "desc": "Lancez votre propre produit imaginaire !" }
+        ]
+      },
+      "5": {
+        "title": "Créateur Web : Sites Web avec HTML et CSS !",
+        "desc": "Transformez vos idées en vraies pages web avec HTML et CSS !",
+        "category": "Design Web",
+        "difficulty": "Intermédiaire",
+        "modules": [
+          { "title": "Module 1 : Les Bases du HTML", "desc": "Titres, paragraphes, balises et structure." },
+          { "title": "Module 2 : Images et Liens", "desc": "Reliez des pages et ajoutez des graphismes." },
+          { "title": "Module 3 : Style avec le CSS", "desc": "Changez les polices, couleurs et dégradés." },
+          { "title": "Module 4 : Boutons et Effets", "desc": "Créez des boutons animés." },
+          { "title": "Module 5 : Design Responsive", "desc": "Adaptez vos pages aux smartphones et tablettes." },
+          { "title": "Module 6 : Votre Portfolio Web", "desc": "Créez et publiez votre site personnel !" }
+        ]
+      },
+      "6": {
+        "title": "Artiste Numérique : Graphismes et Art !",
+        "desc": "Maîtrisez les couleurs, les formes, les calques et l'illustration numérique !",
+        "category": "Art Numérique",
+        "difficulty": "Débutant",
+        "modules": [
+          { "title": "Module 1 : Pixels et Toile", "desc": "Comprenez la résolution et les outils virtuels." },
+          { "title": "Module 2 : Théorie des Couleurs", "desc": "Associez couleurs chaudes et froides." },
+          { "title": "Module 3 : Travailler avec les Calques", "desc": "Empilez les éléments et les ombrages." },
+          { "title": "Module 4 : Dessiner des Avatars", "desc": "Esquissez des personnages étape par étape." },
+          { "title": "Module 5 : Peinture Numérique", "desc": "Utilisez pinceaux, dégradés et lumières." },
+          { "title": "Module 6 : Galerie d'Art", "desc": "Réalisez une grande affiche numérique !" }
+        ]
+      }
     },
     common: {
       soundOn: "Son Activé",
-      soundOff: "Son Muet",
+      soundOff: "Son Coupé",
       language: "Langue",
       close: "Fermer",
       cancel: "Annuler",
       confirm: "Confirmer",
-      back: "Retour"
+      back: "Retour",
+      loading: "Chargement...",
+      saving: "Enregistrement...",
+      error: "Une erreur est survenue"
     }
   },
 
   de: {
+    aiTutor: {
+          "yourTutor": "Dein KI-Tutor",
+          "askTutor": "Frage {name}",
+          "typeMessage": "Stelle eine Frage zu diesem Kurs...",
+          "thinking": "Überlegt...",
+          "errorMessage": "Ups! Dein KI-Tutor konnte nicht erreicht werden. Bitte versuche es erneut.",
+          "rateLimitError": "Dein KI-Tutor macht eine kurze Pause! Bitte warte einen Moment.",
+          "clearChat": "Chat-Verlauf löschen",
+          "poweredBy": "Unterstützt von Google Gemini 2.0 Flash • Kinder-sichere KI",
+          "chatGreeting": "Hallo! 👋 Ich bin {name}, dein {subject}-Lernpartner! Frage mich alles zu diesem Kurs, und lass uns gemeinsam lernen!"
+    },
     nav: {
       home: "Startseite",
       courses: "Kurse",
@@ -716,30 +1633,30 @@ export const translations = {
       titleStart: "Baue deine",
       titleAccent: "Fähigkeiten",
       titleEnd: "online auf",
-      subtitle: "Lerne und verbessere deine Fähigkeiten mit interaktiven Kursen und Echtzeit-Quizze.",
+      subtitle: "Lerne und verbessere deine Fähigkeiten mit interaktiven Kursen und Echtzeit-Tests.",
       exploreCourses: "Kurse Entdecken",
       takeQuiz: "Quiz Spielen",
-      statsStudents: "Aktive Schüler",
+      statsStudents: "Aktive Lerner",
       statsCourses: "Interaktive Kurse",
-      statsCost: "Für Immer Kostenlos"
+      statsCost: "Forever Kostenlos"
     },
     home: {
-      lovedBy: "Von über 2.000 Lernenden geschätzt",
+      lovedBy: "Beliebt bei über 2.000 Lernenden",
       whyEyebrow: "Warum Learntopia",
       whyTitle: "Alles, was du zum Wachsen brauchst",
-      subjectEyebrow: "Fachbereiche",
+      subjectEyebrow: "Themengebiete",
       subjectTitle: "Was möchtest du lernen?",
       browseAll: "Alle Kurse durchsuchen",
       quoteEyebrow: "Warum weiterlernen",
-      quoteText: "Kontinuierliches Lernen ist die Mindestvoraussetzung für den Erfolg in jedem Bereich.",
+      quoteText: "Kontinuierliches Lernen ist die Mindestvoraussetzung für Erfolg in jedem Bereich.",
       quoteAuthor: "Brian Tracy",
-      quoteSubtext: "Jeder abgeschlossene Kurs bringt dich dem Ziel näher, der Experte zu werden, der du sein möchtest.",
+      quoteSubtext: "Jeder abgeschlossene Kurs bringt dich deinem Ziel einen Schritt näher.",
       val1Title: "Interaktive Kurse",
-      val1Text: "Lerne praktische Fähigkeiten durch strukturierte Lernpfade.",
-      val2Title: "Zeitgesteuerte Quiz-Herausforderungen",
-      val2Text: "Testen Sie sich gegen die Uhr mit sofortigem Feedback.",
-      val3Title: "Fortschritt verfolgen",
-      val3Text: "Melden Sie sich an, um jeden Versuch zu speichern und deine Highscores zu steigern.",
+      val1Text: "Lerne praktische Fähigkeiten durch zielgerichtete, einsteigerfreundliche Kurspfade.",
+      val2Title: "Zeitbasierte Quizze",
+      val2Text: "Teste dich gegen die Uhr mit sofortigem Feedback und ehrlicher Bewertung.",
+      val3Title: "Verfolge deinen Fortschritt",
+      val3Text: "Melde dich an, um jeden Versuch zu speichern und deine Highscores steigen zu sehen.",
       learnMore: "Mehr erfahren",
       subjectScience: "Wissenschaft",
       subjectTech: "Technologie",
@@ -752,154 +1669,237 @@ export const translations = {
     stats: {
       eyebrow: "In Zahlen",
       title: "Lernen, das sich auszahlt",
-      description: "Eine wachsende Gemeinschaft, echte Kurstiefe und messbare Fortschritte auf einen Blick.",
-      learners: "Aktive Lernende",
+      description: "Eine wachsende Gemeinschaft, echte Kurstiefe und messbarer Fortschritt auf einen Blick.",
+      learners: "Aktive Lerner",
       courses: "Expertenkurse",
       quizzes: "Quiz-Pfade",
       rating: "Durchschnittsbewertung",
       chartTitle: "Einschreibungen nach Fach",
-      chartSubtitle: "Worauf sich unsere Lernenden aktuell konzentrieren.",
+      chartSubtitle: "Worauf sich unsere Lerner aktuell konzentrieren.",
       studentsLegend: "Schüler",
       frontend: "Frontend",
       finance: "Finanzen",
       python: "Python",
       arts: "Kunst",
-      maths: "Mathematik",
+      maths: "Mathe",
       marketing: "Marketing"
     },
     courses: {
       title: "Starte dein Lernabenteuer!",
-      subtitle: "Entdecke unterhaltsame, interaktive Kurse für Jugendliche. Lerne Coden, Zeichnen und Rätseln!",
+      subtitle: "Entdecke unterhaltsame Kurse für Kinder & Jugendliche. Coden, Zeichnen & Rätsel lösen!",
       eyebrow: "Kurskatalog",
       level: "Stufe",
       modules: "Module",
-      startLearning: "Lernen Starten",
+      startLearning: "Kurs Starten",
       continueLearning: "Kurs Fortsetzen",
       courseCompleted: "Abgeschlossen 🎉",
-      searchPlaceholder: "Nach Kurs oder Fach suchen…",
+      searchPlaceholder: "Nach Kurs oder Thema suchen…",
       enrolling: "Einschreiben...",
       enrolledBadge: "Eingeschrieben"
+    ,
+      searchResultsSingle: "{count} Ergebnis für „{query}“",
+      searchResultsPlural: "{count} Ergebnisse für „{query}“",
+      noResults: "Keine Kurse passen zu „{query}“",
+      noResultsDesc: "Versuche einen breiteren Suchbegriff oder stöbere im gesamten Katalog.",
+      clearSearch: "Suche löschen"
     },
     courseDetails: {
       overview: "Übersicht",
       curriculum: "Lehrplan",
       takeaways: "Wichtigste Erkenntnisse",
       prerequisites: "Voraussetzungen",
-      targetAudience: "Für Wen Dieser Kurs Ist",
+      targetAudience: "Für wen ist das",
       certificateTitle: "Abschlusszertifikat",
-      certificateText: "Schließen Sie alle Module ab, um Ihr digitales Zertifikat zu erhalten!",
-      enrollNow: "In Kurs Einschreiben",
-      enrolledBadge: "Sie Sind Eingeschrieben",
-      continueBtn: "Weiter Lernen",
+      certificateText: "Schließe alle Module ab, um dein verifiziertes digitales Abzeichen zu verdienen!",
+      enrollNow: "Jetzt Einschreiben",
+      enrolledBadge: "Du bist Eingeschrieben",
+      continueBtn: "Weiterlernen",
       completedBadge: "Kurs Abgeschlossen 🎉",
       modulesCount: "Module",
       duration: "Geschätzte Zeit",
       level: "Stufe",
       category: "Kategorie",
-      backToCourses: "Zurück zu Kursen",
+      backToCourses: "Zurück zu den Kursen",
       module: "Modul"
+    },
+    lessonPlayer: {
+      story: "Geschichtszeit",
+      concept: "Lernen",
+      fact: "Wusstest du schon?",
+      tip: "Profi-Tipp",
+      example: "Beispiel",
+      activity: "Übung",
+      recap: "Zusammenfassung",
+      stepCount: "Schritt {current} von {total}",
+      prevStep: "Vorheriger Schritt",
+      nextStep: "Nächster Schritt",
+      startPractice: "Interaktive Übungen Starten 🚀",
+      completeModule: "Abschließen & Üben 🎯"
+    },
+    exerciseEngine: {
+      header: "Interaktive Praxis",
+      qCounter: "Frage {current} von {total}",
+      trueBtn: "Wahr",
+      falseBtn: "Falsch",
+      fillPlaceholder: "Gib deine Antwort hier ein...",
+      matchingHelp: "Klicke links auf ein Element und verbinde es rechts!",
+      checkAnswer: "Antwort Überprüfen",
+      correctTitle: "Alles Richtig! +50 XP",
+      incorrectTitle: "Noch nicht ganz richtig!",
+      tryAgain: "Erneut Versuchen",
+      nextQ: "Nächste Herausforderung",
+      completeBtn: "Modul Abschließen 🎉",
+      saving: "Fortschritt wird gespeichert..."
     },
     quiz: {
       title: "Quiz-Zentrum",
-      subtitle: "Testen Sie Ihr Wissen und überprüfen Sie Ihre Fähigkeiten in Echtzeit.",
+      subtitle: "Teste dein Wissen und überprüfe deine Fähigkeiten in Echtzeit.",
       selectTopic: "Thema Wählen",
       questionsCount: "10 Zufallsfragen",
       timer: "Verbleibende Zeit",
       nextQuestion: "Nächste Frage",
       submitQuiz: "Quiz Einreichen",
-      scoreTitle: "Quiz Abgeschlossen!",
+      scoreTitle: "Quiz Beendet!",
       resultsTitle: "Ergebnis in deinem Profil gespeichert!",
-      yourScore: "Ihre Punktzahl",
+      yourScore: "Dein Ergebnis",
       tryAgain: "Erneut Versuchen",
-      backToTopics: "Zurück zu Themen",
-      backToQuizzes: "Zurück zu Quizze",
+      backToTopics: "Zurück zur Themenauswahl",
+      backToQuizzes: "Zurück zu allen Quizzen",
       questionCountLabel: "Frage",
-      of: "von"
+      of: "von",
+      quitConfirmTitle: "Aktives Quiz abbrechen?",
+      quitConfirmMsg: "Dein aktueller Fortschritt geht verloren.",
+      quitBtn: "Ja, Abbrechen",
+      stayBtn: "Weiter Quiz spielen"
     },
     leaderboard: {
-      badge: "Learntopia Rangliste",
+      badge: "Learntopia Ränge",
       title: "Bestenliste",
-      subtitle: "Sehen Sie, wer an der Spitze steht. Filtern Sie nach Quiz für Einzelwertungen.",
+      subtitle: "Sieh nach, wer an der Spitze steht. Filtere nach Quiz für Einzelwertungen.",
       filterByQuiz: "Nach Quiz Filtern",
       allQuizzes: "Gesamtpunkte",
       rank: "Rang",
       student: "Schüler",
-      score: "Punktzahl",
+      score: "Punkte",
       quizCol: "Quiz",
       youBadge: "Du",
-      noRankings: "Noch keine Ränge",
-      noRankingsDesc: "Schließen Sie ein Quiz ab, um auf der Bestenliste zu erscheinen!",
-      searchPlaceholder: "Nach Name suchen...",
+      noRankings: "Noch keine Platzierungen",
+      noRankingsDesc: "Schließe ein Quiz ab, um auf der Bestenliste zu erscheinen!",
+      searchPlaceholder: "Nach Namen suchen...",
       entries: "Einträge",
       entry: "Eintrag"
     },
     dashboard: {
       welcome: "Willkommen zurück",
       level: "Stufe",
-      totalXp: "Gesamt-XP",
-      dayStreak: "Tägliche Serie",
+      totalXp: "Gesamt XP",
+      dayStreak: "Tages-Serie",
       enrolled: "Eingeschrieben",
       completed: "Abgeschlossen",
       badges: "Abzeichen & Erfolge",
       activeCourses: "Aktive Kurse",
       completedCourses: "Abgeschlossene Kurse",
-      quizHistory: "Neueste Quiz-Ergebnisse",
+      quizHistory: "Letzte Quiz-Ergebnisse",
       noCoursesTitle: "Keine aktiven Kurse",
-      noCoursesDesc: "Entdecken Sie unseren Katalog und starten Sie Ihr Lernabenteuer!",
-      noQuizTitle: "Noch keine Quizze abgeschlossen",
-      noQuizDesc: "Absolvieren Sie Ihr erstes Quiz, um hier Ergebnisse zu sehen!",
+      noCoursesDesc: "Entdecke unseren interaktiven Katalog und starte dein Abenteuer!",
+      noQuizTitle: "Noch keine Quizze absolviert",
+      noQuizDesc: "Nimm an deinem ersten Quiz teil, um hier deine Punkte zu verfolgen!",
       exploreBtn: "Kurse Entdecken",
-      takeQuizBtn: "Quiz Absolvieren",
+      takeQuizBtn: "Quiz Machen",
       unenroll: "Abmelden",
-      confirmUnenroll: "Möchten Sie sich wirklich von diesem Kurs abmelden?",
-      maxLevel: "Maximales Level erreicht",
+      confirmUnenroll: "Möchtest du dich wirklich von diesem Kurs abmelden?",
+      maxLevel: "Maximalstufe erreicht",
       xpToNext: "XP → Stufe",
       accountSettings: "Kontoeinstellungen",
       deleteAccount: "Konto Löschen",
       logout: "Abmelden",
-      profile: "Schülerprofil"
+      profile: "Schülerprofil",
+      earnedOn: "Erhalten am {date}"
+    ,
+      dangerZoneTitle: "Kontoverwaltung — Gefahrenzone",
+      dangerZoneDesc: "Lösche dauerhaft dein Schülerprofil, Kurseinschreibungen, verdiente XP, Abzeichen, Quizpunktzahlen und deine Platzierung in der Bestenliste.",
+      deleteProfileBtn: "Mein Profil Löschen",
+      unenrollModalTitle: "Vom Kurs abmelden?",
+      unenrollModalText: "Bist du sicher, dass du dich von {title} abmelden möchtest? Dein Fortschritt für diesen Kurs wird zurückgesetzt.",
+      unenrollBtn: "Abmelden",
+      deleteModalTitle: "Profil Dauerhaft Löschen?",
+      deleteWarningTitle: "DIES IST EINE DESTRUKTIVE & PERMANENTE ENTSCHEIDUNG!",
+      deleteWarningText: "Das Löschen deines Profils löscht sofort alle deine Daten von Learntopia. Einmal bestätigt, kann diese Aktion nicht rückgängig gemacht werden.",
+      deleteListHeading: "Folgendes wird für immer gelöscht:",
+      deleteList1: "Alle Kurseinschreibungen & Modulfortschritt",
+      deleteList2: "Gesamt-XP, Stufenfortschritt & verdiente Abzeichen",
+      deleteList3: "Quiz-Highscores und Versuchsaufzeichnungen",
+      deleteList4: "Öffentliche Bestenliste & Profileintrag",
+      deleteList5: "Benutzerkonto & Profildaten",
+      deleteConfirmLabel: "Zur Bestätigung gib {keyword} unten ein:",
+      deleteConfirmPlaceholder: "Schreibe \"DELETE\" zur Bestätigung",
+      deleteConfirmBtn: "Profil Dauerhaft Löschen"
     },
     gamification: {
       levelUp: "LEVEL UP!",
       badgeUnlocked: "ABZEICHEN FREIGESCHALTET!",
       congrats: "Tolle Arbeit!",
-      close: "Super! 🚀"
+      close: "Super! 🚀",
+      earnedBadge: "{name} Abzeichen"
+    },
+    levelNames: {
+      level1: "Coder-Neuling",
+      level2: "Code-Entdecker",
+      level3: "Byte-Meister",
+      level4: "Logik-Legende",
+      level5: "Großmeister"
+    },
+    badgeNames: {
+      python: "Python-Pionier",
+      math: "Mathe-Magier",
+      finance: "Finanz-Meister",
+      marketing: "Marken-Genie",
+      web: "Web-Architekt",
+      art: "Digitaler Picasso"
     },
     auth: {
       loginTitle: "Willkommen zurück bei Learntopia",
-      loginSubtitle: "Melden Sie sich an, um Ihr Lernabenteuer fortzusetzen",
-      signUpTitle: "Heute Learntopia Beitreten",
-      signUpSubtitle: "Lernen Sie 100% kostenlos mit Ihrem Profil",
+      loginSubtitle: "Melde dich an, um dein Lernabenteuer fortzusetzen",
+      signUpTitle: "Tritt Learntopia Heute Bei",
+      signUpSubtitle: "Lerne 100% kostenlos mit deinem eigenen Avatar",
       emailLabel: "E-Mail-Adresse",
       passwordLabel: "Passwort",
-      googleAuth: "Mit Google Fortfahren",
-      alreadyHaveAccount: "Haben Sie bereits ein Konto?",
-      dontHaveAccount: "Haben Sie noch kein Konto?",
+      googleAuth: "Weiter mit Google",
+      alreadyHaveAccount: "Hast du bereits ein Konto?",
+      dontHaveAccount: "Noch kein Konto?",
       signInHere: "Hier anmelden",
       registerHere: "Hier registrieren"
     },
+    authGuidance: {
+      noAccountTitle: "Konto Nicht Gefunden",
+      noAccountMsg: "Wir konnten kein Konto mit der E-Mail {email} finden. Möchtest du ein neues Konto erstellen?",
+      createAccountBtn: "Neues Konto Erstellen",
+      alreadyExistsTitle: "Konto Existiert Bereits",
+      alreadyExistsMsg: "Ein Konto mit {email} ist bereits registriert. Möchtest du dich stattdessen anmelden?",
+      signInBtn: "Jetzt Anmelden"
+    },
     contact: {
-      eyebrow: "Kontaktieren Sie uns",
-      title: "Wir würden uns freuen, von Ihnen zu hören",
-      subtitle: "Haben Sie eine Frage oder benötigen Hilfe? Senden Sie uns eine Nachricht.",
-      nameLabel: "Ihr Name",
+      eyebrow: "Kontakt aufnehmen",
+      title: "Wir freuen uns auf deine Nachricht",
+      subtitle: "Hast du Fragen oder brauchst du Hilfe? Sende uns eine Nachricht.",
+      nameLabel: "Dein Name",
       emailLabel: "E-Mail-Adresse",
       subjectLabel: "Betreff (optional)",
       messageLabel: "Nachricht",
       sendBtn: "Nachricht Senden",
-      sending: "Senden...",
+      sending: "Wird gesendet...",
       emailCardTitle: "Direkte E-Mail",
-      emailCardSub: "E-Mail senden →",
+      emailCardSub: "Sende uns eine E-Mail →",
       responseTitle: "Antwortzeit",
       responseSub: "Innerhalb von 1–2 Werktagen",
       docTitle: "Dokumentation",
-      docSub: "Dokumentation lesen →",
+      docSub: "Dokumente lesen →",
       privacyTitle: "Datenschutz",
-      privacySub: "Ihre Daten werden sicher gespeichert — niemals weitergegeben."
+      privacySub: "Deine Nachricht wird sicher gespeichert — niemals weitergegeben."
     },
     thankYou: {
       title: "Nachricht Erfolgreich Gesendet!",
-      subtitle: "Vielen Dank für Ihre Nachricht an Learntopia. Wir werden Ihnen in Kürze antworten.",
+      subtitle: "Vielen Dank für deine Nachricht an Learntopia. Wir antworten in Kürze.",
       backHome: "Zurück zur Startseite",
       exploreCourses: "Kurse Entdecken"
     },
@@ -908,13 +1908,182 @@ export const translations = {
       subtitle: "Hoppla! Die gesuchte Seite existiert nicht oder wurde verschoben.",
       goHome: "Zurück zur Startseite"
     },
+    doc: {
+      badge: "Dokumentation",
+      title: "Learntopia Dokumentation",
+      subtitle: "Vollständige Referenz der Learntopia-Plattform — Funktionen und häufige Fragen.",
+      lastUpdated: "Zuletzt aktualisiert: August 2026",
+      onThisPage: "Auf dieser Seite",
+      quickJump: "Schnellnavigation",
+      secOverview: "Übersicht",
+      secOverviewBody1: "Learntopia ist eine interaktive E-Learning-Plattform für Kinder und Jugendliche mit strukturierten Kursen und zeitbasierten Quizzen.",
+      secOverviewBody2: "Die Plattform ist 100% kostenlos. Du kannst Kurse als Gast erkunden oder ein Konto erstellen.",
+      cardCourses: "Strukturierte Kurse",
+      cardCoursesDesc: "Themenspezifische Lernpfade mit Modul-Fortschritt.",
+      cardQuizzes: "Zeitbasierte Quizze",
+      cardQuizzesDesc: "15-Sekunden-Fragen mit sofortigem Feedback.",
+      cardTracking: "Fortschrittsverfolgung",
+      cardTrackingDesc: "Persönliches Dashboard, Tages-Serien und weltweite Bestenliste.",
+      secFeatures: "Funktionen",
+      feat1: "Interaktive Kurse: Schritt-für-Schritt-Lektionen mit Beispielen und Übungen.",
+      feat2: "Quiz-Engine: 10 Zufallsfragen pro Thema mit 15s Timer.",
+      feat3: "Gamifizierung & XP: Verdiene XP und steige vom Coder-Neuling zum Großmeister auf.",
+      feat4: "Abzeichen & Erfolge: Schalte digitale Abzeichen frei.",
+      feat5: "Weltweite Bestenliste: Vergleiche deine Punkte mit anderen Lernenden.",
+      feat6: "Mehrsprachigkeit: Vollständige Unterstützung für Deutsch, Englisch, Spanisch, Französisch und Arabisch.",
+      secGettingStarted: "Erste Schritte",
+      gsStep1Title: "1. Erstelle ein Konto",
+      gsStep1Desc: "Klicke auf 'Jetzt Starten', um dich per E-Mail oder Google zu registrieren.",
+      gsStep2Title: "2. Wähle einen Kurs",
+      gsStep2Desc: "Entdecke Kurse in Python, Mathematik, Finanzen, Marketing und Digitaler Kunst.",
+      gsStep3Title: "3. Sammle XP & Steige Auf",
+      gsStep3Desc: "Lerne Lektionen, löse Aufgaben und siehe dein Level im Profil steigen!",
+      secFaq: "Häufig Gestellte Fragen",
+      faq1Q: "Ist Learntopia wirklich 100% kostenlos?",
+      faq1A: "Ja! Learntopia ist komplett kostenlos ohne versteckte Gebühren.",
+      faq2Q: "Brauche ich unbedingt ein Konto?",
+      faq2A: "Du kannst als Gast lernen. Mit einem Konto speicherst du deinen Fortschritt.",
+      faq3Q: "Sind meine persönlichen Daten sicher?",
+      faq3A: "Absolut. Wir halten uns strikt an Datenschutzrichtlinien ohne Werbung."
+    },
+    privacy: {
+      badge: "Rechtliches & Sicherheit",
+      title: "Datenschutzerklärung",
+      subtitle: "Erfahre, wie wir deine Daten auf Learntopia schützen und verarbeiten.",
+      lastUpdated: "Zuletzt aktualisiert: Juli 2026",
+      sec1Title: "1. Einleitung",
+      sec1Body: "Learntopia bietet eine sichere Lernumgebung für Lernende jeden Alters.",
+      sec2Title: "2. Erhobene Informationen",
+      sec2Item1: "Konto-Details: Benutzername und E-Mail-Adresse bei der Registrierung.",
+      sec2Item2: "Fortschrittsdaten: Belegte Kurse, Quiz-Ergebnisse und XP-Punkte.",
+      sec3Title: "3. Datenschutz & Sicherheit",
+      sec3Body: "Deine Daten werden sicher mit Google Firebase gespeichert und niemals verkauft.",
+      sec4Title: "4. Schutz von Kindern",
+      sec4Body: "Wir halten uns strikt an COPPA-Richtlinien ohne Werbung Dritter."
+    },
+    terms: {
+      badge: "Nutzungsbedingungen",
+      title: "Nutzungsbedingungen",
+      subtitle: "Bitte lies diese Bedingungen vor der Nutzung von Learntopia aufmerksam durch.",
+      lastUpdated: "Zuletzt aktualisiert: Juli 2026",
+      sec1Title: "1. Zustimmung",
+      sec1Body: "Durch die Nutzung von Learntopia stimmst du diesen Bedingungen zu.",
+      sec2Title: "2. Verhaltensregeln",
+      sec2Body: "Learntopia ist eine respektvolle Lerngemeinschaft.",
+      sec3Title: "3. Bildungsinhalte",
+      sec3Body: "Alle Materialien dienen ausschließlich Bildungszwecken."
+    },
+    admin: {
+      badge: "Operationszentrale",
+      title: "Learntopia Admin-Portal",
+      subtitle: "Verwaltungskonsole und Schülerverzeichnis.",
+      liveClock: "Systemzeit",
+      adminBadge: "ADMIN",
+      exitPortal: "Portal Verlassen",
+      totalStudents: "Registrierte Schüler",
+      activeQuizzes: "Quiz-Versuche",
+      totalXpGranted: "Gesamt XP Vergeben",
+      directoryTitle: "Schülerverzeichnis",
+      directorySubtitle: "Übersicht aller Lernenden und Leistungsdaten.",
+      colStudent: "Schüler",
+      colEmail: "E-Mail",
+      colXp: "Gesamt XP",
+      colStreak: "Serie",
+      colJoined: "Registriert Am"
+    },
     footer: {
-      tagline: "Die nächste Generation von Entwicklern mit kostenloser Bildung fördern.",
+      tagline: "Die nächste Generation von Denkern und Machern mit kostenloser Bildung begeistern.",
       quickLinks: "Schnelllinks",
       legal: "Rechtliches & Sicherheit",
       terms: "Nutzungsbedingungen",
-      privacy: "Datenschutzrichtlinie",
-      rights: "Alle Rechte vorbehalten. Für Lernende weltweit gemacht."
+      privacy: "Datenschutzerklärung",
+      rights: "Alle Rechte vorbehalten. Für Kinder & Jugendliche weltweit gemacht."
+    },
+    courseData: {
+      "1": {
+        "title": "Python für Kinder: Baue dein erstes Spiel!",
+        "desc": "Lerne Coden durch das Bauen echter Spiele. Perfekt für Anfänger von 7-14 Jahren!",
+        "category": "Programmierung",
+        "difficulty": "Anfänger",
+        "modules": [
+          { "title": "Modul 1: Hallo Python!", "desc": "Lerne Python kennen und schreibe deine ersten Zeilen Code." },
+          { "title": "Modul 2: Variablen und Daten-Boxen", "desc": "Speichere Zahlen, Text und Punkte in Variablen." },
+          { "title": "Modul 3: Entscheidungen mit IF", "desc": "Nutze Logik und Bedingungen in deinen Spielen." },
+          { "title": "Modul 4: Schleifen und Wiederholungen", "desc": "Wiederhole Code automatisch mit FOR und WHILE." },
+          { "title": "Modul 5: Funktionen und Werkzeuge", "desc": "Verpacke deinen Code in wiederverwendbare Funktionen." },
+          { "title": "Modul 6: Finales Spiel-Projekt", "desc": "Kombiniere alles für dein eigenes Abenteuerspiel!" }
+        ]
+      },
+      "2": {
+        "title": "Mathe-Magie: Rätsel und Logikspaß!",
+        "desc": "Meistere Mathe-Sequenzen, 3D-Geometrie und Logikrätsel!",
+        "category": "Mathematik",
+        "difficulty": "Anfänger",
+        "modules": [
+          { "title": "Modul 1: Zahlen-Sequenzen", "desc": "Erkenne verdeckte Regeln und nenne die nächste Zahl." },
+          { "title": "Modul 2: 2D und 3D Geometrie", "desc": "Entdecke Formen, Winkel, Würfel und Kugeln." },
+          { "title": "Modul 3: Logik-Rätsel", "desc": "Nutze schlussfolgerndes Denken für knifflige Rätsel." },
+          { "title": "Modul 4: Algorithmen und Schritte", "desc": "Zerlege Probleme in einfache Anweisungen." },
+          { "title": "Modul 5: Muster in der Natur", "desc": "Entdecke Fibonacci-Zahlen in Pflanzen und Galaxien." },
+          { "title": "Modul 6: Mathe-Magier Challenge", "desc": "Teste dein gesammeltes Rätselwissen!" }
+        ]
+      },
+      "3": {
+        "title": "Finanz-Schlau: Geld und Budget für Kinder!",
+        "desc": "Verstehe, wie Geld, Budgetierung und Sparen funktionieren!",
+        "category": "Finanzen",
+        "difficulty": "Anfänger",
+        "modules": [
+          { "title": "Modul 1: Geschichte des Geldes", "desc": "Vom Tauschhandel zu digitalen Währungen." },
+          { "title": "Modul 2: Einnahmen vs. Ausgaben", "desc": "Woher Geld kommt und wohin es fließt." },
+          { "title": "Modul 3: Dein erstes Budget", "desc": "Teile dein Geld für Wünsche und Ersparnisse auf." },
+          { "title": "Modul 4: Die Macht der Zinsen", "desc": "Sieh zu, wie Ersparnisse auf der Bank wachsen." },
+          { "title": "Modul 5: Schlaues Einkaufen", "desc": "Vergleiche Preise und vermeide Spontankäufe." },
+          { "title": "Modul 6: Das Limonaden-Stand Spiel", "desc": "Führe deinen eigenen virtuellen Stand!" }
+        ]
+      },
+      "4": {
+        "title": "Marken-Genie: Marketing und Medien!",
+        "desc": "Entdecke, wie Marken Logos entwerfen und digitale Werbung erstellen!",
+        "category": "Marketing",
+        "difficulty": "Anfänger",
+        "modules": [
+          { "title": "Modul 1: Was ist eine Marke?", "desc": "Logos, Farben, Slogans und Persönlichkeit." },
+          { "title": "Modul 2: Zielgruppe", "desc": "Erkenne, für wen dein Produkt gemacht ist." },
+          { "title": "Modul 3: Visuelles Design", "desc": "Wähle Farben, die Emotionen wecken." },
+          { "title": "Modul 4: Werbung Gestalten", "desc": "Schreibe tolle Überschriften und erstelle Poster." },
+          { "title": "Modul 5: Digitale Medien", "desc": "Verstehe Videoanzeigen und soziale Medien." },
+          { "title": "Modul 6: Produkt-Launch", "desc": "Starte dein eigenes erfundenes Produkt!" }
+        ]
+      },
+      "5": {
+        "title": "Web-Maker: Baue Websites mit HTML und CSS!",
+        "desc": "Verwandle deine Ideen in echte Websites mit bunten Styles und Buttons!",
+        "category": "Webdesign",
+        "difficulty": "Mittel",
+        "modules": [
+          { "title": "Modul 1: HTML Bausteine", "desc": "Überschriften, Absätze und Seitenstruktur." },
+          { "title": "Modul 2: Bilder und Links", "desc": "Verlinke Seiten und füge Grafiken ein." },
+          { "title": "Modul 3: Styling mit CSS", "desc": "Ändere Schriftarten, Farben und Verläufe." },
+          { "title": "Modul 4: Buttons und Hover-Effekte", "desc": "Bringe Buttons zum Leuchten." },
+          { "title": "Modul 5: Responsive Webdesign", "desc": "Passe Seiten für Handys und Tablets an." },
+          { "title": "Modul 6: Dein Web-Portfolio", "desc": "Erstelle deine eigene Website!" }
+        ]
+      },
+      "6": {
+        "title": "Digital-Künstler: Grafiken und Kunst!",
+        "desc": "Meistere Farben, Formen, Ebenen und digitale Illustration!",
+        "category": "Digitale Kunst",
+        "difficulty": "Anfänger",
+        "modules": [
+          { "title": "Modul 1: Pixel und Leinwand", "desc": "Auflösung und digitale Zeichenwerkzeuge." },
+          { "title": "Modul 2: Farbenlehre", "desc": "Kombiniere warme und kalte Farben." },
+          { "title": "Modul 3: Arbeiten mit Ebenen", "desc": "Staple Objekte und Schattierungen." },
+          { "title": "Modul 4: Charaktere Zeichnen", "desc": "Zeichne niedliche Avatare Schritt für Schritt." },
+          { "title": "Modul 5: Digitales Malen", "desc": "Nutze Pinsel, Verläufe und Lichteffekte." },
+          { "title": "Modul 6: Kunst-Ausstellung", "desc": "Erstelle ein digitales Meisterwerk!" }
+        ]
+      }
     },
     common: {
       soundOn: "Ton An",
@@ -923,11 +2092,25 @@ export const translations = {
       close: "Schließen",
       cancel: "Abbrechen",
       confirm: "Bestätigen",
-      back: "Zurück"
+      back: "Zurück",
+      loading: "Laden...",
+      saving: "Speichern...",
+      error: "Ein Fehler ist aufgetreten"
     }
   },
 
   ar: {
+    aiTutor: {
+          "yourTutor": "المعلم الذكي الخاص بك",
+          "askTutor": "اسأل {name}",
+          "typeMessage": "اسأل سؤالاً حول هذه الدورة...",
+          "thinking": "جاري التفكير...",
+          "errorMessage": "عذراً! تعذر الاتصال بـ معلمك الذكي. يرجى المحاولة مرة أخرى.",
+          "rateLimitError": "معلمك الذكي يأخذ استراحة قصيرة! يرجى الانتظار لحظة.",
+          "clearChat": "مسح سجل المحادثة",
+          "poweredBy": "مدعوم من Google Gemini 2.0 Flash • ذكاء آمن للأطفال",
+          "chatGreeting": "مرحباً! 👋 أنا {name}، صديقك في مادة {subject}! اسألني أي شيء عن هذه الدورة، ولنتعلم معاً!"
+    },
     nav: {
       home: "الرئيسية",
       courses: "الدورات",
@@ -935,42 +2118,42 @@ export const translations = {
       leaderboard: "لوحة الصدارة",
       dashboard: "ملفي الشخصي",
       doc: "الوثائق",
-      contact: "اتصل بنا",
+      contact: "تواصل معنا",
       login: "تسجيل الدخول",
       signUp: "ابدأ الآن",
       logout: "تسجيل الخروج",
-      adminPortal: "بوابة الإدارة"
+      adminPortal: "بوابة المشرف"
     },
     hero: {
-      badge: "100% مجاني وآمن للأطفال",
-      titleStart: "ابنِ",
+      badge: "تعلم مجاني 100٪ وآمن للأطفال",
+      titleStart: "طوّر",
       titleAccent: "مهاراتك",
       titleEnd: "عبر الإنترنت",
-      subtitle: "تعلم وطوّر مهاراتك من خلال دورات تفاعلية واختبارات قياس المهارات المباشرة.",
+      subtitle: "تعلم وطوّر مهاراتك من خلال دورات تفاعلية واختبارات قياسية ممتعة مخصصة لشباب المستقبل.",
       exploreCourses: "استكشف الدورات",
-      takeQuiz: "العب الاختبار",
-      statsStudents: "طلاب نشطون",
-      statsCourses: "دورات تفاعلية",
-      statsCost: "مجاني مدى الحياة"
+      takeQuiz: "ابدأ الاختبار",
+      statsStudents: "متعلم نشط",
+      statsCourses: "دورة تفاعلية",
+      statsCost: "مجاني للأبد"
     },
     home: {
-      lovedBy: "مفضّل من قبل أكثر من 2000 طالب",
+      lovedBy: "يثق بنا أكثر من 2000 متعلم",
       whyEyebrow: "لماذا ليرنتوبيا",
       whyTitle: "كل ما تحتاجه للنمو والتميز",
-      subjectEyebrow: "مجالات الدراسة",
+      subjectEyebrow: "مجالات التعلم",
       subjectTitle: "ماذا تريد أن تتعلم اليوم؟",
       browseAll: "تصفح جميع الدورات",
       quoteEyebrow: "لماذا تستمر في التعلم",
-      quoteText: "التعلم المستمر هو الحد الأدنى من متطلبات النجاح في أي مجال.",
+      quoteText: "التعلم المستمر هو الحد الأدنى للنجاح في أي مجال.",
       quoteAuthor: "برايان تريسي",
-      quoteSubtext: "كل دورة تكملها تقربك خطوة واحدة نحو المهني الذي تطمح أن تكونه.",
+      quoteSubtext: "كل دورة تنهيها تقربك خطوة إضافية نحو هدفك المستقبلي.",
       val1Title: "دورات تفاعلية",
-      val1Text: "تعلم مهارات عملية ومطلوبة من خلال مسارات تعلم مبسطة.",
-      val2Title: "تحديات اختبارات محددة بوقت",
-      val2Text: "اختبر نفسك مع الوقت واحصل على تقييم فوري ودقيق.",
-      val3Title: "تتبع تقدمك",
-      val3Text: "سجل الدخول لحفظ كل محاولة وشاهد أرقامك القياسية ترتفع.",
-      learnMore: "اعرف المزيد",
+      val1Text: "تعلم مهارات عملية ومطلوبة عبر مسارات مبسطة تناسب المبتدئين.",
+      val2Title: "تحديات اختبار موقوتة",
+      val2Text: "اختبر معلوماتك ضد الساعة مع تقييم فوري ونتائج دقيقة.",
+      val3Title: "تتبع تقدمك الشخصي",
+      val3Text: "سجل دخولك لحفظ محاولاتك ومتابعة ارتفاع نقاطك باستمرار.",
+      learnMore: "معرفة المزيد",
       subjectScience: "العلوم",
       subjectTech: "التكنولوجيا",
       subjectMarketing: "التسويق",
@@ -981,34 +2164,40 @@ export const translations = {
     },
     stats: {
       eyebrow: "بالأرقام",
-      title: "تعلم يصنع الفرق",
-      description: "مجتمع متنامٍ، ودورات عميقة، وتقدم يمكنك قياسه في لمحة.",
-      learners: "طلاب نشطون",
-      courses: "دورات تخصصية",
+      title: "تعلم يصنع الفارق",
+      description: "مجتمع متنامٍ، دورات ممتعة، وتقدم ملموس يمكنك قياسه لحظة بلحظة.",
+      learners: "متعلمون نشطون",
+      courses: "دورات متخصصة",
       quizzes: "مسارات اختبارات",
       rating: "متوسط التقييم",
-      chartTitle: "التسجيلات حسب المادة",
-      chartSubtitle: "أين يركز طلابنا حالياً.",
-      studentsLegend: "الطلاب",
+      chartTitle: "الطلاب حسب المجال",
+      chartSubtitle: "المجالات الأكثر إقبالاً من قبل طلابنا حالياً.",
+      studentsLegend: "طلاب",
       frontend: "تطوير المواقع",
       finance: "المالية",
-      python: "بايثون",
+      python: "باثيون",
       arts: "الفنون",
       maths: "الرياضيات",
       marketing: "التسويق"
     },
     courses: {
-      title: "ابدأ مغامرة التعلم الخاصة بك!",
-      subtitle: "استكشف دورات ممتعة وتفاعلية مصممة خصيصاً للناشئين. تعلم البرمجة، الرسم، وحل الألغاز!",
+      title: "ابدأ رحلة التعلم الممتعة!",
+      subtitle: "استكشف دورات تفاعلية صُممت خصيصاً للأطفال واليافعين. تعلم البرمجة، الرسم وحل الألغاز!",
       eyebrow: "دليل الدورات",
       level: "المستوى",
       modules: "الوحدات",
-      startLearning: "ابدأ التعلم",
+      startLearning: "ابدأ الدورة",
       continueLearning: "متابعة الدورة",
       courseCompleted: "مكتمل 🎉",
-      searchPlaceholder: "البحث عن دورة أو مهارة…",
+      searchPlaceholder: "ابحث بالدورة أو الموضوع…",
       enrolling: "جاري التسجيل...",
       enrolledBadge: "مسجل"
+    ,
+      searchResultsSingle: "{count} نتيجة لـ “{query}”",
+      searchResultsPlural: "{count} نتائج لـ “{query}”",
+      noResults: "لا توجد دورات تطابق “{query}”",
+      noResultsDesc: "جرب مصطلحاً أوسع، أو تصفح الكتالوج الكامل.",
+      clearSearch: "مسح البحث"
     },
     courseDetails: {
       overview: "نظرة عامة",
@@ -1016,57 +2205,90 @@ export const translations = {
       takeaways: "المهارات المكتسبة",
       prerequisites: "المتطلبات السابقة",
       targetAudience: "لمن هذه الدورة",
-      certificateTitle: "شهادة إتمام",
-      certificateText: "أكمل جميع الوحدات للحصول على شارتك الرقمية المعتمدة!",
-      enrollNow: "التسجيل في الدورة",
-      enrolledBadge: "أنت مسجل في هذه الدورة",
+      certificateTitle: "شهادة إتمام الدورة",
+      certificateText: "أكمل جميع وحدات الدورة للحصول على وسام الإتمام المعتمد!",
+      enrollNow: "سجل في الدورة",
+      enrolledBadge: "أنت مسجل",
       continueBtn: "متابعة التعلم",
-      completedBadge: "أكملت الدورة 🎉",
+      completedBadge: "تم إكمال الدورة 🎉",
       modulesCount: "الوحدات",
       duration: "الوقت المقدر",
       level: "المستوى",
       category: "الفئة",
       backToCourses: "العودة للدورات",
-      module: "الوحدة"
+      module: "وحدة"
+    },
+    lessonPlayer: {
+      story: "قصة مشوقة",
+      concept: "تعلم مفهوم",
+      fact: "حقيقة ممتعة",
+      tip: "نصيحة ذكية",
+      example: "مثال توضيحي",
+      activity: "تطبيق عملي",
+      recap: "ملخص الدرس",
+      stepCount: "الخطوة {current} من {total}",
+      prevStep: "الخطوة السابقة",
+      nextStep: "الخطوة التالية",
+      startPractice: "ابدأ التمارين التفاعلية 🚀",
+      completeModule: "إكمال الدرس والتمرن 🎯"
+    },
+    exerciseEngine: {
+      header: "تمارين تفاعلية",
+      qCounter: "السؤال {current} من {total}",
+      trueBtn: "صحيح",
+      falseBtn: "خاطئ",
+      fillPlaceholder: "اكتب إجابتك هنا...",
+      matchingHelp: "انقر على عنصر من اليمين ثم صله بالخيار المناسب على اليسار!",
+      checkAnswer: "تحقق من الإجابة",
+      correctTitle: "إجابة صحيحة! +50 XP",
+      incorrectTitle: "حاول مرة أخرى!",
+      tryAgain: "إعادة المحاولة",
+      nextQ: "التحدي التالي",
+      completeBtn: "إكمال الدرس 🎉",
+      saving: "جاري حفظ التقدم..."
     },
     quiz: {
       title: "مركز الاختبارات",
-      subtitle: "اختبر معرفتك وتحقق من مهاراتك في الوقت الفعلي.",
+      subtitle: "اختبر معلوماتك وتأكد من مهاراتك في الوقت الفعلي.",
       selectTopic: "اختر موضوعاً",
       questionsCount: "10 أسئلة عشوائية",
       timer: "الوقت المتبقي",
       nextQuestion: "السؤال التالي",
-      submitQuiz: "إرسال الاختبار",
+      submitQuiz: "إنهاء الاختبار",
       scoreTitle: "اكتمل الاختبار!",
-      resultsTitle: "تم حفظ النتيجة في ملفك الشخصي!",
-      yourScore: "درجتك",
-      tryAgain: "حاول مرة أخرى",
+      resultsTitle: "تم حفظ نتيجتك في ملفك الشخصي!",
+      yourScore: "درجتك النهائية",
+      tryAgain: "حاول مجدداً",
       backToTopics: "العودة للمواضيع",
-      backToQuizzes: "العودة إلى الاختبارات",
-      questionCountLabel: "السؤال",
-      of: "من"
+      backToQuizzes: "العودة للاختبارات",
+      questionCountLabel: "سؤال",
+      of: "من",
+      quitConfirmTitle: "هل تريد الخروج من الاختبار؟",
+      quitConfirmMsg: "سيتم فقدان تقدمك في هذا الاختبار النشط.",
+      quitBtn: "نعم، خروج",
+      stayBtn: "متابعة الاختبار"
     },
     leaderboard: {
-      badge: "تصنيف ليرنتوبيا",
+      badge: "ترتيب ليرنتوبيا",
       title: "لوحة الصدارة",
-      subtitle: "شاهد من في المقدمة. قم بالتصفية حسب الاختبار لرؤية الترتيب.",
+      subtitle: "شاهد من يتصدر قائمة المتفوقين. تصفح الترتيب العام أو حسب الاختبار.",
       filterByQuiz: "تصفية حسب الاختبار",
-      allQuizzes: "إجمالي النقاط",
+      allQuizzes: "مجموع النقاط",
       rank: "الترتيب",
       student: "الطالب",
       score: "النقاط",
       quizCol: "الاختبار",
       youBadge: "أنت",
-      noRankings: "لا يوجد ترتيب بعد",
-      noRankingsDesc: "أكمل اختباراً لظهر اسمك في لوحة الصدارة!",
-      searchPlaceholder: "البحث بالاسم...",
-      entries: "سجلات",
-      entry: "سجل"
+      noRankings: "لا يوجد ترتيب حالياً",
+      noRankingsDesc: "أكمل اختبارك الأول ليظهر اسمك في لوحة الصدارة!",
+      searchPlaceholder: "ابحث بالاسم...",
+      entries: "مدخلات",
+      entry: "مدخل"
     },
     dashboard: {
-      welcome: "أهلاً بك من جديد",
+      welcome: "مرحباً بعودتك",
       level: "المستوى",
-      totalXp: "إجمالي النقاط",
+      totalXp: "مجموع XP",
       dayStreak: "سلسلة الأيام",
       enrolled: "المسجلة",
       completed: "المكتملة",
@@ -1074,62 +2296,106 @@ export const translations = {
       activeCourses: "الدورات الحالية",
       completedCourses: "الدورات المكتملة",
       quizHistory: "سجل الاختبارات الأخيرة",
-      noCoursesTitle: "لا توجد دورات حالية",
-      noCoursesDesc: "استكشف دليلنا التفاعلي وابدأ مغامرة التعلم الآن!",
+      noCoursesTitle: "لا توجد دورات نشطة",
+      noCoursesDesc: "استكشف دليل دوراتنا التفاعلي وابدأ مغامرتك التعليمية!",
       noQuizTitle: "لم تكتمل أي اختبارات بعد",
-      noQuizDesc: "خذ أول تحدٍ لك في الاختبارات لتتبع نتائجك هنا!",
+      noQuizDesc: "خض تحدي الاختبار الأول لتتبع نتائجك هنا!",
       exploreBtn: "استكشف الدورات",
-      takeQuizBtn: "العب اختباراً",
+      takeQuizBtn: "خض اختباراً",
       unenroll: "إلغاء التسجيل",
-      confirmUnenroll: "هل أنت تأكد من أنك تريد إلغاء التسجيل في هذه الدورة؟",
-      maxLevel: "وصلت للحد الأقصى من المستوى",
-      xpToNext: "نقطة → مستوى",
+      confirmUnenroll: "هل أنت تأكد من إلغاء التسجيل في هذه الدورة؟",
+      maxLevel: "وصلت للحد الأقصى",
+      xpToNext: "XP ← مستوى",
       accountSettings: "إعدادات الحساب",
       deleteAccount: "حذف الحساب",
       logout: "تسجيل الخروج",
-      profile: "ملف الطالب"
+      profile: "ملف الطالب",
+      earnedOn: "تم الحصول عليه في {date}"
+    ,
+      dangerZoneTitle: "التحكم في الحساب — منطقة الخطر",
+      dangerZoneDesc: "احذف ملفك الشخصي ونقاط الخبرة والشارات والتسجيلات ونتائج الاختبارات وترتيبك في لوحة المتصدرين بشكل دائم.",
+      deleteProfileBtn: "حذف ملفي الشخصي",
+      unenrollModalTitle: "إلغاء التسجيل من الدورة؟",
+      unenrollModalText: "هل أنت متأكد من إلغاء تسجيلك في {title}؟ سيتم إعادة تعيين تقدمك في هذه الدورة.",
+      unenrollBtn: "إلغاء التسجيل",
+      deleteModalTitle: "حذف ملفك الشخصي نهائياً؟",
+      deleteWarningTitle: "هذا قرار مدمر ودائم!",
+      deleteWarningText: "حذف ملفك الشخصي سيمحو فوراً جميع بياناتك من Learntopia. بمجرد التأكيد، لا يمكن التراجع عن هذا الإجراء.",
+      deleteListHeading: "سيتم حذف التالي نهائياً:",
+      deleteList1: "جميع التسجيلات في الدورات وتقدم الوحدات",
+      deleteList2: "إجمالي نقاط الخبرة وتقدم المستوى والشارات المكتسبة",
+      deleteList3: "أعلى نتائج الاختبارات وسجلات المحاولات",
+      deleteList4: "الترتيب العام في لوحة المتصدرين ومدخل الملف الشخصي",
+      deleteList5: "حساب المستخدم وبيانات الملف الشخصي",
+      deleteConfirmLabel: "للتأكيد، اكتب {keyword} أدناه:",
+      deleteConfirmPlaceholder: "اكتب \"DELETE\" للتأكيد",
+      deleteConfirmBtn: "حذف الملف الشخصي نهائياً"
     },
     gamification: {
       levelUp: "ترقية المستوى!",
       badgeUnlocked: "تم فتح وسام جديد!",
-      congrats: "عمل رائع!",
-      close: "رائع! 🚀"
+      congrats: "عمل رائع ومميز!",
+      close: "ممتاز! 🚀",
+      earnedBadge: "وسام {name}"
+    },
+    levelNames: {
+      level1: "مبرمج مبتدئ",
+      level2: "مستكشف الكود",
+      level3: "خبير البايت",
+      level4: "أسطورة المنطق",
+      level5: "الاستاذ الكبير"
+    },
+    badgeNames: {
+      python: "رائد بايثون",
+      math: "عبقري الرياضيات",
+      finance: "خبير الأموال",
+      marketing: "عبقري الهوية",
+      web: "مهندس المواقع",
+      art: "بيكاسو الرقمي"
     },
     auth: {
-      loginTitle: "أهلاً بك مجدداً في ليرنتوبيا",
-      loginSubtitle: "سجل الدخول لمتابعة مغامرة التعلم",
+      loginTitle: "مرحباً بعودتك إلى ليرنتوبيا",
+      loginSubtitle: "سجل دخولك لمتابعة رحلة تعلمك الممتعة",
       signUpTitle: "انضم إلى ليرنتوبيا اليوم",
-      signUpSubtitle: "ابدأ التعلم مجاناً 100% مع رمزك الشخصي",
+      signUpSubtitle: "تعلم مجاناً 100٪ واحصل على شخصيتك الخاصة",
       emailLabel: "البريد الإلكتروني",
       passwordLabel: "كلمة المرور",
       googleAuth: "المتابعة باستخدام Google",
       alreadyHaveAccount: "لديك حساب بالفعل؟",
       dontHaveAccount: "ليس لديك حساب؟",
-      signInHere: "سجل الدخول هنا",
-      registerHere: "سجل هنا"
+      signInHere: "سجل دخولك هنا",
+      registerHere: "أنشئ حسابك هنا"
+    },
+    authGuidance: {
+      noAccountTitle: "الحساب غير موجود",
+      noAccountMsg: "لم نجد حساباً مسجلاً بالبريد {email}. هل ترغب في إنشاء حساب جديد؟",
+      createAccountBtn: "إنشاء حساب جديد",
+      alreadyExistsTitle: "الحساب موجود بالفعل",
+      alreadyExistsMsg: "البريد {email} مسجل لدينا مسبقاً. هل ترغب في تسجيل الدخول؟",
+      signInBtn: "تسجيل الدخول الآن"
     },
     contact: {
       eyebrow: "تواصل معنا",
-      title: "يسعدنا أن نسمع منك",
-      subtitle: "هل لديك سؤال أو ملحوظة؟ أرسل لنا رسالة وسيرد عليك فريقنا.",
-      nameLabel: "اسمك",
+      title: "يسعدنا دائماً الاستماع إليك",
+      subtitle: "هل لديك سؤال، ملاحظة، أو تحتاج لمساعدة؟ أرسل لنا رسالة وسيرد فريقنا عليك.",
+      nameLabel: "اسمك الكامل",
       emailLabel: "البريد الإلكتروني",
       subjectLabel: "الموضوع (اختياري)",
-      messageLabel: "الرسالة",
+      messageLabel: "نص الرسالة",
       sendBtn: "إرسال الرسالة",
       sending: "جاري الإرسال...",
       emailCardTitle: "البريد المباشر",
-      emailCardSub: "أرسل بريداً →",
-      responseTitle: "وقت الاستجابة",
-      responseSub: "خلال 1–2 يوم عمل",
-      docTitle: "الوثائق",
-      docSub: "اقرأ الوثائق →",
+      emailCardSub: "أرسل لنا بريداً ←",
+      responseTitle: "سرعة الرد",
+      responseSub: "خلال 1-2 يوم عمل",
+      docTitle: "الوثائق والتوجيهات",
+      docSub: "اقرأ الدليل ←",
       privacyTitle: "خصوصية البيانات",
-      privacySub: "رسالتك مخزنة بأمان ولن يتم مشاركتها أبداً."
+      privacySub: "رسالتك محفوظة بأمان تام ولا يتم مشاركتها."
     },
     thankYou: {
       title: "تم إرسال الرسالة بنجاح!",
-      subtitle: "شكراً لتواصلك مع ليرنتوبيا. لقد استلمنا رسالتك وسنرد عليك في أقرب وقت.",
+      subtitle: "شكراً لتواصلك مع ليرنتوبيا. لقد استلمنا رسالتك وسنقوم بالرد عليك قريباً.",
       backHome: "العودة للرئيسية",
       exploreCourses: "استكشف الدورات"
     },
@@ -1138,13 +2404,182 @@ export const translations = {
       subtitle: "عذراً! الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
       goHome: "العودة للرئيسية"
     },
+    doc: {
+      badge: "الوثائق والدليل",
+      title: "دليل منصة ليرنتوبيا",
+      subtitle: "مرجع شامل لمنصة ليرنتوبيا التعليمية — الميزات والإجابات على الأسئلة الشائعة.",
+      lastUpdated: "آخر تحديث: أغسطس 2026",
+      onThisPage: "في هذه الصفحة",
+      quickJump: "انتقال سريع",
+      secOverview: "نظرة عامة",
+      secOverviewBody1: "ليرنتوبيا منصة تعليمية تفاعلية صُممت للأطفال واليافعين لتوفير مسارات تعليمية واختبارات موقوتة.",
+      secOverviewBody2: "المنصة مجانية تماماً 100٪. يمكنك تجربة الدورات وزيارة الموقع بدون رسوم.",
+      cardCourses: "دورات متكاملة",
+      cardCoursesDesc: "مسارات تعليمية منظمة خطوة بخطوة مع تطبيق عملي.",
+      cardQuizzes: "اختبارات موقوتة",
+      cardQuizzesDesc: "أسئلة مدتها 15 ثانية مع تقييم وإجابات فورية.",
+      cardTracking: "تتبع التقدم",
+      cardTrackingDesc: "ملف شخصي، نقاط XP وسلسلة أيام متتالية.",
+      secFeatures: "الميزات الأساسية",
+      feat1: "دورات تفاعلية: دروس خطوة بخطوة مع أمثلة عملية وتمارين.",
+      feat2: "نظام اختبارات ذكي: 10 أسئلة عشوائية لكل موضوع مع عداد زمني.",
+      feat3: "نقاط وترقيات XP: احصل على XP وارتقِ من مبتدئ إلى استاد كبير.",
+      feat4: "أوسمة وشارات: افتح أوسمة رقمية عند إتقان الموضوعات.",
+      feat5: "لوحة صدارة عالمية: تنافس مع زملائك المتعلمين في النقاط.",
+      feat6: "دعم متعدد اللغات: دعم كامل للعربية، الإنجليزية، الإسبانية، الفرنسية والألمانية.",
+      secGettingStarted: "كيف تبدأ",
+      gsStep1Title: "1. أنشئ حسابك",
+      gsStep1Desc: "انقر على 'ابدأ الآن' للتسجيل ببريدك الإلكتروني أو عبر حساب Google.",
+      gsStep2Title: "2. اختر مسارك التعليمي",
+      gsStep2Desc: "تصفح دورات البرمجة، الرياضيات، المالية، التسويق والرقميات.",
+      gsStep3Title: "3. اجمع النقاط وارتقِ",
+      gsStep3Desc: "اقرأ الدروس، حل التمارين وشاهد مستوى تقدمك يرتفع في ملفك!",
+      secFaq: "الأسئلة الشائعة",
+      faq1Q: "هل منصة ليرنتوبيا مجانية حقاً 100٪؟",
+      faq1A: "نعم! ليرنتوبيا مجانية تماماً لكافة الأطفال والمتعلمين بدون أي رسوم خفية.",
+      faq2Q: "هل أحتاج إلى إنشاء حساب لاستخدام المنصة؟",
+      faq2A: "يمكنك التصفح كزائر، وتساعدك إضافة الحساب على حفظ نتائجك وأوسمتك.",
+      faq3Q: "هل بياناتي الشخصية بأمان؟",
+      faq3A: "بالتأكيد. نلتزم بأعلى معايير حماية الخصوصية والأمان للأطفال."
+    },
+    privacy: {
+      badge: "الأمان والخصوصية",
+      title: "سياسة الخصوصية",
+      subtitle: "تعرف على كيفية جمعنا وحمايتنا لبياناتك الشخصية في ليرنتوبيا.",
+      lastUpdated: "آخر تحديث: يوليو 2026",
+      sec1Title: "1. مقدمة",
+      sec1Body: "تلتزم ليرنتوبيا بتوفير بيئة تعليمية آمنة وموثوقة لجميع الطلاب.",
+      sec2Title: "2. المعلومات التي نجمعها",
+      sec2Item1: "تفاصيل الحساب: الاسم البرمجي والبريد الإلكتروني فقط.",
+      sec2Item2: "بيانات التقدم: الدورات المسجلة والاختبارات ونقاط XP.",
+      sec3Title: "3. حماية البيانات",
+      sec3Body: "يتم تخزين بياناتك بأمان في خوادم Google Firebase وحمايتها بقواعد أمان صارمة.",
+      sec4Title: "4. خصوصية الأطفال",
+      sec4Body: "نلتزم بمعايير COPPA بحزم ولا نعرض أي إعلانات أطراف خارجية."
+    },
+    terms: {
+      badge: "شروط الخدمة",
+      title: "شروط الاستخدام",
+      subtitle: "يرجى قراءة هذه الشروط بعناية قبل استخدام منصة ليرنتوبيا.",
+      lastUpdated: "آخر تحديث: يوليو 2026",
+      sec1Title: "1. القبول بالشروط",
+      sec1Body: "بدخولك واستخدامك لمنصة ليرنتوبيا فإنك توافق على الالتزام بشروط الخدمة.",
+      sec2Title: "2. سلوك المستخدم",
+      sec2Body: "ليرنتوبيا مجتمع تعلييمي آمن ويحب الاحترام والتعاون.",
+      sec3Title: "3. المحتوى التعليمي",
+      sec3Body: "جميع المواد والدورات مخصصة لأغراض التعليم والتدريب."
+    },
+    admin: {
+      badge: "مركز العمليات",
+      title: "بوابة إدارة ليرنتوبيا",
+      subtitle: "لوحة التحكم التنفيذية وسجل الطلاب.",
+      liveClock: "ساعة النظام الحية",
+      adminBadge: "مشرف",
+      exitPortal: "الخروج من البوابة",
+      totalStudents: "إجمالي الطلاب المسجلين",
+      activeQuizzes: "محاولات الاختبارات",
+      totalXpGranted: "إجمالي نقاط XP الممنوحة",
+      directoryTitle: "دليل الطلاب",
+      directorySubtitle: "عرض الطلاب المسجلين ومؤشرات الأداء.",
+      colStudent: "الطالب",
+      colEmail: "البريد الإلكتروني",
+      colXp: "مجموع XP",
+      colStreak: "السلسلة",
+      colJoined: "تاريخ الانضمام"
+    },
     footer: {
-      tagline: "تمكين الجيل القادم من المبدعين والمفكرين بالتعليم المجاني.",
+      tagline: "تمكين الجيل القادم من المبدعين والمبرمجين بتعليم مجاني وتفاعلي.",
       quickLinks: "روابط سريعة",
-      legal: "الأمان والقانونية",
+      legal: "الأمان والخصوصية",
       terms: "شروط الخدمة",
       privacy: "سياسة الخصوصية",
-      rights: "جميع الحقوق محفوظة. صُمم للطلاب في جميع أنحاء العالم."
+      rights: "جميع الحقوق محفوظة. صُمم للأطفال واليافعين في جميع أنحاء العالم."
+    },
+    courseData: {
+      "1": {
+        "title": "بايثون للأطفال: ابني لعبتك الأولى!",
+        "desc": "تعلم البرمجة من خلال بناء ألعاب حقيقية. مثالي للمبتدئين من عمر 7 إلى 14 سنة!",
+        "category": "البرمجة",
+        "difficulty": "مبتدئ",
+        "modules": [
+          { "title": "الوحدة 1: مرحباً بايثون!", "desc": "تعرف على بايثون واكتب أول أسطرك البرمجية." },
+          { "title": "الوحدة 2: المتغيرات وصناديق البيانات", "desc": "احفظ الأرقام والنصوص والنتائج في متغيرات." },
+          { "title": "الوحدة 3: اتخاذ القرارات بـ IF", "desc": "استخدم المنطق والشروط للتحكم في اللعبة." },
+          { "title": "الوحدة 4: الحلقات والتكرار", "desc": "كرر الكود تلقائياً باستخدام FOR و WHILE." },
+          { "title": "الوحدة 5: الدوال وأدوات الكود", "desc": "نظم كودك في دوال قابلة لإعادة الاستخدام." },
+          { "title": "الوحدة 6: المشروع النهائي: لعبتك!", "desc": "اجمع كل ما تعلمته لبناء لعبتك التفاعلية!" }
+        ]
+      },
+      "2": {
+        "title": "سحر الرياضيات: ألغاز ومرح منطقي!",
+        "desc": "اتقن المتتاليات الرياضية الممتعة، الأشكال الهندسية ثلاثية الأبعاد والألغاز!",
+        "category": "الرياضيات",
+        "difficulty": "مبتدئ",
+        "modules": [
+          { "title": "الوحدة 1: المتتاليات العددية", "desc": "اكتشف القواعد المخفية وتوقع الأرقام القادمة." },
+          { "title": "الوحدة 2: الهندسة 2D و 3D", "desc": "استكشف الأشكال والزوايا والمكعبات والكرات." },
+          { "title": "الوحدة 3: الألغاز المنطقية", "desc": "استخدم الاستنتاج المنطقي لحل الألغاز." },
+          { "title": "الوحدة 4: الخوارزميات والتفكير", "desc": "قسم المشكلات الكبيرة إلى خطوات بسيطة." },
+          { "title": "الوحدة 5: الأنماط في الطبيعة", "desc": "اكتشف أرقام فيبوناتشي في الأزهار والمجرات." },
+          { "title": "الوحدة 6: تحدي عبقري الرياضيات", "desc": "اختبر مهاراتك في حل جميع الألغاز!" }
+        ]
+      },
+      "3": {
+        "title": "الذكاء المالي: المال والميزانية للأطفال!",
+        "desc": "افهم كيف يعمل المال والميزانية والادخار من خلال عمليات محاكاة تفاعلية.",
+        "category": "المالية",
+        "difficulty": "مبتدئ",
+        "modules": [
+          { "title": "الوحدة 1: تاريخ المال", "desc": "من المقايضة إلى العملات الرقمية." },
+          { "title": "الوحدة 2: الدخل مقابل المصروفات", "desc": "تعرف على مصادر المال وأين ينفق." },
+          { "title": "الوحدة 3: بناء ميزانيتك الأولى", "desc": "وزع أموالك بين الاحتياجات والادخار." },
+          { "title": "الوحدة 4: قوة الفائدة والادخار", "desc": "شاهد مدخراتك تنمو في الحساب البنكي." },
+          { "title": "الوحدة 5: التسوق الذكي", "desc": "قارن الأسعار وتجنب الشراء الاندفاعي." },
+          { "title": "الوحدة 6: لعبة رائد الأعمال الصغير", "desc": "أدر مشروعك الافتراضي لبيع العصير!" }
+        ]
+      },
+      "4": {
+        "title": "عبقري الهوية: أساسيات التسويق والإعلام!",
+        "desc": "اكتشف كيف تصمم العلامات التجارية الشعارات وتنشئ الإعلانات وتتواصل مع الجمهور.",
+        "category": "التسويق",
+        "difficulty": "مبتدئ",
+        "modules": [
+          { "title": "الوحدة 1: ما هي العلامة التجارية؟", "desc": "الشعارات، الألوان، الشعارات والشخصية." },
+          { "title": "الوحدة 2: الجمهور المستهدف", "desc": "حدد الفئة الموجه لها منتجك." },
+          { "title": "الوحدة 3: التصميم البصري والألوان", "desc": "اختر الألوان التي تبني الثقة والاهتمام." },
+          { "title": "الوحدة 4: صناعة الإعلانات", "desc": "اكتب عناوين جذابة وصمم ملصقات مميزة." },
+          { "title": "الوحدة 5: الإعلام الرقمي", "desc": "افهم إعلانات الفيديو ووسائل التواصل الاجتماعي." },
+          { "title": "الوحدة 6: إطلاق المنتج", "desc": "أطلق منتجك أو لعبتك التخيلية الخاصة!" }
+        ]
+      },
+      "5": {
+        "title": "صانع المواقع: ابني مواقع بـ HTML و CSS!",
+        "desc": "حول أفكارك إلى صفحات ويب حقيقية بتنسيقات ملونة وأزرار وتصاميم مميزة.",
+        "category": "تصميم المواقع",
+        "difficulty": "متوسط",
+        "modules": [
+          { "title": "الوحدة 1: عناصر HTML الأساسية", "desc": "العناوين، الفقرات، الوسوم وهيكل الصفحة." },
+          { "title": "الوحدة 2: إضافة الصور والروابط", "desc": "ربط الصفحات وإضافة صور جذابة." },
+          { "title": "الوحدة 3: التنسيق بـ CSS", "desc": "تغيير الخطوط، الألوان والخلفيات." },
+          { "title": "الوحدة 4: الأزرار والتأثيرات", "desc": "اجعل الأزرار تفاعلية مع التحويم." },
+          { "title": "الوحدة 5: التصاميم المتجاوبة", "desc": "صمم صفحات تناسب الهواتف والأجهزة اللوحية." },
+          { "title": "الوحدة 6: موقعك الشخصي", "desc": "ابني وانشر موقعك الشخصي الأول!" }
+        ]
+      },
+      "6": {
+        "title": "الفنان الرقمي: انشئ رسومات وفنون رقمية!",
+        "desc": "اتقن الألوان والأشكال والطبقات وأدوات الرسم الرقمي.",
+        "category": "الفن الرقمي",
+        "difficulty": "مبتدئ",
+        "modules": [
+          { "title": "الوحدة 1: البكسل واللوحة", "desc": "فهم الدقة والأدوات الرقمية." },
+          { "title": "الوحدة 2: نظرية الألوان", "desc": "دمج الألوان الدافئة والباردة." },
+          { "title": "الوحدة 3: التعامل مع الطبقات", "desc": "ترتيب العناصر والخلفيات والظلال." },
+          { "title": "الوحدة 4: رسم الشخصيات", "desc": "ارسم شخصيات كرتونية خطوة بخطوة." },
+          { "title": "الوحدة 5: التلوين الرقمي", "desc": "استخدم الفرش والتأثيرات الضوئية." },
+          { "title": "الوحدة 6: معرض الفنون", "desc": "انشئ ملصقاً فنياً رائعاً!" }
+        ]
+      }
     },
     common: {
       soundOn: "الصوت مفعل",
@@ -1153,7 +2588,10 @@ export const translations = {
       close: "إغلاق",
       cancel: "إلغاء",
       confirm: "تأكيد",
-      back: "عودة"
+      back: "عودة",
+      loading: "جاري التحميل...",
+      saving: "جاري الحفظ...",
+      error: "حدث خطأ غير متوقع"
     }
   }
 };
