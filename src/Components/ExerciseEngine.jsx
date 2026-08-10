@@ -20,6 +20,7 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, isCompleted = false, sav
   const [currentQuestion, setCurrentQuestion] = useState(0);
 
   const { playClick, playCorrect, playIncorrect, playModuleComplete } = useSound();
+  const { t } = useLanguage();
 
   const totalQ = exercises.length;
 
@@ -249,7 +250,7 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, isCompleted = false, sav
           onClick={() => handleTrueFalse(qIndex, true)}
           className={`flex items-center justify-center gap-3 rounded-2xl border-2 px-6 py-5 text-lg font-bold transition-all duration-300 ${getBtnStyle(true)}`}
         >
-          <span className="text-2xl">✅</span> True
+          <span className="text-2xl">✅</span> {t("exerciseEngine.trueBtn")}
         </button>
         <button
           type="button"
@@ -257,7 +258,7 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, isCompleted = false, sav
           onClick={() => handleTrueFalse(qIndex, false)}
           className={`flex items-center justify-center gap-3 rounded-2xl border-2 px-6 py-5 text-lg font-bold transition-all duration-300 ${getBtnStyle(false)}`}
         >
-          <span className="text-2xl">❌</span> False
+          <span className="text-2xl">❌</span> {t("exerciseEngine.falseBtn")}
         </button>
       </div>
     );
@@ -285,7 +286,7 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, isCompleted = false, sav
               value={displayVal}
               onChange={(e) => handleFillBlank(qIndex, e.target.value)}
               disabled={isDone || submitted}
-              placeholder="type here..."
+              placeholder={t("exerciseEngine.fillPlaceholder")}
               className={`inline-block w-40 rounded-xl border-2 px-4 py-2 text-center text-base font-bold outline-none transition-all duration-300 focus:ring-2 ${inputStyle}`}
             />
             <span>{parts[1]}</span>
@@ -296,7 +297,7 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, isCompleted = false, sav
             value={displayVal}
             onChange={(e) => handleFillBlank(qIndex, e.target.value)}
             disabled={isDone || submitted}
-            placeholder="Type your answer..."
+            placeholder={t("exerciseEngine.fillPlaceholder")}
             className={`w-full rounded-xl border-2 px-5 py-3 text-base font-bold outline-none transition-all duration-300 focus:ring-2 ${inputStyle}`}
           />
         )}
@@ -498,20 +499,20 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, isCompleted = false, sav
           {submitted && !allCorrect ? (
             <>
               <p className="text-sm font-bold text-state-danger flex items-center gap-2">
-                <Icon name="alert-circle" size={18} /> Review the highlighted answers and try again!
+                <Icon name="alert-circle" size={18} /> {t("exerciseEngine.incorrectTitle")}
               </p>
               <Button onClick={handleRetry} variant="secondary">
-                Try Again
+                {t("exerciseEngine.tryAgain")}
               </Button>
             </>
           ) : submitted && allCorrect ? (
             <p className="text-sm font-bold text-state-success flex items-center gap-2 mx-auto">
-              <Icon name="check-circle" size={18} /> All correct! Module complete! 🎉
+              <Icon name="check-circle" size={18} /> {t("exerciseEngine.correctTitle")}
             </p>
           ) : (
             <>
               <p className="text-sm text-ink-low">
-                {allAnswered ? "Ready to submit!" : `Answer all ${totalQ} questions to proceed.`}
+                {allAnswered ? t("exerciseEngine.checkAnswer") : t("exerciseEngine.qCounter", { current: Object.keys(answers).length, total: totalQ })}
               </p>
               <Button
                 onClick={handleSubmitAll}
@@ -519,7 +520,7 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, isCompleted = false, sav
                 loading={saving}
                 className="w-full sm:w-auto px-8"
               >
-                Submit Answers
+                {t("exerciseEngine.checkAnswer")}
               </Button>
             </>
           )}
@@ -530,7 +531,7 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, isCompleted = false, sav
       {isCompleted && (
         <div className="mt-8 rounded-xl bg-state-success/10 p-4 border border-state-success/20 text-center animate-fade-in">
           <p className="flex items-center justify-center gap-2 text-lg font-bold text-state-success">
-            <Icon name="check-circle" size={24} /> Module Mastered!
+            <Icon name="check-circle" size={24} /> {t("exerciseEngine.correctTitle")}
           </p>
         </div>
       )}

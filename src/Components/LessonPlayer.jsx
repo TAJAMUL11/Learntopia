@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import Icon from "./ui/Icon";
 import Button from "./ui/Button";
 import { useSound } from "../context/SoundContext";
+import { useLanguage } from "../context/LanguageContext";
 
 /**
  * LessonPlayer — Renders a module's contentSections one step at a time
@@ -110,6 +111,7 @@ const LessonPlayer = ({ sections = [], onComplete }) => {
   const [canProceed, setCanProceed] = useState(false);
   const contentRef = useRef(null);
   const { playClick } = useSound();
+  const { t, isRTL } = useLanguage();
 
   const total = sections.length;
   const isLastStep = currentStep === total - 1;
@@ -117,7 +119,7 @@ const LessonPlayer = ({ sections = [], onComplete }) => {
   const sectionType = section?.type || "concept";
   const style = SECTION_STYLES[sectionType] || DEFAULT_STYLE;
   const icon = SECTION_ICONS[sectionType] || "lightbulb";
-  const label = SECTION_LABELS[sectionType] || "Learn";
+  const label = t(`lessonPlayer.${sectionType}`, SECTION_LABELS[sectionType] || "Learn");
 
   // Slight delay before enabling "Next" to encourage reading
   useEffect(() => {
@@ -236,7 +238,7 @@ const LessonPlayer = ({ sections = [], onComplete }) => {
       {/* Step Progress Bar */}
       <div className="flex items-center gap-3">
         <span className="text-xs font-bold text-ink-low whitespace-nowrap">
-          Step {currentStep + 1} of {total}
+          {t("lessonPlayer.stepCount", { current: currentStep + 1, total })}
         </span>
         <div className="flex-grow flex gap-1.5">
           {sections.map((_, i) => (
@@ -314,8 +316,8 @@ const LessonPlayer = ({ sections = [], onComplete }) => {
           disabled={currentStep === 0 || isAnimating}
           className="gap-2"
         >
-          <Icon name="arrow-left" size={16} />
-          Back
+          <Icon name={isRTL ? "arrow-right" : "arrow-left"} size={16} />
+          {t("lessonPlayer.prevStep")}
         </Button>
 
         <div className="hidden sm:flex items-center gap-2">
@@ -351,13 +353,13 @@ const LessonPlayer = ({ sections = [], onComplete }) => {
         >
           {isLastStep ? (
             <>
-              Start Challenge
+              {t("lessonPlayer.startPractice")}
               <Icon name="edit-3" size={16} />
             </>
           ) : (
             <>
-              Next
-              <Icon name="arrow-right" size={16} />
+              {t("lessonPlayer.nextStep")}
+              <Icon name={isRTL ? "arrow-left" : "arrow-right"} size={16} />
             </>
           )}
         </Button>
