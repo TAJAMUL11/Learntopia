@@ -200,6 +200,12 @@ const PATHS = {
     </>
   ),
   x: <path d="M18 6 6 18M6 6l12 12" />,
+  send: (
+    <>
+      <line x1="22" y1="2" x2="11" y2="13" />
+      <polygon points="22 2 15 22 11 13 2 9 22 2" />
+    </>
+  ),
   "alert-circle": (
     <>
       <circle cx="12" cy="12" r="10" />
