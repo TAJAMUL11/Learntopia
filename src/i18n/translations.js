@@ -1,11 +1,11 @@
-// Only fully-translated languages are exposed in the dropdown. Spanish, French,
-// German and Arabic translations exist in the data (contentTranslations.js) but
-// stay HIDDEN until each is completed and verified end-to-end — a partial
-// translation is worse UX than none. Re-add a language here (e.g. the Spanish
-// entry below) only once every page, course, quiz and toast is translated.
-//   { code: 'es', name: 'Español', flag: '🇪🇸', dir: 'ltr' },
+// Only fully-translated languages are exposed in the dropdown. English and
+// Spanish are complete end-to-end (UI, all pages, all 6 courses, quizzes,
+// toasts and modals). French, German and Arabic translations exist in the data
+// (contentTranslations.js) but stay HIDDEN until each is completed and verified
+// — a partial translation is worse UX than none. Re-add each below when done.
 export const LANGUAGES = [
   { code: 'en', name: 'English', flag: '🇺🇸', dir: 'ltr' },
+  { code: 'es', name: 'Español', flag: '🇪🇸', dir: 'ltr' },
 ];
 
 export const translations = {

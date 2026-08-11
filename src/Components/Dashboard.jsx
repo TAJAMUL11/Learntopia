@@ -124,11 +124,11 @@ const Dashboard = () => {
   const handleLogout = async () => {
     try {
       await logOut();
-      toast.success("Logged out safely!");
+      toast.success(t("toasts.logoutSafe"));
       navigate("/", { replace: true });
     } catch (err) {
       console.error("Logout failed:", err);
-      toast.error("Failed to log out.");
+      toast.error(t("toasts.logoutFailed"));
     }
   };
 
@@ -138,11 +138,11 @@ const Dashboard = () => {
     try {
       await deleteDoc(doc(db, "Users", currentUser.uid, "enrolledCourses", courseToUnenroll.courseId.toString()));
       setEnrolledCourses((prev) => prev.filter((c) => c.courseId !== courseToUnenroll.courseId));
-      toast.success(`Unenrolled from ${courseToUnenroll.title}`);
+      toast.success(t("toasts.unenrolledFrom", { title: courseToUnenroll.title }));
       setCourseToUnenroll(null);
     } catch (err) {
       console.error("Error unenrolling:", err);
-      toast.error("Failed to unenroll. Please try again.");
+      toast.error(t("toasts.unenrollFailed"));
     } finally {
       setUnenrollLoading(false);
     }
@@ -151,7 +151,7 @@ const Dashboard = () => {
   const handleDeleteProfile = async () => {
     if (deleteConfirmText.trim().toUpperCase() !== "DELETE") {
       playWarningAlert();
-      toast.error("Please type DELETE to confirm profile removal.");
+      toast.error(t("toasts.deleteConfirmType"));
       return;
     }
 
@@ -163,7 +163,7 @@ const Dashboard = () => {
         deleteDoc(doc(db, "PublicLeaderboard", uid)).catch(() => {}),
       ]);
       await deleteUser(currentUser);
-      toast.success("Profile deleted successfully. We're sad to see you go!");
+      toast.success(t("toasts.profileDeleted"));
       navigate("/", { replace: true });
     } catch (err) {
       console.error("Profile deletion error:", err);
@@ -202,8 +202,8 @@ const Dashboard = () => {
         <Card className="mx-auto w-full max-w-md p-8">
           <EmptyState
             icon="user"
-            title="No active profile"
-            description="Please log in to view your dashboard."
+            title={t("modals.dashNoProfileTitle")}
+            description={t("modals.dashNoProfileDesc")}
             action={<Button onClick={() => navigate("/login")}>{t("nav.login")}</Button>}
           />
         </Card>

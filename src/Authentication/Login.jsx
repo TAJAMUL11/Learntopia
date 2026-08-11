@@ -19,7 +19,7 @@ import signUpImage from "../assets/Icons/auth-image.jpg";
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { googleSignIn, currentUser, logOut } = useAuth();
+  const { googleSignIn, currentUser } = useAuth();
   const { playLevelUp, playIncorrect } = useSound();
   const { t } = useLanguage();
 
@@ -90,46 +90,28 @@ const Login = () => {
     }
   };
 
-  const ADMIN_EMAIL = (import.meta.env.VITE_ADMIN_EMAIL || "thetj4054@gmail.com").toLowerCase();
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (userEmail.trim().toLowerCase() === ADMIN_EMAIL) {
-      playIncorrect();
-      toast.warning("Administrator account detected. Please sign in via the Admin Portal at /admin.", { autoClose: 4000 });
-      setUserPassword("");
-      navigate("/admin");
-      return;
-    }
 
     setLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(auth, userEmail, userPassword);
       const user = userCredential.user;
-      if (user.email && user.email.toLowerCase() === ADMIN_EMAIL) {
-        await logOut();
-        playIncorrect();
-        toast.warning("Administrator account detected. Please sign in via the Admin Portal at /admin.", { autoClose: 4000 });
-        setUserPassword("");
-        navigate("/admin");
-        return;
-      }
       await handlePendingQuizResult(user, null);
       playLevelUp();
-      toast.success("Successfully logged in");
+      toast.success(t("toasts.loginSuccess"));
       navigate(returnTo, { replace: true });
     } catch (err) {
       playIncorrect();
       if (err.code === "auth/user-not-found" || err.code === "auth/invalid-credential") {
         setNotFoundEmail(userEmail);
-        toast.info("No account found for this email address.", { autoClose: 3000 });
+        toast.info(t("toasts.noAccount"), { autoClose: 3000 });
       } else if (err.code === "auth/wrong-password") {
-        toast.error("Incorrect password. Please try again.");
+        toast.error(t("toasts.wrongPassword"));
       } else if (err.code === "auth/invalid-email") {
-        toast.error("That email address looks incomplete.");
+        toast.error(t("toasts.invalidEmail"));
       } else {
-        toast.error("Invalid email or password.");
+        toast.error(t("toasts.invalidCredentials"));
       }
       setUserPassword("");
     } finally {
@@ -140,23 +122,16 @@ const Login = () => {
   const handleGoogleSignIn = async () => {
     try {
       const user = await googleSignIn();
-      if (user && user.email && user.email.toLowerCase() === ADMIN_EMAIL) {
-        await logOut();
-        playIncorrect();
-        toast.warning("Administrator account detected. Please sign in via the Admin Portal at /admin.", { autoClose: 4000 });
-        navigate("/admin");
-        return;
-      }
       if (user) {
         await handlePendingQuizResult(user, user.displayName);
       }
       playLevelUp();
-      toast.success("Successfully logged in with Google");
+      toast.success(t("toasts.loginGoogleSuccess"));
       navigate(returnTo, { replace: true });
     } catch (err) {
       playIncorrect();
       console.error("Google sign-in error:", err);
-      toast.error("Google sign-in failed. Please try again.");
+      toast.error(t("toasts.googleFailed"));
     }
   };
 

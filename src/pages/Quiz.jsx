@@ -104,10 +104,10 @@ const Quiz = () => {
         ...prev,
         [activeQuiz.id]: Math.max(prev[activeQuiz.id] || 0, finalScore),
       }));
-      toast.success("Progress saved successfully!");
+      toast.success(t("toasts.quizProgressSaved"));
     } catch (err) {
       console.error("Error saving score:", err);
-      toast.error("Failed to save progress.");
+      toast.error(t("toasts.quizProgressFailed"));
     } finally {
       setIsSaving(false);
     }
@@ -132,7 +132,7 @@ const Quiz = () => {
       }
 
       if (isTimeout) {
-        toast.error("Time's up for this question!", {
+        toast.error(t("toasts.timesUp"), {
           style: { backgroundColor: "rgba(225, 29, 72, 0.15)", color: "#fecdd3", border: "1px solid rgba(225, 29, 72, 0.3)" }
         });
       }

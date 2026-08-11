@@ -27,6 +27,9 @@ export const contentTranslations = {
   // UI strings that were hardcoded in components, now routed through t().
   // These deep-merge onto the base dictionaries in translations.js.
   en: {
+    nav: { quizzes: "Quizzes" },
+    notFound: { backHome: "Back to Home" },
+    thankYou: { whatsNext: "What's Next", exploreDesc: "Browse all our learning tracks", quizDesc: "Test your knowledge in a timed quiz" },
     common: { sfx: "SFX", off: "Off" },
     quiz: {
       start: "Start",
@@ -93,12 +96,169 @@ export const contentTranslations = {
         { heading: "16. Changes to These Terms", body: ["We may update these Terms from time to time. When we make material changes, we will revise the \"Last updated\" date at the top of this page and, where appropriate, provide additional notice. Your continued use of the Service after changes take effect constitutes acceptance of the revised Terms."] },
       ],
     },
+    doc: {
+      featuresHeading: "Features",
+      gettingStartedHeading: "Getting Started",
+      coursesHeading: "Gamified Courses & Modules",
+      coursesIntro: "Each course is designed for learners aged 7-14 with a gamified, step-by-step lesson experience. Modules must be completed sequentially to unlock the next challenge.",
+      tableColFeature: "Feature / Component",
+      tableColDesc: "Description & Behavior",
+      quizzesHeading: "Quizzes",
+      quizzesIntro: "Quizzes are topic-specific assessments available to all users, including guests. Each quiz presents a set of randomized multiple-choice questions with a 15-second countdown per question.",
+      dashboardHeading: "Dashboard",
+      dashboardIntro: "The personal dashboard is available to authenticated users only. It consolidates all your learning activity into one view.",
+      accountHeading: "Account & Security",
+      accountIntro: "You can create an account with an email and password, or sign in with Google. Your data is kept private to your account and protected by strong, server-enforced access controls.",
+      faqHeading: "FAQ",
+      footerTitle: "Something missing or unclear?",
+      footerPre: "Reach out via the",
+      footerContact: "Contact page",
+      footerMid: "or review our",
+      footerTerms: "Terms",
+      footerAnd: "and",
+      footerPrivacy: "Privacy Policy",
+      features: [
+        { title: "Multi-Language Support", text: "Switch the platform UI between the available languages. Your language preference is stored locally and applied on every visit." },
+        { title: "Interactive Courses", text: "Enroll in kid-friendly course tracks. Each module contains a short reading and a comprehension question. You must answer correctly to unlock the next module — progress cannot be faked." },
+        { title: "Dynamic Timed Quizzes", text: "Test your knowledge with a 15-second countdown per question. Questions are drawn from a large pool and randomized on every attempt. Instant feedback is shown after each answer." },
+        { title: "Web Audio SFX System", text: "Enjoy interactive sound effects for correct/wrong answers, module completion, level-up fanfares, and badge unlocks synthesized 100% free offline in your browser. Easily toggle audio muted/unmuted in the header navigation." },
+        { title: "Personal Dashboard", text: "View your enrolled and completed courses, per-course progress bars, quiz high scores, total points earned, and your current daily streak — all consolidated in one place." },
+        { title: "Daily Login Streaks", text: "Your streak increments each calendar day you log in. If you miss a day, the streak resets. Streaks are calculated in your local timezone and displayed in the dashboard header and metrics grid." },
+        { title: "Global & Per-Quiz Leaderboards", text: "The Leaderboard ranks users by total points and individual quiz scores. The Leaderboard tab and page are visible exclusively to logged-in users to protect community rankings." },
+        { title: "Quiz Completion Indicators", text: "Completed quiz cards display a green Done badge and your best score. The Start button becomes a Retake button. Abandoning a quiz mid-way does not count as an attempt — scores are logged only on the results screen." },
+        { title: "Guest Quiz Score Preservation", text: "Take a quiz as a guest and finish it, then use the Log In or Sign Up link on the results screen. Your score is automatically saved to your profile on authentication without any data loss." },
+        { title: "AI Tutors", text: "Each course is accompanied by a specialized AI tutor with a distinct persona designed to guide learners through the subject matter." },
+        { title: "Strict Focus Mode", text: "A custom route blocker detects navigation attempts during active quizzes or module challenges and presents a confirmation dialog to prevent accidental progress loss." },
+        { title: "Course Controls", text: "Unenroll from courses directly from your dashboard. Reset a 100%-completed course to start fresh. Resume in-progress courses exactly where you left off." },
+        { title: "Searchable Catalog", text: "Filter courses by title or subject using the live search field. An informative empty state is shown when no results match the query." },
+        { title: "Private & Secure", text: "Your data — profile, courses, progress, and quiz attempts — is private to your account. Only you can see or change it, and the leaderboard shows just your name and score, never your email or contact details." },
+      ],
+      steps: [
+        { step: "01", title: "Create an account", text: "Click Sign Up in the navigation bar. Register with your email and a password, or continue with Google for a one-click setup. Email/password accounts require a display name." },
+        { step: "02", title: "Browse the course catalog", text: "Navigate to Courses to see all available learning tracks. Use the search bar to filter by subject or title. Click on any course card to view the full syllabus and module list." },
+        { step: "03", title: "Enroll and start learning", text: "Click Enroll on the course detail page. Modules unlock sequentially — read each lesson, then answer the comprehension question correctly to unlock the next module." },
+        { step: "04", title: "Take quizzes", text: "Visit the Quiz Center to test your knowledge. Select a topic, answer all questions within the time limit, and view your score on the results screen. Completed quizzes display a Done badge on the selection card." },
+        { step: "05", title: "Track your progress", text: "Open your Dashboard to see enrolled courses, completion percentages, quiz high scores, total points, and your current streak. Check the Leaderboard to compare your score with others." },
+      ],
+      coursesTable: [
+        { concept: "Step-by-Step Lesson Player", behaviour: "Presents module content one card at a time with distinct visual themes (Story, Concept, Fun Fact, Pro Tip, Example, Activity, Recap) and code syntax highlighting." },
+        { concept: "Multi-Type Exercise Engine", behaviour: "Tests understanding using 4 interactive formats: Multiple Choice (MCQ), True/False, Fill-in-the-Blank, and Tap-to-Connect Matching Pairs." },
+        { concept: "Gamification & Level System", behaviour: "Earn +50 XP per completed module and +100 XP per completed course. Level up from Rookie Coder (Level 1) to Grandmaster (Level 5)." },
+        { concept: "Badges & Celebrations", behaviour: "Unlocks unique course badges (e.g. Python Pioneer 🐍, Math Wizard 🔮) with celebratory full-screen overlays upon achievement." },
+        { concept: "Course progress", behaviour: "Tracks completed modules in real time with progress bars, saved automatically. Resume anytime from your Student Dashboard." },
+        { concept: "Course reset", behaviour: "Reset completed courses anytime via the Start Again button to replay lessons and re-earn practice." },
+      ],
+      quizMeta: [
+        { label: "Timer", value: "15 seconds per question. The timer resets on each new question." },
+        { label: "Question pool", value: "Questions are randomized from a large pool on every attempt, so retaking a quiz gives a fresh experience." },
+        { label: "Feedback", value: "After submitting an answer, the correct answer is revealed immediately before moving to the next question." },
+        { label: "Score logging", value: "Scores are saved only when you complete all questions and reach the results screen. Exiting early logs nothing." },
+        { label: "Points", value: "Each correct answer earns 10 points added to your cumulative total." },
+        { label: "Leaderboard sync", value: "Your score is synced to the per-quiz leaderboard and your total points are updated in the global leaderboard." },
+        { label: "Guest attempts", value: "Guests can take any quiz. On the results screen, links allow login or signup with automatic score transfer." },
+        { label: "Retake", value: "Completed quizzes show a Retake button. High scores are tracked — only your best score per quiz is displayed." },
+      ],
+      dashboardList: [
+        "Profile header — displays your display name, avatar initial, total points, and current daily streak.",
+        "Metrics grid — shows total points, quiz attempts, courses enrolled, and streak in numeric cards.",
+        "Active courses — lists in-progress courses with a live progress bar and a Continue button.",
+        "Completed courses — lists all fully completed courses.",
+        "Quiz high scores — shows your best score per quiz across all attempts.",
+        "Delete Profile — option to permanently delete your account and all learning data anytime.",
+      ],
+      accountCards: [
+        { title: "Strict Account Privacy & Data Isolation", text: "Learntopia uses enterprise-grade encryption and strict account isolation to keep your student profile safe. Your personal learning history, course notes, and account settings can only be accessed by you when signed in." },
+        { title: "Smart Auth Guidance", text: "Attempting to log in with an unregistered email automatically presents an interactive option to create a new account, pre-filling your entered email on the registration form. Similarly, registering with an existing email provides a 1-click option to log in without re-typing credentials." },
+        { title: "Works Offline", text: "If your internet connection drops while taking a quiz or reading a module, your progress is kept safe on your device and syncs automatically the moment you reconnect — so you never lose your place." },
+        { title: "Resilient by Design", text: "If a page ever fails to load because of a shaky connection, Learntopia shows a friendly reload option instead of a blank screen or a crash — a dropped signal never breaks your session." },
+        { title: "Your Data Stays Yours", text: "Your profile, courses, progress, and quiz history are tied to your account and can't be viewed or changed by anyone else. Behind the scenes, safeguards keep scores and badges fair and tamper-resistant, so the leaderboard stays honest." },
+      ],
+      faq: [
+        { q: "Do I need an account to use Learntopia?", a: "No. Courses and quizzes can be browsed without an account. However, progress, scores, and streaks are only saved for authenticated users. Guest quiz scores can be retroactively saved by logging in from the results screen." },
+        { q: "How does the streak counter work?", a: "Your streak increments by one each calendar day you log in (calculated in your local timezone). Logging in multiple times on the same day counts as one day. Missing a day resets the streak to 1." },
+        { q: "Why did my quiz score not appear on the leaderboard?", a: "Scores are only logged when you complete all questions and reach the results screen. Quitting mid-quiz does not save any data. If you are logged in and complete a quiz, the score should appear on the leaderboard within seconds." },
+        { q: "What happens if I quit a quiz halfway?", a: "Nothing is saved. There is no partial credit. The quiz card will not show a Done badge. You can restart the quiz from scratch at any time." },
+        { q: "How does course completion work?", a: "You must complete every module in sequence. Each module requires a correct answer to the comprehension question before the next one unlocks. The course is marked complete only when every module is done." },
+        { q: "Can I reset a completed course?", a: "Yes. Open the course detail page for a 100%-complete course. A Start Again button will appear, allowing you to reset all module progress and begin from the first module." },
+        { q: "Is the platform free?", a: "Yes, completely free. No subscription, no paywalled courses, no advertising." },
+        { q: "Who can see my leaderboard score?", a: "Any authenticated Learntopia user can see the Global Leaderboard. It shows your display name and total points only. Your email, course progress, and quiz history are never visible to other users." },
+      ],
+    },
+    toasts: {
+      loginSuccess: "Successfully logged in",
+      loginGoogleSuccess: "Successfully logged in with Google",
+      signupSuccess: "Account created successfully",
+      signupGoogleSuccess: "Signed in with Google successfully",
+      quizScoreSaved: "Saved your quiz score!",
+      googleFailed: "Google sign-in failed. Please try again.",
+      googlePopupBlocked: "Your browser blocked the sign-in popup. Please allow popups and try again.",
+      googleUnauthorizedDomain: "This site isn't authorized for Google sign-in yet.",
+      googleNotEnabled: "Google sign-in isn't enabled for this app yet.",
+      googleNetwork: "Network error. Check your connection and try again.",
+      noAccount: "No account found for this email address.",
+      wrongPassword: "Incorrect password. Please try again.",
+      invalidEmail: "That email address looks incomplete.",
+      invalidCredentials: "Invalid email or password.",
+      emailInUse: "That email is already registered.",
+      weakPassword: "Use a stronger password (at least 6 characters).",
+      signupFailed: "Couldn't create your account. Please try again.",
+      logoutSafe: "Logged out safely!",
+      logoutFailed: "Failed to log out.",
+      loggedOut: "You've been logged out",
+      logoutFailedRetry: "Couldn't log you out. Please try again.",
+      unenrollFailed: "Failed to unenroll. Please try again.",
+      unenrolledFrom: "Unenrolled from {title}",
+      deleteConfirmType: "Please type DELETE to confirm profile removal.",
+      profileDeleted: "Profile deleted successfully. We're sad to see you go!",
+      accessDenied: "Access Denied: Administrator credentials required.",
+      adminWelcome: "Welcome, Administrator",
+      googleAuthFailed: "Google authentication failed.",
+      adminLoggedOut: "Logged out from Admin Operations Center",
+      loadDataFailed: "Failed to load some admin data.",
+      provideTitleDesc: "Please provide both a title and description.",
+      logSaved: "System log saved.",
+      saveLogFailed: "Failed to save the log.",
+      noStudentData: "No student data to export.",
+      exportedCsv: "Student list exported to CSV.",
+      loginToView: "Please log in to view course details.",
+      saveProgressFailed: "Couldn't save your progress. Please try again.",
+      courseCompleted: "Course completed! Amazing work! 🏆",
+      markCompleteFailed: "Couldn't mark the course complete. Please try again.",
+      courseReset: "Course reset! Good luck on your fresh start. 🌱",
+      resetFailed: "Couldn't reset the course. Please try again.",
+      loginToEnroll: "Please log in to enroll and view course details.",
+      enrollFailed: "Failed to enroll. Please try again.",
+      quizProgressSaved: "Progress saved successfully!",
+      quizProgressFailed: "Failed to save progress.",
+      timesUp: "Time's up for this question!",
+    },
+    modals: {
+      leaveTitle: "Leave Syllabus?",
+      leaveAction: "Leave",
+      leaveBody: "Are you sure you want to leave the syllabus?",
+      leaveResetPre: "Any ",
+      leaveResetBold: "unsubmitted answers",
+      leaveResetPost: " for your current module will be reset.",
+      leaveSavedPre: "Modules you have ",
+      leaveSavedBold: "already completed",
+      leaveSavedPost: " are securely saved and will not be lost.",
+      resetTitle: "Start Again?",
+      resetAction: "Yes, reset course",
+      resetBody: "Are you sure you want to reset your progress and start this course from the beginning?",
+      resetWarnLabel: "Warning:",
+      resetWarnText: " All your current checkmarks and completion timestamps will be permanently wiped out. This action cannot be undone.",
+      dashNoProfileTitle: "No active profile",
+      dashNoProfileDesc: "Please log in to view your dashboard.",
+    },
   },
 
   // ===================================================================
   // SPANISH
   // ===================================================================
   es: {
+    nav: { quizzes: "Cuestionarios" },
+    notFound: { backHome: "Volver al Inicio" },
+    thankYou: { whatsNext: "¿Qué Sigue?", exploreDesc: "Explora todos nuestros itinerarios de aprendizaje", quizDesc: "Pon a prueba tus conocimientos en un cuestionario cronometrado" },
     common: { sfx: "SFX", off: "Apagado" },
     quiz: {
       start: "Empezar",
@@ -164,6 +324,160 @@ export const contentTranslations = {
         { heading: "15. Ley Aplicable", body: ["Estos Términos se rigen por las leyes aplicables en la jurisdicción del operador, sin tener en cuenta los principios de conflicto de leyes. Cualquier disputa que surja de estos Términos será resuelta por los tribunales competentes de dicha jurisdicción."] },
         { heading: "16. Cambios en estos Términos", body: ["Podemos actualizar estos Términos de vez en cuando. Cuando hagamos cambios importantes, actualizaremos la fecha de \"Última actualización\" en la parte superior de esta página y, cuando corresponda, proporcionaremos un aviso adicional. Tu uso continuado del Servicio después de que los cambios entren en vigor constituye la aceptación de los Términos revisados."] },
       ],
+    },
+    doc: {
+      featuresHeading: "Funciones",
+      gettingStartedHeading: "Primeros Pasos",
+      coursesHeading: "Cursos y Módulos Gamificados",
+      coursesIntro: "Cada curso está diseñado para estudiantes de 7 a 14 años con una experiencia de lecciones gamificada y paso a paso. Los módulos deben completarse en orden para desbloquear el siguiente desafío.",
+      tableColFeature: "Función / Componente",
+      tableColDesc: "Descripción y Comportamiento",
+      quizzesHeading: "Cuestionarios",
+      quizzesIntro: "Los cuestionarios son evaluaciones sobre temas específicos, disponibles para todos los usuarios, incluidos los invitados. Cada cuestionario presenta un conjunto de preguntas de opción múltiple aleatorias con una cuenta regresiva de 15 segundos por pregunta.",
+      dashboardHeading: "Panel",
+      dashboardIntro: "El panel personal está disponible solo para usuarios autenticados. Reúne toda tu actividad de aprendizaje en una sola vista.",
+      accountHeading: "Cuenta y Seguridad",
+      accountIntro: "Puedes crear una cuenta con un correo y una contraseña, o iniciar sesión con Google. Tus datos se mantienen privados en tu cuenta y protegidos por sólidos controles de acceso aplicados en el servidor.",
+      faqHeading: "Preguntas Frecuentes",
+      footerTitle: "¿Falta algo o no queda claro?",
+      footerPre: "Escríbenos a través de la",
+      footerContact: "página de Contacto",
+      footerMid: "o revisa nuestros",
+      footerTerms: "Términos",
+      footerAnd: "y la",
+      footerPrivacy: "Política de Privacidad",
+      features: [
+        { title: "Soporte Multilingüe", text: "Cambia la interfaz de la plataforma entre los idiomas disponibles. Tu preferencia de idioma se guarda localmente y se aplica en cada visita." },
+        { title: "Cursos Interactivos", text: "Inscríbete en itinerarios de cursos pensados para niños. Cada módulo contiene una lectura breve y una pregunta de comprensión. Debes responder correctamente para desbloquear el siguiente módulo — el progreso no se puede falsear." },
+        { title: "Cuestionarios Cronometrados Dinámicos", text: "Pon a prueba tus conocimientos con una cuenta regresiva de 15 segundos por pregunta. Las preguntas se extraen de un gran conjunto y se aleatorizan en cada intento. Se muestra retroalimentación instantánea tras cada respuesta." },
+        { title: "Sistema de Efectos de Sonido (Web Audio)", text: "Disfruta de efectos de sonido interactivos para respuestas correctas/incorrectas, finalización de módulos, fanfarrias de subida de nivel y desbloqueo de insignias, sintetizados 100% gratis y sin conexión en tu navegador. Activa o silencia el audio fácilmente desde la barra de navegación." },
+        { title: "Panel Personal", text: "Consulta tus cursos inscritos y completados, barras de progreso por curso, tus mejores puntuaciones de cuestionarios, el total de puntos ganados y tu racha diaria actual, todo reunido en un solo lugar." },
+        { title: "Rachas de Inicio de Sesión Diarias", text: "Tu racha aumenta cada día natural que inicias sesión. Si te saltas un día, la racha se reinicia. Las rachas se calculan según tu zona horaria local y se muestran en la cabecera del panel y en la cuadrícula de métricas." },
+        { title: "Clasificaciones Globales y por Cuestionario", text: "La clasificación ordena a los usuarios por puntos totales y por puntuaciones de cuestionarios individuales. La pestaña y la página de clasificación son visibles exclusivamente para usuarios que han iniciado sesión, para proteger las clasificaciones de la comunidad." },
+        { title: "Indicadores de Finalización de Cuestionarios", text: "Las tarjetas de cuestionarios completados muestran una insignia verde de Hecho y tu mejor puntuación. El botón Empezar se convierte en Repetir. Abandonar un cuestionario a mitad no cuenta como intento — las puntuaciones solo se registran en la pantalla de resultados." },
+        { title: "Conservación de Puntuación de Invitados", text: "Haz un cuestionario como invitado y termínalo, luego usa el enlace de Iniciar Sesión o Registrarse en la pantalla de resultados. Tu puntuación se guarda automáticamente en tu perfil al autenticarte, sin pérdida de datos." },
+        { title: "Tutores con IA", text: "Cada curso viene acompañado de un tutor con IA especializado y con una personalidad propia, diseñado para guiar a los estudiantes a través de la materia." },
+        { title: "Modo de Concentración Estricto", text: "Un bloqueador de rutas personalizado detecta los intentos de navegación durante cuestionarios o desafíos de módulo activos y muestra un diálogo de confirmación para evitar la pérdida accidental de progreso." },
+        { title: "Controles del Curso", text: "Cancela tu inscripción a cursos directamente desde tu panel. Reinicia un curso completado al 100% para empezar de nuevo. Retoma los cursos en curso justo donde los dejaste." },
+        { title: "Catálogo con Búsqueda", text: "Filtra los cursos por título o materia usando el campo de búsqueda en vivo. Se muestra un estado vacío informativo cuando ningún resultado coincide con la búsqueda." },
+        { title: "Privado y Seguro", text: "Tus datos — perfil, cursos, progreso e intentos de cuestionarios — son privados de tu cuenta. Solo tú puedes verlos o cambiarlos, y la clasificación muestra únicamente tu nombre y puntuación, nunca tu correo ni tus datos de contacto." },
+      ],
+      steps: [
+        { step: "01", title: "Crea una cuenta", text: "Haz clic en Registrarse en la barra de navegación. Regístrate con tu correo y una contraseña, o continúa con Google para una configuración con un solo clic. Las cuentas de correo/contraseña requieren un nombre visible." },
+        { step: "02", title: "Explora el catálogo de cursos", text: "Ve a Cursos para ver todos los itinerarios de aprendizaje disponibles. Usa la barra de búsqueda para filtrar por materia o título. Haz clic en cualquier tarjeta de curso para ver el temario completo y la lista de módulos." },
+        { step: "03", title: "Inscríbete y empieza a aprender", text: "Haz clic en Inscribirse en la página de detalle del curso. Los módulos se desbloquean en orden — lee cada lección y luego responde correctamente la pregunta de comprensión para desbloquear el siguiente módulo." },
+        { step: "04", title: "Haz cuestionarios", text: "Visita el Centro de Cuestionarios para poner a prueba tus conocimientos. Elige un tema, responde todas las preguntas dentro del tiempo límite y consulta tu puntuación en la pantalla de resultados. Los cuestionarios completados muestran una insignia de Hecho en la tarjeta de selección." },
+        { step: "05", title: "Sigue tu progreso", text: "Abre tu Panel para ver los cursos inscritos, los porcentajes de finalización, tus mejores puntuaciones de cuestionarios, el total de puntos y tu racha actual. Consulta la Clasificación para comparar tu puntuación con la de otros." },
+      ],
+      coursesTable: [
+        { concept: "Reproductor de Lecciones Paso a Paso", behaviour: "Presenta el contenido del módulo de una tarjeta a la vez con temas visuales distintos (Historia, Concepto, Dato Curioso, Consejo Pro, Ejemplo, Actividad, Resumen) y resaltado de sintaxis de código." },
+        { concept: "Motor de Ejercicios Multitipo", behaviour: "Evalúa la comprensión mediante 4 formatos interactivos: Opción Múltiple (MCQ), Verdadero/Falso, Rellenar el Espacio y Emparejar Pares." },
+        { concept: "Gamificación y Sistema de Niveles", behaviour: "Gana +50 XP por cada módulo completado y +100 XP por cada curso completado. Sube de nivel desde Programador Novato (Nivel 1) hasta Gran Maestro (Nivel 5)." },
+        { concept: "Insignias y Celebraciones", behaviour: "Desbloquea insignias únicas de cada curso (p. ej. Pionero de Python 🐍, Mago de las Matemáticas 🔮) con superposiciones a pantalla completa al conseguirlas." },
+        { concept: "Progreso del curso", behaviour: "Registra los módulos completados en tiempo real con barras de progreso, guardadas automáticamente. Retoma cuando quieras desde tu Panel de Estudiante." },
+        { concept: "Reinicio del curso", behaviour: "Reinicia los cursos completados cuando quieras con el botón Empezar de Nuevo para repetir las lecciones y volver a practicar." },
+      ],
+      quizMeta: [
+        { label: "Temporizador", value: "15 segundos por pregunta. El temporizador se reinicia en cada nueva pregunta." },
+        { label: "Conjunto de preguntas", value: "Las preguntas se aleatorizan de un gran conjunto en cada intento, así que repetir un cuestionario ofrece una experiencia nueva." },
+        { label: "Retroalimentación", value: "Después de enviar una respuesta, la respuesta correcta se revela de inmediato antes de pasar a la siguiente pregunta." },
+        { label: "Registro de puntuación", value: "Las puntuaciones solo se guardan cuando completas todas las preguntas y llegas a la pantalla de resultados. Salir antes no registra nada." },
+        { label: "Puntos", value: "Cada respuesta correcta otorga 10 puntos que se suman a tu total acumulado." },
+        { label: "Sincronización con la clasificación", value: "Tu puntuación se sincroniza con la clasificación de cada cuestionario y tus puntos totales se actualizan en la clasificación global." },
+        { label: "Intentos de invitados", value: "Los invitados pueden hacer cualquier cuestionario. En la pantalla de resultados, los enlaces permiten iniciar sesión o registrarse con transferencia automática de la puntuación." },
+        { label: "Repetir", value: "Los cuestionarios completados muestran un botón de Repetir. Se registran las mejores puntuaciones — solo se muestra tu mejor puntuación por cuestionario." },
+      ],
+      dashboardList: [
+        "Cabecera de perfil — muestra tu nombre visible, la inicial del avatar, los puntos totales y tu racha diaria actual.",
+        "Cuadrícula de métricas — muestra puntos totales, intentos de cuestionarios, cursos inscritos y racha en tarjetas numéricas.",
+        "Cursos activos — lista los cursos en curso con una barra de progreso en vivo y un botón de Continuar.",
+        "Cursos completados — lista todos los cursos completados por completo.",
+        "Mejores puntuaciones de cuestionarios — muestra tu mejor puntuación por cuestionario entre todos los intentos.",
+        "Eliminar perfil — opción para eliminar permanentemente tu cuenta y todos los datos de aprendizaje en cualquier momento.",
+      ],
+      accountCards: [
+        { title: "Privacidad Estricta de la Cuenta y Aislamiento de Datos", text: "Learntopia usa cifrado de nivel empresarial y un estricto aislamiento de cuentas para mantener seguro tu perfil de estudiante. Tu historial de aprendizaje personal, tus notas de cursos y la configuración de tu cuenta solo pueden ser consultados por ti cuando has iniciado sesión." },
+        { title: "Guía de Autenticación Inteligente", text: "Al intentar iniciar sesión con un correo no registrado, se muestra automáticamente una opción interactiva para crear una cuenta nueva, rellenando previamente el correo que introdujiste en el formulario de registro. Del mismo modo, registrarse con un correo existente ofrece una opción de 1 clic para iniciar sesión sin volver a escribir las credenciales." },
+        { title: "Funciona Sin Conexión", text: "Si tu conexión a internet se corta mientras haces un cuestionario o lees un módulo, tu progreso se mantiene a salvo en tu dispositivo y se sincroniza automáticamente en cuanto te reconectas, para que nunca pierdas tu lugar." },
+        { title: "Resistente por Diseño", text: "Si alguna vez una página no carga por una conexión inestable, Learntopia muestra una opción amigable para recargar en lugar de una pantalla en blanco o un error — una señal perdida nunca interrumpe tu sesión." },
+        { title: "Tus Datos Siguen Siendo Tuyos", text: "Tu perfil, cursos, progreso e historial de cuestionarios están vinculados a tu cuenta y nadie más puede verlos ni modificarlos. Entre bastidores, las salvaguardas mantienen las puntuaciones e insignias justas y a prueba de manipulaciones, para que la clasificación siga siendo honesta." },
+      ],
+      faq: [
+        { q: "¿Necesito una cuenta para usar Learntopia?", a: "No. Los cursos y cuestionarios se pueden explorar sin una cuenta. Sin embargo, el progreso, las puntuaciones y las rachas solo se guardan para usuarios autenticados. Las puntuaciones de cuestionarios de invitados pueden guardarse de forma retroactiva iniciando sesión desde la pantalla de resultados." },
+        { q: "¿Cómo funciona el contador de rachas?", a: "Tu racha aumenta en uno cada día natural que inicias sesión (calculado según tu zona horaria local). Iniciar sesión varias veces el mismo día cuenta como un día. Saltarte un día reinicia la racha a 1." },
+        { q: "¿Por qué no apareció mi puntuación en la clasificación?", a: "Las puntuaciones solo se registran cuando completas todas las preguntas y llegas a la pantalla de resultados. Salir a mitad del cuestionario no guarda ningún dato. Si has iniciado sesión y completas un cuestionario, la puntuación debería aparecer en la clasificación en segundos." },
+        { q: "¿Qué pasa si salgo de un cuestionario a la mitad?", a: "No se guarda nada. No hay crédito parcial. La tarjeta del cuestionario no mostrará una insignia de Hecho. Puedes reiniciar el cuestionario desde cero en cualquier momento." },
+        { q: "¿Cómo funciona la finalización de un curso?", a: "Debes completar cada módulo en orden. Cada módulo requiere una respuesta correcta a la pregunta de comprensión antes de que se desbloquee el siguiente. El curso se marca como completado solo cuando todos los módulos están hechos." },
+        { q: "¿Puedo reiniciar un curso completado?", a: "Sí. Abre la página de detalle de un curso completado al 100%. Aparecerá un botón de Empezar de Nuevo que te permite reiniciar todo el progreso de los módulos y comenzar desde el primero." },
+        { q: "¿La plataforma es gratuita?", a: "Sí, completamente gratuita. Sin suscripción, sin cursos de pago, sin publicidad." },
+        { q: "¿Quién puede ver mi puntuación en la clasificación?", a: "Cualquier usuario autenticado de Learntopia puede ver la Clasificación Global. Muestra únicamente tu nombre visible y tus puntos totales. Tu correo, el progreso de los cursos y el historial de cuestionarios nunca son visibles para otros usuarios." },
+      ],
+    },
+    toasts: {
+      loginSuccess: "Sesión iniciada correctamente",
+      loginGoogleSuccess: "Sesión iniciada con Google correctamente",
+      signupSuccess: "Cuenta creada correctamente",
+      signupGoogleSuccess: "Sesión iniciada con Google correctamente",
+      quizScoreSaved: "¡Guardamos tu puntuación del cuestionario!",
+      googleFailed: "Error al iniciar sesión con Google. Inténtalo de nuevo.",
+      googlePopupBlocked: "Tu navegador bloqueó la ventana de inicio de sesión. Permite las ventanas emergentes e inténtalo de nuevo.",
+      googleUnauthorizedDomain: "Este sitio aún no está autorizado para el inicio de sesión con Google.",
+      googleNotEnabled: "El inicio de sesión con Google aún no está habilitado para esta app.",
+      googleNetwork: "Error de red. Comprueba tu conexión e inténtalo de nuevo.",
+      noAccount: "No se encontró ninguna cuenta para este correo electrónico.",
+      wrongPassword: "Contraseña incorrecta. Inténtalo de nuevo.",
+      invalidEmail: "Esa dirección de correo parece incompleta.",
+      invalidCredentials: "Correo o contraseña no válidos.",
+      emailInUse: "Ese correo ya está registrado.",
+      weakPassword: "Usa una contraseña más segura (al menos 6 caracteres).",
+      signupFailed: "No pudimos crear tu cuenta. Inténtalo de nuevo.",
+      logoutSafe: "¡Sesión cerrada de forma segura!",
+      logoutFailed: "Error al cerrar sesión.",
+      loggedOut: "Has cerrado sesión",
+      logoutFailedRetry: "No pudimos cerrar tu sesión. Inténtalo de nuevo.",
+      unenrollFailed: "Error al cancelar la inscripción. Inténtalo de nuevo.",
+      unenrolledFrom: "Inscripción cancelada de {title}",
+      deleteConfirmType: "Escribe DELETE para confirmar la eliminación del perfil.",
+      profileDeleted: "Perfil eliminado correctamente. ¡Lamentamos que te vayas!",
+      accessDenied: "Acceso denegado: se requieren credenciales de administrador.",
+      adminWelcome: "Bienvenido, Administrador",
+      googleAuthFailed: "Error de autenticación con Google.",
+      adminLoggedOut: "Sesión cerrada del Centro de Operaciones de Administración",
+      loadDataFailed: "Error al cargar algunos datos de administración.",
+      provideTitleDesc: "Proporciona un título y una descripción.",
+      logSaved: "Registro del sistema guardado.",
+      saveLogFailed: "Error al guardar el registro.",
+      noStudentData: "No hay datos de estudiantes para exportar.",
+      exportedCsv: "Lista de estudiantes exportada a CSV.",
+      loginToView: "Inicia sesión para ver los detalles del curso.",
+      saveProgressFailed: "No pudimos guardar tu progreso. Inténtalo de nuevo.",
+      courseCompleted: "¡Curso completado! ¡Excelente trabajo! 🏆",
+      markCompleteFailed: "No pudimos marcar el curso como completado. Inténtalo de nuevo.",
+      courseReset: "¡Curso reiniciado! Mucha suerte en tu nuevo comienzo. 🌱",
+      resetFailed: "No pudimos reiniciar el curso. Inténtalo de nuevo.",
+      loginToEnroll: "Inicia sesión para inscribirte y ver los detalles del curso.",
+      enrollFailed: "Error al inscribirte. Inténtalo de nuevo.",
+      quizProgressSaved: "¡Progreso guardado correctamente!",
+      quizProgressFailed: "Error al guardar el progreso.",
+      timesUp: "¡Se acabó el tiempo para esta pregunta!",
+    },
+    modals: {
+      leaveTitle: "¿Salir del Temario?",
+      leaveAction: "Salir",
+      leaveBody: "¿Seguro que quieres salir del temario?",
+      leaveResetPre: "Cualquier ",
+      leaveResetBold: "respuesta sin enviar",
+      leaveResetPost: " de tu módulo actual se reiniciará.",
+      leaveSavedPre: "Los módulos que ya has ",
+      leaveSavedBold: "completado",
+      leaveSavedPost: " están guardados de forma segura y no se perderán.",
+      resetTitle: "¿Empezar de Nuevo?",
+      resetAction: "Sí, reiniciar el curso",
+      resetBody: "¿Seguro que quieres reiniciar tu progreso y empezar este curso desde el principio?",
+      resetWarnLabel: "Advertencia:",
+      resetWarnText: " Todas tus marcas actuales y las fechas de finalización se borrarán permanentemente. Esta acción no se puede deshacer.",
+      dashNoProfileTitle: "Sin perfil activo",
+      dashNoProfileDesc: "Inicia sesión para ver tu panel.",
     },
     quizzesData: {
       python: {
@@ -384,6 +698,365 @@ export const contentTranslations = {
               { question: "Si el número secreto es 5 y el jugador adivina 8, ¿qué debería decir el juego?", options: ["¡Muy bajo!", "¡Muy alto!", "¡Ganaste!", "¡Error!"] },
               { question: "La función input() siempre devuelve un número, así que nunca necesitas int()." },
               { question: "Relaciona cada concepto de Python con lo que hace en el juego:", pairs: [ { term: "bucle while", definition: "Se repite hasta que el jugador acierta" }, { term: "input()", definition: "Obtiene el intento del jugador" }, { term: "random.randint()", definition: "Elige el número secreto" }, { term: "if/elif/else", definition: "Comprueba si el intento es muy alto o bajo" } ] }
+            ]
+          }
+        ]
+      },
+      "2": {
+        title: "Magia Matemática: Acertijos y Lógica",
+        desc: "Desarrolla el pensamiento crítico resolviendo acertijos, identificando patrones y dominando la lógica.",
+        category: "Matemáticas",
+        difficulty: "Todos los Niveles",
+        modules: [
+          {
+            title: "Módulo 1: Patrones Numéricos",
+            desc: "¡Descubre patrones secretos para predecir el futuro!",
+            contentSections: [
+              { title: "El Secreto del Descifrador", content: "La agente Maya encontró un cofre antiguo cerrado con una combinación secreta: 2, 4, 6, 8, __. Los guardias estaban desconcertados, pero Maya sonrió: '¡Es solo un patrón! Suma 2 cada vez.' Escribió 10, ¡y el cofre se abrió! Las matemáticas no tratan solo de números grandes: tratan de ver reglas secretas que resuelven misterios." },
+              { title: "La Magia de las Secuencias", content: "Una secuencia es una lista de números que sigue una regla clara. ¡Cuando conoces la regla, puedes predecir lo que viene después! Por ejemplo:\n\n• Regla (+5): 5, 10, 15, 20, 25...\n• Regla (×2): 2, 4, 8, 16, 32...\n• Regla (-3): 20, 17, 14, 11, 8..." },
+              { title: "¡A la Naturaleza le Encanta Fibonacci! 🌻", content: "La secuencia de Fibonacci empieza así: 1, 1, 2, 3, 5, 8, 13... ¡donde cada número es la suma de los dos anteriores! ¡Los girasoles, las piñas, las conchas de mar e incluso los remolinos de las tormentas siguen exactamente esta secuencia!" },
+              { title: "Encontrar la Regla Secreta", content: "Mira esta secuencia: 3, 6, 12, 24, __\n\n¿Cómo pasamos de 3 a 6? Multiplicamos por 2 (o sumamos 3).\n¿Cómo pasamos de 6 a 12? ¡Multiplicamos por 2! (Sumar 3 daría 9, así que la regla DEBE ser ×2).\nPor lo tanto, ¡24 × 2 = 48! ¡El número secreto es 48!" },
+              { title: "Consejo Pro: Fíjate en las Diferencias", content: "Si te atascas con un patrón, resta los números adyacentes (6 - 3 = 3, 12 - 6 = 6). ¡Si las diferencias crecen, comprueba la multiplicación!" },
+              { title: "Desafío del Detective de Patrones", content: "¿Puedes resolver estas dos secuencias secretas de cabeza?\n\n1) 1, 4, 9, 16, 25, __ (Pista: 1×1, 2×2, 3×3...)\n2) 100, 90, 80, 70, __ (Pista: Va bajando de...)\n\n¡Respuestas: 36 y 60!" },
+              { title: "Resumen del Módulo 1", content: "Ideas clave:\n• Una secuencia sigue una regla fija (+, -, ×, ÷)\n• Comprueba tu regla en TODOS los números para asegurarte de que funciona\n• ¡Fibonacci (1,1,2,3,5,8...) está por todas partes en la naturaleza!\n• ¡Los patrones nos permiten predecir números futuros con un 100% de precisión!" }
+            ],
+            exercises: [
+              { question: "¿Cuál es el siguiente número en: 5, 10, 15, 20...?", options: ["22", "25", "30", "100"] },
+              { question: "En la secuencia 2, 4, 8, 16, el siguiente número es ___.", answer: "32" },
+              { question: "La secuencia de Fibonacci (1, 1, 2, 3, 5, 8...) aparece en las semillas de girasol y las piñas." },
+              { question: "Relaciona cada secuencia con su regla:", pairs: [ { term: "3, 6, 9, 12", definition: "Sumar 3" }, { term: "2, 4, 8, 16", definition: "Multiplicar por 2" }, { term: "50, 40, 30", definition: "Restar 10" } ] },
+              { question: "¿Cómo llamamos a una lista de números que sigue una regla matemática?", options: ["Un desorden", "Una secuencia", "Una variable", "Un bucle"] }
+            ]
+          },
+          {
+            title: "Módulo 2: Geometría 2D y 3D",
+            desc: "Explora formas en el espacio plano y en mundos 3D.",
+            contentSections: [
+              { title: "Diseñar Mundos de Minecraft", content: "¿Alguna vez te has preguntado cómo se construyen los juegos 3D como Minecraft o Roblox? Los desarrolladores empiezan con formas planas 2D — cuadrados y triángulos — y las extruyen en bloques 3D (cubos y pirámides). ¡La geometría es el motor secreto detrás de cada gráfico 3D que ves!" },
+              { title: "Plano (2D) vs Sólido (3D)", content: "• Las formas 2D tienen Altura y Anchura (planas en el papel): Cuadrado, Círculo, Triángulo, Hexágono (6 lados).\n• Las formas 3D añaden Profundidad (sólidas en la mano): Cubo, Esfera, Pirámide, Cilindro." },
+              { title: "Ángulos y Ángulos Rectos 📐", content: "Un ángulo se forma donde se encuentran dos líneas. La esquina de un cuadrado es un ángulo de 90°, llamado Ángulo Recto. Mira a tu alrededor: ¡las puertas, los libros y las pantallas están llenos de ángulos rectos!" },
+              { title: "Contar Lados y Vértices", content: "• Triángulo: 3 lados, 3 esquinas (vértices)\n• Cuadrado / Rectángulo: 4 lados, 4 vértices\n• Hexágono: 6 lados, 6 vértices\n• Octágono (señal de Stop): 8 lados, 8 vértices" },
+              { title: "Secreto del Cubo", content: "¡Un cubo 3D tiene 6 caras cuadradas planas, 8 esquinas (vértices) y 12 aristas rectas!" },
+              { title: "Resumen del Módulo 2", content: "• 2D = plano (largo y ancho), 3D = sólido (largo, ancho y profundidad)\n• Los hexágonos tienen 6 lados, los octágonos tienen 8\n• Los ángulos de 90° son Ángulos Rectos\n• ¡Los cubos tienen 6 caras, 8 vértices y 12 aristas!" }
+            ],
+            exercises: [
+              { question: "¿Cuántos lados tiene un hexágono?", options: ["4", "5", "6", "8"] },
+              { question: "Un cuadrado en 3D se llama ___.", answer: "cubo" },
+              { question: "Un ángulo recto mide exactamente 90 grados." },
+              { question: "Relaciona la forma con su número de lados:", pairs: [ { term: "Triángulo", definition: "3 lados" }, { term: "Pentágono", definition: "5 lados" }, { term: "Hexágono", definition: "6 lados" }, { term: "Octágono", definition: "8 lados" } ] },
+              { question: "¿Cuántas caras tiene un cubo estándar?", options: ["4", "6", "8", "12"] }
+            ]
+          },
+          {
+            title: "Módulo 3: Acertijos de Lógica",
+            desc: "Resuelve misterios usando la deducción.",
+            contentSections: [
+              { title: "La Detective Maya y la Llave Perdida", content: "La llave dorada había desaparecido. Maya conocía tres hechos: 1) No está en el cofre rojo. 2) No está en una caja de madera. 3) El cofre azul es de metal. ¡Combinando las pistas, demostró que la llave DEBE estar en el cofre azul de metal! ¡Eso es la deducción!" },
+              { title: "¿Qué es la Lógica Deductiva?", content: "La deducción significa eliminar las posibilidades incorrectas hasta que solo queda la verdad. ¡Si la afirmación A es Verdadera, entonces la afirmación B DEBE ser Verdadera!" },
+              { title: "Resolver Acertijos de Orden", content: "Pista 1: Liam es más alto que Sam.\nPista 2: Sam es más alto que Zoe.\nConclusión: Liam > Sam > Zoe. ¡Por lo tanto, Liam es el más alto y Zoe la más baja!" },
+              { title: "¡Dibuja una Cuadrícula!", content: "Cuando resuelvas acertijos de lógica con personas y objetos, haz una cuadrícula con marcas de verificación y X para descartar las opciones imposibles." },
+              { title: "Resumen del Módulo 3", content: "• La lógica usa hechos para llegar a conclusiones 100% seguras\n• La deducción elimina las opciones incorrectas paso a paso\n• ¡Las pistas de orden ayudan a ordenar los objetos de mayor a menor!" }
+            ],
+            exercises: [
+              { question: "Si A es más alto que B, y B es más alto que C, ¿quién es el más alto?", options: ["A", "B", "C", "Son iguales"] },
+              { question: "La lógica deductiva significa adivinar al azar sin pruebas." },
+              { question: "Usar pistas para eliminar respuestas incorrectas se llama razonamiento ___.", answer: "deductivo" },
+              { question: "Tengo 4 patas pero no puedo caminar. ¿Qué soy?", options: ["Un perro", "Una silla", "Un pájaro", "Una serpiente"] },
+              { question: "Relaciona la pista lógica con su resultado:", pairs: [ { term: "El gato no está en la Caja A ni B", definition: "Debe estar en la Caja C" }, { term: "Tom > Mark > Leo", definition: "Tom es el más alto" }, { term: "Todos los cuadrados son formas", definition: "Un cuadrado es una forma" } ] }
+            ]
+          },
+          {
+            title: "Módulo 4: Algoritmos y Resolución de Problemas",
+            desc: "Aprende a resolver problemas enormes paso a paso.",
+            contentSections: [
+              { title: "El Sándwich de Mantequilla de Maní del Robot", content: "Imagina ordenar a un robot que haga un sándwich. Si dices 'Pon mantequilla de maní en el pan', ¡el robot podría aplastar el frasco cerrado contra la barra de pan! Tienes que decir: 1) Abre el frasco. 2) Coge el cuchillo. 3) Saca mantequilla de maní. 4) Úntala en el pan. ¡Esa receta paso a paso es un algoritmo!" },
+              { title: "¿Qué es un Algoritmo?", content: "Un algoritmo es una lista de instrucciones precisa y ordenada para resolver un problema o completar una tarea." },
+              { title: "Descomposición: Dividir Tareas Grandes", content: "Cuando se enfrentan a un problema enorme (como construir un cohete o crear un juego), los expertos usan la Descomposición: ¡dividir 1 problema enorme en 10 pasos pequeños y fáciles!" },
+              { title: "Resumen del Módulo 4", content: "• Los algoritmos son recetas paso a paso\n• El orden importa: fuera de orden = fallo\n• ¡La descomposición divide las tareas grandes en pasos simples!" }
+            ],
+            exercises: [
+              { question: "¿Qué es un algoritmo?", options: ["Un error matemático", "Un tipo de dinosaurio", "Una lista de instrucciones paso a paso", "Una figura 3D"] },
+              { question: "En un algoritmo, cambiar el orden de los pasos no importa." },
+              { question: "Dividir un problema grande en pasos pequeños se llama ___.", answer: "descomposición" },
+              { question: "Relaciona los términos de algoritmos con su significado:", pairs: [ { term: "Algoritmo", definition: "Instrucciones paso a paso" }, { term: "Descomposición", definition: "Dividir tareas en partes pequeñas" }, { term: "Depuración", definition: "Corregir un error en los pasos" } ] },
+              { question: "¿Cuál es la mejor forma de resolver un acertijo matemático enorme y difícil?", options: ["Llorar", "Dividirlo en pasos pequeños y fáciles", "Adivinar", "Rendirse"] }
+            ]
+          }
+        ]
+      },
+      "3": {
+        title: "Dinero Inteligente: Niños y Efectivo",
+        desc: "Desarrolla la educación financiera desde pequeño. Aprende sobre presupuestos, interés compuesto, banca e inversión inteligente.",
+        category: "Finanzas",
+        difficulty: "Principiante",
+        modules: [
+          {
+            title: "Módulo 1: ¿Qué es el Dinero?",
+            desc: "Aprende por qué se inventó el dinero y cómo funcionaba el trueque.",
+            contentSections: [
+              { title: "Cambiar Gallinas por Espadas", content: "Hace miles de años, si Sam tenía una gallina y quería una espada, ¡Sam tenía que encontrar a un herrero que quisiera una gallina! Esto se llamaba 'trueque'. Pero ¿y si el herrero solo quería manzanas? ¡El intercambio se volvía imposible! Por eso los humanos inventaron el dinero: algo que todos aceptan como valioso." },
+              { title: "Antes del Dinero: El Trueque", content: "El trueque es intercambiar bienes o servicios directamente sin dinero. El dinero resolvió el trueque porque sirve como medio de intercambio universal." },
+              { title: "Dato Curioso: ¡Conchas y Sal como Dinero! 🐚", content: "¡Antes del papel moneda, la gente usaba conchas de cauri, piedras gigantes e incluso sal como dinero! ¡De hecho, la palabra 'salario' viene de la palabra latina para sal ('sal')!" },
+              { title: "Resumen del Módulo 1", content: "• Trueque = intercambiar objetos directamente\n• Dinero = medio de intercambio universal\n• ¡El dinero solo funciona porque todos aceptan que tiene valor!" }
+            ],
+            exercises: [
+              { question: "¿Qué es el trueque?", options: ["Usar tarjetas de crédito", "Intercambiar bienes directamente sin dinero", "Invertir en acciones", "Ahorrar en un banco"] },
+              { question: "El dinero solo funciona si todos aceptan que tiene valor." },
+              { question: "La palabra salario viene de la palabra latina para ___.", answer: "sal" },
+              { question: "Relaciona los términos de dinero con sus definiciones:", pairs: [ { term: "Trueque", definition: "Intercambiar bienes directamente" }, { term: "Moneda", definition: "Dinero usado en un país" }, { term: "Medio de Intercambio", definition: "Algo usado para comprar bienes" } ] },
+              { question: "¿Por qué se inventó el dinero?", options: ["Porque las monedas brillan", "Para hacer el comercio más fácil que el trueque", "Para hacer las carteras pesadas", "Porque las gallinas se escaparon"] }
+            ]
+          },
+          {
+            title: "Módulo 2: Presupuestos y Ahorro",
+            desc: "Dile a tu dinero a dónde ir en lugar de preguntarte a dónde se fue.",
+            contentSections: [
+              { title: "Ingresos vs Gastos", content: "• Ingresos = Dinero que ENTRA (paga semanal, regalos de cumpleaños, tareas).\n• Gastos = Dinero que SALE (comprar juguetes, snacks, juegos).\n• Presupuesto = ¡Un plan para asegurar que los Gastos sean MENORES que los Ingresos!" },
+              { title: "La Regla 50/30/20", content: "Una forma famosa de hacer un presupuesto:\n• 50% para Necesidades (comida, material escolar)\n• 30% para Deseos (juegos, juguetes)\n• 20% para Ahorros (¡metas futuras!)" },
+              { title: "Resumen del Módulo 2", content: "• Los ingresos son dinero que entra; los gastos son dinero que sale\n• ¡Gasta siempre menos de lo que ganas para acumular riqueza!" }
+            ],
+            exercises: [
+              { question: "El dinero que ENTRA a tu bolsillo se llama:", options: ["Gasto", "Ingreso", "Impuesto", "Deuda"] },
+              { question: "Un buen presupuesto significa que tus gastos son mayores que tus ingresos." },
+              { question: "El dinero que SALE cuando compras algo se llama un ___.", answer: "gasto" },
+              { question: "Relaciona las categorías del presupuesto:", pairs: [ { term: "Ingreso", definition: "Paga ganada" }, { term: "Necesidad", definition: "Material escolar" }, { term: "Deseo", definition: "Aspecto para un videojuego" }, { term: "Ahorro", definition: "Dinero en el banco para el futuro" } ] },
+              { question: "¿Cuál es la Regla de Oro del dinero?", options: ["Gasta todo tu dinero", "Gasta menos de lo que ganas", "Nunca ahorres", "Compra todo en oferta"] }
+            ]
+          },
+          {
+            title: "Módulo 3: La Magia del Interés Compuesto",
+            desc: "El multiplicador mágico que convierte pequeños ahorros en fortunas.",
+            contentSections: [
+              { title: "Interés sobre Interés", content: "Cuando depositas dinero en un banco, el banco te paga 'Interés'. ¡El interés compuesto significa que ganas interés sobre tu dinero Y sobre el interés que ya has ganado! ¡Se multiplica con el tiempo como una bola de nieve rodando montaña abajo!" },
+              { title: "La Cita de Albert Einstein 🧠", content: "Albert Einstein llamó célebremente al interés compuesto 'la 8ª maravilla del mundo. ¡Quien lo entiende, lo gana... quien no, lo paga!'" },
+              { title: "Resumen del Módulo 3", content: "• Interés = bonificación pagada por el banco por ahorrar\n• Interés compuesto = interés sobre el interés\n• ¡El tiempo es el multiplicador secreto!" }
+            ],
+            exercises: [
+              { question: "Cuando un banco te paga dinero extra por mantener tus ahorros con ellos, se llama:", options: ["Impuestos", "Interés", "Multas", "Préstamos"] },
+              { question: "El interés compuesto significa que ganas interés además del interés anterior." },
+              { question: "El interés compuesto funciona mejor cuando dejas tu dinero ahorrado durante ___ tiempo.", answer: "mucho" },
+              { question: "Relaciona los conceptos de interés:", pairs: [ { term: "Interés Simple", definition: "Interés solo sobre el dinero inicial" }, { term: "Interés Compuesto", definition: "Interés sobre el interés con el tiempo" }, { term: "Depósito Bancario", definition: "Poner dinero en una cuenta" } ] },
+              { question: "¿Quién llamó al interés compuesto la 8ª maravilla del mundo?", options: ["Isaac Newton", "Albert Einstein", "Steve Jobs", "Elon Musk"] }
+            ]
+          },
+          {
+            title: "Módulo 4: Inversión y Acciones",
+            desc: "Haz que tu dinero trabaje para que tú no tengas que hacerlo.",
+            contentSections: [
+              { title: "¿Qué es una Acción?", content: "Cuando una empresa (como Apple o Disney) quiere expandirse, divide la propiedad en millones de pequeñas partes llamadas 'Acciones'. ¡Cuando compras una acción, te conviertes en un micro-propietario de esa empresa!" },
+              { title: "Diversificación: ¡No pongas todos los huevos en 1 cesta!", content: "Si compras acciones de solo 1 empresa y quiebra, pierdes dinero. ¡Si inviertes en 10 empresas diferentes, estás a salvo si una tiene un mal día!" },
+              { title: "Resumen del Módulo 4", content: "• Acción = pequeña parte de propiedad de una empresa\n• La inversión hace crecer el dinero con el tiempo\n• ¡Diversifica para reducir el riesgo!" }
+            ],
+            exercises: [
+              { question: "Cuando compras una acción, ¿qué estás comprando en realidad?", options: ["Una hoja de papel", "Una pequeña parte de la propiedad de una empresa real", "Un préstamo al gobierno", "Un producto"] },
+              { question: "Invertir no tiene ningún riesgo y siempre garantiza ganancias." },
+              { question: "Repartir tus inversiones entre varias empresas se llama ___.", answer: "diversificación" },
+              { question: "Relaciona los términos de inversión:", pairs: [ { term: "Acción", definition: "Parte de la propiedad de una empresa" }, { term: "Dividendo", definition: "Ganancia de la empresa repartida a los inversores" }, { term: "Cartera", definition: "Conjunto de todas tus inversiones" } ] },
+              { question: "¿Cuál es el objetivo principal de invertir?", options: ["Perder dinero", "Hacer crecer tu dinero con el tiempo", "Guardar el dinero bajo el colchón", "Pagar comisiones"] }
+            ]
+          }
+        ]
+      },
+      "4": {
+        title: "Creadores del Futuro: Marketing Digital",
+        desc: "Domina la marca, la narración, la creación de contenido y la seguridad en línea.",
+        category: "Marketing",
+        difficulty: "Intermedio",
+        modules: [
+          {
+            title: "Módulo 1: Marca e Identidad",
+            desc: "Aprende cómo las empresas construyen personalidades reconocibles.",
+            contentSections: [
+              { title: "Más que un logo", content: "Una marca es el sentimiento y la reputación que la gente asocia a una empresa. Los colores provocan emociones: Rojo = emoción/hambre (McDonald's, Netflix), Azul = confianza (Samsung, NASA), Verde = naturaleza/crecimiento (Spotify, Starbucks)." },
+              { title: "Resumen del Módulo 1", content: "• Marca = sentimiento y reputación\n• ¡Los colores y las tipografías crean una conexión emocional!" }
+            ],
+            exercises: [
+              { question: "¿Qué es una marca?", options: ["Solo un logo", "El sentimiento, la personalidad y la reputación de una empresa", "Un edificio de oficinas", "La firma de un director"] },
+              { question: "Las empresas eligen los colores al azar sin pensar en las emociones." },
+              { question: "El color azul se usa a menudo en los logos para generar ___.", answer: "confianza" },
+              { question: "Relaciona los elementos de marca:", pairs: [ { term: "Logo", definition: "Símbolo visual de la marca" }, { term: "Eslogan", definition: "Frase pegadiza (p. ej. Just Do It)" }, { term: "Paleta", definition: "Conjunto específico de colores de la marca" } ] },
+              { question: "¿Cuál de estos forma parte de una identidad de marca?", options: ["Logos, colores y tipografía", "Muebles de oficina", "La talla de zapato de los empleados", "Formularios de impuestos"] }
+            ]
+          },
+          {
+            title: "Módulo 2: La Narración en el Marketing",
+            desc: "Engancha a tu audiencia con grandes historias.",
+            contentSections: [
+              { title: "El Cliente es el Héroe", content: "En marketing, tu cliente es el Héroe (Luke Skywalker) y tu producto es el Guía (Yoda). No hables de ti mismo: ¡muestra cómo tu producto ayuda al cliente a ganar!" },
+              { title: "Resumen del Módulo 2", content: "• Cliente = Héroe, Producto = Guía\n• ¡Engancha a los espectadores en los primeros 3 segundos!" }
+            ],
+            exercises: [
+              { question: "En la narración de marca, ¿quién es el Héroe?", options: ["El director", "El producto", "El cliente", "El competidor"] },
+              { question: "Los vídeos en línea necesitan un buen gancho en los primeros 3 segundos." },
+              { question: "En la narración de marketing, tu producto actúa como el ___ para ayudar al héroe a ganar.", answer: "guía" },
+              { question: "Relaciona los componentes de la historia:", pairs: [ { term: "Héroe", definition: "El Cliente" }, { term: "Guía", definition: "Tu Producto/Servicio" }, { term: "Gancho", definition: "Los primeros 3 segundos que captan la atención" } ] },
+              { question: "¿Por qué los especialistas en marketing usan la narración?", options: ["Para aburrir a la gente", "Para crear una conexión emocional", "Para rellenar espacio en blanco", "Para confundir a los lectores"] }
+            ]
+          },
+          {
+            title: "Módulo 3: Ciudadanía Digital y Seguridad",
+            desc: "Protege tu huella digital.",
+            contentSections: [
+              { title: "La Tinta Permanente de la Web", content: "Tu Huella Digital es el rastro de datos que dejas en línea. ¡Nunca publiques información personal (PII) como tu dirección de casa, número de teléfono o el nombre de tu escuela!" },
+              { title: "Resumen del Módulo 3", content: "• La Huella Digital es permanente\n• ¡Nunca compartas información personal en línea!" }
+            ],
+            exercises: [
+              { question: "¿Qué es tu Huella Digital?", options: ["Tu talla de zapato", "El rastro permanente de datos que dejas en línea", "La tinta de la impresora", "El brillo de la pantalla"] },
+              { question: "Cualquier cosa que publiques en línea se puede borrar fácilmente para siempre." },
+              { question: "PII significa Información Personal ___.", answer: "identificable" },
+              { question: "Relaciona los términos de seguridad:", pairs: [ { term: "PII (Info personal)", definition: "Dirección, teléfono, nombre completo" }, { term: "Seguro de Compartir", definition: "Dibujos, reseñas, aficiones" }, { term: "Huella Digital", definition: "Rastro del historial en línea" } ] },
+              { question: "¿Cuál de los siguientes NUNCA debe publicarse públicamente en línea?", options: ["Película favorita", "Dirección de casa", "Dibujo de un gato", "Reseña de un libro"] }
+            ]
+          },
+          {
+            title: "Módulo 4: Campañas de Marketing y CTA",
+            desc: "Lanza tu gran idea con una llamada a la acción clara.",
+            contentSections: [
+              { title: "Llamada a la Acción (CTA)", content: "Una CTA le dice a la audiencia exactamente qué paso dar a continuación: '¡Suscríbete ya!', '¡Haz clic aquí para unirte!', '¡Descarga la app!'." },
+              { title: "Resumen del Módulo 4", content: "• CTA = instrucción clara para el siguiente paso\n• ¡Público objetivo = grupo específico para el que diseñas!" }
+            ],
+            exercises: [
+              { question: "¿Qué significa CTA?", options: ["Llamada a la Acción (Call To Action)", "Alineación central del texto", "Costo de publicidad", "Clic para añadir"] },
+              { question: "'¡Suscríbete para más vídeos!' es un ejemplo de una CTA." },
+              { question: "El grupo específico de personas para el que diseñas una campaña se llama el ___ objetivo.", answer: "público" },
+              { question: "Relaciona los términos de campaña:", pairs: [ { term: "CTA", definition: "Llamada a la Acción" }, { term: "Público Objetivo", definition: "Espectadores/compradores previstos" }, { term: "Campaña", definition: "Estrategia de marketing organizada" } ] },
+              { question: "¿Cuál es una Llamada a la Acción eficaz?", options: ["'Existimos.'", "'¡Suscríbete hoy para recibir consejos gratis!'", "'Los colores son bonitos.'", "'Adiós.'"] }
+            ]
+          }
+        ]
+      },
+      "5": {
+        title: "Maravillas Web: HTML y CSS",
+        desc: "Domina los lenguajes de marcado y estilo que dan vida a internet.",
+        category: "Ciencia",
+        difficulty: "Principiante",
+        modules: [
+          {
+            title: "Módulo 1: Estructura HTML",
+            desc: "El esqueleto de cada sitio web.",
+            contentSections: [
+              { title: "Etiquetas y Bloques de Construcción", content: "¡HTML (Lenguaje de Marcado de Hipertexto) usa etiquetas envueltas en corchetes angulares como `<h1>` para Encabezados, `<p>` para Párrafos y `<a>` para Enlaces!" },
+              { title: "Resumen del Módulo 1", content: "• HTML = estructura/esqueleto\n• ¡`<h1>` = encabezado más grande, `<p>` = párrafo!" }
+            ],
+            exercises: [
+              { question: "¿Qué proporciona HTML a una página web?", options: ["Colores y estilos", "La estructura básica (esqueleto)", "Almacenamiento en base de datos", "El backend del servidor"] },
+              { question: "Los nombres de las etiquetas HTML van entre corchetes angulares como <p>." },
+              { question: "La etiqueta usada para el texto de párrafo en HTML es ___.", answer: "<p>" },
+              { question: "Relaciona las etiquetas HTML con su propósito:", pairs: [ { term: "<h1>", definition: "Encabezado principal" }, { term: "<p>", definition: "Texto de párrafo" }, { term: "<a>", definition: "Hipervínculo" }, { term: "<img>", definition: "Etiqueta de imagen" } ] },
+              { question: "¿Qué etiqueta produce el encabezado más grande?", options: ["<p>", "<h1>", "<h6>", "<div>"] }
+            ]
+          },
+          {
+            title: "Módulo 2: Estilo con CSS",
+            desc: "Añade colores, fuentes y belleza.",
+            contentSections: [
+              { title: "La Ropa sobre el Esqueleto", content: "CSS (Hojas de Estilo en Cascada) controla cómo se ve el HTML. Seleccionas elementos y añades estilos: `color: purple; font-size: 20px; background-color: black;`." },
+              { title: "Resumen del Módulo 2", content: "• CSS = estilo y diseño\n• ¡Usa `color` para el color del texto!" }
+            ],
+            exercises: [
+              { question: "¿Qué hace CSS?", options: ["Construye las etiquetas HTML básicas", "Da estilo a las páginas con colores y fuentes", "Guarda las cuentas de usuario", "Alimenta las bases de datos"] },
+              { question: "Los nombres de las propiedades CSS terminan con dos puntos (:)." },
+              { question: "En CSS, para poner el texto en rojo escribes color: ___;", answer: "red" },
+              { question: "Relaciona las propiedades CSS:", pairs: [ { term: "color", definition: "Color del texto" }, { term: "font-size", definition: "Tamaño del texto" }, { term: "background-color", definition: "Color de fondo" } ] },
+              { question: "¿Cómo cambias el color del texto en CSS?", options: ["text: red;", "color: red;", "font-color: red;", "paint: red;"] }
+            ]
+          },
+          {
+            title: "Módulo 3: El Modelo de Caja de CSS",
+            desc: "Domina el espaciado: Contenido, Relleno, Borde, Margen.",
+            contentSections: [
+              { title: "¡Todo es una Caja Rectangular!", content: "En CSS, cada elemento es una caja. El Modelo de Caja tiene 4 capas:\n1. Contenido (el texto/imagen)\n2. Relleno (Padding) (espacio DENTRO del borde)\n3. Borde (el contorno)\n4. Margen (Margin) (espacio FUERA del borde)" },
+              { title: "Resumen del Módulo 3", content: "• Relleno (Padding) = espaciado interior\n• ¡Margen (Margin) = espaciado exterior!" }
+            ],
+            exercises: [
+              { question: "En el Modelo de Caja de CSS, ¿qué es el espacio DENTRO del borde?", options: ["Margen (Margin)", "Relleno (Padding)", "Contenido (Content)", "Contorno (Outline)"] },
+              { question: "El margen (margin) crea espacio FUERA del borde del elemento." },
+              { question: "El espacio dentro de un elemento, entre el contenido y el borde, se llama ___ (en inglés).", answer: "padding" },
+              { question: "Relaciona las capas del Modelo de Caja:", pairs: [ { term: "Contenido", definition: "Texto o imagen dentro" }, { term: "Relleno (Padding)", definition: "Espacio dentro del borde" }, { term: "Borde", definition: "Línea que rodea el relleno" }, { term: "Margen (Margin)", definition: "Espacio fuera del borde" } ] },
+              { question: "¿Cómo se llama el espacio FUERA del borde?", options: ["Margen (Margin)", "Relleno (Padding)", "Contenido (Content)", "Contorno (Outline)"] }
+            ]
+          },
+          {
+            title: "Módulo 4: Despliegue y Alojamiento Web",
+            desc: "Comparte tu sitio con el mundo.",
+            contentSections: [
+              { title: "Poner tu Sitio en Línea", content: "¡Para que cualquiera pueda visitar tu sitio, subes tus archivos HTML y CSS a un Servidor (alojamiento web). El servidor te da un enlace URL (como misitio.com)!" },
+              { title: "Resumen del Módulo 4", content: "• Despliegue = publicar el sitio en vivo\n• ¡Servidor = computadora de alojamiento web 24/7!" }
+            ],
+            exercises: [
+              { question: "¿Qué es un servidor web?", options: ["Un camarero", "Una computadora que permanece en línea 24/7 alojando archivos", "Un archivo CSS", "Un navegador"] },
+              { question: "Desplegar un sitio web significa ponerlo en un servidor para que el mundo pueda visitarlo." },
+              { question: "La dirección web que la gente escribe para visitar tu sitio se llama ___.", answer: "url" },
+              { question: "Relaciona los términos de alojamiento:", pairs: [ { term: "Servidor", definition: "Computadora en línea 24/7" }, { term: "URL", definition: "Dirección web" }, { term: "Desplegar", definition: "Publicar el código en vivo" } ] },
+              { question: "¿Qué escriben los visitantes para acceder a tu sitio web?", options: ["Una URL", "Una memoria USB", "Una contraseña", "Un archivo de texto"] }
+            ]
+          }
+        ]
+      },
+      "6": {
+        title: "Arte Digital: Dibuja en tu Pantalla",
+        desc: "Da rienda suelta a tu creatividad con técnicas de arte digital.",
+        category: "Artes",
+        difficulty: "Todos los Niveles",
+        modules: [
+          {
+            title: "Módulo 1: Capas y Arte No Destructivo",
+            desc: "Dibuja sin miedo a arruinar tu trabajo.",
+            contentSections: [
+              { title: "Láminas de Vidrio Transparentes", content: "Las capas digitales son como láminas transparentes apiladas. Dibuja bocetos en la Capa 1, el entintado en la Capa 2, los colores en la Capa 3. ¡Si borras los colores de la Capa 3, tu boceto de debajo queda 100% a salvo!" },
+              { title: "Resumen del Módulo 1", content: "• Capas = láminas transparentes apiladas\n• ¡No destructivo = el boceto está a salvo mientras coloreas!" }
+            ],
+            exercises: [
+              { question: "¿A qué se parecen las capas del arte digital?", options: ["Rocas pesadas", "Láminas de vidrio transparentes apiladas", "Una sola hoja de papel", "Un pincel"] },
+              { question: "Borrar en la Capa 2 elimina tu dibujo en la Capa 1." },
+              { question: "Dibujar en capas separadas evita arruinar tu boceto; a esto se le llama arte no ___.", answer: "destructivo" },
+              { question: "Relaciona los tipos de capa:", pairs: [ { term: "Capa de Boceto", definition: "Guía inicial en bruto" }, { term: "Capa de Entintado", definition: "Contorno limpio" }, { term: "Capa de Color", definition: "Rellenos bajo el entintado" } ] },
+              { question: "¿Por qué usan capas los artistas digitales?", options: ["Para ir más lento", "Para colorear sin destruir el boceto", "Para bloquear el software", "Para desperdiciar espacio"] }
+            ]
+          },
+          {
+            title: "Módulo 2: Teoría del Color y Paletas",
+            desc: "¡Elige colores que resalten!",
+            contentSections: [
+              { title: "Colores Complementarios", content: "Los colores opuestos en la Rueda de Color (Azul y Naranja, Rojo y Verde, Amarillo y Morado) son Complementarios. ¡Colocados uno al lado del otro, crean un contraste vibrante!" },
+              { title: "Resumen del Módulo 2", content: "• Colores opuestos en la rueda = Complementarios\n• ¡El alto contraste hace que el arte resalte!" }
+            ],
+            exercises: [
+              { question: "Los colores opuestos en la rueda de color se llaman:", options: ["Análogos", "Complementarios", "Primarios", "Monocromáticos"] },
+              { question: "El azul y el naranja son colores complementarios." },
+              { question: "Los colores complementarios crean el máximo ___ visual.", answer: "contraste" },
+              { question: "Relaciona los pares de colores complementarios:", pairs: [ { term: "Azul", definition: "Naranja" }, { term: "Rojo", definition: "Verde" }, { term: "Amarillo", definition: "Morado" } ] },
+              { question: "¿Qué efecto crean los colores complementarios cuando se colocan uno al lado del otro?", options: ["Aburrimiento", "Máximo contraste y emoción", "Un borrón gris", "Invisibilidad"] }
+            ]
+          },
+          {
+            title: "Módulo 3: Composición y Regla de los Tercios",
+            desc: "Organiza los elementos como un director profesional.",
+            contentSections: [
+              { title: "El Secreto de la Cuadrícula 3x3", content: "¡No pongas a tu personaje justo en el medio! Divide tu lienzo en una cuadrícula de 3x3. Colocar tu sujeto principal en las líneas de intersección de la cuadrícula crea una composición dinámica y cinematográfica." },
+              { title: "Resumen del Módulo 3", content: "• La Regla de los Tercios usa una cuadrícula de 3x3\n• ¡Las intersecciones crean puntos focales atractivos!" }
+            ],
+            exercises: [
+              { question: "¿Qué cuadrícula usa la Regla de los Tercios?", options: ["Cuadrícula 2x2", "Cuadrícula 3x3", "Cuadrícula 10x10", "Sin cuadrícula"] },
+              { question: "Colocar un personaje justo en el centro es siempre la opción más cinematográfica." },
+              { question: "En la Regla de los Tercios, coloca tu sujeto en las ___ de la cuadrícula.", answer: "intersecciones" },
+              { question: "Relaciona los términos de composición:", pairs: [ { term: "Regla de los Tercios", definition: "Cuadrícula de alineación 3x3" }, { term: "Punto Focal", definition: "Lugar principal donde miran los ojos" }, { term: "Lienzo", definition: "Área de dibujo digital" } ] },
+              { question: "¿Dónde debes colocar tu sujeto usando la Regla de los Tercios?", options: ["Siempre en el centro exacto", "Fuera del lienzo", "En las intersecciones de las líneas de la cuadrícula", "Solo en la esquina inferior izquierda"] }
+            ]
+          },
+          {
+            title: "Módulo 4: Renderizado e Iluminación",
+            desc: "Haz que los dibujos planos parezcan 3D con luz y sombra.",
+            contentSections: [
+              { title: "Brillos y Sombras", content: "El renderizado consiste en añadir luz y sombra. ¡El lado que mira hacia la fuente de luz recibe un 'Brillo' claro. El lado opuesto recibe una 'Sombra' profunda!" },
+              { title: "Resumen del Módulo 4", content: "• El renderizado añade profundidad 3D\n• ¡Lado iluminado = Brillo, lado oscuro = Sombra!" }
+            ],
+            exercises: [
+              { question: "¿Qué es el renderizado en el arte digital?", options: ["Añadir luz y sombra para dar profundidad 3D", "Borrar el boceto", "Añadir una firma", "Guardar como JPEG"] },
+              { question: "El lado de un objeto que mira hacia el sol recibe una sombra." },
+              { question: "El punto luminoso donde la luz incide directamente sobre un objeto se llama ___.", answer: "brillo" },
+              { question: "Relaciona los términos de iluminación:", pairs: [ { term: "Fuente de Luz", definition: "De dónde viene la luz (sol/lámpara)" }, { term: "Brillo", definition: "El punto más luminoso del objeto" }, { term: "Sombra", definition: "Zona oscura alejada de la luz" } ] },
+              { question: "¿Qué zona recibe un Brillo?", options: ["El lado opuesto a la luz", "El lado que mira directamente hacia la luz", "Siempre la parte inferior", "En ningún lugar"] }
             ]
           }
         ]

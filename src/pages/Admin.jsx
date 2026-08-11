@@ -4,6 +4,7 @@ import { db } from "../firebase/firebase";
 import { collection, getDocs, addDoc, serverTimestamp, query, orderBy } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 import { useSound } from "../context/SoundContext";
+import { useLanguage } from "../context/LanguageContext";
 import Button from "../Components/ui/Button";
 import Icon from "../Components/ui/Icon";
 import Card from "../Components/ui/Card";
@@ -21,8 +22,6 @@ const useLiveClock = () => {
   }, []);
   return now;
 };
-
-const ADMIN_EMAIL = (import.meta.env.VITE_ADMIN_EMAIL || "thetj4054@gmail.com").toLowerCase();
 
 const NAV_ITEMS = [
   { id: "overview", label: "Overview", icon: "bar-chart" },
@@ -42,6 +41,7 @@ const Admin = () => {
   const navigate = useNavigate();
   const { currentUser, isAdmin, loading: authLoading, googleSignIn, logOut } = useAuth();
   const { playLevelUp, playIncorrect } = useSound();
+  const { t } = useLanguage();
 
   const [activeTab, setActiveTab] = useState("overview");
   const [loading, setLoading] = useState(true);
@@ -62,20 +62,22 @@ const Admin = () => {
     setAdminLoading(true);
     try {
       const user = await googleSignIn();
-      if (!user || !user.email || user.email.toLowerCase() !== ADMIN_EMAIL) {
+      // Authority is the server-set admin claim only — no email compared client-side.
+      const tokenResult = user && (await user.getIdTokenResult());
+      if (!tokenResult || tokenResult.claims.admin !== true) {
         await logOut();
         playIncorrect();
-        toast.error("Access Denied: Administrator credentials required.", { autoClose: 4000 });
+        toast.error(t("toasts.accessDenied"), { autoClose: 4000 });
         navigate("/login");
         return;
       }
 
       playLevelUp();
-      toast.success("Welcome, Administrator");
+      toast.success(t("toasts.adminWelcome"));
     } catch (err) {
       playIncorrect();
       console.error("Admin Google auth error:", err);
-      toast.error("Google authentication failed.");
+      toast.error(t("toasts.googleAuthFailed"));
     } finally {
       setAdminLoading(false);
     }
@@ -84,10 +86,10 @@ const Admin = () => {
   const handleAdminLogout = async () => {
     try {
       await logOut();
-      toast.success("Logged out from Admin Operations Center");
+      toast.success(t("toasts.adminLoggedOut"));
     } catch (err) {
       console.error("Admin logout error:", err);
-      toast.error("Failed to log out.");
+      toast.error(t("toasts.logoutFailed"));
     }
   };
 
@@ -108,9 +110,9 @@ const Admin = () => {
         const usersSnap = await getDocs(collection(db, "Users"));
         const studentList = [];
         usersSnap.forEach((docSnap) => {
+          // Skip the admin's own profile (the current viewer).
           if (docSnap.id === currentUser.uid) return;
           const data = docSnap.data();
-          if (data.email && data.email.toLowerCase() === ADMIN_EMAIL) return;
           studentList.push({ id: docSnap.id, uid: docSnap.id, ...data });
         });
         setStudents(studentList);
@@ -146,7 +148,7 @@ const Admin = () => {
         toast.success(`Loaded ${studentCount} student${studentCount === 1 ? "" : "s"} · ${msgCount} message${msgCount === 1 ? "" : "s"} · ${bugCount} log${bugCount === 1 ? "" : "s"}`);
       } catch (err) {
         console.error("Error fetching admin data:", err);
-        toast.error("Failed to load some admin data.");
+        toast.error(t("toasts.loadDataFailed"));
       } finally {
         setLoading(false);
       }
@@ -158,7 +160,7 @@ const Admin = () => {
   const handleCreateBugReport = async (e) => {
     e.preventDefault();
     if (!newBug.title.trim() || !newBug.description.trim()) {
-      toast.error("Please provide both a title and description.");
+      toast.error(t("toasts.provideTitleDesc"));
       return;
     }
     setSubmittingBug(true);
@@ -169,16 +171,16 @@ const Admin = () => {
         priority: newBug.priority,
         status: "Open",
         createdAt: serverTimestamp(),
-        createdBy: currentUser?.email || ADMIN_EMAIL,
+        createdBy: currentUser?.email || "admin",
       };
       const docRef = await addDoc(collection(db, "BugReports"), bugData);
       setBugReports((prev) => [{ id: docRef.id, ...bugData, createdAt: new Date() }, ...prev]);
       setShowNewBugModal(false);
       setNewBug({ title: "", description: "", priority: "Medium" });
-      toast.success("System log saved.");
+      toast.success(t("toasts.logSaved"));
     } catch (err) {
       console.error("Error logging bug report:", err);
-      toast.error("Failed to save the log.");
+      toast.error(t("toasts.saveLogFailed"));
     } finally {
       setSubmittingBug(false);
     }
@@ -207,7 +209,7 @@ const Admin = () => {
 
   const exportStudentsCSV = () => {
     if (students.length === 0) {
-      toast.error("No student data to export.");
+      toast.error(t("toasts.noStudentData"));
       return;
     }
     const headers = "Name,Email,UID,Total Points,Streak,Badges Count\n";
@@ -224,7 +226,7 @@ const Admin = () => {
     a.download = `Learntopia_Students_${new Date().toISOString().split("T")[0]}.csv`;
     a.click();
     URL.revokeObjectURL(url);
-    toast.success("Student list exported to CSV.");
+    toast.success(t("toasts.exportedCsv"));
   };
 
   const clock = useLiveClock();
