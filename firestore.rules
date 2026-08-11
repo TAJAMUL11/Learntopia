@@ -118,6 +118,15 @@ service cloud.firestore {
         allow delete: if isOwner(userId);
         allow create, update: if isOwner(userId) && isValidEnrollment();
       }
+
+      // --- Gamification state (XP, badges, streak) ------------------------
+      // Private, owner-only data behind the XP/level/badge UI. Holds no PII and
+      // never feeds the leaderboard (that uses the validated totalPoints), so
+      // owner read/write is sufficient. Without this match the subcollection
+      // fell through to default-deny, silently blocking every XP/badge save.
+      match /data/{docId} {
+        allow read, write: if isOwner(userId);
+      }
     }
 
     // --- Quiz Leaderboards -----------------------------------------------

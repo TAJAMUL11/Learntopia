@@ -1,9 +1,9 @@
+// Only fully-translated languages are exposed in the dropdown. French, German
+// and Arabic translations exist in the data but are hidden until each is
+// completed end-to-end — add them back here one at a time as they're finished.
 export const LANGUAGES = [
   { code: 'en', name: 'English', flag: '🇺🇸', dir: 'ltr' },
   { code: 'es', name: 'Español', flag: '🇪🇸', dir: 'ltr' },
-  { code: 'fr', name: 'Français', flag: '🇫🇷', dir: 'ltr' },
-  { code: 'de', name: 'Deutsch', flag: '🇩🇪', dir: 'ltr' },
-  { code: 'ar', name: 'العربية', flag: '🇦🇪', dir: 'rtl' },
 ];
 
 export const translations = {

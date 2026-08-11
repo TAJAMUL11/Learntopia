@@ -424,7 +424,7 @@ const Dashboard = () => {
           isOpen={!!courseToUnenroll} 
           onClose={() => setCourseToUnenroll(null)} 
           title={t("dashboard.unenrollModalTitle")}
-          onAction={handleUnenroll}
+          onAction={handleUnenrollConfirm}
           actionText={t("dashboard.unenrollBtn")}
           actionVariant="danger"
           loading={unenrollLoading}

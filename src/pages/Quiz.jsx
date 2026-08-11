@@ -1,9 +1,10 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Link, useBlocker } from "react-router-dom";
 import { toast } from "react-toastify";
 import { db } from "../firebase/firebase";
 import { collection, addDoc, getDocs, doc, updateDoc, increment, setDoc } from "firebase/firestore";
 import { quizzes } from "../data/quizData";
+import { getLocalizedQuiz } from "../utils/localizationUtils";
 import { useAuth } from "../context/AuthContext";
 import { useSound } from "../context/SoundContext";
 import { useLanguage } from "../context/LanguageContext";
@@ -18,6 +19,9 @@ import { Skeleton } from "../Components/ui/Skeleton";
 const Quiz = () => {
   const { playClick, playCorrect, playIncorrect, playLevelUp, playTimerTick, playTimerUrgent } = useSound();
   const { t } = useLanguage();
+
+  // Localize quiz metadata + questions/options for the active language.
+  const localizedQuizzes = useMemo(() => quizzes.map((q) => getLocalizedQuiz(q, t)), [t]);
 
   // Core game state
   const [screen, setScreen] = useState("selection"); // 'selection' | 'active' | 'results'
@@ -251,7 +255,7 @@ const Quiz = () => {
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {quizzes.map((quiz) => {
+            {localizedQuizzes.map((quiz) => {
               const attempted = !loadingScores && highScores[quiz.id] !== undefined;
               return (
                 <Card
