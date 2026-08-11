@@ -105,8 +105,25 @@ export const LanguageProvider = ({ children }) => {
     return result;
   };
 
+  // Return the RAW translated value for a key path (array/object/string), with
+  // English fallback. Used for structured content like the Privacy/Terms/Docs
+  // section lists, which t() (string-only) can't return.
+  const tRaw = (path) => {
+    const keys = (path || '').split('.');
+    const lookup = (dict) => {
+      let node = dict;
+      for (const key of keys) {
+        if (node && node[key] !== undefined) node = node[key];
+        else return undefined;
+      }
+      return node;
+    };
+    const active = lookup(mergedTranslations[currentLang]);
+    return active !== undefined ? active : lookup(mergedTranslations['en']);
+  };
+
   return (
-    <LanguageContext.Provider value={{ currentLang, setLanguage, languages: LANGUAGES, activeLangObj, isRTL, t }}>
+    <LanguageContext.Provider value={{ currentLang, setLanguage, languages: LANGUAGES, activeLangObj, isRTL, t, tRaw }}>
       {children}
     </LanguageContext.Provider>
   );
