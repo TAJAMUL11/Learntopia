@@ -1,5 +1,3 @@
-import React from "react";
-
 /**
  * BotAvatar — Custom vector SVG robot avatars for AI Tutors.
  * Provides unique, kid-friendly, colorful vector designs for each tutor persona:

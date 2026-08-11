@@ -11,6 +11,7 @@ import { useLanguage } from "../context/LanguageContext";
 import Card from "./ui/Card";
 import Button from "./ui/Button";
 import Icon from "./ui/Icon";
+import Modal from "./ui/Modal";
 import EmptyState from "./ui/EmptyState";
 import { Skeleton } from "./ui/Skeleton";
 import { getLocalizedQuiz } from "../utils/localizationUtils";
