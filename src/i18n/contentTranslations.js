@@ -786,6 +786,74 @@ export const contentTranslations = {
             ]
           }
         ]
+      },
+      "5": {
+        title: "Maravillas Web: HTML y CSS",
+        desc: "Domina los lenguajes de marcado y estilo que dan vida a internet.",
+        category: "Ciencia",
+        difficulty: "Principiante",
+        modules: [
+          {
+            title: "Módulo 1: Estructura HTML",
+            desc: "El esqueleto de cada sitio web.",
+            contentSections: [
+              { title: "Etiquetas y Bloques de Construcción", content: "¡HTML (Lenguaje de Marcado de Hipertexto) usa etiquetas envueltas en corchetes angulares como `<h1>` para Encabezados, `<p>` para Párrafos y `<a>` para Enlaces!" },
+              { title: "Resumen del Módulo 1", content: "• HTML = estructura/esqueleto\n• ¡`<h1>` = encabezado más grande, `<p>` = párrafo!" }
+            ],
+            exercises: [
+              { question: "¿Qué proporciona HTML a una página web?", options: ["Colores y estilos", "La estructura básica (esqueleto)", "Almacenamiento en base de datos", "El backend del servidor"] },
+              { question: "Los nombres de las etiquetas HTML van entre corchetes angulares como <p>." },
+              { question: "La etiqueta usada para el texto de párrafo en HTML es ___.", answer: "<p>" },
+              { question: "Relaciona las etiquetas HTML con su propósito:", pairs: [ { term: "<h1>", definition: "Encabezado principal" }, { term: "<p>", definition: "Texto de párrafo" }, { term: "<a>", definition: "Hipervínculo" }, { term: "<img>", definition: "Etiqueta de imagen" } ] },
+              { question: "¿Qué etiqueta produce el encabezado más grande?", options: ["<p>", "<h1>", "<h6>", "<div>"] }
+            ]
+          },
+          {
+            title: "Módulo 2: Estilo con CSS",
+            desc: "Añade colores, fuentes y belleza.",
+            contentSections: [
+              { title: "La Ropa sobre el Esqueleto", content: "CSS (Hojas de Estilo en Cascada) controla cómo se ve el HTML. Seleccionas elementos y añades estilos: `color: purple; font-size: 20px; background-color: black;`." },
+              { title: "Resumen del Módulo 2", content: "• CSS = estilo y diseño\n• ¡Usa `color` para el color del texto!" }
+            ],
+            exercises: [
+              { question: "¿Qué hace CSS?", options: ["Construye las etiquetas HTML básicas", "Da estilo a las páginas con colores y fuentes", "Guarda las cuentas de usuario", "Alimenta las bases de datos"] },
+              { question: "Los nombres de las propiedades CSS terminan con dos puntos (:)." },
+              { question: "En CSS, para poner el texto en rojo escribes color: ___;", answer: "red" },
+              { question: "Relaciona las propiedades CSS:", pairs: [ { term: "color", definition: "Color del texto" }, { term: "font-size", definition: "Tamaño del texto" }, { term: "background-color", definition: "Color de fondo" } ] },
+              { question: "¿Cómo cambias el color del texto en CSS?", options: ["text: red;", "color: red;", "font-color: red;", "paint: red;"] }
+            ]
+          },
+          {
+            title: "Módulo 3: El Modelo de Caja de CSS",
+            desc: "Domina el espaciado: Contenido, Relleno, Borde, Margen.",
+            contentSections: [
+              { title: "¡Todo es una Caja Rectangular!", content: "En CSS, cada elemento es una caja. El Modelo de Caja tiene 4 capas:\n1. Contenido (el texto/imagen)\n2. Relleno (Padding) (espacio DENTRO del borde)\n3. Borde (el contorno)\n4. Margen (Margin) (espacio FUERA del borde)" },
+              { title: "Resumen del Módulo 3", content: "• Relleno (Padding) = espaciado interior\n• ¡Margen (Margin) = espaciado exterior!" }
+            ],
+            exercises: [
+              { question: "En el Modelo de Caja de CSS, ¿qué es el espacio DENTRO del borde?", options: ["Margen (Margin)", "Relleno (Padding)", "Contenido (Content)", "Contorno (Outline)"] },
+              { question: "El margen (margin) crea espacio FUERA del borde del elemento." },
+              { question: "El espacio dentro de un elemento, entre el contenido y el borde, se llama ___ (en inglés).", answer: "padding" },
+              { question: "Relaciona las capas del Modelo de Caja:", pairs: [ { term: "Contenido", definition: "Texto o imagen dentro" }, { term: "Relleno (Padding)", definition: "Espacio dentro del borde" }, { term: "Borde", definition: "Línea que rodea el relleno" }, { term: "Margen (Margin)", definition: "Espacio fuera del borde" } ] },
+              { question: "¿Cómo se llama el espacio FUERA del borde?", options: ["Margen (Margin)", "Relleno (Padding)", "Contenido (Content)", "Contorno (Outline)"] }
+            ]
+          },
+          {
+            title: "Módulo 4: Despliegue y Alojamiento Web",
+            desc: "Comparte tu sitio con el mundo.",
+            contentSections: [
+              { title: "Poner tu Sitio en Línea", content: "¡Para que cualquiera pueda visitar tu sitio, subes tus archivos HTML y CSS a un Servidor (alojamiento web). El servidor te da un enlace URL (como misitio.com)!" },
+              { title: "Resumen del Módulo 4", content: "• Despliegue = publicar el sitio en vivo\n• ¡Servidor = computadora de alojamiento web 24/7!" }
+            ],
+            exercises: [
+              { question: "¿Qué es un servidor web?", options: ["Un camarero", "Una computadora que permanece en línea 24/7 alojando archivos", "Un archivo CSS", "Un navegador"] },
+              { question: "Desplegar un sitio web significa ponerlo en un servidor para que el mundo pueda visitarlo." },
+              { question: "La dirección web que la gente escribe para visitar tu sitio se llama ___.", answer: "url" },
+              { question: "Relaciona los términos de alojamiento:", pairs: [ { term: "Servidor", definition: "Computadora en línea 24/7" }, { term: "URL", definition: "Dirección web" }, { term: "Desplegar", definition: "Publicar el código en vivo" } ] },
+              { question: "¿Qué escriben los visitantes para acceder a tu sitio web?", options: ["Una URL", "Una memoria USB", "Una contraseña", "Un archivo de texto"] }
+            ]
+          }
+        ]
       }
     }
   },
