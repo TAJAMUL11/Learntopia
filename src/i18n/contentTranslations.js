@@ -185,7 +185,6 @@ export const contentTranslations = {
       ],
     },
     toasts: {
-      adminDetected: "Administrator account detected. Please sign in via the Admin Portal at /admin.",
       loginSuccess: "Successfully logged in",
       loginGoogleSuccess: "Successfully logged in with Google",
       signupSuccess: "Account created successfully",
@@ -415,7 +414,6 @@ export const contentTranslations = {
       ],
     },
     toasts: {
-      adminDetected: "Cuenta de administrador detectada. Inicia sesión a través del Portal de Administración en /admin.",
       loginSuccess: "Sesión iniciada correctamente",
       loginGoogleSuccess: "Sesión iniciada con Google correctamente",
       signupSuccess: "Cuenta creada correctamente",

@@ -61,7 +61,6 @@ The platform is designed to be fast, accessible, and mobile-friendly, with authe
 | **Course Controls** | Unenroll, resume, or reset completed courses directly from the dashboard. |
 | **Google OAuth** | One-tap sign-in with Google alongside standard email/password authentication. |
 | **Smart Auth Guidance** | Interactive account guidance modals and seamless email pre-filling when transitioning between `/login` and `/signUp`. |
-| **Admin Operations Portal** | Fully isolated `/admin` shell with dedicated `AdminLayout` (no student Navbar/Footer), executive top bar with live clock, one-tap Google Auth, single-email enforcement, and `[ ADMIN ]` badge. |
 | **Firestore Security Rules** | Server-side rules enforce per-user data isolation. Leaderboard exposes name and score only — never private data. |
 | **SEO & Meta** | Canonical links, Open Graph, JSON-LD schema, geographic meta, and custom favicon/meta image on every page. |
 | **Fully Responsive** | Mobile, tablet, and desktop layouts. Dynamic viewport height and custom overscroll colours for native-feel scrolling. |
@@ -172,9 +171,6 @@ VITE_APP_ID=
 
 # Google Gemini — required for the AI Tutor chat.
 VITE_GEMINI_API_KEY=
-
-# Owner email for the hidden /admin portal (optional; used only to redirect the owner).
-VITE_ADMIN_EMAIL=
 ```
 
 All variables use the `VITE_` prefix so Vite exposes them to the client build.

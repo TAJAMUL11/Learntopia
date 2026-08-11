@@ -19,7 +19,7 @@ import signUpImage from "../assets/Icons/auth-image.jpg";
 const SignUp = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { googleSignIn, currentUser, logOut } = useAuth();
+  const { googleSignIn, currentUser } = useAuth();
   const { playLevelUp, playIncorrect } = useSound();
   const { t } = useLanguage();
 
@@ -92,33 +92,14 @@ const SignUp = () => {
     }
   };
 
-  const ADMIN_EMAIL = (import.meta.env.VITE_ADMIN_EMAIL || "thetj4054@gmail.com").toLowerCase();
-
   const handleRegister = async (e) => {
     e.preventDefault();
-
-    if (userEmail.trim().toLowerCase() === ADMIN_EMAIL) {
-      playIncorrect();
-      toast.warning(t("toasts.adminDetected"), { autoClose: 4000 });
-      setUserPassword("");
-      navigate("/admin");
-      return;
-    }
 
     setLoading(true);
     try {
       await createUserWithEmailAndPassword(auth, userEmail, userPassword);
       const user = auth.currentUser;
       if (user) {
-        if (user.email && user.email.toLowerCase() === ADMIN_EMAIL) {
-          await logOut();
-          playIncorrect();
-          toast.warning(t("toasts.adminDetected"), { autoClose: 4000 });
-          setUserPassword("");
-          navigate("/admin");
-          return;
-        }
-
         const today = new Date();
         const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
         await setDoc(doc(db, "Users", user.uid), {
@@ -166,13 +147,6 @@ const SignUp = () => {
   const handleGoogleSignIn = async () => {
     try {
       const user = await googleSignIn();
-      if (user && user.email && user.email.toLowerCase() === ADMIN_EMAIL) {
-        await logOut();
-        playIncorrect();
-        toast.warning(t("toasts.adminDetected"), { autoClose: 4000 });
-        navigate("/admin");
-        return;
-      }
       if (user) {
         await handlePendingQuizResult(user, user.displayName);
       }

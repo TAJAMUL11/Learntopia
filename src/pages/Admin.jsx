@@ -23,8 +23,6 @@ const useLiveClock = () => {
   return now;
 };
 
-const ADMIN_EMAIL = (import.meta.env.VITE_ADMIN_EMAIL || "thetj4054@gmail.com").toLowerCase();
-
 const NAV_ITEMS = [
   { id: "overview", label: "Overview", icon: "bar-chart" },
   { id: "students", label: "Students", icon: "users" },
@@ -64,7 +62,9 @@ const Admin = () => {
     setAdminLoading(true);
     try {
       const user = await googleSignIn();
-      if (!user || !user.email || user.email.toLowerCase() !== ADMIN_EMAIL) {
+      // Authority is the server-set admin claim only — no email compared client-side.
+      const tokenResult = user && (await user.getIdTokenResult());
+      if (!tokenResult || tokenResult.claims.admin !== true) {
         await logOut();
         playIncorrect();
         toast.error(t("toasts.accessDenied"), { autoClose: 4000 });
@@ -110,9 +110,9 @@ const Admin = () => {
         const usersSnap = await getDocs(collection(db, "Users"));
         const studentList = [];
         usersSnap.forEach((docSnap) => {
+          // Skip the admin's own profile (the current viewer).
           if (docSnap.id === currentUser.uid) return;
           const data = docSnap.data();
-          if (data.email && data.email.toLowerCase() === ADMIN_EMAIL) return;
           studentList.push({ id: docSnap.id, uid: docSnap.id, ...data });
         });
         setStudents(studentList);
@@ -171,7 +171,7 @@ const Admin = () => {
         priority: newBug.priority,
         status: "Open",
         createdAt: serverTimestamp(),
-        createdBy: currentUser?.email || ADMIN_EMAIL,
+        createdBy: currentUser?.email || "admin",
       };
       const docRef = await addDoc(collection(db, "BugReports"), bugData);
       setBugReports((prev) => [{ id: docRef.id, ...bugData, createdAt: new Date() }, ...prev]);

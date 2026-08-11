@@ -14,8 +14,6 @@ export function useAuth() {
   return useContext(AuthContext);
 }
 
-const ADMIN_EMAIL = (import.meta.env.VITE_ADMIN_EMAIL || "thetj4054@gmail.com").toLowerCase();
-
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -27,8 +25,10 @@ export function AuthProvider({ children }) {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
       
-      const isConfiguredAdmin = user.email && user.email.toLowerCase() === ADMIN_EMAIL;
-      if (isConfiguredAdmin) {
+      // The owner/admin never gets a student profile. Admin authority is the
+      // server-set custom claim only — no email is checked or stored client-side.
+      const tokenResult = await user.getIdTokenResult();
+      if (tokenResult.claims.admin === true) {
         return user;
       }
 
@@ -69,15 +69,14 @@ export function AuthProvider({ children }) {
         return;
       }
 
-      const isConfiguredAdmin = user.email && user.email.toLowerCase() === ADMIN_EMAIL;
-      let admin = isConfiguredAdmin;
-      if (!admin) {
-        try {
-          const tokenResult = await user.getIdTokenResult();
-          admin = tokenResult.claims.admin === true;
-        } catch (err) {
-          console.error("Error reading auth claims:", err);
-        }
+      // Admin authority comes solely from the server-set custom claim — no email
+      // appears in the client bundle.
+      let admin = false;
+      try {
+        const tokenResult = await user.getIdTokenResult();
+        admin = tokenResult.claims.admin === true;
+      } catch (err) {
+        console.error("Error reading auth claims:", err);
       }
       setIsAdmin(admin);
 
