@@ -13,7 +13,7 @@ import Button from "./ui/Button";
 import Icon from "./ui/Icon";
 import EmptyState from "./ui/EmptyState";
 import { Skeleton } from "./ui/Skeleton";
-import Modal from "./ui/Modal";
+import { getLocalizedQuiz } from "../utils/localizationUtils";
 
 // Student dashboard only. The owner/admin has a SEPARATE, hidden portal at
 // /admin (Admin.jsx) — admins are redirected there and never see this view.
@@ -73,11 +73,18 @@ const Dashboard = () => {
         quizSnap.forEach((docSnap) => {
           const data = docSnap.data();
           if (data.score) calculatedTotalPoints += data.score * 10;
-          if (data.quizTitle) {
-            best[data.quizTitle] = Math.max(best[data.quizTitle] || 0, data.score || 0);
+          const key = data.quizId || data.quizTitle;
+          if (key) {
+            if (!best[key] || (data.score || 0) > best[key].score) {
+              best[key] = {
+                quizId: data.quizId || null,
+                title: data.quizTitle || data.title || key,
+                score: data.score || 0,
+              };
+            }
           }
         });
-        setQuizScores(Object.entries(best).map(([title, score]) => ({ title, score })));
+        setQuizScores(Object.values(best));
 
         if (userSnap.exists()) {
           const uData = userSnap.data();
@@ -372,9 +379,11 @@ const Dashboard = () => {
               {quizScores.length > 0 ? (
                 <ul className="space-y-2.5">
                   {quizScores.map((q) => {
-                    const localizedTitle = t(`quizzesData.${q.quizId}.title`, q.title);
+                    const localizedTitle = q.quizId
+                      ? getLocalizedQuiz({ id: q.quizId, title: q.title }, t)?.title || q.title
+                      : q.title;
                     return (
-                      <li key={q.title} className="flex items-center justify-between gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5">
+                      <li key={q.quizId || q.title} className="flex items-center justify-between gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5">
                         <span className="min-w-0 truncate text-sm text-ink">{localizedTitle}</span>
                         <span className="flex-none rounded-lg bg-violet-500/15 px-2.5 py-1 text-xs font-bold tabular-nums text-violet-300">
                           {q.score} <span className="font-medium text-violet-400/80">best</span>
