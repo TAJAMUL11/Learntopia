@@ -20,7 +20,7 @@ jobs:
           echo "VITE_API_KEY=${{ secrets.VITE_API_KEY }}" >> .env
           echo "VITE_MESSAGING_SENDER_ID=${{ secrets.VITE_MESSAGING_SENDER_ID }}" >> .env
           echo "VITE_APP_ID=${{ secrets.VITE_APP_ID }}" >> .env
-          npm ci && npm run build
+          npm ci && npm run lint && npm run build
       # Deploy the PR preview via the official Firebase action (fast, reliable).
       # Omitting channelId makes the action create a per-PR preview channel and
       # comment the preview URL on the PR. Direct `npx firebase-tools` CLI in CI

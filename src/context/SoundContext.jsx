@@ -18,7 +18,7 @@ export const SoundProvider = ({ children }) => {
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(isMuted));
-    } catch {}
+    } catch { /* localStorage unavailable — ignore */ }
   }, [isMuted]);
 
   const toggleMute = useCallback(() => {

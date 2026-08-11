@@ -39,8 +39,6 @@ const CourseDetails = () => {
   const [activeTab, setActiveTab] = useState("overview");
 
   // Track answers for the current active module's exercises: { exerciseIndex: selectedOption }
-  const [currentAnswers, setCurrentAnswers] = useState({});
-  const [showErrors, setShowErrors] = useState(false);
   // Track whether user has completed the lesson phase for the active module
   const [lessonPhase, setLessonPhase] = useState(true);
 
@@ -120,12 +118,6 @@ const CourseDetails = () => {
     return doc(db, "Users", currentUser.uid, "enrolledCourses", course.id.toString());
   };
 
-  const handleSelectAnswer = (exerciseIndex, option) => {
-    if (saving) return;
-    setShowErrors(false);
-    setCurrentAnswers(prev => ({ ...prev, [exerciseIndex]: option }));
-  };
-
   const checkAnswersAndComplete = async (moduleIndex) => {
     if (saving) return;
     const ref = courseRef();
@@ -141,8 +133,6 @@ const CourseDetails = () => {
         { merge: true }
       );
       setCompletedModules(newCompleted);
-      setCurrentAnswers({});
-      setShowErrors(false);
       setLessonPhase(true);
       setExpandedIndex(newCompleted.length < total ? newCompleted.length : moduleIndex);
       
@@ -209,8 +199,6 @@ const CourseDetails = () => {
       setCompletedModules([]);
       setIsCompleted(false);
       setExpandedIndex(0);
-      setCurrentAnswers({});
-      setShowErrors(false);
       setShowResetModal(false);
       toast.success("Course reset! Good luck on your fresh start. 🌱");
     } catch (err) {
@@ -391,7 +379,7 @@ const CourseDetails = () => {
                     <p className="mt-1 text-sm font-semibold text-sky">{course.aiTutor?.role}</p>
                   </div>
                   <p className="mt-2 text-sm leading-relaxed text-ink-low">
-                    I am powered by AI and I'm here to help you master this course!
+                    I am powered by AI and I&rsquo;m here to help you master this course!
                   </p>
                   <Button variant="primary" className="mt-4 w-full gap-2 shadow-[0_0_15px_rgba(139,92,246,0.4)] hover:shadow-[0_0_25px_rgba(139,92,246,0.6)]" onClick={() => setShowAIDrawer(true)}>
                     <Icon name="message-circle" size={16} /> Ask {course.aiTutor?.name}
@@ -435,8 +423,6 @@ const CourseDetails = () => {
                       else {
                         setExpandedIndex(moduleIndex);
                         if (active) {
-                          setCurrentAnswers({});
-                          setShowErrors(false);
                           setLessonPhase(true);
                         }
                       }
@@ -582,8 +568,6 @@ const CourseDetails = () => {
             blocker.proceed();
           } else if (pendingTab) {
             setActiveTab(pendingTab);
-            setCurrentAnswers({});
-            setShowErrors(false);
           }
           setShowLeaveModal(false);
           setPendingTab(null);

@@ -1,11 +1,9 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signOut } from "firebase/auth";
-import { auth, db } from "../firebase/firebase";
+import { db } from "../firebase/firebase";
 import { collection, getDocs, addDoc, serverTimestamp, query, orderBy } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 import { useSound } from "../context/SoundContext";
-import { useLanguage } from "../context/LanguageContext";
 import Button from "../Components/ui/Button";
 import Icon from "../Components/ui/Icon";
 import Card from "../Components/ui/Card";
@@ -229,7 +227,6 @@ const Admin = () => {
     toast.success("Student list exported to CSV.");
   };
 
-  /* eslint-disable react-hooks/rules-of-hooks */
   const clock = useLiveClock();
   const timeStr = clock.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true });
   const dateStr = clock.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" });

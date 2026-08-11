@@ -18,9 +18,7 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, isCompleted = false, sav
   const [submitted, setSubmitted] = useState(false);
   const [showFeedback, setShowFeedback] = useState({});
   const [matchState, setMatchState] = useState({}); // Track match exercise state
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-
-  const { playClick, playCorrect, playIncorrect, playModuleComplete } = useSound();
+  const { playClick, playIncorrect, playModuleComplete } = useSound();
   const { t } = useLanguage();
 
   const totalQ = exercises.length;
@@ -138,7 +136,6 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, isCompleted = false, sav
     setShowFeedback({});
     setAnswers({});
     setMatchState({});
-    setCurrentQuestion(0);
   };
 
   const allAnswered = exercises.every((_, i) => {

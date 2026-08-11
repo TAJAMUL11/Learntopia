@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import Card from "./Card";
 import Icon from "./Icon";
 import Button from "./Button";
+import { useLanguage } from "../../context/LanguageContext";
 
 const Modal = ({ 
   isOpen, 
@@ -18,6 +19,7 @@ const Modal = ({
   actionDisabled = false,
   showFooter = true
 }) => {
+  const { t } = useLanguage();
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -66,7 +68,7 @@ const Modal = ({
         {shouldRenderFooter && (
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
             <Button variant="secondary" onClick={onClose} disabled={loading} className="w-full sm:w-auto">
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button 
               variant={actionVariant} 
