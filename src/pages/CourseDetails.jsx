@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate, useBlocker } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useGamification } from "../context/GamificationContext";
@@ -18,6 +18,7 @@ import Modal from "../Components/ui/Modal";
 import LessonPlayer from "../Components/LessonPlayer";
 import ExerciseEngine from "../Components/ExerciseEngine";
 import AIChatDrawer from "../Components/AIChatDrawer";
+import BotAvatar from "../Components/BotAvatar";
 
 const CourseDetails = () => {
   const { id } = useParams();
@@ -27,7 +28,11 @@ const CourseDetails = () => {
   const { playClick } = useSound();
   const { t } = useLanguage();
 
-  const [course, setCourse] = useState(null);
+  const course = useMemo(() => {
+    const c = COURSES.find((item) => item.id.toString() === id);
+    return c ? getLocalizedCourse(c, t) : null;
+  }, [id, t]);
+
   const [completedModules, setCompletedModules] = useState([]);
   const [isCompleted, setIsCompleted] = useState(false);
   const [expandedIndex, setExpandedIndex] = useState(0);
@@ -44,6 +49,11 @@ const CourseDetails = () => {
 
   const [showLeaveModal, setShowLeaveModal] = useState(false);
   const [pendingTab, setPendingTab] = useState(null);
+
+  const handleBackToCourses = () => {
+    playClick();
+    navigate("/courses");
+  };
 
   const blocker = useBlocker(
     ({ currentLocation, nextLocation }) =>
@@ -73,8 +83,6 @@ const CourseDetails = () => {
       navigate("/courses", { replace: true });
       return;
     }
-    const localized = getLocalizedCourse(c, t);
-    setCourse(localized);
 
     const load = async () => {
       const total = c.syllabus.length;
@@ -297,36 +305,48 @@ const CourseDetails = () => {
         </Card>
 
         {/* Tabs Navigation */}
-        <div className="mb-8 flex gap-2 border-b border-white/[0.08] pb-[1px]">
-          <button 
-            onClick={() => handleTabSwitch("overview")}
-            className={`px-5 py-3 text-sm font-bold transition-all relative ${
-              activeTab === "overview" 
-                ? "text-ink-hi" 
-                : "text-ink-low hover:text-ink-hi hover:bg-white/[0.02] rounded-t-lg"
-            }`}
+        <div className="mb-8 flex items-center justify-between border-b border-white/[0.08] pb-[1px]">
+          <div className="flex gap-2">
+            <button 
+              onClick={() => handleTabSwitch("overview")}
+              className={`px-5 py-3 text-sm font-bold transition-all relative ${
+                activeTab === "overview" 
+                  ? "text-ink-hi" 
+                  : "text-ink-low hover:text-ink-hi hover:bg-white/[0.02] rounded-t-lg"
+              }`}
+            >
+              {t("courseDetails.overview")}
+              {activeTab === "overview" && (
+                <div className="absolute bottom-[-1px] left-0 right-0 h-[2px] bg-violet-500 rounded-t-full shadow-[0_0_10px_rgba(139,92,246,0.5)]" />
+              )}
+            </button>
+            <button 
+              onClick={() => handleTabSwitch("syllabus")}
+              className={`px-5 py-3 text-sm font-bold transition-all relative flex items-center gap-2 ${
+                activeTab === "syllabus" 
+                  ? "text-ink-hi" 
+                  : "text-ink-low hover:text-ink-hi hover:bg-white/[0.02] rounded-t-lg"
+              }`}
+            >
+              {t("courseDetails.curriculum")}
+              {activeTab === "syllabus" && (
+                <div className="absolute bottom-[-1px] left-0 right-0 h-[2px] bg-violet-500 rounded-t-full shadow-[0_0_10px_rgba(139,92,246,0.5)]" />
+              )}
+              {completedModules.length > 0 && !isCompleted && activeTab !== "syllabus" && (
+                 <span className="flex h-2 w-2 rounded-full bg-sky animate-pulse" />
+              )}
+            </button>
+          </div>
+
+          <Button
+            variant="secondary"
+            size="sm"
+            className="mb-1 gap-2 border-violet-500/30 text-xs font-semibold text-violet-300 hover:bg-violet-500/10 hover:text-white"
+            onClick={handleBackToCourses}
           >
-            {t("courseDetails.overview")}
-            {activeTab === "overview" && (
-              <div className="absolute bottom-[-1px] left-0 right-0 h-[2px] bg-violet-500 rounded-t-full shadow-[0_0_10px_rgba(139,92,246,0.5)]" />
-            )}
-          </button>
-          <button 
-            onClick={() => handleTabSwitch("syllabus")}
-            className={`px-5 py-3 text-sm font-bold transition-all relative flex items-center gap-2 ${
-              activeTab === "syllabus" 
-                ? "text-ink-hi" 
-                : "text-ink-low hover:text-ink-hi hover:bg-white/[0.02] rounded-t-lg"
-            }`}
-          >
-            {t("courseDetails.curriculum")}
-            {activeTab === "syllabus" && (
-              <div className="absolute bottom-[-1px] left-0 right-0 h-[2px] bg-violet-500 rounded-t-full shadow-[0_0_10px_rgba(139,92,246,0.5)]" />
-            )}
-            {completedModules.length > 0 && !isCompleted && activeTab !== "syllabus" && (
-               <span className="flex h-2 w-2 rounded-full bg-sky animate-pulse" />
-            )}
-          </button>
+            <Icon name="arrow-left" size={14} />
+            {t("courseDetails.backToCourses")}
+          </Button>
         </div>
 
         {/* Tab Content: OVERVIEW */}
@@ -364,25 +384,20 @@ const CourseDetails = () => {
                 <div className="absolute top-4 right-4 flex h-6 w-6 items-center justify-center rounded-full bg-violet-500/20">
                   <Icon name="cpu" size={14} className="text-violet-400" />
                 </div>
-                <h4 className="mb-5 text-xs font-bold uppercase tracking-[0.1em] text-violet-300">Your AI Tutor</h4>
+                <h4 className="mb-5 text-xs font-bold uppercase tracking-[0.1em] text-violet-300">
+                  {t("courseDetails.yourAiTutor")}
+                </h4>
                 <div className="flex flex-col items-center gap-4 text-center">
-                  <div className="relative">
-                    <div className="absolute -inset-2 rounded-full bg-gradient-to-br from-violet-500 to-sky opacity-60 blur-md animate-pulse" />
-                    <img 
-                      src={course.aiTutor?.avatar} 
-                      alt={course.aiTutor?.name} 
-                      className="relative h-24 w-24 rounded-full border-2 border-violet-500 object-cover" 
-                    />
-                  </div>
+                  <BotAvatar name={course.aiTutor?.name} size="lg" />
                   <div>
                     <h5 className="text-xl font-extrabold text-ink-hi">{course.aiTutor?.name || "AI Tutor"}</h5>
                     <p className="mt-1 text-sm font-semibold text-sky">{course.aiTutor?.role}</p>
                   </div>
                   <p className="mt-2 text-sm leading-relaxed text-ink-low">
-                    I am powered by AI and I&rsquo;m here to help you master this course!
+                    {t("courseDetails.aiTutorSub")}
                   </p>
                   <Button variant="primary" className="mt-4 w-full gap-2 shadow-[0_0_15px_rgba(139,92,246,0.4)] hover:shadow-[0_0_25px_rgba(139,92,246,0.6)]" onClick={() => setShowAIDrawer(true)}>
-                    <Icon name="message-circle" size={16} /> Ask {course.aiTutor?.name}
+                    <Icon name="message-circle" size={16} /> {t("courseDetails.askTutor", { name: course.aiTutor?.name })}
                   </Button>
                 </div>
               </Card>
@@ -395,11 +410,11 @@ const CourseDetails = () => {
           <div className="space-y-5 animate-fade-in">
             <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h3 className="text-2xl font-bold text-ink-hi">Course Modules</h3>
-                <p className="mt-1 text-sm text-ink-low">Complete all exercises in a module to unlock the next one.</p>
+                <h3 className="text-2xl font-bold text-ink-hi">{t("courseDetails.courseModules")}</h3>
+                <p className="mt-1 text-sm text-ink-low">{t("courseDetails.moduleUnlockHint")}</p>
               </div>
               <Button variant="secondary" size="sm" className="gap-2 shrink-0 border-violet-500/30 text-violet-300 hover:bg-violet-500/10" onClick={() => setShowAIDrawer(true)}>
-                <Icon name="help-circle" size={16} /> Need help? Ask AI
+                <Icon name="help-circle" size={16} /> {t("courseDetails.needHelpAskAi")}
               </Button>
             </div>
             
@@ -445,7 +460,7 @@ const CourseDetails = () => {
                     <div className="min-w-0 flex-grow">
                       <h3 className="text-lg font-bold text-ink-hi">{module.title}</h3>
                       <p className="mt-1 truncate text-sm text-ink-low">
-                        {locked ? "Complete the previous module to unlock" : module.desc}
+                        {locked ? t("courseDetails.completePreviousToUnlock") : module.desc}
                       </p>
                     </div>
                     {!locked && (

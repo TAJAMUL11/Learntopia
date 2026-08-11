@@ -77,7 +77,31 @@ export const getLocalizedCourse = (course, t) => {
     };
   });
 
-  return { ...course, title, desc, category, difficulty, syllabus };
+  const learningObjectives = (course.learningObjectives || []).map((obj, i) =>
+    resolve(`courseData.${cId}.learningObjectives.${i}`, obj)
+  );
+  const prerequisites = (course.prerequisites || []).map((req, i) =>
+    resolve(`courseData.${cId}.prerequisites.${i}`, req)
+  );
+  const aiTutor = course.aiTutor
+    ? {
+        ...course.aiTutor,
+        name: resolve(`courseData.${cId}.aiTutor.name`, course.aiTutor.name),
+        role: resolve(`courseData.${cId}.aiTutor.role`, course.aiTutor.role),
+      }
+    : course.aiTutor;
+
+  return {
+    ...course,
+    title,
+    desc,
+    category,
+    difficulty,
+    learningObjectives,
+    prerequisites,
+    aiTutor,
+    syllabus,
+  };
 };
 
 export const getLocalizedQuiz = (quiz, t) => {

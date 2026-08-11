@@ -126,7 +126,14 @@ export const translations = {
       level: "Level",
       category: "Category",
       backToCourses: "Back to Courses",
-      module: "Module"
+      module: "Module",
+      yourAiTutor: "Your AI Tutor",
+      aiTutorSub: "I am powered by AI and I'm here to help you master this course!",
+      askTutor: "Ask {name}",
+      courseModules: "Course Modules",
+      moduleUnlockHint: "Complete all exercises in a module to unlock the next one.",
+      needHelpAskAi: "Need help? Ask AI",
+      completePreviousToUnlock: "Complete the previous module to unlock"
     },
     lessonPlayer: {
       story: "Story Time",
@@ -730,7 +737,14 @@ export const translations = {
       level: "Nivel",
       category: "Categoría",
       backToCourses: "Volver a Cursos",
-      module: "Módulo"
+      module: "Módulo",
+      yourAiTutor: "Tu Tutor IA",
+      aiTutorSub: "¡Tengo tecnología de IA y estoy aquí para ayudarte a dominar este curso!",
+      askTutor: "Preguntar a {name}",
+      courseModules: "Módulos del Curso",
+      moduleUnlockHint: "Completa todos los ejercicios de un módulo para desbloquear el siguiente.",
+      needHelpAskAi: "¿Necesitas ayuda? Pregunta a la IA",
+      completePreviousToUnlock: "Completa el módulo anterior para desbloquear"
     },
     lessonPlayer: {
       story: "Hora de Historia",

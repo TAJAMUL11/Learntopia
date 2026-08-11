@@ -3,12 +3,12 @@
  * for the AI Tutor chat feature. Never exposes the API key publicly.
  */
 
-const getApiKey = () => import.meta.env.VITE_GEMINI_API_KEY || "";
+const getApiKey = () => (import.meta.env.VITE_GEMINI_API_KEY || "").trim();
 
 const MODELS = [
-  "gemini-flash-latest",
   "gemini-3.6-flash",
   "gemini-3.5-flash",
+  "gemini-3.1-flash-lite",
 ];
 
 /**
@@ -53,7 +53,9 @@ export const sendMessageToGemini = async (chatHistory, userMessage, systemPrompt
   const apiKey = getApiKey();
   if (!apiKey) {
     console.error("VITE_GEMINI_API_KEY is missing in import.meta.env");
-    throw new Error("Gemini API key is not configured. Please add VITE_GEMINI_API_KEY to your .env file.");
+    throw new Error(
+      "Gemini API key is not configured. Please add VITE_GEMINI_API_KEY to your .env file and restart your Vite dev server."
+    );
   }
 
   // Build the contents array for the Gemini API
@@ -92,7 +94,7 @@ export const sendMessageToGemini = async (chatHistory, userMessage, systemPrompt
 
   for (const modelName of MODELS) {
     try {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+      const url = `https://generativelanguage.googleapis.com/v1/models/${modelName}:generateContent?key=${apiKey}`;
       const response = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
