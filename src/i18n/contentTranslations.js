@@ -854,6 +854,74 @@ export const contentTranslations = {
             ]
           }
         ]
+      },
+      "6": {
+        title: "Arte Digital: Dibuja en tu Pantalla",
+        desc: "Da rienda suelta a tu creatividad con técnicas de arte digital.",
+        category: "Artes",
+        difficulty: "Todos los Niveles",
+        modules: [
+          {
+            title: "Módulo 1: Capas y Arte No Destructivo",
+            desc: "Dibuja sin miedo a arruinar tu trabajo.",
+            contentSections: [
+              { title: "Láminas de Vidrio Transparentes", content: "Las capas digitales son como láminas transparentes apiladas. Dibuja bocetos en la Capa 1, el entintado en la Capa 2, los colores en la Capa 3. ¡Si borras los colores de la Capa 3, tu boceto de debajo queda 100% a salvo!" },
+              { title: "Resumen del Módulo 1", content: "• Capas = láminas transparentes apiladas\n• ¡No destructivo = el boceto está a salvo mientras coloreas!" }
+            ],
+            exercises: [
+              { question: "¿A qué se parecen las capas del arte digital?", options: ["Rocas pesadas", "Láminas de vidrio transparentes apiladas", "Una sola hoja de papel", "Un pincel"] },
+              { question: "Borrar en la Capa 2 elimina tu dibujo en la Capa 1." },
+              { question: "Dibujar en capas separadas evita arruinar tu boceto; a esto se le llama arte no ___.", answer: "destructivo" },
+              { question: "Relaciona los tipos de capa:", pairs: [ { term: "Capa de Boceto", definition: "Guía inicial en bruto" }, { term: "Capa de Entintado", definition: "Contorno limpio" }, { term: "Capa de Color", definition: "Rellenos bajo el entintado" } ] },
+              { question: "¿Por qué usan capas los artistas digitales?", options: ["Para ir más lento", "Para colorear sin destruir el boceto", "Para bloquear el software", "Para desperdiciar espacio"] }
+            ]
+          },
+          {
+            title: "Módulo 2: Teoría del Color y Paletas",
+            desc: "¡Elige colores que resalten!",
+            contentSections: [
+              { title: "Colores Complementarios", content: "Los colores opuestos en la Rueda de Color (Azul y Naranja, Rojo y Verde, Amarillo y Morado) son Complementarios. ¡Colocados uno al lado del otro, crean un contraste vibrante!" },
+              { title: "Resumen del Módulo 2", content: "• Colores opuestos en la rueda = Complementarios\n• ¡El alto contraste hace que el arte resalte!" }
+            ],
+            exercises: [
+              { question: "Los colores opuestos en la rueda de color se llaman:", options: ["Análogos", "Complementarios", "Primarios", "Monocromáticos"] },
+              { question: "El azul y el naranja son colores complementarios." },
+              { question: "Los colores complementarios crean el máximo ___ visual.", answer: "contraste" },
+              { question: "Relaciona los pares de colores complementarios:", pairs: [ { term: "Azul", definition: "Naranja" }, { term: "Rojo", definition: "Verde" }, { term: "Amarillo", definition: "Morado" } ] },
+              { question: "¿Qué efecto crean los colores complementarios cuando se colocan uno al lado del otro?", options: ["Aburrimiento", "Máximo contraste y emoción", "Un borrón gris", "Invisibilidad"] }
+            ]
+          },
+          {
+            title: "Módulo 3: Composición y Regla de los Tercios",
+            desc: "Organiza los elementos como un director profesional.",
+            contentSections: [
+              { title: "El Secreto de la Cuadrícula 3x3", content: "¡No pongas a tu personaje justo en el medio! Divide tu lienzo en una cuadrícula de 3x3. Colocar tu sujeto principal en las líneas de intersección de la cuadrícula crea una composición dinámica y cinematográfica." },
+              { title: "Resumen del Módulo 3", content: "• La Regla de los Tercios usa una cuadrícula de 3x3\n• ¡Las intersecciones crean puntos focales atractivos!" }
+            ],
+            exercises: [
+              { question: "¿Qué cuadrícula usa la Regla de los Tercios?", options: ["Cuadrícula 2x2", "Cuadrícula 3x3", "Cuadrícula 10x10", "Sin cuadrícula"] },
+              { question: "Colocar un personaje justo en el centro es siempre la opción más cinematográfica." },
+              { question: "En la Regla de los Tercios, coloca tu sujeto en las ___ de la cuadrícula.", answer: "intersecciones" },
+              { question: "Relaciona los términos de composición:", pairs: [ { term: "Regla de los Tercios", definition: "Cuadrícula de alineación 3x3" }, { term: "Punto Focal", definition: "Lugar principal donde miran los ojos" }, { term: "Lienzo", definition: "Área de dibujo digital" } ] },
+              { question: "¿Dónde debes colocar tu sujeto usando la Regla de los Tercios?", options: ["Siempre en el centro exacto", "Fuera del lienzo", "En las intersecciones de las líneas de la cuadrícula", "Solo en la esquina inferior izquierda"] }
+            ]
+          },
+          {
+            title: "Módulo 4: Renderizado e Iluminación",
+            desc: "Haz que los dibujos planos parezcan 3D con luz y sombra.",
+            contentSections: [
+              { title: "Brillos y Sombras", content: "El renderizado consiste en añadir luz y sombra. ¡El lado que mira hacia la fuente de luz recibe un 'Brillo' claro. El lado opuesto recibe una 'Sombra' profunda!" },
+              { title: "Resumen del Módulo 4", content: "• El renderizado añade profundidad 3D\n• ¡Lado iluminado = Brillo, lado oscuro = Sombra!" }
+            ],
+            exercises: [
+              { question: "¿Qué es el renderizado en el arte digital?", options: ["Añadir luz y sombra para dar profundidad 3D", "Borrar el boceto", "Añadir una firma", "Guardar como JPEG"] },
+              { question: "El lado de un objeto que mira hacia el sol recibe una sombra." },
+              { question: "El punto luminoso donde la luz incide directamente sobre un objeto se llama ___.", answer: "brillo" },
+              { question: "Relaciona los términos de iluminación:", pairs: [ { term: "Fuente de Luz", definition: "De dónde viene la luz (sol/lámpara)" }, { term: "Brillo", definition: "El punto más luminoso del objeto" }, { term: "Sombra", definition: "Zona oscura alejada de la luz" } ] },
+              { question: "¿Qué zona recibe un Brillo?", options: ["El lado opuesto a la luz", "El lado que mira directamente hacia la luz", "Siempre la parte inferior", "En ningún lugar"] }
+            ]
+          }
+        ]
       }
     }
   },
