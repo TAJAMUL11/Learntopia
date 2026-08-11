@@ -619,6 +619,14 @@ export const contentTranslations = {
         desc: "Aprende a programar creando juegos reales. Perfecto para principiantes de 7 a 14 años. ¡Sumérgete en los fundamentos de Python y la mecánica de los juegos!",
         category: "Programación",
         difficulty: "Principiante",
+        learningObjectives: [
+          "Comprender los conceptos clave de programación",
+          "Escribir scripts utilizando la sintaxis de Python",
+          "Usar bucles, variables y lógica",
+          "Construir un juego de texto totalmente jugable"
+        ],
+        prerequisites: ["Una computadora con acceso a internet", "Habilidades básicas de mecanografía"],
+        aiTutor: { name: "Robo-Py", role: "Compañero de Código IA" },
         modules: [
           {
             title: "Módulo 1: ¡Hola Python!",
@@ -707,6 +715,13 @@ export const contentTranslations = {
         desc: "Desarrolla el pensamiento crítico resolviendo acertijos, identificando patrones y dominando la lógica.",
         category: "Matemáticas",
         difficulty: "Todos los Niveles",
+        learningObjectives: [
+          "Dominar aritmética rápida y trucos mentales",
+          "Resolver problemas de palabras de la vida real",
+          "Entender patrones, lógica y secuencias"
+        ],
+        prerequisites: ["Matemáticas básicas de primaria", "Papel y lápiz para practicar"],
+        aiTutor: { name: "Count AI-Cula", role: "Genio Matemático IA" },
         modules: [
           {
             title: "Módulo 1: Patrones Numéricos",
@@ -789,6 +804,14 @@ export const contentTranslations = {
         desc: "Desarrolla la educación financiera desde pequeño. Aprende sobre presupuestos, interés compuesto, banca e inversión inteligente.",
         category: "Finanzas",
         difficulty: "Principiante",
+        learningObjectives: [
+          "Comprender la historia del dinero",
+          "Crear un presupuesto personal",
+          "Entender el interés compuesto",
+          "Aprender los conceptos básicos de inversión"
+        ],
+        prerequisites: ["Habilidades matemáticas básicas (porcentajes, suma)"],
+        aiTutor: { name: "Penny Bot", role: "Asesor Financiero IA" },
         modules: [
           {
             title: "Módulo 1: ¿Qué es el Dinero?",
@@ -862,6 +885,14 @@ export const contentTranslations = {
         desc: "Domina la marca, la narración, la creación de contenido y la seguridad en línea.",
         category: "Marketing",
         difficulty: "Intermedio",
+        learningObjectives: [
+          "Construir una identidad de marca sólida",
+          "Estructurar narrativas atractivas",
+          "Entender la ciudadanía digital",
+          "Diseñar una campaña simulada"
+        ],
+        prerequisites: ["Familiaridad con redes sociales"],
+        aiTutor: { name: "Viral AI", role: "Estratega de Marketing IA" },
         modules: [
           {
             title: "Módulo 1: Marca e Identidad",
@@ -930,6 +961,14 @@ export const contentTranslations = {
         desc: "Domina los lenguajes de marcado y estilo que dan vida a internet.",
         category: "Ciencia",
         difficulty: "Principiante",
+        learningObjectives: [
+          "Escribir marcado semántico en HTML5",
+          "Estilizar páginas con CSS moderno",
+          "Entender el modelo de caja en CSS",
+          "Publicar tu sitio web"
+        ],
+        prerequisites: ["Una computadora con navegador web"],
+        aiTutor: { name: "WebWeaver", role: "Maestro Frontend IA" },
         modules: [
           {
             title: "Módulo 1: Estructura HTML",
@@ -998,6 +1037,14 @@ export const contentTranslations = {
         desc: "Da rienda suelta a tu creatividad con técnicas de arte digital.",
         category: "Artes",
         difficulty: "Todos los Niveles",
+        learningObjectives: [
+          "Navegar en software de lienzo digital",
+          "Aplicar teoría de color avanzada",
+          "Estructurar poses dinámicas de personajes",
+          "Renderizar y pulir ilustraciones"
+        ],
+        prerequisites: ["Una tableta de dibujo digital"],
+        aiTutor: { name: "Pixel Bot", role: "Artista de Concepto IA" },
         modules: [
           {
             title: "Módulo 1: Capas y Arte No Destructivo",
