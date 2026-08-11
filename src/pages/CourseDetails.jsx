@@ -558,9 +558,9 @@ const CourseDetails = () => {
           setShowLeaveModal(false);
           setPendingTab(null);
         }}
-        title="Leave Syllabus?"
+        title={t("modals.leaveTitle")}
         icon="alert-triangle"
-        actionText="Leave"
+        actionText={t("modals.leaveAction")}
         actionVariant="danger"
         isDestructive={true}
         onAction={() => {
@@ -573,11 +573,11 @@ const CourseDetails = () => {
           setPendingTab(null);
         }}
       >
-        <p className="mb-4 text-ink-hi">Are you sure you want to leave the syllabus?</p>
+        <p className="mb-4 text-ink-hi">{t("modals.leaveBody")}</p>
         <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4 text-sm">
           <ul className="list-disc pl-5 space-y-1 text-ink-low">
-            <li>Any <strong className="text-white">unsubmitted answers</strong> for your current module will be reset.</li>
-            <li>Modules you have <strong className="text-state-success">already completed</strong> are securely saved and will not be lost.</li>
+            <li>{t("modals.leaveResetPre")}<strong className="text-white">{t("modals.leaveResetBold")}</strong>{t("modals.leaveResetPost")}</li>
+            <li>{t("modals.leaveSavedPre")}<strong className="text-state-success">{t("modals.leaveSavedBold")}</strong>{t("modals.leaveSavedPost")}</li>
           </ul>
         </div>
       </Modal>
@@ -585,19 +585,19 @@ const CourseDetails = () => {
       <Modal
         isOpen={showResetModal}
         onClose={() => setShowResetModal(false)}
-        title="Start Again?"
+        title={t("modals.resetTitle")}
         icon="refresh-cw"
-        actionText="Yes, reset course"
+        actionText={t("modals.resetAction")}
         actionVariant="primary"
         onAction={resetCourse}
         loading={saving}
       >
-        <p className="mb-4 text-ink-hi">Are you sure you want to reset your progress and start this course from the beginning?</p>
+        <p className="mb-4 text-ink-hi">{t("modals.resetBody")}</p>
         <div className="rounded-xl border border-state-warning/20 bg-state-warning/10 p-4 text-sm">
           <div className="flex items-start gap-3 text-state-warning">
             <Icon name="alert-triangle" size={18} className="mt-0.5 flex-none" />
             <div className="leading-relaxed">
-              <span className="font-bold">Warning:</span> All your current checkmarks and completion timestamps will be permanently wiped out. This action cannot be undone.
+              <span className="font-bold">{t("modals.resetWarnLabel")}</span>{t("modals.resetWarnText")}
             </div>
           </div>
         </div>

@@ -202,8 +202,8 @@ const Dashboard = () => {
         <Card className="mx-auto w-full max-w-md p-8">
           <EmptyState
             icon="user"
-            title="No active profile"
-            description="Please log in to view your dashboard."
+            title={t("modals.dashNoProfileTitle")}
+            description={t("modals.dashNoProfileDesc")}
             action={<Button onClick={() => navigate("/login")}>{t("nav.login")}</Button>}
           />
         </Card>
