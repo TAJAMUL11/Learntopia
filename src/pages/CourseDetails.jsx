@@ -63,7 +63,7 @@ const CourseDetails = () => {
   useEffect(() => {
     if (authLoading) return;
     if (!currentUser) {
-      toast.info("Please log in to view course details.");
+      toast.info(t("toasts.loginToView"));
       navigate("/login", { state: { returnTo: `/course/${id}` }, replace: true });
       return;
     }
@@ -141,7 +141,7 @@ const CourseDetails = () => {
       toast.success(`Module complete! 🎉 +${xpEarned} XP!`);
     } catch (err) {
       console.error("Error saving progress:", err);
-      toast.error("Couldn't save your progress. Please try again.");
+      toast.error(t("toasts.saveProgressFailed"));
     } finally {
       setSaving(false);
     }
@@ -170,10 +170,10 @@ const CourseDetails = () => {
       }
       addXP(100, `Finished ${course?.title || "Course"}!`);
 
-      toast.success("Course completed! Amazing work! 🏆");
+      toast.success(t("toasts.courseCompleted"));
     } catch (err) {
       console.error("Error completing course:", err);
-      toast.error("Couldn't mark the course complete. Please try again.");
+      toast.error(t("toasts.markCompleteFailed"));
     } finally {
       setSaving(false);
     }
@@ -200,10 +200,10 @@ const CourseDetails = () => {
       setIsCompleted(false);
       setExpandedIndex(0);
       setShowResetModal(false);
-      toast.success("Course reset! Good luck on your fresh start. 🌱");
+      toast.success(t("toasts.courseReset"));
     } catch (err) {
       console.error("Error resetting course:", err);
-      toast.error("Couldn't reset the course. Please try again.");
+      toast.error(t("toasts.resetFailed"));
     } finally {
       setSaving(false);
     }

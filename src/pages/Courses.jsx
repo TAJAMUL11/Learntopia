@@ -44,7 +44,7 @@ const Courses = () => {
   const handleEnroll = async (course) => {
     if (!currentUser) {
       playClick();
-      toast.info("Please log in to enroll and view course details.");
+      toast.info(t("toasts.loginToEnroll"));
       navigate("/login", { state: { returnTo: `/course/${course.id}` } });
       return;
     }
@@ -82,7 +82,7 @@ const Courses = () => {
       }, 3500);
     } catch (err) {
       console.error("Enrollment error:", err);
-      toast.error("Failed to enroll. Please try again.");
+      toast.error(t("toasts.enrollFailed"));
     }
   };
 

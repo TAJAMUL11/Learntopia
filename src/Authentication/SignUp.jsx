@@ -85,7 +85,7 @@ const SignUp = () => {
             }, { merge: true });
           }
         }
-        toast.success("Saved your quiz score!");
+        toast.success(t("toasts.quizScoreSaved"));
       } catch (err) {
         console.error("Error saving pending quiz score:", err);
       }
@@ -99,7 +99,7 @@ const SignUp = () => {
 
     if (userEmail.trim().toLowerCase() === ADMIN_EMAIL) {
       playIncorrect();
-      toast.warning("Administrator account detected. Please sign in via the Admin Portal at /admin.", { autoClose: 4000 });
+      toast.warning(t("toasts.adminDetected"), { autoClose: 4000 });
       setUserPassword("");
       navigate("/admin");
       return;
@@ -113,7 +113,7 @@ const SignUp = () => {
         if (user.email && user.email.toLowerCase() === ADMIN_EMAIL) {
           await logOut();
           playIncorrect();
-          toast.warning("Administrator account detected. Please sign in via the Admin Portal at /admin.", { autoClose: 4000 });
+          toast.warning(t("toasts.adminDetected"), { autoClose: 4000 });
           setUserPassword("");
           navigate("/admin");
           return;
@@ -143,19 +143,19 @@ const SignUp = () => {
         await handlePendingQuizResult(user, userFName);
       }
       playLevelUp();
-      toast.success("Account created successfully");
+      toast.success(t("toasts.signupSuccess"));
       navigate(returnTo, { replace: true });
     } catch (err) {
       playIncorrect();
       if (err.code === "auth/email-already-in-use") {
         setAlreadyExistsEmail(userEmail);
-        toast.info("That email is already registered.", { autoClose: 3000 });
+        toast.info(t("toasts.emailInUse"), { autoClose: 3000 });
       } else if (err.code === "auth/invalid-email") {
-        toast.error("That email address looks incomplete.");
+        toast.error(t("toasts.invalidEmail"));
       } else if (err.code === "auth/weak-password") {
-        toast.error("Use a stronger password (at least 6 characters).");
+        toast.error(t("toasts.weakPassword"));
       } else {
-        toast.error("Couldn't create your account. Please try again.");
+        toast.error(t("toasts.signupFailed"));
       }
       setUserPassword("");
     } finally {
@@ -169,7 +169,7 @@ const SignUp = () => {
       if (user && user.email && user.email.toLowerCase() === ADMIN_EMAIL) {
         await logOut();
         playIncorrect();
-        toast.warning("Administrator account detected. Please sign in via the Admin Portal at /admin.", { autoClose: 4000 });
+        toast.warning(t("toasts.adminDetected"), { autoClose: 4000 });
         navigate("/admin");
         return;
       }
@@ -177,12 +177,12 @@ const SignUp = () => {
         await handlePendingQuizResult(user, user.displayName);
       }
       playLevelUp();
-      toast.success("Signed in with Google successfully");
+      toast.success(t("toasts.signupGoogleSuccess"));
       navigate(returnTo, { replace: true });
     } catch (err) {
       playIncorrect();
       console.error("Google sign-in error:", err);
-      toast.error("Google sign-in failed. Please try again.");
+      toast.error(t("toasts.googleFailed"));
     }
   };
 

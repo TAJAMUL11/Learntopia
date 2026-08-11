@@ -32,11 +32,11 @@ const Navbar = () => {
     try {
       await logOut();
       closeMenu();
-      toast.success("You've been logged out");
+      toast.success(t("toasts.loggedOut"));
       navigate("/");
     } catch (err) {
       console.error(err);
-      toast.error("Couldn't log you out. Please try again.");
+      toast.error(t("toasts.logoutFailedRetry"));
     }
   };
 
