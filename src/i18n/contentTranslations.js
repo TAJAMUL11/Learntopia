@@ -645,6 +645,79 @@ export const contentTranslations = {
             ]
           }
         ]
+      },
+      "3": {
+        title: "Dinero Inteligente: Niños y Efectivo",
+        desc: "Desarrolla la educación financiera desde pequeño. Aprende sobre presupuestos, interés compuesto, banca e inversión inteligente.",
+        category: "Finanzas",
+        difficulty: "Principiante",
+        modules: [
+          {
+            title: "Módulo 1: ¿Qué es el Dinero?",
+            desc: "Aprende por qué se inventó el dinero y cómo funcionaba el trueque.",
+            contentSections: [
+              { title: "Cambiar Gallinas por Espadas", content: "Hace miles de años, si Sam tenía una gallina y quería una espada, ¡Sam tenía que encontrar a un herrero que quisiera una gallina! Esto se llamaba 'trueque'. Pero ¿y si el herrero solo quería manzanas? ¡El intercambio se volvía imposible! Por eso los humanos inventaron el dinero: algo que todos aceptan como valioso." },
+              { title: "Antes del Dinero: El Trueque", content: "El trueque es intercambiar bienes o servicios directamente sin dinero. El dinero resolvió el trueque porque sirve como medio de intercambio universal." },
+              { title: "Dato Curioso: ¡Conchas y Sal como Dinero! 🐚", content: "¡Antes del papel moneda, la gente usaba conchas de cauri, piedras gigantes e incluso sal como dinero! ¡De hecho, la palabra 'salario' viene de la palabra latina para sal ('sal')!" },
+              { title: "Resumen del Módulo 1", content: "• Trueque = intercambiar objetos directamente\n• Dinero = medio de intercambio universal\n• ¡El dinero solo funciona porque todos aceptan que tiene valor!" }
+            ],
+            exercises: [
+              { question: "¿Qué es el trueque?", options: ["Usar tarjetas de crédito", "Intercambiar bienes directamente sin dinero", "Invertir en acciones", "Ahorrar en un banco"] },
+              { question: "El dinero solo funciona si todos aceptan que tiene valor." },
+              { question: "La palabra salario viene de la palabra latina para ___.", answer: "sal" },
+              { question: "Relaciona los términos de dinero con sus definiciones:", pairs: [ { term: "Trueque", definition: "Intercambiar bienes directamente" }, { term: "Moneda", definition: "Dinero usado en un país" }, { term: "Medio de Intercambio", definition: "Algo usado para comprar bienes" } ] },
+              { question: "¿Por qué se inventó el dinero?", options: ["Porque las monedas brillan", "Para hacer el comercio más fácil que el trueque", "Para hacer las carteras pesadas", "Porque las gallinas se escaparon"] }
+            ]
+          },
+          {
+            title: "Módulo 2: Presupuestos y Ahorro",
+            desc: "Dile a tu dinero a dónde ir en lugar de preguntarte a dónde se fue.",
+            contentSections: [
+              { title: "Ingresos vs Gastos", content: "• Ingresos = Dinero que ENTRA (paga semanal, regalos de cumpleaños, tareas).\n• Gastos = Dinero que SALE (comprar juguetes, snacks, juegos).\n• Presupuesto = ¡Un plan para asegurar que los Gastos sean MENORES que los Ingresos!" },
+              { title: "La Regla 50/30/20", content: "Una forma famosa de hacer un presupuesto:\n• 50% para Necesidades (comida, material escolar)\n• 30% para Deseos (juegos, juguetes)\n• 20% para Ahorros (¡metas futuras!)" },
+              { title: "Resumen del Módulo 2", content: "• Los ingresos son dinero que entra; los gastos son dinero que sale\n• ¡Gasta siempre menos de lo que ganas para acumular riqueza!" }
+            ],
+            exercises: [
+              { question: "El dinero que ENTRA a tu bolsillo se llama:", options: ["Gasto", "Ingreso", "Impuesto", "Deuda"] },
+              { question: "Un buen presupuesto significa que tus gastos son mayores que tus ingresos." },
+              { question: "El dinero que SALE cuando compras algo se llama un ___.", answer: "gasto" },
+              { question: "Relaciona las categorías del presupuesto:", pairs: [ { term: "Ingreso", definition: "Paga ganada" }, { term: "Necesidad", definition: "Material escolar" }, { term: "Deseo", definition: "Aspecto para un videojuego" }, { term: "Ahorro", definition: "Dinero en el banco para el futuro" } ] },
+              { question: "¿Cuál es la Regla de Oro del dinero?", options: ["Gasta todo tu dinero", "Gasta menos de lo que ganas", "Nunca ahorres", "Compra todo en oferta"] }
+            ]
+          },
+          {
+            title: "Módulo 3: La Magia del Interés Compuesto",
+            desc: "El multiplicador mágico que convierte pequeños ahorros en fortunas.",
+            contentSections: [
+              { title: "Interés sobre Interés", content: "Cuando depositas dinero en un banco, el banco te paga 'Interés'. ¡El interés compuesto significa que ganas interés sobre tu dinero Y sobre el interés que ya has ganado! ¡Se multiplica con el tiempo como una bola de nieve rodando montaña abajo!" },
+              { title: "La Cita de Albert Einstein 🧠", content: "Albert Einstein llamó célebremente al interés compuesto 'la 8ª maravilla del mundo. ¡Quien lo entiende, lo gana... quien no, lo paga!'" },
+              { title: "Resumen del Módulo 3", content: "• Interés = bonificación pagada por el banco por ahorrar\n• Interés compuesto = interés sobre el interés\n• ¡El tiempo es el multiplicador secreto!" }
+            ],
+            exercises: [
+              { question: "Cuando un banco te paga dinero extra por mantener tus ahorros con ellos, se llama:", options: ["Impuestos", "Interés", "Multas", "Préstamos"] },
+              { question: "El interés compuesto significa que ganas interés además del interés anterior." },
+              { question: "El interés compuesto funciona mejor cuando dejas tu dinero ahorrado durante ___ tiempo.", answer: "mucho" },
+              { question: "Relaciona los conceptos de interés:", pairs: [ { term: "Interés Simple", definition: "Interés solo sobre el dinero inicial" }, { term: "Interés Compuesto", definition: "Interés sobre el interés con el tiempo" }, { term: "Depósito Bancario", definition: "Poner dinero en una cuenta" } ] },
+              { question: "¿Quién llamó al interés compuesto la 8ª maravilla del mundo?", options: ["Isaac Newton", "Albert Einstein", "Steve Jobs", "Elon Musk"] }
+            ]
+          },
+          {
+            title: "Módulo 4: Inversión y Acciones",
+            desc: "Haz que tu dinero trabaje para que tú no tengas que hacerlo.",
+            contentSections: [
+              { title: "¿Qué es una Acción?", content: "Cuando una empresa (como Apple o Disney) quiere expandirse, divide la propiedad en millones de pequeñas partes llamadas 'Acciones'. ¡Cuando compras una acción, te conviertes en un micro-propietario de esa empresa!" },
+              { title: "Diversificación: ¡No pongas todos los huevos en 1 cesta!", content: "Si compras acciones de solo 1 empresa y quiebra, pierdes dinero. ¡Si inviertes en 10 empresas diferentes, estás a salvo si una tiene un mal día!" },
+              { title: "Resumen del Módulo 4", content: "• Acción = pequeña parte de propiedad de una empresa\n• La inversión hace crecer el dinero con el tiempo\n• ¡Diversifica para reducir el riesgo!" }
+            ],
+            exercises: [
+              { question: "Cuando compras una acción, ¿qué estás comprando en realidad?", options: ["Una hoja de papel", "Una pequeña parte de la propiedad de una empresa real", "Un préstamo al gobierno", "Un producto"] },
+              { question: "Invertir no tiene ningún riesgo y siempre garantiza ganancias." },
+              { question: "Repartir tus inversiones entre varias empresas se llama ___.", answer: "diversificación" },
+              { question: "Relaciona los términos de inversión:", pairs: [ { term: "Acción", definition: "Parte de la propiedad de una empresa" }, { term: "Dividendo", definition: "Ganancia de la empresa repartida a los inversores" }, { term: "Cartera", definition: "Conjunto de todas tus inversiones" } ] },
+              { question: "¿Cuál es el objetivo principal de invertir?", options: ["Perder dinero", "Hacer crecer tu dinero con el tiempo", "Guardar el dinero bajo el colchón", "Pagar comisiones"] }
+            ]
+          }
+        ]
       }
     }
   },
