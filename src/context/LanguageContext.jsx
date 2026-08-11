@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useEffect } from 'react';
 import { LANGUAGES, translations } from '../i18n/translations';
 import { contentTranslations } from '../i18n/contentTranslations';
@@ -48,6 +49,9 @@ export const LanguageProvider = ({ children }) => {
     return 'en';
   });
 
+  const [isChangingLang, setIsChangingLang] = useState(false);
+  const [targetLangObj, setTargetLangObj] = useState(null);
+
   const activeLangObj = LANGUAGES.find(l => l.code === currentLang) || LANGUAGES[0];
   const isRTL = activeLangObj.dir === 'rtl';
 
@@ -58,8 +62,20 @@ export const LanguageProvider = ({ children }) => {
   }, [currentLang, isRTL]);
 
   const setLanguage = (code) => {
-    if (LANGUAGES.some((l) => l.code === code)) {
-      setCurrentLang(code);
+    if (LANGUAGES.some((l) => l.code === code) && code !== currentLang) {
+      const nextLangObj = LANGUAGES.find((l) => l.code === code);
+      setTargetLangObj(nextLangObj);
+      setIsChangingLang(true);
+      localStorage.setItem('learntopia_lang', code);
+
+      setTimeout(() => {
+        setCurrentLang(code);
+      }, 50);
+
+      setTimeout(() => {
+        setIsChangingLang(false);
+        setTargetLangObj(null);
+      }, 350);
     }
   };
 
@@ -125,6 +141,21 @@ export const LanguageProvider = ({ children }) => {
   return (
     <LanguageContext.Provider value={{ currentLang, setLanguage, languages: LANGUAGES, activeLangObj, isRTL, t, tRaw }}>
       {children}
+
+      {/* Smooth, non-blocking glassmorphism language transition overlay */}
+      {isChangingLang && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/60 backdrop-blur-md transition-opacity duration-300 animate-fade-in">
+          <div className="flex flex-col items-center gap-3 rounded-2xl border border-violet-500/30 bg-slate-900/90 px-6 py-5 shadow-2xl shadow-violet-500/20 text-center">
+            <div className="relative flex items-center justify-center">
+              <div className="h-10 w-10 animate-spin rounded-full border-2 border-violet-500 border-t-transparent" />
+              <span className="absolute text-base">{targetLangObj?.flag || activeLangObj.flag}</span>
+            </div>
+            <div className="text-sm font-bold text-white">
+              Updating Language...
+            </div>
+          </div>
+        </div>
+      )}
     </LanguageContext.Provider>
   );
 };
