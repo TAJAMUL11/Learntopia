@@ -718,6 +718,74 @@ export const contentTranslations = {
             ]
           }
         ]
+      },
+      "4": {
+        title: "Creadores del Futuro: Marketing Digital",
+        desc: "Domina la marca, la narración, la creación de contenido y la seguridad en línea.",
+        category: "Marketing",
+        difficulty: "Intermedio",
+        modules: [
+          {
+            title: "Módulo 1: Marca e Identidad",
+            desc: "Aprende cómo las empresas construyen personalidades reconocibles.",
+            contentSections: [
+              { title: "Más que un logo", content: "Una marca es el sentimiento y la reputación que la gente asocia a una empresa. Los colores provocan emociones: Rojo = emoción/hambre (McDonald's, Netflix), Azul = confianza (Samsung, NASA), Verde = naturaleza/crecimiento (Spotify, Starbucks)." },
+              { title: "Resumen del Módulo 1", content: "• Marca = sentimiento y reputación\n• ¡Los colores y las tipografías crean una conexión emocional!" }
+            ],
+            exercises: [
+              { question: "¿Qué es una marca?", options: ["Solo un logo", "El sentimiento, la personalidad y la reputación de una empresa", "Un edificio de oficinas", "La firma de un director"] },
+              { question: "Las empresas eligen los colores al azar sin pensar en las emociones." },
+              { question: "El color azul se usa a menudo en los logos para generar ___.", answer: "confianza" },
+              { question: "Relaciona los elementos de marca:", pairs: [ { term: "Logo", definition: "Símbolo visual de la marca" }, { term: "Eslogan", definition: "Frase pegadiza (p. ej. Just Do It)" }, { term: "Paleta", definition: "Conjunto específico de colores de la marca" } ] },
+              { question: "¿Cuál de estos forma parte de una identidad de marca?", options: ["Logos, colores y tipografía", "Muebles de oficina", "La talla de zapato de los empleados", "Formularios de impuestos"] }
+            ]
+          },
+          {
+            title: "Módulo 2: La Narración en el Marketing",
+            desc: "Engancha a tu audiencia con grandes historias.",
+            contentSections: [
+              { title: "El Cliente es el Héroe", content: "En marketing, tu cliente es el Héroe (Luke Skywalker) y tu producto es el Guía (Yoda). No hables de ti mismo: ¡muestra cómo tu producto ayuda al cliente a ganar!" },
+              { title: "Resumen del Módulo 2", content: "• Cliente = Héroe, Producto = Guía\n• ¡Engancha a los espectadores en los primeros 3 segundos!" }
+            ],
+            exercises: [
+              { question: "En la narración de marca, ¿quién es el Héroe?", options: ["El director", "El producto", "El cliente", "El competidor"] },
+              { question: "Los vídeos en línea necesitan un buen gancho en los primeros 3 segundos." },
+              { question: "En la narración de marketing, tu producto actúa como el ___ para ayudar al héroe a ganar.", answer: "guía" },
+              { question: "Relaciona los componentes de la historia:", pairs: [ { term: "Héroe", definition: "El Cliente" }, { term: "Guía", definition: "Tu Producto/Servicio" }, { term: "Gancho", definition: "Los primeros 3 segundos que captan la atención" } ] },
+              { question: "¿Por qué los especialistas en marketing usan la narración?", options: ["Para aburrir a la gente", "Para crear una conexión emocional", "Para rellenar espacio en blanco", "Para confundir a los lectores"] }
+            ]
+          },
+          {
+            title: "Módulo 3: Ciudadanía Digital y Seguridad",
+            desc: "Protege tu huella digital.",
+            contentSections: [
+              { title: "La Tinta Permanente de la Web", content: "Tu Huella Digital es el rastro de datos que dejas en línea. ¡Nunca publiques información personal (PII) como tu dirección de casa, número de teléfono o el nombre de tu escuela!" },
+              { title: "Resumen del Módulo 3", content: "• La Huella Digital es permanente\n• ¡Nunca compartas información personal en línea!" }
+            ],
+            exercises: [
+              { question: "¿Qué es tu Huella Digital?", options: ["Tu talla de zapato", "El rastro permanente de datos que dejas en línea", "La tinta de la impresora", "El brillo de la pantalla"] },
+              { question: "Cualquier cosa que publiques en línea se puede borrar fácilmente para siempre." },
+              { question: "PII significa Información Personal ___.", answer: "identificable" },
+              { question: "Relaciona los términos de seguridad:", pairs: [ { term: "PII (Info personal)", definition: "Dirección, teléfono, nombre completo" }, { term: "Seguro de Compartir", definition: "Dibujos, reseñas, aficiones" }, { term: "Huella Digital", definition: "Rastro del historial en línea" } ] },
+              { question: "¿Cuál de los siguientes NUNCA debe publicarse públicamente en línea?", options: ["Película favorita", "Dirección de casa", "Dibujo de un gato", "Reseña de un libro"] }
+            ]
+          },
+          {
+            title: "Módulo 4: Campañas de Marketing y CTA",
+            desc: "Lanza tu gran idea con una llamada a la acción clara.",
+            contentSections: [
+              { title: "Llamada a la Acción (CTA)", content: "Una CTA le dice a la audiencia exactamente qué paso dar a continuación: '¡Suscríbete ya!', '¡Haz clic aquí para unirte!', '¡Descarga la app!'." },
+              { title: "Resumen del Módulo 4", content: "• CTA = instrucción clara para el siguiente paso\n• ¡Público objetivo = grupo específico para el que diseñas!" }
+            ],
+            exercises: [
+              { question: "¿Qué significa CTA?", options: ["Llamada a la Acción (Call To Action)", "Alineación central del texto", "Costo de publicidad", "Clic para añadir"] },
+              { question: "'¡Suscríbete para más vídeos!' es un ejemplo de una CTA." },
+              { question: "El grupo específico de personas para el que diseñas una campaña se llama el ___ objetivo.", answer: "público" },
+              { question: "Relaciona los términos de campaña:", pairs: [ { term: "CTA", definition: "Llamada a la Acción" }, { term: "Público Objetivo", definition: "Espectadores/compradores previstos" }, { term: "Campaña", definition: "Estrategia de marketing organizada" } ] },
+              { question: "¿Cuál es una Llamada a la Acción eficaz?", options: ["'Existimos.'", "'¡Suscríbete hoy para recibir consejos gratis!'", "'Los colores son bonitos.'", "'Adiós.'"] }
+            ]
+          }
+        ]
       }
     }
   },
