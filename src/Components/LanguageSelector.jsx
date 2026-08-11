@@ -18,6 +18,11 @@ const LanguageSelector = ({ mobile = false }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // When only one language is exposed there's nothing to switch between, so the
+  // selector hides itself entirely (keeps the navbar clean while other
+  // languages are still being completed behind the scenes).
+  if (languages.length <= 1) return null;
+
   const handleSelect = (code) => {
     playClick();
     setLanguage(code);
