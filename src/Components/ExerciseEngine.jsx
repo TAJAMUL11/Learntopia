@@ -2,6 +2,7 @@ import { useState } from "react";
 import Icon from "./ui/Icon";
 import Button from "./ui/Button";
 import { useSound } from "../context/SoundContext";
+import { useLanguage } from "../context/LanguageContext";
 
 /**
  * ExerciseEngine — Renders different exercise types with validation & feedback.
