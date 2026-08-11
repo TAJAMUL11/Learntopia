@@ -77,7 +77,7 @@ export const soundEffects = {
 
       osc.start(now);
       osc.stop(now + 0.05);
-    } catch {}
+    } catch { /* Web Audio unavailable — ignore */ }
   },
 
   // Cheerful 3-note ascending chime for correct answers
@@ -163,7 +163,7 @@ export const soundEffects = {
 
       osc.start(now);
       osc.stop(now + 0.25);
-    } catch {}
+    } catch { /* Web Audio unavailable — ignore */ }
   },
 
   // Soft clock tick sound for timer countdown

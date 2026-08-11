@@ -1,7 +1,5 @@
 import { Link } from "react-router-dom";
 
-const LAST_UPDATED = "July 24, 2026";
-
 const SECTIONS = [
   {
     heading: "1. Introduction and Acceptance",

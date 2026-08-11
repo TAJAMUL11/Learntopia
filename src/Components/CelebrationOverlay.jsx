@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useGamification } from "../context/GamificationContext";
 import { useSound } from "../context/SoundContext";
 import { useLanguage } from "../context/LanguageContext";
-import Icon from "./ui/Icon";
 import Button from "./ui/Button";
 
 const CelebrationOverlay = () => {
