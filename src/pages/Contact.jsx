@@ -171,9 +171,9 @@ const Contact = () => {
           <div className="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-sky-600/6 blur-3xl" />
 
           <div className="relative mb-7">
-            <h2 className="text-xl font-bold text-ink-hi">Send a message</h2>
+            <h2 className="text-xl font-bold text-ink-hi">{t("contact.formHeading")}</h2>
             <p className="mt-1 text-sm text-ink-low">
-              Fill in the details below — we read every message.
+              {t("contact.formSubtitle")}
             </p>
           </div>
 
@@ -200,7 +200,7 @@ const Contact = () => {
                   name="name"
                   type="text"
                   autoComplete="name"
-                  placeholder="John Doe"
+                  placeholder={t("contact.namePlaceholder")}
                   value={formData.name}
                   onChange={handleChange}
                   className={inputBase(!!errors.name)}
@@ -224,7 +224,7 @@ const Contact = () => {
                   name="email"
                   type="email"
                   autoComplete="email"
-                  placeholder="you@example.com"
+                  placeholder={t("contact.emailPlaceholder")}
                   value={formData.email}
                   onChange={handleChange}
                   className={inputBase(!!errors.email)}
@@ -249,7 +249,7 @@ const Contact = () => {
                 id="contact-subject"
                 name="subject"
                 type="text"
-                placeholder="Subject..."
+                placeholder={t("contact.subjectPlaceholder")}
                 value={formData.subject}
                 onChange={handleChange}
                 className={inputBase(false)}
@@ -291,11 +291,11 @@ const Contact = () => {
 
             {/* Privacy note */}
             <p className="text-xs text-ink-low">
-              By submitting, you agree to our{" "}
+              {t("contact.agreementPre")}{" "}
               <Link to="/privacy" className="text-violet-400 hover:text-violet-300">
-                Privacy Policy
+                {t("contact.privacyLink")}
               </Link>
-              . We only use your email to respond to your message.
+              . {t("contact.agreementPost")}
             </p>
 
             {/* Submit button */}

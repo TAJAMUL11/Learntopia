@@ -24,10 +24,53 @@
  */
 
 export const contentTranslations = {
+  // UI strings that were hardcoded in components, now routed through t().
+  // These deep-merge onto the base dictionaries in translations.js.
+  en: {
+    common: { sfx: "SFX", off: "Off" },
+    quiz: {
+      start: "Start",
+      notSignedInTitle: "You're not signed in",
+      notSignedInMsg: "Your high scores won't be saved to your student profile.",
+      quitTitle: "Quit Quiz?",
+      quitMsg: "Are you sure you want to leave? Your progress won't be saved and this attempt won't be logged.",
+      quitConfirm: "Quit",
+    },
+    contact: {
+      formHeading: "Send a message",
+      formSubtitle: "Fill in the details below — we read every message.",
+      namePlaceholder: "John Doe",
+      emailPlaceholder: "you@example.com",
+      subjectPlaceholder: "Subject...",
+      agreementPre: "By submitting, you agree to our",
+      privacyLink: "Privacy Policy",
+      agreementPost: "We only use your email to respond to your message.",
+    },
+  },
+
   // ===================================================================
   // SPANISH
   // ===================================================================
   es: {
+    common: { sfx: "SFX", off: "Apagado" },
+    quiz: {
+      start: "Empezar",
+      notSignedInTitle: "No has iniciado sesión",
+      notSignedInMsg: "Tus mejores puntuaciones no se guardarán en tu perfil de estudiante.",
+      quitTitle: "¿Salir del Cuestionario?",
+      quitMsg: "¿Seguro que quieres salir? No se guardará tu progreso y este intento no se registrará.",
+      quitConfirm: "Salir",
+    },
+    contact: {
+      formHeading: "Enviar un mensaje",
+      formSubtitle: "Completa los datos a continuación — leemos cada mensaje.",
+      namePlaceholder: "Juan Pérez",
+      emailPlaceholder: "tu@ejemplo.com",
+      subjectPlaceholder: "Asunto...",
+      agreementPre: "Al enviar, aceptas nuestra",
+      privacyLink: "Política de Privacidad",
+      agreementPost: "Solo usamos tu correo para responder a tu mensaje.",
+    },
     quizzesData: {
       python: {
         title: "Python para Niños",
@@ -159,6 +202,96 @@ export const contentTranslations = {
           { questionText: "Al dibujar un personaje, ¿qué debes dibujar primero?", options: ["Ojos detallados", "Formas 3D básicas como esferas y cilindros", "El fondo", "El cabello"] },
           { questionText: "¿Qué significa 'valor' en la teoría del color?", options: ["Cuánto cuesta una pintura", "Qué tan claro u oscuro es un color", "Cuántos colores usas", "Qué tan grande es el pincel"] },
           { questionText: "¿Dónde ocurre la 'Oclusión Ambiental'?", options: ["A la luz directa del sol", "En hendiduras profundas donde la luz no llega", "En el cielo", "En el brillo"] }
+        ]
+      }
+    },
+    courseData: {
+      "1": {
+        title: "Python para Niños: ¡Crea tu Primer Juego!",
+        desc: "Aprende a programar creando juegos reales. Perfecto para principiantes de 7 a 14 años. ¡Sumérgete en los fundamentos de Python y la mecánica de los juegos!",
+        category: "Programación",
+        difficulty: "Principiante",
+        modules: [
+          {
+            title: "Módulo 1: ¡Hola Python!",
+            desc: "Aprende qué es Python y escribe tus primeras líneas de código.",
+            contentSections: [
+              { title: "Conoce a Alex el Inventor", content: "Alex tiene 11 años y le encantan los videojuegos. Un día Alex pensó: '¿Y si pudiera CREAR mi propio juego en lugar de solo jugarlos?' Su profesora le dijo: '¡Puedes! Solo necesitas un lenguaje llamado Python.' Esta también es TU historia: al final de este curso, ¡crearás tu propio juego desde cero!" },
+              { title: "¿Qué es Python?", content: "Python es un lenguaje de programación: un conjunto especial de palabras y reglas que usas para hablar con las computadoras. ¡Imagina que tienes un amigo robot, pero solo entiende un idioma: Python! Si quieres que el robot baile, dibuje o resuelva problemas de matemáticas, tienes que escribir instrucciones en Python. ¿Lo mejor? Python fue diseñado para parecerse casi al inglés normal, así que es uno de los lenguajes más fáciles de aprender." },
+              { title: "¡Dato Curioso!", content: "¡Python no recibió su nombre por la serpiente! 🐍 Fue nombrado por un divertido programa de comedia británico llamado 'Monty Python's Flying Circus'. El creador, Guido van Rossum, lo estaba viendo mientras programaba Python y pensó que el nombre era divertido." },
+              { title: "Tu Primer Comando: print()", content: "El comando print() le dice a la computadora que muestre texto en la pantalla. Prueba esto:\n\nprint('Hello World!')\n\nCuando lo ejecutes, la computadora mostrará: Hello World!\n\nPuedes imprimir lo que quieras:\nprint('My name is Alex!')\nprint('I am learning Python!')\n\n¿Notas cómo el texto siempre va entre comillas? ¡Eso le dice a Python: 'Oye, esto es texto, no un comando!'" },
+              { title: "Consejo Pro: ¡No Olvides las Comillas!", content: "Un error muy común de los principiantes es olvidar las comillas alrededor del texto. Si escribes print(Hello) sin comillas, Python se confundirá y mostrará un error. ¡Envuelve siempre tu texto en comillas simples ('Hello') o dobles (\"Hello\") — ambas funcionan!" },
+              { title: "¡Inténtalo Tú Mismo!", content: "Si tienes Python en tu computadora, ábrelo y prueba escribir estos comandos uno por uno:\n\n1. print('Hello World!')\n2. print('My name is [TU NOMBRE]!')\n3. print('I am learning to code!')\n4. print('Python is awesome!')\n\nObserva qué pasa después de cada uno. ¡Acabas de hacer que una computadora hable! 🎉" },
+              { title: "Resumen del Módulo 1", content: "Repasemos lo que aprendiste:\n\n• Python es un lenguaje de programación usado para dar instrucciones a las computadoras\n• ¡Fue nombrado por un programa de comedia, no por la serpiente!\n• El comando print() muestra texto en la pantalla\n• El texto debe ir entre comillas (simples o dobles)\n• Acabas de escribir tu primer código real — ¡ya eres oficialmente programador!" }
+            ],
+            exercises: [
+              { question: "¿Qué es Python?", options: ["Un tipo de serpiente", "Un lenguaje de programación para hablar con las computadoras", "Un motor de videojuegos", "Un navegador web"] },
+              { question: "Python recibió su nombre por la serpiente." },
+              { question: "El comando ___ muestra texto en la pantalla en Python." },
+              { question: "¿Por qué necesitamos comillas alrededor del texto en print()?", options: ["Para que se vea bonito", "Para que Python sepa que es texto, no un comando", "Las comillas son opcionales", "Para agrandar el texto"] },
+              { question: "Relaciona los términos de Python con sus significados:", pairs: [ { term: "Python", definition: "Un lenguaje de programación" }, { term: "print()", definition: "Muestra texto en la pantalla" }, { term: "Comillas", definition: "Envuelven el texto en el código" } ] }
+            ]
+          },
+          {
+            title: "Módulo 2: Variables y Tipos de Datos",
+            desc: "Almacena números y texto en la memoria como un profesional.",
+            contentSections: [
+              { title: "Alex Necesita un Marcador", content: "El juego de Alex avanza, pero hay un problema: ¿cómo recuerda la computadora la puntuación del jugador? Cuando un jugador consigue 10 puntos, ¿a dónde va ese número? Alex necesita una forma de GUARDAR información. ¡Eso es exactamente lo que hacen las variables!" },
+              { title: "¿Qué es una Variable?", content: "Piensa en una variable como una caja etiquetada donde puedes guardar cosas. Si tienes una caja etiquetada 'score' y pones el número 10 dentro, ¡tu variable score ahora es igual a 10!\n\nEn Python, creas una variable así:\nscore = 10\nplayer_name = 'Alex'\n\nEl signo = no significa 'igual' como en matemáticas — significa 'pon este valor dentro de esta caja'. Así que score = 10 significa 'crea una caja llamada score y pon 10 dentro'." },
+              { title: "Diferentes Tipos de Datos", content: "Las computadoras son exigentes: necesitan saber QUÉ TIPO de cosa hay en cada caja:\n\n• Enteros (int): Números enteros como 5, 42 o 1000. ¡Ideales para puntuaciones!\n• Cadenas (str): Texto entre comillas como 'Hello' o 'Alex'. ¡Se usan para nombres y mensajes!\n• Decimales (float): Números con decimales como 3.14 o 99.9. ¡Se usan para precios y medidas precisas!\n• Booleanos (bool): Solo True o False. Como un interruptor de luz: encendido o apagado.\n\nPython es lo bastante inteligente para averiguar el tipo automáticamente cuando creas una variable." },
+              { title: "Variables en Acción", content: "Mira cómo Alex usa variables en el juego:\n\nplayer_name = 'Alex'\nscore = 0\nlives = 3\n\nscore = score + 10\nprint('Score:', score)\n\nLa computadora mostrará: Score: 10\n\n¡Fíjate cómo funciona score = score + 10: Python mira el valor ANTERIOR de score (0), le suma 10 y pone el NUEVO valor (10) de vuelta en la caja!" },
+              { title: "¡Tu Cerebro Está Lleno de Variables!", content: "¡Tu cerebro funciona igual que una computadora con variables! Ahora mismo, tu cerebro tiene una variable llamada 'mi_nombre' que guarda tu nombre, una variable 'mi_edad' que guarda tu edad y una variable 'color_favorito' que guarda tu color favorito. Simplemente no las piensas como 'variables', ¡pero eso es exactamente lo que son! 🧠" },
+              { title: "Cómo Nombrar tus Variables", content: "Los buenos nombres de variables describen lo que hay dentro de la caja:\n\n✅ Bien: player_score, user_name, lives_remaining\n❌ Mal: x, thing, abc123\n\nReglas para los nombres de variables en Python:\n• ¡Sin espacios! Usa guiones bajos: player_name (no player name)\n• No pueden empezar con número: 1score está mal, score1 está bien\n• Python distingue mayúsculas: ¡Score y score son variables DIFERENTES!" },
+              { title: "Resumen del Módulo 2", content: "Repasemos lo que aprendiste:\n\n• Las variables son cajas etiquetadas que guardan datos\n• El signo = significa 'pon este valor en la caja'\n• Los enteros son números enteros, las cadenas son texto, los decimales tienen coma, los booleanos son True/False\n• Puedes actualizar una variable: score = score + 10\n• Usa nombres descriptivos: player_score es mejor que x\n• ¡Python distingue mayúsculas: score y Score son diferentes!" }
+            ],
+            exercises: [
+              { question: "¿Qué es una variable en programación?", options: ["Un tipo de mensaje de error", "Una caja etiquetada para guardar datos", "Una fórmula matemática", "Un comando de Python"] },
+              { question: "Relaciona cada tipo de dato con su ejemplo:", pairs: [ { term: "Entero", definition: "El número 42" }, { term: "Cadena", definition: "El texto 'Hello'" }, { term: "Decimal", definition: "El número 3.14" }, { term: "Booleano", definition: "True o False" } ] },
+              { question: "Si score = 4 + 6, el valor guardado en score es ___." },
+              { question: "En Python, los nombres de variable 'Score' y 'score' son exactamente lo mismo." },
+              { question: "¿Cuál de estos es un BUEN nombre de variable?", options: ["1player", "my score", "player_score", "p"] }
+            ]
+          },
+          {
+            title: "Módulo 3: Condicionales (if) y Lógica",
+            desc: "Haz tu código inteligente con decisiones y condiciones.",
+            contentSections: [
+              { title: "El Juego de Alex Necesita un Cerebro", content: "El juego de Alex ya puede guardar puntuaciones, ¡genial! Pero hay un nuevo problema. Cuando un jugador llega a 100 puntos, el juego debería decir '¡GANASTE!' Y cuando el jugador pierde todas sus vidas, debería decir 'FIN DEL JUEGO'. Pero ¿cómo sabe la computadora CUÁNDO hacer estas cosas? Necesita la capacidad de tomar decisiones. ¡Para eso sirven los condicionales (if)!" },
+              { title: "Tomar Decisiones con 'if'", content: "Un condicional (if) permite que tu código tome decisiones, ¡igual que hace tu cerebro cada día!\n\nEn la vida real: 'SI está lloviendo, ENTONCES lleva un paraguas.'\nEn Python: if score > 100:\n              print('You win!')\n\nLa computadora revisa la condición (¿es score mayor que 100?). Si es VERDADERA, ejecuta el código de abajo. Si es FALSA, lo omite por completo." },
+              { title: "Añadir 'else' y 'elif'", content: "¿Y si quieres hacer algo DIFERENTE cuando la condición es falsa?\n\nif score > 100:\n    print('You win!')\nelse:\n    print('Keep trying!')\n\n¿Y si tienes VARIAS condiciones?\n\nif score > 100:\n    print('Amazing!')\nelif score > 50:\n    print('Getting close!')\nelse:\n    print('Keep going!')\n\n'elif' es la abreviatura de 'else if' — revisa otra condición si la primera fue falsa." },
+              { title: "¡Los Condicionales Están POR TODAS PARTES!", content: "¡Los videojuegos usan MILLONES de condicionales! 🎮\n\n• SI Mario golpea a un Goomba → pierde una vida\n• SI Mario agarra un hongo → crece\n• SI el temporizador llega a cero → ¡Fin del juego!\n• SI el jugador presiona el botón de salto → Mario salta\n\n¡Cada cosa que ocurre en un juego está controlada por condicionales trabajando juntos!" },
+              { title: "Operadores de Comparación", content: "Para escribir condiciones, necesitas operadores de comparación:\n\n>  significa 'mayor que'        (10 > 5 es True)\n<  significa 'menor que'        (3 < 7 es True)\n== significa 'igual a'          (5 == 5 es True)\n!= significa 'distinto de'      (5 != 3 es True)\n>= significa 'mayor o igual'    (10 >= 10 es True)\n<= significa 'menor o igual'    (4 <= 9 es True)\n\n⚠️ Fíjate: comprobar la igualdad usa == (doble igual), NO = (un solo igual). ¡El = simple es para asignar variables!" },
+              { title: "¡Los Dos Puntos Son Cruciales!", content: "Cada línea if, elif y else DEBE terminar con dos puntos (:)\n\n✅ Correcto: if score > 10:\n❌ Incorrecto: if score > 10\n\nAdemás, el código que se ejecuta dentro del condicional debe estar indentado (desplazado a la derecha con espacios). ¡Python usa la indentación para saber qué código pertenece dentro del condicional!" },
+              { title: "Resumen del Módulo 3", content: "Repasemos lo que aprendiste:\n\n• Los condicionales (if) permiten que el código tome decisiones según condiciones\n• Usa 'else' cuando quieras que algo ocurra si la condición es falsa\n• Usa 'elif' para comprobar varias condiciones\n• Operadores de comparación: > < == != >= <=\n• El doble igual (==) comprueba igualdad, el igual simple (=) asigna variables\n• Termina siempre if/elif/else con dos puntos (:)\n• ¡Indenta el código dentro de tu condicional!" }
+            ],
+            exercises: [
+              { question: "¿Qué permiten hacer los condicionales (if) a un programa?", options: ["Colapsar la computadora", "Tomar decisiones según condiciones", "Solo imprimir texto", "Guardar variables"] },
+              { question: "Cada línea de condicional (if) en Python debe terminar con dos puntos (:)." },
+              { question: "Relaciona cada operador de comparación con su significado:", pairs: [ { term: ">", definition: "Mayor que" }, { term: "==", definition: "Igual a" }, { term: "!=", definition: "Distinto de" }, { term: "<", definition: "Menor que" } ] },
+              { question: "La palabra clave ___ es la abreviatura de 'else if' en Python." },
+              { question: "Si score es 75, ¿qué imprimirá este código?\nif score > 100:\n    print('Winner!')\nelif score > 50:\n    print('Almost there!')\nelse:\n    print('Keep going!')", options: ["Winner!", "Almost there!", "Keep going!", "Nada"] }
+            ]
+          },
+          {
+            title: "Módulo 4: ¡Crea un Juego de Adivinanzas!",
+            desc: "¡Combina todo para crear tu primer juego real desde cero!",
+            contentSections: [
+              { title: "El Gran Momento de Alex", content: "Por fin llegó el día. Alex conoce print(), las variables y los condicionales. ¡Ahora es momento de combinar TODAS estas habilidades para crear un juego real y jugable! El juego se llama 'Adivina el Número': la computadora elige un número secreto y el jugador tiene que adivinarlo. Después de cada intento, la computadora da pistas: '¡Muy alto!' o '¡Muy bajo!' ¡Vamos a crearlo!" },
+              { title: "¿Qué Son los Bucles?", content: "Un bucle te permite ejecutar el mismo código una y otra vez. Sin un bucle, ¡el jugador solo tendría UN intento — eso no es divertido!\n\nEl bucle 'while' sigue ejecutándose mientras una condición sea True:\n\nwhile guess != secret:\n    guess = input('Try again: ')\n\nEsto sigue pidiendo intentos hasta que el jugador acierte. ¡Cuando por fin adivina correctamente, el bucle se detiene!" },
+              { title: "Obtener la Entrada del Usuario", content: "El comando input() permite que el jugador escriba algo en el juego:\n\nguess = input('Enter your guess: ')\n\nLo que sea que el jugador escriba se guarda en la variable 'guess'. Sin embargo, hay algo complicado: ¡input() siempre te da una Cadena (texto), incluso si el jugador escribe un número! Para convertirlo en número y poder compararlo, usamos int():\n\nguess = int(input('Enter your guess: '))" },
+              { title: "El Código Completo del Juego", content: "Aquí está el juego de adivinanzas completo:\n\nimport random\n\nsecret = random.randint(1, 20)\nprint('I picked a number between 1 and 20!')\n\nguess = 0\nattempts = 0\n\nwhile guess != secret:\n    guess = int(input('Your guess: '))\n    attempts = attempts + 1\n    \n    if guess > secret:\n        print('Too High! Try lower.')\n    elif guess < secret:\n        print('Too Low! Try higher.')\n    else:\n        print('YOU GOT IT! 🎉')\n        print('It took you', attempts, 'guesses!')\n\n¡Cada concepto que aprendiste — print, variables, if/elif/else, bucles, input — se usa aquí!" },
+              { title: "Números Aleatorios en los Juegos", content: "La función random.randint(1, 20) elige un número aleatorio entre 1 y 20. ¡Cada juego que has jugado usa números aleatorios! Minecraft los usa para generar mundos, Pokémon los usa para decidir si atrapas un Pokémon y los juegos de cartas los usan para barajar el mazo. ¡La aleatoriedad hace que los juegos sean emocionantes porque nunca sabes qué pasará! 🎲" },
+              { title: "¡Mejora tu Juego!", content: "Cuando tu juego básico funcione, prueba estas mejoras:\n\n🌟 Fácil: Cambia el rango de 1-20 a 1-100 para un juego más difícil\n🌟 Medio: Limita al jugador a solo 5 intentos. Si se le acaban, imprime '¡Fin del juego!'\n🌟 Difícil: Añade un sistema de puntuación — ¡menos intentos = más puntos!\n🌟 Experto: ¡Pregunta al jugador si quiere jugar de nuevo tras ganar!\n\n¡Cada mejora usa las mismas habilidades que ya aprendiste, solo combinadas de formas creativas!" },
+              { title: "¡Resumen Final del Curso!", content: "Felicidades — ¡has aprendido todos los fundamentos de Python! 🎉\n\n• print() muestra texto en la pantalla\n• Las variables guardan datos en cajas etiquetadas\n• Tipos de datos: Enteros, Cadenas, Decimales, Booleanos\n• If/elif/else toman decisiones según condiciones\n• Operadores de comparación: > < == != >= <=\n• Los bucles while repiten código hasta que una condición es falsa\n• input() obtiene información del usuario\n• int() convierte texto en número\n• random.randint() genera números aleatorios\n\n¡Estás listo para crear tus propios juegos — el cielo es el límite! 🚀" }
+            ],
+            exercises: [
+              { question: "El comando ___ permite al jugador escribir una respuesta durante un juego." },
+              { question: "¿Por qué usamos un bucle 'while' en el juego de adivinanzas?", options: ["Para poner la pantalla colorida", "Para dejar que el jugador adivine varias veces hasta acertar", "Para detener el juego de inmediato", "Para hacer el juego más difícil de leer"] },
+              { question: "Si el número secreto es 5 y el jugador adivina 8, ¿qué debería decir el juego?", options: ["¡Muy bajo!", "¡Muy alto!", "¡Ganaste!", "¡Error!"] },
+              { question: "La función input() siempre devuelve un número, así que nunca necesitas int()." },
+              { question: "Relaciona cada concepto de Python con lo que hace en el juego:", pairs: [ { term: "bucle while", definition: "Se repite hasta que el jugador acierta" }, { term: "input()", definition: "Obtiene el intento del jugador" }, { term: "random.randint()", definition: "Elige el número secreto" }, { term: "if/elif/else", definition: "Comprueba si el intento es muy alto o bajo" } ] }
+            ]
+          }
         ]
       }
     }

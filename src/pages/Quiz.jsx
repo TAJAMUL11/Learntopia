@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { Link, useBlocker } from "react-router-dom";
 import { toast } from "react-toastify";
 import { db } from "../firebase/firebase";
-import { collection, addDoc, getDocs, doc, updateDoc, increment, setDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs, doc, increment, setDoc } from "firebase/firestore";
 import { quizzes } from "../data/quizData";
 import { getLocalizedQuiz } from "../utils/localizationUtils";
 import { useAuth } from "../context/AuthContext";
@@ -296,7 +296,7 @@ const Quiz = () => {
                         <Icon name="refresh-cw" size={12} /> Retake
                       </Button>
                     ) : (
-                      <Button size="sm" onClick={() => startQuiz(quiz)}>Start</Button>
+                      <Button size="sm" onClick={() => startQuiz(quiz)}>{t("quiz.start")}</Button>
                     )}
                   </div>
                 </Card>
@@ -408,8 +408,8 @@ const Quiz = () => {
 
           {!currentUser ? (
             <div className="mb-7 text-left">
-              <Alert variant="warning" title="You're not signed in">
-                Your high scores won&rsquo;t be saved to your student profile.
+              <Alert variant="warning" title={t("quiz.notSignedInTitle")}>
+                {t("quiz.notSignedInMsg")}
                 <div className="mt-2 flex gap-4">
                   <Link
                     to="/login"
@@ -470,9 +470,9 @@ const Quiz = () => {
           if (blocker?.state === "blocked") blocker.reset();
           setShowQuitModal(false);
         }}
-        title="Quit Quiz?"
+        title={t("quiz.quitTitle")}
         icon="alert-triangle"
-        actionText="Quit"
+        actionText={t("quiz.quitConfirm")}
         actionVariant="danger"
         isDestructive={true}
         onAction={() => {
@@ -485,7 +485,7 @@ const Quiz = () => {
           setShowQuitModal(false);
         }}
       >
-        <p>Are you sure you want to leave? Your progress won't be saved and this attempt won't be logged.</p>
+        <p>{t("quiz.quitMsg")}</p>
       </Modal>
 
     </div>

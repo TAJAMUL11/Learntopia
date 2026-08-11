@@ -86,7 +86,7 @@ const Navbar = () => {
               aria-label={isMuted ? "Unmute sound effects" : "Mute sound effects"}
             >
               <Icon name={isMuted ? "volume-x" : "volume-2"} size={14} />
-              <span className="text-[11px] font-bold uppercase tracking-wider">{isMuted ? "Off" : "SFX"}</span>
+              <span className="text-[11px] font-bold uppercase tracking-wider">{isMuted ? t("common.off") : t("common.sfx")}</span>
             </button>
           </div>
 
