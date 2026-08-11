@@ -3,6 +3,7 @@ import { useLanguage } from "../context/LanguageContext";
 import { useSound } from "../context/SoundContext";
 import { sendMessageToGemini, buildSystemPrompt } from "../services/geminiService";
 import Icon from "./ui/Icon";
+import BotAvatar from "./BotAvatar";
 
 /**
  * AIChatDrawer — Premium Slide-out AI Tutor Drawer
@@ -175,12 +176,7 @@ const AIChatDrawer = ({ isOpen, onClose, course, currentModule }) => {
         <div className="flex items-center justify-between border-b border-white/10 bg-gradient-to-r from-violet-900/40 via-purple-900/20 to-ground-900 p-4 shadow-lg">
           <div className="flex items-center gap-3 min-w-0">
             <div className="relative flex-none">
-              <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-violet-500 to-sky blur-sm animate-pulse" />
-              <img
-                src={tutor.avatar}
-                alt={tutor.name}
-                className="relative h-11 w-11 rounded-full border-2 border-violet-400 object-cover shadow-md"
-              />
+              <BotAvatar name={tutor.name} size="sm" />
               <div className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-ground-900 bg-emerald-400 shadow-sm" />
             </div>
             <div className="min-w-0">
@@ -219,11 +215,7 @@ const AIChatDrawer = ({ isOpen, onClose, course, currentModule }) => {
             >
               {/* Avatar for AI */}
               {msg.role === "model" && (
-                <img
-                  src={tutor.avatar}
-                  alt=""
-                  className="h-8 w-8 flex-none rounded-full border border-violet-400 object-cover shadow-sm mt-0.5"
-                />
+                <BotAvatar name={tutor.name} size="sm" className="!w-8 !h-8 !p-1 flex-none mt-0.5" />
               )}
 
               <div
@@ -249,11 +241,7 @@ const AIChatDrawer = ({ isOpen, onClose, course, currentModule }) => {
           {/* Typing Indicator */}
           {isLoading && (
             <div className="flex items-start gap-2.5">
-              <img
-                src={tutor.avatar}
-                alt=""
-                className="h-8 w-8 flex-none rounded-full border border-violet-400 object-cover shadow-sm"
-              />
+              <BotAvatar name={tutor.name} size="sm" className="!w-8 !h-8 !p-1 flex-none" />
               <div className="rounded-2xl rounded-tl-none border border-violet-500/30 bg-violet-500/10 p-3.5 backdrop-blur-md">
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-1">
