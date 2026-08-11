@@ -43,7 +43,7 @@ The platform is designed to be fast, accessible, and mobile-friendly, with authe
 
 | Feature | Description |
 |---|---|
-| **Multi-Language Translator (i18n)** | Global localization switcher supporting English 🇺🇸, Spanish 🇪🇸, French 🇫🇷, German 🇩🇪, and Arabic 🇦🇪 with dynamic RTL layout rendering. |
+| **Multi-Language (i18n)** | Global localization switcher. **English 🇺🇸 and Spanish 🇪🇸 are live and fully translated** (UI, all courses, quizzes, docs, legal pages). French, German, and Arabic translations are staged in the data and hidden until each is complete end-to-end (a partial translation is worse UX than none); the framework already supports RTL for Arabic. |
 | **Gamified Course Overhaul** | Step-by-step interactive courses designed for kids aged 7-14 with rich learning cards (Story, Concept, Fun Fact, Pro Tip, Example, Activity, Recap). |
 | **Web Audio SFX System** | Native Web Audio API sound synthesizer ($0 cost, 0 dependencies) playing audio feedback for clicks, correct answers, module finishes, level-ups, and badge unlocks with persistent mute toggle. |
 | **LessonPlayer Engine** | Paginated step-by-step lesson player with visual theme cards, progress dots, and code syntax blocks. |
@@ -161,19 +161,25 @@ src/
 
 ## Environment Variables
 
-Create a `.env` file in the project root. **Never commit this file.** An `.env.example` template is provided.
+Create a `.env` file in the project root. **Never commit this file** — it is listed in `.gitignore`. An `.env.example` template is provided.
 
 ```env
-VITE_FIREBASE_API_KEY=
-VITE_FIREBASE_AUTH_DOMAIN=
-VITE_FIREBASE_PROJECT_ID=
-VITE_FIREBASE_STORAGE_BUCKET=
-VITE_FIREBASE_MESSAGING_SENDER_ID=
-VITE_FIREBASE_APP_ID=
-VITE_FIREBASE_MEASUREMENT_ID=
+# Firebase — from Firebase Console → Project settings → SDK setup and configuration.
+# (authDomain, projectId, and storageBucket are non-secret and set in src/firebase/firebase.js.)
+VITE_API_KEY=
+VITE_MESSAGING_SENDER_ID=
+VITE_APP_ID=
+
+# Google Gemini — required for the AI Tutor chat.
+VITE_GEMINI_API_KEY=
+
+# Owner email for the hidden /admin portal (optional; used only to redirect the owner).
+VITE_ADMIN_EMAIL=
 ```
 
-All Firebase config variables use the `VITE_` prefix to be exposed to the Vite build. The `.env` file is listed in `.gitignore` and is never committed.
+All variables use the `VITE_` prefix so Vite exposes them to the client build.
+
+> ⚠️ **Security note:** any `VITE_`-prefixed value is embedded in the public JavaScript bundle and is therefore visible to anyone. The Firebase web API key is safe to expose (it is protected by Firestore security rules and authorized domains, not by secrecy). A **Gemini API key is a billable secret** — before shipping it in the client, restrict it in Google Cloud (limit to the Generative Language API, set a hard quota/budget cap, and add an HTTP-referrer restriction), or proxy the calls through a serverless function.
 
 ---
 

@@ -27,6 +27,9 @@ export const contentTranslations = {
   // UI strings that were hardcoded in components, now routed through t().
   // These deep-merge onto the base dictionaries in translations.js.
   en: {
+    nav: { quizzes: "Quizzes" },
+    notFound: { backHome: "Back to Home" },
+    thankYou: { whatsNext: "What's Next", exploreDesc: "Browse all our learning tracks", quizDesc: "Test your knowledge in a timed quiz" },
     common: { sfx: "SFX", off: "Off" },
     quiz: {
       start: "Start",
@@ -254,6 +257,9 @@ export const contentTranslations = {
   // SPANISH
   // ===================================================================
   es: {
+    nav: { quizzes: "Cuestionarios" },
+    notFound: { backHome: "Volver al Inicio" },
+    thankYou: { whatsNext: "¿Qué Sigue?", exploreDesc: "Explora todos nuestros itinerarios de aprendizaje", quizDesc: "Pon a prueba tus conocimientos en un cuestionario cronometrado" },
     common: { sfx: "SFX", off: "Apagado" },
     quiz: {
       start: "Empezar",
