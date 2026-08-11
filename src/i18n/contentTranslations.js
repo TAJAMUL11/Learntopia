@@ -563,6 +563,88 @@ export const contentTranslations = {
             ]
           }
         ]
+      },
+      "2": {
+        title: "Magia Matemática: Acertijos y Lógica",
+        desc: "Desarrolla el pensamiento crítico resolviendo acertijos, identificando patrones y dominando la lógica.",
+        category: "Matemáticas",
+        difficulty: "Todos los Niveles",
+        modules: [
+          {
+            title: "Módulo 1: Patrones Numéricos",
+            desc: "¡Descubre patrones secretos para predecir el futuro!",
+            contentSections: [
+              { title: "El Secreto del Descifrador", content: "La agente Maya encontró un cofre antiguo cerrado con una combinación secreta: 2, 4, 6, 8, __. Los guardias estaban desconcertados, pero Maya sonrió: '¡Es solo un patrón! Suma 2 cada vez.' Escribió 10, ¡y el cofre se abrió! Las matemáticas no tratan solo de números grandes: tratan de ver reglas secretas que resuelven misterios." },
+              { title: "La Magia de las Secuencias", content: "Una secuencia es una lista de números que sigue una regla clara. ¡Cuando conoces la regla, puedes predecir lo que viene después! Por ejemplo:\n\n• Regla (+5): 5, 10, 15, 20, 25...\n• Regla (×2): 2, 4, 8, 16, 32...\n• Regla (-3): 20, 17, 14, 11, 8..." },
+              { title: "¡A la Naturaleza le Encanta Fibonacci! 🌻", content: "La secuencia de Fibonacci empieza así: 1, 1, 2, 3, 5, 8, 13... ¡donde cada número es la suma de los dos anteriores! ¡Los girasoles, las piñas, las conchas de mar e incluso los remolinos de las tormentas siguen exactamente esta secuencia!" },
+              { title: "Encontrar la Regla Secreta", content: "Mira esta secuencia: 3, 6, 12, 24, __\n\n¿Cómo pasamos de 3 a 6? Multiplicamos por 2 (o sumamos 3).\n¿Cómo pasamos de 6 a 12? ¡Multiplicamos por 2! (Sumar 3 daría 9, así que la regla DEBE ser ×2).\nPor lo tanto, ¡24 × 2 = 48! ¡El número secreto es 48!" },
+              { title: "Consejo Pro: Fíjate en las Diferencias", content: "Si te atascas con un patrón, resta los números adyacentes (6 - 3 = 3, 12 - 6 = 6). ¡Si las diferencias crecen, comprueba la multiplicación!" },
+              { title: "Desafío del Detective de Patrones", content: "¿Puedes resolver estas dos secuencias secretas de cabeza?\n\n1) 1, 4, 9, 16, 25, __ (Pista: 1×1, 2×2, 3×3...)\n2) 100, 90, 80, 70, __ (Pista: Va bajando de...)\n\n¡Respuestas: 36 y 60!" },
+              { title: "Resumen del Módulo 1", content: "Ideas clave:\n• Una secuencia sigue una regla fija (+, -, ×, ÷)\n• Comprueba tu regla en TODOS los números para asegurarte de que funciona\n• ¡Fibonacci (1,1,2,3,5,8...) está por todas partes en la naturaleza!\n• ¡Los patrones nos permiten predecir números futuros con un 100% de precisión!" }
+            ],
+            exercises: [
+              { question: "¿Cuál es el siguiente número en: 5, 10, 15, 20...?", options: ["22", "25", "30", "100"] },
+              { question: "En la secuencia 2, 4, 8, 16, el siguiente número es ___.", answer: "32" },
+              { question: "La secuencia de Fibonacci (1, 1, 2, 3, 5, 8...) aparece en las semillas de girasol y las piñas." },
+              { question: "Relaciona cada secuencia con su regla:", pairs: [ { term: "3, 6, 9, 12", definition: "Sumar 3" }, { term: "2, 4, 8, 16", definition: "Multiplicar por 2" }, { term: "50, 40, 30", definition: "Restar 10" } ] },
+              { question: "¿Cómo llamamos a una lista de números que sigue una regla matemática?", options: ["Un desorden", "Una secuencia", "Una variable", "Un bucle"] }
+            ]
+          },
+          {
+            title: "Módulo 2: Geometría 2D y 3D",
+            desc: "Explora formas en el espacio plano y en mundos 3D.",
+            contentSections: [
+              { title: "Diseñar Mundos de Minecraft", content: "¿Alguna vez te has preguntado cómo se construyen los juegos 3D como Minecraft o Roblox? Los desarrolladores empiezan con formas planas 2D — cuadrados y triángulos — y las extruyen en bloques 3D (cubos y pirámides). ¡La geometría es el motor secreto detrás de cada gráfico 3D que ves!" },
+              { title: "Plano (2D) vs Sólido (3D)", content: "• Las formas 2D tienen Altura y Anchura (planas en el papel): Cuadrado, Círculo, Triángulo, Hexágono (6 lados).\n• Las formas 3D añaden Profundidad (sólidas en la mano): Cubo, Esfera, Pirámide, Cilindro." },
+              { title: "Ángulos y Ángulos Rectos 📐", content: "Un ángulo se forma donde se encuentran dos líneas. La esquina de un cuadrado es un ángulo de 90°, llamado Ángulo Recto. Mira a tu alrededor: ¡las puertas, los libros y las pantallas están llenos de ángulos rectos!" },
+              { title: "Contar Lados y Vértices", content: "• Triángulo: 3 lados, 3 esquinas (vértices)\n• Cuadrado / Rectángulo: 4 lados, 4 vértices\n• Hexágono: 6 lados, 6 vértices\n• Octágono (señal de Stop): 8 lados, 8 vértices" },
+              { title: "Secreto del Cubo", content: "¡Un cubo 3D tiene 6 caras cuadradas planas, 8 esquinas (vértices) y 12 aristas rectas!" },
+              { title: "Resumen del Módulo 2", content: "• 2D = plano (largo y ancho), 3D = sólido (largo, ancho y profundidad)\n• Los hexágonos tienen 6 lados, los octágonos tienen 8\n• Los ángulos de 90° son Ángulos Rectos\n• ¡Los cubos tienen 6 caras, 8 vértices y 12 aristas!" }
+            ],
+            exercises: [
+              { question: "¿Cuántos lados tiene un hexágono?", options: ["4", "5", "6", "8"] },
+              { question: "Un cuadrado en 3D se llama ___.", answer: "cubo" },
+              { question: "Un ángulo recto mide exactamente 90 grados." },
+              { question: "Relaciona la forma con su número de lados:", pairs: [ { term: "Triángulo", definition: "3 lados" }, { term: "Pentágono", definition: "5 lados" }, { term: "Hexágono", definition: "6 lados" }, { term: "Octágono", definition: "8 lados" } ] },
+              { question: "¿Cuántas caras tiene un cubo estándar?", options: ["4", "6", "8", "12"] }
+            ]
+          },
+          {
+            title: "Módulo 3: Acertijos de Lógica",
+            desc: "Resuelve misterios usando la deducción.",
+            contentSections: [
+              { title: "La Detective Maya y la Llave Perdida", content: "La llave dorada había desaparecido. Maya conocía tres hechos: 1) No está en el cofre rojo. 2) No está en una caja de madera. 3) El cofre azul es de metal. ¡Combinando las pistas, demostró que la llave DEBE estar en el cofre azul de metal! ¡Eso es la deducción!" },
+              { title: "¿Qué es la Lógica Deductiva?", content: "La deducción significa eliminar las posibilidades incorrectas hasta que solo queda la verdad. ¡Si la afirmación A es Verdadera, entonces la afirmación B DEBE ser Verdadera!" },
+              { title: "Resolver Acertijos de Orden", content: "Pista 1: Liam es más alto que Sam.\nPista 2: Sam es más alto que Zoe.\nConclusión: Liam > Sam > Zoe. ¡Por lo tanto, Liam es el más alto y Zoe la más baja!" },
+              { title: "¡Dibuja una Cuadrícula!", content: "Cuando resuelvas acertijos de lógica con personas y objetos, haz una cuadrícula con marcas de verificación y X para descartar las opciones imposibles." },
+              { title: "Resumen del Módulo 3", content: "• La lógica usa hechos para llegar a conclusiones 100% seguras\n• La deducción elimina las opciones incorrectas paso a paso\n• ¡Las pistas de orden ayudan a ordenar los objetos de mayor a menor!" }
+            ],
+            exercises: [
+              { question: "Si A es más alto que B, y B es más alto que C, ¿quién es el más alto?", options: ["A", "B", "C", "Son iguales"] },
+              { question: "La lógica deductiva significa adivinar al azar sin pruebas." },
+              { question: "Usar pistas para eliminar respuestas incorrectas se llama razonamiento ___.", answer: "deductivo" },
+              { question: "Tengo 4 patas pero no puedo caminar. ¿Qué soy?", options: ["Un perro", "Una silla", "Un pájaro", "Una serpiente"] },
+              { question: "Relaciona la pista lógica con su resultado:", pairs: [ { term: "El gato no está en la Caja A ni B", definition: "Debe estar en la Caja C" }, { term: "Tom > Mark > Leo", definition: "Tom es el más alto" }, { term: "Todos los cuadrados son formas", definition: "Un cuadrado es una forma" } ] }
+            ]
+          },
+          {
+            title: "Módulo 4: Algoritmos y Resolución de Problemas",
+            desc: "Aprende a resolver problemas enormes paso a paso.",
+            contentSections: [
+              { title: "El Sándwich de Mantequilla de Maní del Robot", content: "Imagina ordenar a un robot que haga un sándwich. Si dices 'Pon mantequilla de maní en el pan', ¡el robot podría aplastar el frasco cerrado contra la barra de pan! Tienes que decir: 1) Abre el frasco. 2) Coge el cuchillo. 3) Saca mantequilla de maní. 4) Úntala en el pan. ¡Esa receta paso a paso es un algoritmo!" },
+              { title: "¿Qué es un Algoritmo?", content: "Un algoritmo es una lista de instrucciones precisa y ordenada para resolver un problema o completar una tarea." },
+              { title: "Descomposición: Dividir Tareas Grandes", content: "Cuando se enfrentan a un problema enorme (como construir un cohete o crear un juego), los expertos usan la Descomposición: ¡dividir 1 problema enorme en 10 pasos pequeños y fáciles!" },
+              { title: "Resumen del Módulo 4", content: "• Los algoritmos son recetas paso a paso\n• El orden importa: fuera de orden = fallo\n• ¡La descomposición divide las tareas grandes en pasos simples!" }
+            ],
+            exercises: [
+              { question: "¿Qué es un algoritmo?", options: ["Un error matemático", "Un tipo de dinosaurio", "Una lista de instrucciones paso a paso", "Una figura 3D"] },
+              { question: "En un algoritmo, cambiar el orden de los pasos no importa." },
+              { question: "Dividir un problema grande en pasos pequeños se llama ___.", answer: "descomposición" },
+              { question: "Relaciona los términos de algoritmos con su significado:", pairs: [ { term: "Algoritmo", definition: "Instrucciones paso a paso" }, { term: "Descomposición", definition: "Dividir tareas en partes pequeñas" }, { term: "Depuración", definition: "Corregir un error en los pasos" } ] },
+              { question: "¿Cuál es la mejor forma de resolver un acertijo matemático enorme y difícil?", options: ["Llorar", "Dividirlo en pasos pequeños y fáciles", "Adivinar", "Rendirse"] }
+            ]
+          }
+        ]
       }
     }
   },
