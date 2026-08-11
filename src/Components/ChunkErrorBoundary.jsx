@@ -13,8 +13,37 @@ class ChunkErrorBoundary extends Component {
     return { hasError: true };
   }
 
+  // A stale-chunk error happens when a new version is deployed while a user has
+  // the app open: their cached index.html asks for JS chunks whose hashes no
+  // longer exist. Detect that case so we can silently self-heal with a reload.
+  static isChunkError(error) {
+    const msg = (error && error.message) || "";
+    const name = (error && error.name) || "";
+    return (
+      name === "ChunkLoadError" ||
+      /Loading chunk [\w-]+ failed/i.test(msg) ||
+      /Loading CSS chunk/i.test(msg) ||
+      /(failed to fetch|error loading) dynamically imported module/i.test(msg) ||
+      /import.*module.*(text\/html|MIME)/i.test(msg)
+    );
+  }
+
   componentDidCatch(error, errorInfo) {
     console.error("ChunkErrorBoundary caught an error:", error, errorInfo);
+
+    // For a stale-chunk error, reload once to pull the new index.html + chunks.
+    // A sessionStorage timestamp guards against a reload loop if it keeps failing.
+    if (ChunkErrorBoundary.isChunkError(error)) {
+      try {
+        const last = Number(sessionStorage.getItem("ltp_chunk_reload_at") || 0);
+        if (Date.now() - last > 10000) {
+          sessionStorage.setItem("ltp_chunk_reload_at", String(Date.now()));
+          window.location.reload();
+        }
+      } catch {
+        window.location.reload();
+      }
+    }
   }
 
   componentDidUpdate(prevProps) {
