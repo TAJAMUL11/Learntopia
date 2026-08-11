@@ -410,7 +410,7 @@ const CourseDetails = () => {
                 <h3 className="text-2xl font-bold text-ink-hi">Course Modules</h3>
                 <p className="mt-1 text-sm text-ink-low">Complete all exercises in a module to unlock the next one.</p>
               </div>
-              <Button variant="secondary" size="sm" className="gap-2 shrink-0 border-violet-500/30 text-violet-300 hover:bg-violet-500/10" onClick={() => setShowAIModal(true)}>
+              <Button variant="secondary" size="sm" className="gap-2 shrink-0 border-violet-500/30 text-violet-300 hover:bg-violet-500/10" onClick={() => setShowAIDrawer(true)}>
                 <Icon name="help-circle" size={16} /> Need help? Ask AI
               </Button>
             </div>
