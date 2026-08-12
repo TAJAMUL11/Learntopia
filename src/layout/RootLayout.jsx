@@ -4,6 +4,7 @@ import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import PageSkeleton from "../Components/ui/PageSkeleton";
 import ChunkErrorBoundary from "../Components/ChunkErrorBoundary";
+import StreakModal from "../Components/StreakModal";
 
 // React Router keeps the previous scroll position on navigation, which lands
 // the user mid-page. Reset to the top whenever the route changes.
@@ -30,6 +31,7 @@ const RootLayout = () => {
         </ChunkErrorBoundary>
       </main>
       <Footer />
+      <StreakModal />
     </div>
   );
 };
