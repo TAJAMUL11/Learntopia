@@ -143,7 +143,7 @@ export const contentTranslations = {
       coursesTable: [
         { concept: "Step-by-Step Lesson Player", behaviour: "Presents module content one card at a time with distinct visual themes (Story, Concept, Fun Fact, Pro Tip, Example, Activity, Recap) and code syntax highlighting." },
         { concept: "Multi-Type Exercise Engine", behaviour: "Tests understanding using 4 interactive formats: Multiple Choice (MCQ), True/False, Fill-in-the-Blank, and Tap-to-Connect Matching Pairs." },
-        { concept: "Gamification & Level System", behaviour: "Earn +50 XP per completed module and +100 XP per completed course. Level up from Rookie Coder (Level 1) to Grandmaster (Level 5)." },
+        { concept: "Gamification & Level System", behaviour: "Earn XP by completing course modules (+50 XP each, +100 XP for full course) and quizzes (20–100 XP scaled by score). Level up from Rookie Coder (Level 1) to Grandmaster (Level 5)." },
         { concept: "Badges & Celebrations", behaviour: "Unlocks unique course badges (e.g. Python Pioneer 🐍, Math Wizard 🔮) with celebratory full-screen overlays upon achievement." },
         { concept: "Course progress", behaviour: "Tracks completed modules in real time with progress bars, saved automatically. Resume anytime from your Student Dashboard." },
         { concept: "Course reset", behaviour: "Reset completed courses anytime via the Start Again button to replay lessons and re-earn practice." },
@@ -372,7 +372,7 @@ export const contentTranslations = {
       coursesTable: [
         { concept: "Reproductor de Lecciones Paso a Paso", behaviour: "Presenta el contenido del módulo de una tarjeta a la vez con temas visuales distintos (Historia, Concepto, Dato Curioso, Consejo Pro, Ejemplo, Actividad, Resumen) y resaltado de sintaxis de código." },
         { concept: "Motor de Ejercicios Multitipo", behaviour: "Evalúa la comprensión mediante 4 formatos interactivos: Opción Múltiple (MCQ), Verdadero/Falso, Rellenar el Espacio y Emparejar Pares." },
-        { concept: "Gamificación y Sistema de Niveles", behaviour: "Gana +50 XP por cada módulo completado y +100 XP por cada curso completado. Sube de nivel desde Programador Novato (Nivel 1) hasta Gran Maestro (Nivel 5)." },
+        { concept: "Gamificación y Sistema de Niveles", behaviour: "Gana XP completando módulos de cursos (+50 XP cada uno, +100 XP por curso completo) y cuestionarios (20–100 XP según tu puntuación). Sube de nivel desde Programador Novato (Nivel 1) hasta Gran Maestro (Nivel 5)." },
         { concept: "Insignias y Celebraciones", behaviour: "Desbloquea insignias únicas de cada curso (p. ej. Pionero de Python 🐍, Mago de las Matemáticas 🔮) con superposiciones a pantalla completa al conseguirlas." },
         { concept: "Progreso del curso", behaviour: "Registra los módulos completados en tiempo real con barras de progreso, guardadas automáticamente. Retoma cuando quieras desde tu Panel de Estudiante." },
         { concept: "Reinicio del curso", behaviour: "Reinicia los cursos completados cuando quieras con el botón Empezar de Nuevo para repetir las lecciones y volver a practicar." },
