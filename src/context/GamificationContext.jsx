@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useEffect } from "react";
 import { useAuth } from "./AuthContext";
 import { db } from "../firebase/firebase";
@@ -45,32 +46,63 @@ export const GamificationProvider = ({ children }) => {
   const [celebration, setCelebration] = useState(null); // { type: 'module'|'course'|'level', title, message, badge? }
   const [loading, setLoading] = useState(true);
 
+  const [showStreakModal, setShowStreakModal] = useState(false);
+
   useEffect(() => {
     if (!currentUser) {
       setXp(0);
       setBadges([]);
       setStreak(1);
+      setShowStreakModal(false);
       setLoading(false);
       return;
     }
 
     const loadGamification = async () => {
       try {
-        const ref = doc(db, "Users", currentUser.uid, "data", "gamification");
-        const snap = await getDoc(ref);
-        if (snap.exists()) {
-          const d = snap.data();
-          setXp(d.xp || 0);
-          setBadges(d.badges || []);
-          setStreak(d.streak || 1);
-        } else {
-          // Initialize default
-          await setDoc(ref, {
-            xp: 0,
-            badges: [],
-            streak: 1,
-            lastActive: new Date(),
-          }, { merge: true });
+        const userRef = doc(db, "Users", currentUser.uid);
+        const gamiRef = doc(db, "Users", currentUser.uid, "data", "gamification");
+
+        const [userSnap, gamiSnap] = await Promise.all([
+          getDoc(userRef).catch(() => null),
+          getDoc(gamiRef).catch(() => null),
+        ]);
+
+        let loadedXp = 0;
+        let loadedBadges = [];
+        let loadedStreak = 1;
+
+        let lastStreakPopupDate = null;
+
+        if (userSnap && userSnap.exists()) {
+          const u = userSnap.data();
+          if (u.xp !== undefined) loadedXp = Math.max(loadedXp, Number(u.xp) || 0);
+          if (Array.isArray(u.badges) && u.badges.length > 0) loadedBadges = u.badges;
+          if (u.streak !== undefined) loadedStreak = Math.max(loadedStreak, Number(u.streak) || 1);
+          if (u.lastStreakPopupDate) lastStreakPopupDate = u.lastStreakPopupDate;
+        }
+
+        if (gamiSnap && gamiSnap.exists()) {
+          const g = gamiSnap.data();
+          if (g.xp !== undefined) loadedXp = Math.max(loadedXp, Number(g.xp) || 0);
+          if (Array.isArray(g.badges) && g.badges.length > loadedBadges.length) loadedBadges = g.badges;
+          if (g.streak !== undefined) loadedStreak = Math.max(loadedStreak, Number(g.streak) || 1);
+        }
+
+        setXp(loadedXp);
+        setBadges(loadedBadges);
+        setStreak(loadedStreak);
+
+        // HelloTalk-style streak popup check (streak >= 3) — synced via Cloud Firestore & localStorage
+        if (loadedStreak >= 3) {
+          const today = new Date();
+          const todayKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+          const storageKey = `learntopia_streak_popup_${currentUser.uid}_${todayKey}`;
+          const localShown = localStorage.getItem(storageKey);
+          
+          if (lastStreakPopupDate !== todayKey && !localShown) {
+            setShowStreakModal(true);
+          }
         }
       } catch (err) {
         console.error("Error loading gamification data:", err);
@@ -85,9 +117,12 @@ export const GamificationProvider = ({ children }) => {
   const saveGamification = async (newXp, newBadges, newStreak) => {
     if (!currentUser) return;
     try {
-      const ref = doc(db, "Users", currentUser.uid, "data", "gamification");
+      const gamiRef = doc(db, "Users", currentUser.uid, "data", "gamification");
+      const userRef = doc(db, "Users", currentUser.uid);
+      const publicRef = doc(db, "PublicLeaderboard", currentUser.uid);
+
       await setDoc(
-        ref,
+        gamiRef,
         {
           xp: newXp,
           badges: newBadges,
@@ -96,6 +131,48 @@ export const GamificationProvider = ({ children }) => {
         },
         { merge: true }
       );
+
+      const userSnap = await getDoc(userRef).catch(() => null);
+      let quizPoints = 0;
+      let displayName = currentUser.displayName || "Learner";
+
+      if (userSnap && userSnap.exists()) {
+        const uData = userSnap.data();
+        if (uData.fullName) displayName = uData.fullName;
+        if (uData.quizPoints !== undefined) quizPoints = Number(uData.quizPoints) || 0;
+        else if (uData.totalPoints !== undefined && uData.totalPoints > (uData.xp || 0)) {
+          quizPoints = Number(uData.totalPoints - (uData.xp || 0)) || 0;
+        }
+      }
+
+      const newTotalPoints = newXp + quizPoints;
+
+      await setDoc(
+        userRef,
+        {
+          xp: newXp,
+          quizPoints,
+          totalPoints: newTotalPoints,
+          badges: newBadges,
+          streak: newStreak,
+          updatedAt: new Date(),
+        },
+        { merge: true }
+      );
+
+      await setDoc(
+        publicRef,
+        {
+          uid: currentUser.uid,
+          fullName: displayName,
+          totalPoints: newTotalPoints,
+          xp: newXp,
+          streak: newStreak,
+          badges: newBadges.map((b) => (typeof b === "string" ? b : b.name || "Badge")),
+          updatedAt: new Date(),
+        },
+        { merge: true }
+      ).catch(() => {});
     } catch (err) {
       console.error("Error saving gamification:", err);
     }
@@ -158,6 +235,22 @@ export const GamificationProvider = ({ children }) => {
     setCelebration(null);
   };
 
+  const dismissStreakModal = async () => {
+    if (currentUser) {
+      const today = new Date();
+      const todayKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+      const storageKey = `learntopia_streak_popup_${currentUser.uid}_${todayKey}`;
+      try {
+        localStorage.setItem(storageKey, "true");
+        const userRef = doc(db, "Users", currentUser.uid);
+        await setDoc(userRef, { lastStreakPopupDate: todayKey }, { merge: true }).catch(() => {});
+      } catch (err) {
+        console.error("Error setting streak modal storage key:", err);
+      }
+    }
+    setShowStreakModal(false);
+  };
+
   const levelInfo = getLevelInfo(xp);
 
   return (
@@ -168,6 +261,8 @@ export const GamificationProvider = ({ children }) => {
         badges,
         streak,
         celebration,
+        showStreakModal,
+        dismissStreakModal,
         addXP,
         awardBadge,
         triggerCelebration,

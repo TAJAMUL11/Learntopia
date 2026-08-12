@@ -78,77 +78,76 @@ export function AuthProvider({ children }) {
       } catch (err) {
         console.error("Error reading auth claims:", err);
       }
-      setIsAdmin(admin);
+      // Unblock initial app load immediately (~10ms) so cold start is instant.
+      setLoading(false);
 
       // SECURITY GUARD: Never create or update student profile or leaderboard for the Administrator
-      if (admin) {
-        setLoading(false);
-        return;
-      }
+      if (admin) return;
 
-      try {
-        const userRef = doc(db, "Users", user.uid);
-        const userSnap = await getDoc(userRef);
+      // Run profile initialization and daily streak checks asynchronously in background
+      (async () => {
+        try {
+          const userRef = doc(db, "Users", user.uid);
+          const userSnap = await getDoc(userRef);
 
-        const today = new Date();
-        const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+          const today = new Date();
+          const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
-        if (!userSnap.exists()) {
-          // Initialize private student profile
-          await setDoc(userRef, {
-            email: user.email || "",
-            fullName: user.displayName || "New User",
-            totalPoints: 0,
-            badges: ["Newcomer"],
-            streak: 1,
-            lastLoginDate: todayStr,
-          });
-
-          const publicRef = doc(db, "PublicLeaderboard", user.uid);
-          await setDoc(publicRef, {
-            uid: user.uid,
-            fullName: user.displayName || "Learner",
-            totalPoints: 0,
-            streak: 1,
-            badges: ["Newcomer"],
-            updatedAt: new Date()
-          }, { merge: true });
-        } else {
-          const data = userSnap.data();
-          const lastDateStr = data.lastLoginDate;
-
-          // Only update if the user hasn't been credited for today yet
-          if (lastDateStr !== todayStr) {
-            let newStreak;
-
-            if (lastDateStr) {
-              const [ly, lm, ld] = lastDateStr.split("-").map(Number);
-              const [ty, tm, td] = todayStr.split("-").map(Number);
-              const lastMidnight = Date.UTC(ly, lm - 1, ld);
-              const todayMidnight = Date.UTC(ty, tm - 1, td);
-              const diffDays = (todayMidnight - lastMidnight) / (1000 * 60 * 60 * 24);
-              newStreak = diffDays === 1 ? (data.streak || 0) + 1 : 1;
-            } else {
-              newStreak = 1;
-            }
-
-            await updateDoc(userRef, {
-              streak: newStreak,
+          if (!userSnap.exists()) {
+            // Initialize private student profile
+            await setDoc(userRef, {
+              email: user.email || "",
+              fullName: user.displayName || "New User",
+              totalPoints: 0,
+              badges: ["Newcomer"],
+              streak: 1,
               lastLoginDate: todayStr,
             });
 
             const publicRef = doc(db, "PublicLeaderboard", user.uid);
             await setDoc(publicRef, {
-              streak: newStreak,
-              updatedAt: new Date(),
+              uid: user.uid,
+              fullName: user.displayName || "Learner",
+              totalPoints: 0,
+              streak: 1,
+              badges: ["Newcomer"],
+              updatedAt: new Date()
             }, { merge: true });
-          }
-        }
-      } catch (err) {
-        console.error("Error updating streak:", err);
-      }
+          } else {
+            const data = userSnap.data();
+            const lastDateStr = data.lastLoginDate;
 
-      setLoading(false);
+            // Only update if the user hasn't been credited for today yet
+            if (lastDateStr !== todayStr) {
+              let newStreak;
+
+              if (lastDateStr) {
+                const [ly, lm, ld] = lastDateStr.split("-").map(Number);
+                const [ty, tm, td] = todayStr.split("-").map(Number);
+                const lastMidnight = Date.UTC(ly, lm - 1, ld);
+                const todayMidnight = Date.UTC(ty, tm - 1, td);
+                const diffDays = (todayMidnight - lastMidnight) / (1000 * 60 * 60 * 24);
+                newStreak = diffDays === 1 ? (data.streak || 0) + 1 : 1;
+              } else {
+                newStreak = 1;
+              }
+
+              await updateDoc(userRef, {
+                streak: newStreak,
+                lastLoginDate: todayStr,
+              });
+
+              const publicRef = doc(db, "PublicLeaderboard", user.uid);
+              await setDoc(publicRef, {
+                streak: newStreak,
+                updatedAt: new Date(),
+              }, { merge: true });
+            }
+          }
+        } catch (err) {
+          console.error("Error updating background streak:", err);
+        }
+      })();
     });
     return unsubscribe;
   }, []);

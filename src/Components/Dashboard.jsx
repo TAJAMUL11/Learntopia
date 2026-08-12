@@ -1,5 +1,5 @@
 import { db } from "../firebase/firebase";
-import { getDoc, doc, collection, getDocs, deleteDoc, updateDoc, setDoc } from "firebase/firestore";
+import { getDoc, doc, collection, getDocs, deleteDoc, setDoc } from "firebase/firestore";
 import { deleteUser } from "firebase/auth";
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
@@ -68,12 +68,12 @@ const Dashboard = () => {
         coursesSnap.forEach((docSnap) => courses.push({ id: docSnap.id, ...docSnap.data() }));
         setEnrolledCourses(courses);
 
-        // Best score per quiz + total points from all attempts.
-        let calculatedTotalPoints = 0;
+        // Best score per quiz + total quiz points from all attempts.
+        let calculatedQuizPoints = 0;
         const best = {};
         quizSnap.forEach((docSnap) => {
           const data = docSnap.data();
-          if (data.score) calculatedTotalPoints += data.score * 10;
+          if (data.score) calculatedQuizPoints += data.score * 10;
           const key = data.quizId || data.quizTitle;
           if (key) {
             if (!best[key] || (data.score || 0) > best[key].score) {
@@ -87,11 +87,14 @@ const Dashboard = () => {
         });
         setQuizScores(Object.values(best));
 
+        const currentXp = xp || (userSnap.exists() && userSnap.data()?.xp) || 0;
+        const unifiedTotalPoints = currentXp + calculatedQuizPoints;
+
         if (userSnap.exists()) {
           const uData = userSnap.data();
-          if (uData.totalPoints === undefined || uData.totalPoints !== calculatedTotalPoints) {
-            await updateDoc(userRef, { totalPoints: calculatedTotalPoints });
-            setUserDetails({ ...uData, totalPoints: calculatedTotalPoints });
+          if (uData.totalPoints !== unifiedTotalPoints || uData.quizPoints !== calculatedQuizPoints || uData.xp !== currentXp) {
+            await setDoc(userRef, { quizPoints: calculatedQuizPoints, totalPoints: unifiedTotalPoints, xp: currentXp }, { merge: true });
+            setUserDetails({ ...uData, quizPoints: calculatedQuizPoints, totalPoints: unifiedTotalPoints, xp: currentXp });
           } else {
             setUserDetails(uData);
           }
@@ -99,7 +102,9 @@ const Dashboard = () => {
           setUserDetails({
             email: currentUser.email,
             fullName: currentUser.displayName,
-            totalPoints: calculatedTotalPoints,
+            xp: currentXp,
+            quizPoints: calculatedQuizPoints,
+            totalPoints: unifiedTotalPoints,
           });
         }
 
@@ -111,7 +116,8 @@ const Dashboard = () => {
             {
               uid: currentUser.uid,
               fullName: (userSnap.exists() && userSnap.data()?.fullName) || currentUser.displayName || "Learner",
-              totalPoints: calculatedTotalPoints,
+              totalPoints: unifiedTotalPoints,
+              xp: currentXp,
               streak: (userSnap.exists() && userSnap.data()?.streak) || 1,
               badges: (userSnap.exists() && userSnap.data()?.badges) || ["Newcomer"],
               updatedAt: new Date(),
@@ -127,7 +133,7 @@ const Dashboard = () => {
     };
 
     fetchData();
-  }, [currentUser, isAdmin]);
+  }, [currentUser, isAdmin, xp]);
 
   const handleLogout = async () => {
     try {

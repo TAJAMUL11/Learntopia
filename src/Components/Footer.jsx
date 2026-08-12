@@ -72,9 +72,9 @@ const Footer = () => {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-white/[0.06] pt-6 text-xs text-ink-low sm:flex-row">
-          <p>&copy; {new Date().getFullYear()} Learntopia. {t("footer.rights")}</p>
-          <div className="flex items-center gap-4">
+        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-white/[0.06] pt-6 text-center text-xs text-ink-low sm:flex-row sm:text-left">
+          <p className="text-center sm:text-left">&copy; {new Date().getFullYear()} Learntopia. {t("footer.rights")}</p>
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:justify-end">
             <span>
               Built by{" "}
               <a

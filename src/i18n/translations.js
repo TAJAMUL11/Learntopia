@@ -10,6 +10,14 @@ export const LANGUAGES = [
 
 export const translations = {
   en: {
+    streakModal: {
+      title: "{count}-Day Streak!",
+      subtitle: "You're on fire! Keep learning daily to build your streak!",
+      dayLabel: "Day {day}",
+      streakBonus: "+{amount} Streak Bonus XP Credited! ⚡",
+      keepGoing: "Keep It Up! 🚀",
+      motivation: "Consistency is key! Every day you study makes you stronger.",
+    },
     aiTutor: {
           "yourTutor": "Your AI Tutor",
           "askTutor": "Ask {name}",
@@ -621,6 +629,14 @@ export const translations = {
   },
 
   es: {
+    streakModal: {
+      title: "¡Racha de {count} Días!",
+      subtitle: "¡Estás encendido! ¡Sigue aprendiendo a diario para mantener tu racha!",
+      dayLabel: "Día {day}",
+      streakBonus: "¡+{amount} XP de Bonificación de Racha Acreditados! ⚡",
+      keepGoing: "¡A Seguir Así! 🚀",
+      motivation: "¡La constancia es la clave! Cada día de estudio te hace más fuerte.",
+    },
     aiTutor: {
           "yourTutor": "Tu Tutor IA",
           "askTutor": "Preguntar a {name}",

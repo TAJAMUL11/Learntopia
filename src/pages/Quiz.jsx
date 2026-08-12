@@ -137,7 +137,7 @@ const Quiz = () => {
         });
       }
     },
-    [isAnswerSubmitted, activeQuiz, currentQuestionIdx, playCorrect, playIncorrect]
+    [isAnswerSubmitted, activeQuiz, currentQuestionIdx, playCorrect, playIncorrect, t]
   );
 
   const startQuiz = (quiz) => {

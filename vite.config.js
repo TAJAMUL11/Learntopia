@@ -12,8 +12,11 @@ export default defineConfig({
         // and the main app bundle stays small.
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'firebase-vendor': ['firebase/app', 'firebase/auth', 'firebase/firestore'],
-          'gsap-vendor': ['gsap'],
+          'firebase-app': ['firebase/app'],
+          'firebase-auth': ['firebase/auth'],
+          'firebase-firestore': ['firebase/firestore'],
+          'gsap-vendor': ['gsap', '@gsap/react'],
+          'ui-vendor': ['react-toastify'],
         },
       },
     },
