@@ -155,7 +155,7 @@ const Admin = () => {
     };
 
     fetchAdminData();
-  }, [isAdmin, authLoading, currentUser]);
+  }, [isAdmin, authLoading, currentUser, t]);
 
   const handleCreateBugReport = async (e) => {
     e.preventDefault();
@@ -232,7 +232,6 @@ const Admin = () => {
   const clock = useLiveClock();
   const timeStr = clock.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true });
   const dateStr = clock.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" });
-  /* eslint-enable react-hooks/rules-of-hooks */
 
   if (authLoading) {
     return (
