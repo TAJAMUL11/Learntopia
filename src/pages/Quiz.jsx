@@ -8,6 +8,7 @@ import { getLocalizedQuiz } from "../utils/localizationUtils";
 import { useAuth } from "../context/AuthContext";
 import { useSound } from "../context/SoundContext";
 import { useLanguage } from "../context/LanguageContext";
+import { useGamification } from "../context/GamificationContext";
 import Card from "../Components/ui/Card";
 import Button from "../Components/ui/Button";
 import Badge from "../Components/ui/Badge";
@@ -19,6 +20,7 @@ import { Skeleton } from "../Components/ui/Skeleton";
 const Quiz = () => {
   const { playClick, playCorrect, playIncorrect, playLevelUp, playTimerTick, playTimerUrgent } = useSound();
   const { t } = useLanguage();
+  const { addXP } = useGamification();
 
   // Localize quiz metadata + questions/options for the active language.
   const localizedQuizzes = useMemo(() => quizzes.map((q) => getLocalizedQuiz(q, t)), [t]);
@@ -54,17 +56,34 @@ const Quiz = () => {
   const [highScores, setHighScores] = useState({});
   const [isSaving, setIsSaving] = useState(false);
   const [loadingScores, setLoadingScores] = useState(false);
+  const [xpEarned, setXpEarned] = useState(0);
+
+  // Scaled XP based on quiz score percentage
+  const getScaledXP = (correctCount, totalQuestions) => {
+    if (correctCount === 0) return 0;
+    const pct = (correctCount / totalQuestions) * 100;
+    if (pct === 100) return 100;
+    if (pct >= 80) return 80;
+    if (pct >= 60) return 60;
+    if (pct >= 40) return 40;
+    return 20;
+  };
 
   // Save score to Firestore with fail-safe merge
   const saveScore = async (finalScore) => {
     if (!currentUser || !activeQuiz) return;
     setIsSaving(true);
     try {
+      const totalQ = activeQuiz.questions.length;
+      const earnedXP = getScaledXP(finalScore, totalQ);
+      setXpEarned(earnedXP);
+
       const attempt = {
         quizId: activeQuiz.id,
         quizTitle: activeQuiz.title,
         score: finalScore,
-        totalQuestions: activeQuiz.questions.length,
+        totalQuestions: totalQ,
+        xpEarned: earnedXP,
         completedAt: new Date(),
       };
 
@@ -73,30 +92,24 @@ const Quiz = () => {
         attempt
       );
 
-      const pointsEarned = finalScore * 10;
-      if (pointsEarned > 0) {
+      if (earnedXP > 0) {
+        // Update profile XP via GamificationContext (syncs to Firestore + PublicLeaderboard)
+        addXP(earnedXP, `Quiz completed: ${activeQuiz.title}`);
+
+        // Also update quizPoints on user doc for Dashboard unified total
         const userRef = doc(db, "Users", currentUser.uid);
         await setDoc(userRef, {
-          totalPoints: increment(pointsEarned)
+          quizPoints: increment(earnedXP)
         }, { merge: true });
 
         // Sync to global QuizLeaderboard
         const globalScoreRef = doc(db, "QuizLeaderboards", activeQuiz.id, "Scores", currentUser.uid);
         await setDoc(globalScoreRef, {
-          score: pointsEarned,
+          score: earnedXP,
           rawScore: finalScore,
           userFullName: currentUser.displayName || "User",
           userId: currentUser.uid,
           completedAt: new Date()
-        }, { merge: true });
-
-        // Sync to PublicLeaderboard
-        const publicRef = doc(db, "PublicLeaderboard", currentUser.uid);
-        await setDoc(publicRef, {
-          uid: currentUser.uid,
-          fullName: currentUser.displayName || "Learner",
-          totalPoints: increment(pointsEarned),
-          updatedAt: new Date()
         }, { merge: true });
       }
 
@@ -449,9 +462,14 @@ const Quiz = () => {
               {isSaving ? (
                 <p className="animate-pulse text-sm text-ink-low">Saving score to your profile…</p>
               ) : (
-                <p className="flex items-center justify-center gap-1.5 text-sm font-semibold text-state-success">
-                  <Icon name="check-circle" size={16} /> {t("quiz.resultsTitle")}
-                </p>
+                <div className="flex flex-col items-center gap-1.5">
+                  <p className="flex items-center justify-center gap-1.5 text-sm font-semibold text-state-success">
+                    <Icon name="check-circle" size={16} /> {t("quiz.resultsTitle")}
+                  </p>
+                  {xpEarned > 0 && (
+                    <p className="text-xs font-bold text-violet-400">+{xpEarned} XP Earned ⚡</p>
+                  )}
+                </div>
               )}
             </div>
           )}
