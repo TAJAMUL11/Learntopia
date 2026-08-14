@@ -2,7 +2,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { useAuth } from "./AuthContext";
 import { db } from "../firebase/firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, onSnapshot, setDoc, increment } from "firebase/firestore";
 
 const GamificationContext = createContext();
 
@@ -29,27 +29,32 @@ export const getLevelInfo = (xp) => {
   const xpNeeded = nextLevel ? nextLevel.minXP - currentLevel.minXP : 100;
   const progressPct = Math.min(100, Math.round((xpInLevel / xpNeeded) * 100));
 
-  return {
-    ...currentLevel,
-    nextLevel,
-    xpInLevel,
-    xpNeeded,
-    progressPct,
-  };
+  return { ...currentLevel, nextLevel, xpInLevel, xpNeeded, progressPct };
 };
+
+const STREAK_BONUS_XP = 20;
+
+const localDayKey = (d = new Date()) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 
 export const GamificationProvider = ({ children }) => {
   const { currentUser } = useAuth();
+  const [profile, setProfile] = useState(null);
   const [xp, setXp] = useState(0);
   const [badges, setBadges] = useState([]);
   const [streak, setStreak] = useState(1);
-  const [celebration, setCelebration] = useState(null); // { type: 'module'|'course'|'level', title, message, badge? }
+  const [celebration, setCelebration] = useState(null);
+  const [showStreakModal, setShowStreakModal] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const [showStreakModal, setShowStreakModal] = useState(false);
-
+  // ── Single source of truth: a LIVE subscription to the canonical Users doc.
+  // Because every device reads the same doc via onSnapshot, XP / points / streak
+  // are GLOBAL (identical everywhere the user is signed in) and REAL-TIME
+  // (updates pushed instantly, no refresh). All writes are atomic increments, so
+  // two devices earning at once can never clobber each other.
   useEffect(() => {
     if (!currentUser) {
+      setProfile(null);
       setXp(0);
       setBadges([]);
       setStreak(1);
@@ -58,210 +63,156 @@ export const GamificationProvider = ({ children }) => {
       return;
     }
 
-    const loadGamification = async () => {
-      try {
-        const userRef = doc(db, "Users", currentUser.uid);
-        const gamiRef = doc(db, "Users", currentUser.uid, "data", "gamification");
+    const userRef = doc(db, "Users", currentUser.uid);
+    const unsub = onSnapshot(
+      userRef,
+      (snap) => {
+        const d = snap.exists() ? snap.data() : {};
+        setProfile(d);
+        setXp(Number(d.xp) || 0);
+        setBadges(Array.isArray(d.badges) ? d.badges : []);
+        setStreak(Number(d.streak) || 1);
+        setLoading(false);
 
-        const [userSnap, gamiSnap] = await Promise.all([
-          getDoc(userRef).catch(() => null),
-          getDoc(gamiRef).catch(() => null),
-        ]);
-
-        let loadedXp = 0;
-        let loadedBadges = [];
-        let loadedStreak = 1;
-
-        let lastStreakPopupDate = null;
-
-        if (userSnap && userSnap.exists()) {
-          const u = userSnap.data();
-          if (u.xp !== undefined) loadedXp = Math.max(loadedXp, Number(u.xp) || 0);
-          if (Array.isArray(u.badges) && u.badges.length > 0) loadedBadges = u.badges;
-          if (u.streak !== undefined) loadedStreak = Math.max(loadedStreak, Number(u.streak) || 1);
-          if (u.lastStreakPopupDate) lastStreakPopupDate = u.lastStreakPopupDate;
+        // Daily streak celebration: streak >= 3, shown once per calendar day
+        // (tracked in Firestore so it's consistent across every device).
+        if ((Number(d.streak) || 1) >= 3 && d.lastStreakPopupDate !== localDayKey()) {
+          setShowStreakModal(true);
         }
-
-        if (gamiSnap && gamiSnap.exists()) {
-          const g = gamiSnap.data();
-          if (g.xp !== undefined) loadedXp = Math.max(loadedXp, Number(g.xp) || 0);
-          if (Array.isArray(g.badges) && g.badges.length > loadedBadges.length) loadedBadges = g.badges;
-          if (g.streak !== undefined) loadedStreak = Math.max(loadedStreak, Number(g.streak) || 1);
-        }
-
-        setXp(loadedXp);
-        setBadges(loadedBadges);
-        setStreak(loadedStreak);
-
-        // HelloTalk-style streak popup check (streak >= 3) — synced via Cloud Firestore & localStorage
-        if (loadedStreak >= 3) {
-          const today = new Date();
-          const todayKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-          const storageKey = `learntopia_streak_popup_${currentUser.uid}_${todayKey}`;
-          const localShown = localStorage.getItem(storageKey);
-          
-          if (lastStreakPopupDate !== todayKey && !localShown) {
-            setShowStreakModal(true);
-          }
-        }
-      } catch (err) {
-        console.error("Error loading gamification data:", err);
-      } finally {
+      },
+      (err) => {
+        console.error("Gamification snapshot error:", err);
         setLoading(false);
       }
-    };
+    );
 
-    loadGamification();
+    return unsub;
   }, [currentUser]);
 
-  const saveGamification = async (newXp, newBadges, newStreak) => {
-    if (!currentUser) return;
+  const totalPoints = xp; // XP is the single unified score (quizzes + lessons + bonuses)
+  const levelInfo = getLevelInfo(xp);
+
+  // Atomically add points to the profile AND mirror to the public leaderboard.
+  // Uses increment() so concurrent writes from multiple devices are race-safe,
+  // and the onSnapshot listeners reflect the new value everywhere immediately.
+  const awardPoints = async (amount, extraProfileFields = {}) => {
+    if (!currentUser || !amount || amount <= 0) return;
+    const uid = currentUser.uid;
     try {
-      const gamiRef = doc(db, "Users", currentUser.uid, "data", "gamification");
-      const userRef = doc(db, "Users", currentUser.uid);
-      const publicRef = doc(db, "PublicLeaderboard", currentUser.uid);
-
       await setDoc(
-        gamiRef,
-        {
-          xp: newXp,
-          badges: newBadges,
-          streak: newStreak,
-          updatedAt: new Date(),
-        },
+        doc(db, "Users", uid),
+        { xp: increment(amount), totalPoints: increment(amount), updatedAt: new Date(), ...extraProfileFields },
         { merge: true }
       );
-
-      const userSnap = await getDoc(userRef).catch(() => null);
-      let quizPoints = 0;
-      let displayName = currentUser.displayName || "Learner";
-
-      if (userSnap && userSnap.exists()) {
-        const uData = userSnap.data();
-        if (uData.fullName) displayName = uData.fullName;
-        if (uData.quizPoints !== undefined) quizPoints = Number(uData.quizPoints) || 0;
-        else if (uData.totalPoints !== undefined && uData.totalPoints > (uData.xp || 0)) {
-          quizPoints = Number(uData.totalPoints - (uData.xp || 0)) || 0;
-        }
-      }
-
-      const newTotalPoints = newXp + quizPoints;
-
-      await setDoc(
-        userRef,
-        {
-          xp: newXp,
-          quizPoints,
-          totalPoints: newTotalPoints,
-          badges: newBadges,
-          streak: newStreak,
-          updatedAt: new Date(),
-        },
-        { merge: true }
-      );
-
-      await setDoc(
-        publicRef,
-        {
-          uid: currentUser.uid,
-          fullName: displayName,
-          totalPoints: newTotalPoints,
-          xp: newXp,
-          streak: newStreak,
-          badges: newBadges.map((b) => (typeof b === "string" ? b : b.name || "Badge")),
-          updatedAt: new Date(),
-        },
-        { merge: true }
-      ).catch(() => {});
     } catch (err) {
-      console.error("Error saving gamification:", err);
+      console.error("Error awarding points to profile:", err);
+    }
+    // Public leaderboard mirror (display data only — never email/PII).
+    try {
+      await setDoc(
+        doc(db, "PublicLeaderboard", uid),
+        {
+          uid,
+          fullName: profile?.fullName || currentUser.displayName || "Learner",
+          totalPoints: increment(amount),
+          xp: increment(amount),
+          streak: Number(profile?.streak) || 1,
+          badges: (badges || []).map((b) => (typeof b === "string" ? b : b.name || "Badge")),
+          updatedAt: new Date(),
+        },
+        { merge: true }
+      );
+    } catch { /* leaderboard mirror is best-effort */ }
+  };
+
+  const addXP = async (amount, reason = "") => {
+    const oldLevel = getLevelInfo(xp);
+    const newLevel = getLevelInfo(xp + amount);
+    await awardPoints(amount);
+
+    if (newLevel.level > oldLevel.level) {
+      setTimeout(() => {
+        setCelebration({
+          type: "level",
+          title: `Level Up! ${newLevel.icon}`,
+          message: `You reached Level ${newLevel.level}: ${newLevel.name}!`,
+          xpEarned: amount,
+        });
+      }, 500);
+    } else if (reason) {
+      setCelebration({ type: "xp", title: `+${amount} XP Earned! ⚡`, message: reason, xpEarned: amount });
     }
   };
 
-  const addXP = (amount, reason = "") => {
-    setXp((prevXP) => {
-      const oldLevelInfo = getLevelInfo(prevXP);
-      const newXP = prevXP + amount;
-      const newLevelInfo = getLevelInfo(newXP);
-
-      saveGamification(newXP, badges, streak);
-
-      if (newLevelInfo.level > oldLevelInfo.level) {
-        // Level Up Trigger!
-        setTimeout(() => {
-          setCelebration({
-            type: "level",
-            title: `Level Up! ${newLevelInfo.icon}`,
-            message: `You reached Level ${newLevelInfo.level}: ${newLevelInfo.name}!`,
-            xpEarned: amount,
-          });
-        }, 500);
-      } else if (reason) {
-        // Normal XP award celebration
-        setCelebration({
-          type: "xp",
-          title: `+${amount} XP Earned! ⚡`,
-          message: reason,
-          xpEarned: amount,
-        });
-      }
-
-      return newXP;
+  const awardBadge = async (badge) => {
+    if (badges.some((b) => (typeof b === "string" ? b : b.name) === badge.name)) return;
+    const updated = [...badges, { ...badge, earnedAt: new Date().toISOString() }];
+    try {
+      await setDoc(
+        doc(db, "Users", currentUser.uid),
+        { badges: updated, updatedAt: new Date() },
+        { merge: true }
+      );
+    } catch (err) {
+      console.error("Error awarding badge:", err);
+    }
+    setCelebration({
+      type: "badge",
+      title: `Badge Unlocked! ${badge.emoji || "🏆"}`,
+      message: `You earned the "${badge.name}" badge!`,
+      badge,
     });
   };
 
-  const awardBadge = (badge) => {
-    setBadges((prevBadges) => {
-      if (prevBadges.some((b) => b.name === badge.name)) return prevBadges;
-      const updated = [...prevBadges, { ...badge, earnedAt: new Date().toISOString() }];
-      saveGamification(xp, updated, streak);
-
-      setCelebration({
-        type: "badge",
-        title: `Badge Unlocked! ${badge.emoji || "🏆"}`,
-        message: `You earned the "${badge.name}" badge!`,
-        badge,
-      });
-
-      return updated;
+  // Claim the daily streak bonus (+20 XP). Guarded to once per calendar day via
+  // lastStreakClaimDate stored in Firestore, so it can't be re-claimed on
+  // another device or after a refresh. Returns true if the bonus was granted.
+  const claimStreakBonus = async () => {
+    const todayKey = localDayKey();
+    if (!currentUser || profile?.lastStreakClaimDate === todayKey) {
+      setShowStreakModal(false);
+      return false;
+    }
+    await awardPoints(STREAK_BONUS_XP, { lastStreakClaimDate: todayKey, lastStreakPopupDate: todayKey });
+    setCelebration({
+      type: "xp",
+      title: `+${STREAK_BONUS_XP} XP! 🔥`,
+      message: "Daily streak bonus claimed!",
+      xpEarned: STREAK_BONUS_XP,
     });
-  };
-
-  const triggerCelebration = (celebrationObj) => {
-    setCelebration(celebrationObj);
-  };
-
-  const closeCelebration = () => {
-    setCelebration(null);
+    setShowStreakModal(false);
+    return true;
   };
 
   const dismissStreakModal = async () => {
     if (currentUser) {
-      const today = new Date();
-      const todayKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-      const storageKey = `learntopia_streak_popup_${currentUser.uid}_${todayKey}`;
       try {
-        localStorage.setItem(storageKey, "true");
-        const userRef = doc(db, "Users", currentUser.uid);
-        await setDoc(userRef, { lastStreakPopupDate: todayKey }, { merge: true }).catch(() => {});
-      } catch (err) {
-        console.error("Error setting streak modal storage key:", err);
-      }
+        await setDoc(
+          doc(db, "Users", currentUser.uid),
+          { lastStreakPopupDate: localDayKey() },
+          { merge: true }
+        );
+      } catch { /* best-effort */ }
     }
     setShowStreakModal(false);
   };
 
-  const levelInfo = getLevelInfo(xp);
+  const triggerCelebration = (celebrationObj) => setCelebration(celebrationObj);
+  const closeCelebration = () => setCelebration(null);
 
   return (
     <GamificationContext.Provider
       value={{
         xp,
+        totalPoints,
         levelInfo,
         badges,
         streak,
         celebration,
         showStreakModal,
+        streakBonusXp: STREAK_BONUS_XP,
+        alreadyClaimedStreakToday: profile?.lastStreakClaimDate === localDayKey(),
+        claimStreakBonus,
         dismissStreakModal,
         addXP,
         awardBadge,
