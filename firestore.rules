@@ -42,7 +42,7 @@ service cloud.firestore {
     // impossible score. Shape mirrors Quiz.jsx -> saveScore().
     function isValidAttempt() {
       let d = request.resource.data;
-      return d.keys().hasOnly(['quizId', 'quizTitle', 'score', 'totalQuestions', 'completedAt'])
+      return d.keys().hasOnly(['quizId', 'quizTitle', 'score', 'totalQuestions', 'xpEarned', 'completedAt'])
           && d.quizId is string
           && d.quizTitle is string
           && d.score is number
