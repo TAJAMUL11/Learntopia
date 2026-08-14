@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { Link, useBlocker } from "react-router-dom";
 import { toast } from "react-toastify";
 import { db } from "../firebase/firebase";
-import { collection, addDoc, getDocs, doc, increment, setDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs, doc, setDoc } from "firebase/firestore";
 import { quizzes } from "../data/quizData";
 import { getLocalizedQuiz } from "../utils/localizationUtils";
 import { useAuth } from "../context/AuthContext";
@@ -93,14 +93,10 @@ const Quiz = () => {
       );
 
       if (earnedXP > 0) {
-        // Update profile XP via GamificationContext (syncs to Firestore + PublicLeaderboard)
-        addXP(earnedXP, `Quiz completed: ${activeQuiz.title}`);
-
-        // Also update quizPoints on user doc for Dashboard unified total
-        const userRef = doc(db, "Users", currentUser.uid);
-        await setDoc(userRef, {
-          quizPoints: increment(earnedXP)
-        }, { merge: true });
+        // Award XP through GamificationContext — atomically increments the
+        // profile (xp + totalPoints) and mirrors to the public leaderboard, so
+        // it's global across devices and reflects in real time.
+        await addXP(earnedXP, `Quiz completed: ${activeQuiz.title}`);
 
         // Sync to global QuizLeaderboard
         const globalScoreRef = doc(db, "QuizLeaderboards", activeQuiz.id, "Scores", currentUser.uid);

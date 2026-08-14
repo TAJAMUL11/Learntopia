@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useGamification } from "../context/GamificationContext";
 import { useLanguage } from "../context/LanguageContext";
 import { useSound } from "../context/SoundContext";
@@ -13,15 +14,34 @@ import Button from "./ui/Button";
  * - Displays once per calendar day per user.
  */
 const StreakModal = () => {
-  const { streak, showStreakModal, dismissStreakModal } = useGamification();
+  const {
+    streak,
+    showStreakModal,
+    dismissStreakModal,
+    claimStreakBonus,
+    streakBonusXp,
+    alreadyClaimedStreakToday,
+  } = useGamification();
   const { t } = useLanguage();
   const { playBadgeUnlock } = useSound();
 
+  // Auto-close after ~6.5s so it never blocks the user (dismiss keeps the
+  // "shown today" flag; the bonus stays claimable from the profile until claimed).
+  useEffect(() => {
+    if (!showStreakModal) return undefined;
+    const timer = setTimeout(() => dismissStreakModal(), 6500);
+    return () => clearTimeout(timer);
+  }, [showStreakModal, dismissStreakModal]);
+
   if (!showStreakModal || streak < 3) return null;
 
-  const handleClose = () => {
+  const handleClaim = async () => {
     playBadgeUnlock();
-    dismissStreakModal();
+    if (alreadyClaimedStreakToday) {
+      dismissStreakModal();
+    } else {
+      await claimStreakBonus();
+    }
   };
 
   // Build 7-day progress nodes
@@ -117,12 +137,14 @@ const StreakModal = () => {
           {t("streakModal.motivation")}
         </p>
 
-        {/* Close CTA */}
+        {/* Claim CTA — awards the daily bonus XP (once per day, synced everywhere) */}
         <Button
-          onClick={handleClose}
+          onClick={handleClaim}
           className="w-full justify-center bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 py-3.5 text-base font-bold text-white shadow-[0_0_25px_rgba(245,158,11,0.4)] hover:brightness-110 hover:shadow-[0_0_35px_rgba(245,158,11,0.6)]"
         >
-          {t("streakModal.keepGoing")}
+          {alreadyClaimedStreakToday
+            ? t("streakModal.keepGoing")
+            : t("streakModal.claimBonus", { amount: streakBonusXp })}
         </Button>
       </div>
     </div>

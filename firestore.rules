@@ -26,10 +26,14 @@ service cloud.firestore {
       return request.auth != null && request.auth.token.admin == true;
     }
 
-    // Profile documents (Users/{uid}) may hold these known fields.
+    // Profile documents (Users/{uid}) may hold these known fields. Includes the
+    // gamification fields (xp, quizPoints) and streak-popup/claim bookkeeping so
+    // the XP/points/streak system can persist to the canonical profile doc.
     function isValidProfile() {
       let d = request.resource.data;
-      return d.keys().hasOnly(['email', 'fullName', 'totalPoints', 'streak', 'lastLoginDate', 'badges'])
+      return d.keys().hasOnly(['email', 'fullName', 'totalPoints', 'streak', 'lastLoginDate',
+                               'badges', 'xp', 'quizPoints', 'updatedAt',
+                               'lastStreakClaimDate', 'lastStreakPopupDate'])
           && d.email is string
           && d.fullName is string;
     }
@@ -64,7 +68,7 @@ service cloud.firestore {
     // world-readable PublicLeaderboard collection.
     function isValidPublicEntry() {
       let d = request.resource.data;
-      return d.keys().hasOnly(['uid', 'fullName', 'totalPoints', 'streak', 'badges', 'updatedAt']);
+      return d.keys().hasOnly(['uid', 'fullName', 'totalPoints', 'streak', 'badges', 'xp', 'updatedAt']);
     }
 
     // Security check for profile updates (cheating prevention)
@@ -72,12 +76,15 @@ service cloud.firestore {
       let current = resource.data;
       let next = request.resource.data;
 
-      // Prevent points cheating:
-      // 1. totalPoints can only increase or stay the same.
-      // 2. totalPoints cannot jump by more than 200 points in a single write (max quiz bonus).
+      // Prevent points cheating: totalPoints and xp may only increase or stay
+      // the same. (The old fixed 200-per-write cap is removed — totalPoints is a
+      // client-computed sum of XP + quiz points that legitimately jumps by more
+      // than 200, e.g. course completion or a cross-device reconciliation.
+      // Monotonic-increase still blocks a client from lowering another's score.)
       let currentPoints = current.get('totalPoints', 0);
       let nextPoints = next.get('totalPoints', 0);
-      let pointsDiff = nextPoints - currentPoints;
+      let currentXp = current.get('xp', 0);
+      let nextXp = next.get('xp', 0);
 
       // Prevent badges cheating:
       // 1. Badges list size must be equal to or greater than before (no deleting badges).
@@ -86,8 +93,8 @@ service cloud.firestore {
       let nextBadges = next.get('badges', []);
 
       return isValidProfile()
-          && pointsDiff >= 0
-          && pointsDiff <= 200
+          && nextPoints >= currentPoints
+          && nextXp >= currentXp
           && nextBadges.size() >= currentBadges.size()
           && (currentBadges.size() == 0 || nextBadges.hasAll(currentBadges));
     }

@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { collection, query, orderBy, limit, getDocs, doc, getDoc } from "firebase/firestore";
+import { collection, query, orderBy, limit, getDocs, doc, getDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { quizzes } from "../data/quizData";
 import Card from "../Components/ui/Card";
@@ -31,25 +31,25 @@ const Leaderboard = () => {
     }
   }, [currentUser, navigate]);
 
-  // ── Fetch leaderboard data dynamically based on activeTab ──
+  // ── Live leaderboard subscription. Uses onSnapshot so every viewer sees rank
+  // and point changes in real time (no refresh), and every device shows the
+  // same global numbers straight from Firestore. ──
   useEffect(() => {
-    let isMounted = true;
+    if (!currentUser) return undefined;
+    setLoading(true);
 
-    const fetchData = async () => {
-      setLoading(true);
-      try {
+    const liveQuery =
+      activeTab === "all"
+        ? query(collection(db, "PublicLeaderboard"), orderBy("totalPoints", "desc"), limit(50))
+        : query(collection(db, "QuizLeaderboards", activeTab, "Scores"), orderBy("score", "desc"), limit(50));
+
+    const unsub = onSnapshot(
+      liveQuery,
+      async (snap) => {
         const entries = [];
 
         if (activeTab === "all") {
-          // Fetch overall user rankings from PublicLeaderboard
-          const publicSnap = await getDocs(
-            query(
-              collection(db, "PublicLeaderboard"),
-              orderBy("totalPoints", "desc"),
-              limit(50)
-            )
-          );
-          publicSnap.forEach((d) => {
+          snap.forEach((d) => {
             const data = d.data();
             entries.push({
               id: d.id,
@@ -63,16 +63,8 @@ const Leaderboard = () => {
             });
           });
         } else {
-          // Fetch scores for the active quiz
-          const scoresSnap = await getDocs(
-            query(
-              collection(db, "QuizLeaderboards", activeTab, "Scores"),
-              orderBy("score", "desc"),
-              limit(50)
-            )
-          );
           const activeQuizDef = quizzes.find((q) => q.id === activeTab);
-          scoresSnap.forEach((d) => {
+          snap.forEach((d) => {
             const data = d.data();
             entries.push({
               id: `${activeTab}_${d.id}`,
@@ -87,76 +79,68 @@ const Leaderboard = () => {
           });
         }
 
-        // 2. Fallback to current user's local attempts if database list is empty
+        // Fallback to the current user's own record if the live list is empty.
         if (entries.length === 0 && currentUser) {
-          if (activeTab === "all") {
-            const userSnap = await getDoc(doc(db, "Users", currentUser.uid));
-            if (userSnap.exists()) {
-              const data = userSnap.data();
-              entries.push({
-                id: currentUser.uid,
-                userId: currentUser.uid,
-                userName: data.fullName || currentUser.displayName || "You",
-                quizId: "all",
-                quizTitle: "Overall Points",
-                score: Number(data.totalPoints) || 0,
-                rawScore: (Number(data.totalPoints) || 0) / 10,
-                isCurrent: true,
-              });
-            }
-          } else {
-            const attemptsSnap = await getDocs(
-              collection(db, "Users", currentUser.uid, "quizAttempts")
-            );
-            const userSnap = await getDoc(doc(db, "Users", currentUser.uid));
-            const fullName =
-              (userSnap.exists() && userSnap.data().fullName) ||
-              currentUser.displayName ||
-              "You";
-
-            attemptsSnap.forEach((qd) => {
-              const data = qd.data();
-              if (data.quizId === activeTab && data.score !== undefined) {
-                const quizDef = quizzes.find((q) => q.id === data.quizId);
+          try {
+            if (activeTab === "all") {
+              const userSnap = await getDoc(doc(db, "Users", currentUser.uid));
+              if (userSnap.exists()) {
+                const data = userSnap.data();
                 entries.push({
-                  id: `${currentUser.uid}_${qd.id}`,
+                  id: currentUser.uid,
                   userId: currentUser.uid,
-                  userName: fullName,
-                  quizId: data.quizId,
-                  quizTitle: quizDef?.title || "Quiz",
-                  score: Number(data.score) * 10,
-                  rawScore: Number(data.score),
+                  userName: data.fullName || currentUser.displayName || "You",
+                  quizId: "all",
+                  quizTitle: "Overall Points",
+                  score: Number(data.totalPoints) || 0,
+                  rawScore: (Number(data.totalPoints) || 0) / 10,
                   isCurrent: true,
                 });
               }
-            });
+            } else {
+              const attemptsSnap = await getDocs(collection(db, "Users", currentUser.uid, "quizAttempts"));
+              const userSnap = await getDoc(doc(db, "Users", currentUser.uid));
+              const fullName = (userSnap.exists() && userSnap.data().fullName) || currentUser.displayName || "You";
+              attemptsSnap.forEach((qd) => {
+                const data = qd.data();
+                if (data.quizId === activeTab && data.score !== undefined) {
+                  const quizDef = quizzes.find((q) => q.id === data.quizId);
+                  entries.push({
+                    id: `${currentUser.uid}_${qd.id}`,
+                    userId: currentUser.uid,
+                    userName: fullName,
+                    quizId: data.quizId,
+                    quizTitle: quizDef?.title || "Quiz",
+                    score: Number(data.score) * 10,
+                    rawScore: Number(data.score),
+                    isCurrent: true,
+                  });
+                }
+              });
+            }
+          } catch (err) {
+            console.error("Leaderboard fallback error:", err);
           }
         }
 
-        // Deduplicate - keep highest score per user
+        // Deduplicate - keep highest score per user.
         const bestScores = new Map();
         for (const entry of entries) {
           const key = activeTab === "all" ? entry.userId : `${entry.userId}_${entry.quizId}`;
           const existing = bestScores.get(key);
-          if (!existing || entry.score > existing.score) {
-            bestScores.set(key, entry);
-          }
+          if (!existing || entry.score > existing.score) bestScores.set(key, entry);
         }
 
-        if (isMounted) {
-          setAllEntries(Array.from(bestScores.values()));
-        }
-      } catch (err) {
+        setAllEntries(Array.from(bestScores.values()));
+        setLoading(false);
+      },
+      (err) => {
         console.error("Error building leaderboard:", err);
-      } finally {
-        if (isMounted) setLoading(false);
+        setLoading(false);
       }
-    };
+    );
 
-    fetchData();
-    return () => {
-      isMounted = false;
-    };
+    return () => unsub();
   }, [currentUser, activeTab]);
 
   // ── Filter by search query and sort ──
