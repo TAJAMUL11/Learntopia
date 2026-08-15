@@ -10,6 +10,8 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
+import Avatar from "../Components/Avatar";
+import { parseProfileName } from "../utils/profileUtils";
 
 const Leaderboard = () => {
   const navigate = useNavigate();
@@ -51,10 +53,12 @@ const Leaderboard = () => {
         if (activeTab === "all") {
           snap.forEach((d) => {
             const data = d.data();
+            const { displayName, avatarId } = parseProfileName(data, "Learner");
             entries.push({
               id: d.id,
               userId: d.id,
-              userName: data.fullName || "Learner",
+              userName: displayName,
+              avatarId: avatarId,
               quizId: "all",
               quizTitle: "Overall Points",
               score: Number(data.totalPoints) || 0,
@@ -66,10 +70,12 @@ const Leaderboard = () => {
           const activeQuizDef = quizzes.find((q) => q.id === activeTab);
           snap.forEach((d) => {
             const data = d.data();
+            const { displayName, avatarId } = parseProfileName(data, data.userFullName || "Learner");
             entries.push({
               id: `${activeTab}_${d.id}`,
               userId: d.id,
-              userName: data.userFullName || "Learner",
+              userName: displayName,
+              avatarId: avatarId,
               quizId: activeTab,
               quizTitle: activeQuizDef?.title || "Quiz",
               score: Number(data.score) || 0,
@@ -86,10 +92,12 @@ const Leaderboard = () => {
               const userSnap = await getDoc(doc(db, "Users", currentUser.uid));
               if (userSnap.exists()) {
                 const data = userSnap.data();
+                const { displayName, avatarId } = parseProfileName(data, "Learner");
                 entries.push({
                   id: currentUser.uid,
                   userId: currentUser.uid,
-                  userName: data.fullName || currentUser.displayName || "You",
+                  userName: displayName,
+                  avatarId: avatarId,
                   quizId: "all",
                   quizTitle: "Overall Points",
                   score: Number(data.totalPoints) || 0,
@@ -100,7 +108,8 @@ const Leaderboard = () => {
             } else {
               const attemptsSnap = await getDocs(collection(db, "Users", currentUser.uid, "quizAttempts"));
               const userSnap = await getDoc(doc(db, "Users", currentUser.uid));
-              const fullName = (userSnap.exists() && userSnap.data().fullName) || currentUser.displayName || "You";
+              const data = userSnap.exists() ? userSnap.data() : {};
+              const { displayName: userName, avatarId } = parseProfileName(data, "Learner");
               attemptsSnap.forEach((qd) => {
                 const data = qd.data();
                 if (data.quizId === activeTab && data.score !== undefined) {
@@ -108,7 +117,8 @@ const Leaderboard = () => {
                   entries.push({
                     id: `${currentUser.uid}_${qd.id}`,
                     userId: currentUser.uid,
-                    userName: fullName,
+                    userName,
+                    avatarId,
                     quizId: data.quizId,
                     quizTitle: quizDef?.title || "Quiz",
                     score: Number(data.score) * 10,
@@ -321,14 +331,17 @@ const Leaderboard = () => {
                   </div>
 
                   {/* Avatar */}
-                  <div className={`grid h-10 w-10 shrink-0 place-items-center rounded-full text-xs font-bold border ${
-                    rank === 1 ? "border-yellow-400/50 bg-yellow-400/15 text-yellow-300" :
-                    rank === 2 ? "border-slate-300/50 bg-slate-300/15 text-slate-200" :
-                    rank === 3 ? "border-amber-500/50 bg-amber-500/15 text-amber-300" :
-                    "border-white/10 bg-white/5 text-ink-low"
-                  }`}>
-                    {item.userName?.charAt(0).toUpperCase() || "U"}
-                  </div>
+                  <Avatar
+                    avatarId={item.avatarId}
+                    size={40}
+                    name={item.userName}
+                    className={`border-2 ${
+                      rank === 1 ? "border-yellow-400" :
+                      rank === 2 ? "border-slate-300" :
+                      rank === 3 ? "border-amber-500" :
+                      "border-white/10"
+                    }`}
+                  />
 
                   {/* Name + Quiz */}
                   <div className="flex-1 min-w-0">
@@ -417,14 +430,17 @@ const Leaderboard = () => {
                       {/* Student */}
                       <td className="py-5 px-5">
                         <div className="flex items-center gap-3.5 min-w-0">
-                          <div className={`grid h-10 w-10 shrink-0 place-items-center rounded-full text-sm font-bold border-2 ${
-                            rank === 1 ? "border-yellow-400/60 bg-yellow-400/15 text-yellow-300" :
-                            rank === 2 ? "border-slate-300/60 bg-slate-300/15 text-slate-200" :
-                            rank === 3 ? "border-amber-500/60 bg-amber-500/15 text-amber-300" :
-                            "border-white/10 bg-white/[0.04] text-ink-low"
-                          }`}>
-                            {item.userName?.charAt(0).toUpperCase() || "U"}
-                          </div>
+                          <Avatar
+                            avatarId={item.avatarId}
+                            size={40}
+                            name={item.userName}
+                            className={`border-2 ${
+                              rank === 1 ? "border-yellow-400" :
+                              rank === 2 ? "border-slate-300" :
+                              rank === 3 ? "border-amber-500" :
+                              "border-white/10"
+                            }`}
+                          />
                           <div className="flex items-center gap-2.5 min-w-0">
                             <span className={`text-[15px] font-semibold truncate ${rank <= 3 ? "text-white" : "text-ink"}`}>
                               {item.userName}
