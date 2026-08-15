@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { auth, googleProvider, db } from "../firebase/firebase";
+import { auth, db } from "../firebase/firebase";
 import {
   onAuthStateChanged,
   signOut,
@@ -154,7 +154,7 @@ export function AuthProvider({ children }) {
         },
         { merge: true }
       );
-    } catch (err) {
+    } catch {
       try {
         const publicRef = doc(db, "PublicLeaderboard", uid);
         await setDoc(
