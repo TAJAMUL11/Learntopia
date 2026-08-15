@@ -1,17 +1,20 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useGamification } from "../context/GamificationContext";
 import { useLanguage } from "../context/LanguageContext";
 import { useSound } from "../context/SoundContext";
 import Button from "./ui/Button";
 
 /**
- * StreakModal — HelloTalk-style Gamified Streak Popup Modal
- * Triggers automatically when a logged-in student visits the app with streak >= 3.
- * Features:
- * - Glowing multi-layer flame animation 🔥
- * - 7-Day progress node bar (completed ✅, active 🔥, bonus gift 🎁)
- * - +20 Streak Bonus XP badge & motivational feedback
- * - Displays once per calendar day per user.
+ * StreakModal — Gamified streak-milestone popup.
+ * Appears ONLY on the day the student's streak reaches a milestone (7, 15, 30),
+ * once per calendar day, on their first visit that day. It never appears on
+ * other days, and never once the streak is past 30. If the streak breaks and
+ * climbs again, the milestones (and rewards) come around again.
+ *
+ * Rewards: 7 days → +20 XP, 15 days → +40 XP, 30 days → +80 XP.
+ *
+ * UX: auto-closes after ~6s, but PAUSES while the pointer is over the card;
+ * clicking outside the card closes it immediately.
  */
 const StreakModal = () => {
   const {
@@ -20,20 +23,25 @@ const StreakModal = () => {
     dismissStreakModal,
     claimStreakBonus,
     streakBonusXp,
+    streakMilestones,
     alreadyClaimedStreakToday,
   } = useGamification();
   const { t } = useLanguage();
   const { playBadgeUnlock } = useSound();
 
-  // Auto-close after ~6.5s so it never blocks the user (dismiss keeps the
-  // "shown today" flag; the bonus stays claimable from the profile until claimed).
-  useEffect(() => {
-    if (!showStreakModal) return undefined;
-    const timer = setTimeout(() => dismissStreakModal(), 6500);
-    return () => clearTimeout(timer);
-  }, [showStreakModal, dismissStreakModal]);
+  // Pause the auto-close countdown while the user is hovering the card, so it
+  // never vanishes out from under them. Leaving the card restarts the timer.
+  const [paused, setPaused] = useState(false);
 
-  if (!showStreakModal || streak < 3) return null;
+  useEffect(() => {
+    if (!showStreakModal || paused) return undefined;
+    const timer = setTimeout(() => dismissStreakModal(), 6000);
+    return () => clearTimeout(timer);
+  }, [showStreakModal, paused, dismissStreakModal]);
+
+  // Defensive: streakBonusXp > 0 only when the streak is exactly a milestone,
+  // which is the only time the context turns the modal on.
+  if (!showStreakModal || streakBonusXp <= 0) return null;
 
   const handleClaim = async () => {
     playBadgeUnlock();
@@ -44,32 +52,28 @@ const StreakModal = () => {
     }
   };
 
-  // Build 7-day progress nodes
-  const totalDays = 7;
-  const currentDayInCycle = ((streak - 1) % totalDays) + 1;
-
-  const days = Array.from({ length: totalDays }, (_, i) => {
-    const dayNum = i + 1;
-    const isCompleted = dayNum < currentDayInCycle;
-    const isActive = dayNum === currentDayInCycle;
-    const isGift = dayNum === 7;
-
-    return {
-      dayNum,
-      isCompleted,
-      isActive,
-      isGift,
-    };
-  });
+  // Milestone track: 7 → 15 → 30. Past milestones are completed, the current
+  // one is active, later ones are upcoming; the final (30) is the trophy.
+  const milestoneDays = Object.keys(streakMilestones || { 7: 20, 15: 40, 30: 80 })
+    .map(Number)
+    .sort((a, b) => a - b);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-ground-900/85 backdrop-blur-md p-4 animate-fade-in">
-      {/* Glow Effects */}
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-ground-900/85 p-4 backdrop-blur-md animate-fade-in"
+      onClick={dismissStreakModal}
+    >
+      {/* Glow Effects (non-interactive so backdrop clicks still register) */}
       <div className="pointer-events-none absolute h-96 w-96 rounded-full bg-amber-500/25 blur-[120px] animate-pulse" />
       <div className="pointer-events-none absolute h-80 w-80 rounded-full bg-orange-500/20 blur-[100px] animate-pulse delay-500" />
 
-      {/* Main Glassmorphism Card */}
-      <div className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-amber-500/40 bg-gradient-to-b from-ground-800/95 via-ground-850 to-ground-900 p-6 text-center shadow-[0_0_60px_rgba(245,158,11,0.3)] md:p-8 animate-scale-up">
+      {/* Main Glassmorphism Card — clicks inside must NOT close the modal. */}
+      <div
+        className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-amber-500/40 bg-gradient-to-b from-ground-800/95 via-ground-850 to-ground-900 p-6 text-center shadow-[0_0_60px_rgba(245,158,11,0.3)] animate-scale-up md:p-8"
+        onClick={(e) => e.stopPropagation()}
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+      >
         {/* Decorative Top Banner Pill */}
         <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-amber-400">
           <span className="h-2 w-2 rounded-full bg-amber-400 animate-ping" />
@@ -92,44 +96,43 @@ const StreakModal = () => {
           {t("streakModal.subtitle")}
         </p>
 
-        {/* HelloTalk-Style 7-Day Progress Track */}
+        {/* Milestone Track: 7 → 15 → 30 */}
         <div className="my-6 rounded-2xl border border-white/10 bg-ground-900/60 p-4 backdrop-blur-sm">
-          <div className="grid grid-cols-7 gap-1.5 md:gap-2">
-            {days.map((d) => (
-              <div key={d.dayNum} className="flex flex-col items-center gap-1.5">
-                <div
-                  className={`flex h-10 w-10 items-center justify-center rounded-xl text-sm font-bold transition-all duration-300 ${
-                    d.isActive
-                      ? "border-2 border-amber-400 bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-[0_0_20px_rgba(245,158,11,0.6)] scale-110"
-                      : d.isCompleted
-                      ? "border border-emerald-500/50 bg-emerald-500/20 text-emerald-400"
-                      : d.isGift
-                      ? "border border-violet-500/40 bg-violet-500/20 text-violet-300"
-                      : "border border-white/10 bg-ground-800/50 text-ink-muted opacity-60"
-                  }`}
-                >
-                  {d.isCompleted ? (
-                    "✓"
-                  ) : d.isActive ? (
-                    "🔥"
-                  ) : d.isGift ? (
-                    "🎁"
-                  ) : (
-                    <span className="text-xs">{d.dayNum}</span>
-                  )}
+          <div className="flex items-center justify-between gap-2">
+            {milestoneDays.map((day, i) => {
+              const isCompleted = day < streak;
+              const isActive = day === streak;
+              const isFinal = i === milestoneDays.length - 1;
+              const reward = (streakMilestones && streakMilestones[day]) || 0;
+              return (
+                <div key={day} className="flex flex-1 flex-col items-center gap-1.5">
+                  <div
+                    className={`flex h-14 w-14 items-center justify-center rounded-2xl text-base font-black transition-all duration-300 ${
+                      isActive
+                        ? "scale-110 border-2 border-amber-400 bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-[0_0_20px_rgba(245,158,11,0.6)]"
+                        : isCompleted
+                        ? "border border-emerald-500/50 bg-emerald-500/20 text-emerald-400"
+                        : isFinal
+                        ? "border border-violet-500/40 bg-violet-500/20 text-violet-300"
+                        : "border border-white/10 bg-ground-800/50 text-ink-muted opacity-70"
+                    }`}
+                  >
+                    {isCompleted ? "✓" : isActive ? "🔥" : isFinal ? "🎁" : day}
+                  </div>
+                  <span className="text-xs font-bold text-ink-hi">{day}d</span>
+                  <span className="text-[10px] font-semibold text-emerald-400/90">
+                    +{reward} XP
+                  </span>
                 </div>
-                <span className="text-[10px] font-semibold text-ink-muted">
-                  {t("streakModal.dayLabel", { day: d.dayNum })}
-                </span>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
-        {/* Bonus XP Badge */}
+        {/* Bonus XP Badge — reflects the milestone just reached */}
         <div className="mb-6 inline-flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-xs font-bold text-emerald-400">
           <span>⚡</span>
-          <span>{t("streakModal.streakBonus", { amount: 20 })}</span>
+          <span>{t("streakModal.streakBonus", { amount: streakBonusXp })}</span>
         </div>
 
         {/* Motivation Quote */}
@@ -137,10 +140,10 @@ const StreakModal = () => {
           {t("streakModal.motivation")}
         </p>
 
-        {/* Claim CTA — awards the daily bonus XP (once per day, synced everywhere) */}
+        {/* Claim CTA — grants the milestone bonus XP (once per day, synced everywhere) */}
         <Button
           onClick={handleClaim}
-          className="w-full justify-center bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 py-3.5 text-base font-bold text-white shadow-[0_0_25px_rgba(245,158,11,0.4)] hover:brightness-110 hover:shadow-[0_0_35px_rgba(245,158,11,0.6)]"
+          className="w-full justify-center bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 py-3.5 text-base font-bold text-white shadow-[0_0_25px_rgba(245,158,11,0.4)] hover:shadow-[0_0_35px_rgba(245,158,11,0.6)] hover:brightness-110"
         >
           {alreadyClaimedStreakToday
             ? t("streakModal.keepGoing")

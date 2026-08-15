@@ -122,7 +122,23 @@ npm run dev        # Start Vite dev server with HMR
 npm run build      # Production build to /dist
 npm run preview    # Preview production build locally
 npm run lint       # ESLint check
+npm run test:rules:ci  # Firestore rules tests in the local emulator (needs Java)
 ```
+
+### Firestore rules tests
+
+The Firestore security rules are covered by an automated test suite
+(`test/firestore.rules.test.js`) that runs against the real `firestore.rules`
+file inside the local Firestore emulator — no Firebase login or secrets needed.
+It verifies the anti-cheat, PII, privacy, and admin-only guarantees, and runs on
+every pull request via the **Firestore Rules Tests** GitHub Action.
+
+```bash
+npm run test:rules:ci   # starts the emulator, runs the tests, shuts it down
+```
+
+Running locally requires a Java runtime (the emulator is a Java process); CI
+installs it automatically.
 
 ---
 
@@ -171,9 +187,19 @@ VITE_APP_ID=
 
 # Google Gemini — required for the AI Tutor chat.
 VITE_GEMINI_API_KEY=
+
+# Optional hardening — leave blank to disable. Each feature no-ops when unset,
+# so the app runs identically with or without these.
+VITE_SENTRY_DSN=              # Sentry error monitoring (public-safe DSN)
+VITE_RECAPTCHA_SITE_KEY=      # Firebase App Check reCAPTCHA v3 site key
 ```
 
 All variables use the `VITE_` prefix so Vite exposes them to the client build.
+
+The two optional keys are **public-safe**, unlike the Gemini secret: the Sentry
+DSN can only send crash events, and the reCAPTCHA site key is designed to be
+embedded in the page. When either is blank the corresponding feature stays
+completely dormant (the code is only loaded when its key is present).
 
 > ⚠️ **Security note:** any `VITE_`-prefixed value is embedded in the public JavaScript bundle and is therefore visible to anyone. The Firebase web API key is safe to expose (it is protected by Firestore security rules and authorized domains, not by secrecy). A **Gemini API key is a billable secret** — before shipping it in the client, restrict it in Google Cloud (limit to the Generative Language API, set a hard quota/budget cap, and add an HTTP-referrer restriction), or proxy the calls through a serverless function.
 

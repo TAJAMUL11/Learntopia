@@ -1,5 +1,6 @@
 import { Component } from "react";
 import Icon from "./ui/Icon";
+import { reportError } from "../lib/monitoring";
 
 class ChunkErrorBoundary extends Component {
   constructor(props) {
@@ -30,6 +31,12 @@ class ChunkErrorBoundary extends Component {
 
   componentDidCatch(error, errorInfo) {
     console.error("ChunkErrorBoundary caught an error:", error, errorInfo);
+
+    // Report to error monitoring (no-op unless Sentry is configured). A stale
+    // chunk error is expected/self-healing, so only report real render crashes.
+    if (!ChunkErrorBoundary.isChunkError(error)) {
+      reportError(error, { componentStack: errorInfo?.componentStack });
+    }
 
     // For a stale-chunk error, reload once to pull the new index.html + chunks.
     // A sessionStorage timestamp guards against a reload loop if it keeps failing.

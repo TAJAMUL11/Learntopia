@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useRef } from "react";
 import { useAuth } from "./AuthContext";
 import { db } from "../firebase/firebase";
 import { doc, onSnapshot, setDoc, increment } from "firebase/firestore";
@@ -32,7 +32,12 @@ export const getLevelInfo = (xp) => {
   return { ...currentLevel, nextLevel, xpInLevel, xpNeeded, progressPct };
 };
 
-const STREAK_BONUS_XP = 20;
+// Streak reward milestones: the popup appears ONLY on the day the streak reaches
+// one of these day counts, and the Claim button grants the matching XP. There
+// are no milestones after 30; if the streak breaks and climbs again, the user
+// hits these milestones (and earns the rewards) again in the new cycle.
+const STREAK_MILESTONES = { 7: 20, 15: 40, 30: 80 };
+const streakRewardFor = (streak) => STREAK_MILESTONES[Number(streak)] || 0;
 
 const localDayKey = (d = new Date()) =>
   `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -47,23 +52,36 @@ export const GamificationProvider = ({ children }) => {
   const [showStreakModal, setShowStreakModal] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // Guards the daily streak popup so it is evaluated exactly ONCE per login,
+  // from server-confirmed data. Without this, the first (cached) snapshot could
+  // flash the modal on load with stale streak data before the real value lands.
+  const streakEvaluatedRef = useRef(false);
+
+  // Subscribe by uid (not the whole user object) so we re-subscribe only when
+  // the signed-in user actually changes — not on every auth token refresh.
+  const uid = currentUser?.uid;
+
   // ── Single source of truth: a LIVE subscription to the canonical Users doc.
   // Because every device reads the same doc via onSnapshot, XP / points / streak
   // are GLOBAL (identical everywhere the user is signed in) and REAL-TIME
   // (updates pushed instantly, no refresh). All writes are atomic increments, so
   // two devices earning at once can never clobber each other.
   useEffect(() => {
-    if (!currentUser) {
+    if (!uid) {
       setProfile(null);
       setXp(0);
       setBadges([]);
       setStreak(1);
       setShowStreakModal(false);
       setLoading(false);
+      streakEvaluatedRef.current = false;
       return;
     }
 
-    const userRef = doc(db, "Users", currentUser.uid);
+    // New subscription for this user — allow one streak-popup evaluation.
+    streakEvaluatedRef.current = false;
+
+    const userRef = doc(db, "Users", uid);
     const unsub = onSnapshot(
       userRef,
       (snap) => {
@@ -74,10 +92,17 @@ export const GamificationProvider = ({ children }) => {
         setStreak(Number(d.streak) || 1);
         setLoading(false);
 
-        // Daily streak celebration: streak >= 3, shown once per calendar day
-        // (tracked in Firestore so it's consistent across every device).
-        if ((Number(d.streak) || 1) >= 3 && d.lastStreakPopupDate !== localDayKey()) {
-          setShowStreakModal(true);
+        // Streak-milestone celebration — decided ONCE, from SERVER data only.
+        // `fromCache` guards against the stale cached snapshot flashing the modal
+        // on load; the once-guard stops it re-triggering on every write. Shows
+        // ONLY on the day the streak hits a milestone (7/15/30), once per
+        // calendar day (tracked in Firestore so it's consistent across devices).
+        // No popup on other days, and none once the streak is past 30.
+        if (!snap.metadata.fromCache && !streakEvaluatedRef.current) {
+          streakEvaluatedRef.current = true;
+          if (streakRewardFor(d.streak) > 0 && d.lastStreakPopupDate !== localDayKey()) {
+            setShowStreakModal(true);
+          }
         }
       },
       (err) => {
@@ -87,7 +112,20 @@ export const GamificationProvider = ({ children }) => {
     );
 
     return unsub;
-  }, [currentUser]);
+  }, [uid]);
+
+  // DEV-ONLY: preview the streak popup on demand (real popups need an exact
+  // 7/15/30 streak). Visit e.g. http://localhost:5173/?streakTest=15 to force it.
+  // `import.meta.env.DEV` is false in production, so this whole block is stripped
+  // from the production bundle and can never fire for real users.
+  useEffect(() => {
+    if (!import.meta.env.DEV) return;
+    const testStreak = new URLSearchParams(window.location.search).get("streakTest");
+    if (testStreak && [7, 15, 30].includes(Number(testStreak))) {
+      setStreak(Number(testStreak));
+      setShowStreakModal(true);
+    }
+  }, []);
 
   const totalPoints = xp; // XP is the single unified score (quizzes + lessons + bonuses)
   const levelInfo = getLevelInfo(xp);
@@ -169,16 +207,17 @@ export const GamificationProvider = ({ children }) => {
   // another device or after a refresh. Returns true if the bonus was granted.
   const claimStreakBonus = async () => {
     const todayKey = localDayKey();
-    if (!currentUser || profile?.lastStreakClaimDate === todayKey) {
+    const amount = streakRewardFor(streak);
+    if (!currentUser || amount <= 0 || profile?.lastStreakClaimDate === todayKey) {
       setShowStreakModal(false);
       return false;
     }
-    await awardPoints(STREAK_BONUS_XP, { lastStreakClaimDate: todayKey, lastStreakPopupDate: todayKey });
+    await awardPoints(amount, { lastStreakClaimDate: todayKey, lastStreakPopupDate: todayKey });
     setCelebration({
       type: "xp",
-      title: `+${STREAK_BONUS_XP} XP! 🔥`,
-      message: "Daily streak bonus claimed!",
-      xpEarned: STREAK_BONUS_XP,
+      title: `+${amount} XP! 🔥`,
+      message: `${streak}-day streak bonus claimed!`,
+      xpEarned: amount,
     });
     setShowStreakModal(false);
     return true;
@@ -210,7 +249,8 @@ export const GamificationProvider = ({ children }) => {
         streak,
         celebration,
         showStreakModal,
-        streakBonusXp: STREAK_BONUS_XP,
+        streakBonusXp: streakRewardFor(streak),
+        streakMilestones: STREAK_MILESTONES,
         alreadyClaimedStreakToday: profile?.lastStreakClaimDate === localDayKey(),
         claimStreakBonus,
         dismissStreakModal,
