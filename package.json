@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:rules": "node --test test/firestore.rules.test.js",
+    "test:rules:ci": "firebase emulators:exec --only firestore --project demo-learntopia \"node --test test/firestore.rules.test.js\""
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.1",
@@ -16,6 +18,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.7.1",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@gsap/react": "^2.1.1",
+    "@sentry/react": "^8.45.0",
     "firebase": "^11.0.2",
     "gsap": "^3.12.5",
     "react": "^18.3.1",
@@ -25,6 +28,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
+    "@firebase/rules-unit-testing": "^4.0.1",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.3",
