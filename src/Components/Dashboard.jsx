@@ -15,13 +15,17 @@ import Modal from "./ui/Modal";
 import EmptyState from "./ui/EmptyState";
 import { Skeleton } from "./ui/Skeleton";
 import { getLocalizedQuiz } from "../utils/localizationUtils";
+import Avatar from "./Avatar";
+import ProfileSetupModal from "./ProfileSetupModal";
+
+import { parseProfileName } from "../utils/profileUtils";
 
 // Student dashboard only. The owner/admin has a SEPARATE, hidden portal at
 // /admin (Admin.jsx) — admins are redirected there and never see this view.
 const Dashboard = () => {
   const navigate = useNavigate();
   const { currentUser, isAdmin, logOut } = useAuth();
-  const { xp, levelInfo, badges: gamificationBadges, streak } = useGamification();
+  const { xp, levelInfo, badges: gamificationBadges, streak, profile } = useGamification();
   const { playWarningAlert } = useSound();
   const { t } = useLanguage();
 
@@ -31,11 +35,19 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [courseToUnenroll, setCourseToUnenroll] = useState(null);
   const [unenrollLoading, setUnenrollLoading] = useState(false);
+  const [showEditProfileModal, setShowEditProfileModal] = useState(false);
 
   // Destructive profile deletion states
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteConfirmText, setDeleteConfirmText] = useState("");
   const [deleteLoading, setDeleteLoading] = useState(false);
+
+  // Sync userDetails with profile from GamificationContext whenever profile changes
+  useEffect(() => {
+    if (profile) {
+      setUserDetails((prev) => ({ ...prev, ...profile }));
+    }
+  }, [profile]);
 
   // The owner is not a student — send them to the dedicated hidden admin portal.
   useEffect(() => {
@@ -197,25 +209,47 @@ const Dashboard = () => {
     { icon: "check-circle", emoji: null, label: t("dashboard.completed"), value: completedCourses.length, tint: "text-emerald-400", ring: "border-white/[0.08] bg-white/[0.02]" },
   ];
 
+  const { displayName: parsedDisplayName, avatarId: parsedAvatarId } = parseProfileName(
+    userDetails || profile,
+    currentUser?.displayName || "Learner"
+  );
+  const currentDisplayName = parsedDisplayName;
+  const currentAvatarId = parsedAvatarId;
+
   return (
     <div className="container-page py-8 text-ink-hi md:py-12">
       <div className="mx-auto max-w-6xl animate-fade-in space-y-6">
+
+        {/* ── Banner if profile setup not yet complete ── */}
+        {(!currentDisplayName || !currentAvatarId) && (
+          <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-amber-200">
+            <div className="flex items-center gap-3">
+              <Icon name="sparkles" className="text-amber-400 shrink-0" size={20} />
+              <div>
+                <p className="font-bold text-sm text-amber-300">{t("profileSetup.setupBannerTitle")}</p>
+                <p className="text-xs text-amber-200/80 mt-0.5">{t("profileSetup.setupBannerDesc")}</p>
+              </div>
+            </div>
+            <Button size="sm" onClick={() => setShowEditProfileModal(true)} className="shrink-0 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold border-none">
+              {t("profileSetup.setupBannerBtn")}
+            </Button>
+          </div>
+        )}
 
         {/* ── Profile header ── */}
         <Card className="border-violet-500/20 bg-gradient-to-br from-violet-500/10 to-transparent p-5 md:p-7">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-4">
-              {currentUser.photoURL ? (
-                <img src={currentUser.photoURL} referrerPolicy="no-referrer" alt="" className="h-16 w-16 flex-none rounded-full border-2 border-white/20 object-cover shadow-md" />
-              ) : (
-                <div className="grid h-16 w-16 flex-none place-items-center rounded-full bg-gradient-to-tr from-violet-600 to-sky text-2xl font-bold text-white shadow-glow">
-                  {userDetails?.fullName ? userDetails.fullName.charAt(0).toUpperCase() : "S"}
-                </div>
-              )}
+              <Avatar
+                avatarId={currentAvatarId}
+                size={64}
+                name={currentDisplayName || userDetails?.fullName || currentUser.displayName}
+                className="border-2 border-white/20 shadow-md"
+              />
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <h1 className="truncate text-xl font-bold text-white sm:text-2xl">
-                    {userDetails?.fullName || currentUser.displayName || t("dashboard.profile")}
+                    {currentDisplayName || userDetails?.fullName || currentUser.displayName || t("dashboard.profile")}
                   </h1>
                   <span className="inline-flex items-center gap-1 rounded-full border border-violet-500/30 bg-violet-500/20 px-2.5 py-0.5 text-xs font-semibold text-violet-300">
                     <span>{levelInfo.icon}</span> {t("dashboard.level")} {levelInfo.level} · {levelInfo.name}
@@ -236,20 +270,34 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <Button variant="danger" size="sm" onClick={handleLogout} className="flex-none self-start">
-              <Icon name="logout" size={14} /> {t("dashboard.logout")}
-            </Button>
+            <div className="flex items-center gap-2 flex-none self-start">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowEditProfileModal(true)}
+                className="border border-white/10 bg-white/[0.04] text-xs text-white hover:bg-white/10"
+              >
+                <Icon name="edit-3" size={14} /> {t("profileSetup.editBtn")}
+              </Button>
+              <Button variant="danger" size="sm" onClick={handleLogout}>
+                <Icon name="logout" size={14} /> {t("dashboard.logout")}
+              </Button>
+            </div>
           </div>
 
           {/* Badges */}
           {gamificationBadges.length > 0 && (
             <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-white/[0.06] pt-4">
               <span className="text-xs font-semibold text-ink-low">{t("dashboard.badges")}</span>
-              {gamificationBadges.map((badge, idx) => (
-                <span key={idx} className="inline-flex items-center gap-1 rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-xs font-bold text-amber-300">
-                  <span>{badge.emoji || "🏆"}</span> {badge.name}
-                </span>
-              ))}
+              {gamificationBadges.map((badge, idx) => {
+                const bName = typeof badge === "string" ? badge : badge.name || "Badge";
+                const bEmoji = typeof badge === "object" && badge.emoji ? badge.emoji : "🏆";
+                return (
+                  <span key={idx} className="inline-flex items-center gap-1.5 rounded-md border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-xs font-bold text-amber-300">
+                    <span>{bEmoji}</span> {bName}
+                  </span>
+                );
+              })}
             </div>
           )}
         </Card>
@@ -482,6 +530,15 @@ const Dashboard = () => {
           </div>
         </Modal>
       )}
+
+      {/* Edit Profile Modal */}
+      <ProfileSetupModal
+        isOpen={showEditProfileModal}
+        editMode={true}
+        initialName={currentDisplayName || ""}
+        initialAvatar={currentAvatarId || null}
+        onClose={() => setShowEditProfileModal(false)}
+      />
     </div>
   );
 };
