@@ -1,0 +1,32 @@
+# Firestore Security Rules tests.
+#
+# Runs the rules test suite (test/firestore.rules.test.js) against the real
+# firestore.rules file inside the local Firestore emulator. No Firebase login,
+# no service account, no secrets — the emulator uses a fake "demo-" project.
+#
+# This gates every PR: a rules change that reopens a security hole (points
+# cheat, PII leak, cross-user read) fails here before it can be merged.
+name: Firestore Rules Tests
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+jobs:
+  rules-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      # The Firestore emulator is a Java process.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - run: npm ci
+      # emulators:exec starts the emulator, runs the tests, then shuts it down.
+      # Exit code is the test command's exit code, so a failing rule fails CI.
+      - name: Run Firestore rules tests
+        run: npx --yes firebase-tools@13 emulators:exec --only firestore --project demo-learntopia "node --test test/firestore.rules.test.js"
