@@ -6,15 +6,27 @@ import Button from "./ui/Button";
 import Logo from "./ui/Logo";
 import LanguageSelector from "./LanguageSelector";
 import { useAuth } from "../context/AuthContext";
+import { useGamification } from "../context/GamificationContext";
 import { useSound } from "../context/SoundContext";
 import { useLanguage } from "../context/LanguageContext";
+import Avatar from "./Avatar";
+
+import { parseProfileName } from "../utils/profileUtils";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const { currentUser, logOut } = useAuth();
+  const { profile } = useGamification();
   const { isMuted, toggleMute } = useSound();
   const { t } = useLanguage();
+
+  const { displayName: navDisplayName, avatarId: navAvatarId } = parseProfileName(
+    profile,
+    currentUser?.displayName || t("nav.dashboard")
+  );
+  const currentDisplayName = navDisplayName || t("nav.dashboard");
+  const currentAvatarId = navAvatarId;
 
   const NAV_ITEMS = [
     { to: "/", label: t("nav.home"), end: true },
@@ -98,20 +110,13 @@ const Navbar = () => {
                 title="View your student profile & dashboard"
                 className="group h-[34px] flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 cursor-pointer transition-all duration-200 hover:border-sky/50 hover:bg-sky/10 hover:shadow-glow"
               >
-                {currentUser.photoURL ? (
-                  <img
-                    src={currentUser.photoURL}
-                    alt="Profile"
-                    referrerPolicy="no-referrer"
-                    className="h-5 w-5 rounded-full border border-white/20 object-cover"
-                  />
-                ) : (
-                  <div className="grid h-5 w-5 place-items-center rounded-full border border-white/20 bg-sky/20 text-sky">
-                    <Icon name="user" size={12} />
-                  </div>
-                )}
-                <span className="text-xs font-bold text-ink-hi group-hover:text-sky transition-colors">
-                  {t("nav.dashboard")}
+                <Avatar
+                  avatarId={currentAvatarId}
+                  size={22}
+                  name={currentDisplayName}
+                />
+                <span className="text-xs font-bold text-ink-hi group-hover:text-sky transition-colors max-w-[120px] truncate">
+                  {currentDisplayName}
                 </span>
               </div>
 
@@ -139,7 +144,7 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* Mobile controls & menu button */}
+        {/* Mobile controls & hamburger button */}
         <div className="flex items-center gap-2 md:hidden">
           <LanguageSelector />
 
@@ -157,12 +162,11 @@ const Navbar = () => {
           </button>
 
           <button
-            className="grid h-10 w-10 place-items-center rounded-xl text-ink-hi transition-colors hover:bg-white/5"
-            onClick={() => setIsMenuOpen((v) => !v)}
-            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={isMenuOpen}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-ink-hi transition-colors hover:bg-white/[0.08]"
+            aria-label="Toggle navigation menu"
           >
-            <Icon name={isMenuOpen ? "close" : "menu"} size={22} />
+            <Icon name={isMenuOpen ? "x" : "menu"} size={18} />
           </button>
         </div>
       </nav>
@@ -199,25 +203,18 @@ const Navbar = () => {
                   className="group flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] p-3.5 cursor-pointer transition-all hover:bg-white/[0.08]"
                 >
                   <div className="flex items-center gap-3">
-                    {currentUser.photoURL ? (
-                      <img
-                        src={currentUser.photoURL}
-                        alt="Profile"
-                        referrerPolicy="no-referrer"
-                        className="h-9 w-9 rounded-full border border-white/20 object-cover"
-                      />
-                    ) : (
-                      <div className="grid h-9 w-9 flex-none place-items-center rounded-full border border-white/20 bg-sky/10 text-sky">
-                        <Icon name="user" size={18} />
-                      </div>
-                    )}
+                    <Avatar
+                      avatarId={currentAvatarId}
+                      size={36}
+                      name={currentDisplayName}
+                    />
 
                     <div className="flex flex-col leading-tight">
                       <span className="text-sm font-bold text-ink-hi group-hover:text-sky transition-colors">
-                        {t("nav.dashboard")}
+                        {currentDisplayName}
                       </span>
                       <span className="text-xs text-ink-low mt-0.5">
-                        {currentUser.displayName || currentUser.email}
+                        {currentUser.email}
                       </span>
                     </div>
                   </div>

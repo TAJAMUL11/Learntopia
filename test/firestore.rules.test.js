@@ -85,6 +85,16 @@ describe("Users/{uid} profile", () => {
     );
   });
 
+  test("owner can set custom displayName and avatarId", async () => {
+    await assertSucceeds(
+      setDoc(doc(alice(), "Users/alice"), {
+        ...validProfile(),
+        displayName: "CyberCoder",
+        avatarId: "astro-girl",
+      })
+    );
+  });
+
   test("cannot create a profile for someone else", async () => {
     await assertFails(setDoc(doc(alice(), "Users/bob"), validProfile()));
   });
@@ -245,11 +255,21 @@ describe("PublicLeaderboard/{uid}", () => {
     );
   });
 
-  test("PII GUARD: cannot write an email into the public leaderboard", async () => {
+  test("cannot leak email into public entry", async () => {
     await assertFails(
       setDoc(doc(alice(), "PublicLeaderboard/alice"), {
         ...validEntry(),
         email: "kid@example.com",
+      })
+    );
+  });
+
+  test("allows custom displayName and avatarId in public leaderboard entry", async () => {
+    await assertSucceeds(
+      setDoc(doc(alice(), "PublicLeaderboard/alice"), {
+        ...validEntry(),
+        displayName: "CyberCoder",
+        avatarId: "astro-girl",
       })
     );
   });

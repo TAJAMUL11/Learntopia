@@ -9,11 +9,12 @@ import RootLayout from "./layout/RootLayout";
 import AdminLayout from "./layout/AdminLayout";
 import { ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import { GamificationProvider } from "./context/GamificationContext";
 import { SoundProvider } from "./context/SoundContext";
 import { LanguageProvider } from "./context/LanguageContext";
 import CelebrationOverlay from "./Components/CelebrationOverlay";
+import ProfileSetupModal from "./Components/ProfileSetupModal";
 
 // Lazy-load pages so each route ships as its own chunk. While a chunk loads,
 // RootLayout's Suspense boundary shows a PageSkeleton.
@@ -63,6 +64,12 @@ const router = createBrowserRouter(
   )
 );
 
+const GlobalProfileModal = () => {
+  const { needsProfileSetup, isAdmin } = useAuth();
+  if (isAdmin) return null;
+  return <ProfileSetupModal isOpen={needsProfileSetup} />;
+};
+
 const App = () => {
   return (
     <AuthProvider>
@@ -71,6 +78,7 @@ const App = () => {
           <LanguageProvider>
             <RouterProvider router={router} />
             <CelebrationOverlay />
+            <GlobalProfileModal />
             <ToastContainer
               position="top-right"
               autoClose={3000}

@@ -4,6 +4,8 @@ import { useAuth } from "./AuthContext";
 import { db } from "../firebase/firebase";
 import { doc, onSnapshot, setDoc, increment } from "firebase/firestore";
 
+import { parseProfileName } from "../utils/profileUtils";
+
 const GamificationContext = createContext();
 
 export const useGamification = () => useContext(GamificationContext);
@@ -130,6 +132,8 @@ export const GamificationProvider = ({ children }) => {
   const totalPoints = xp; // XP is the single unified score (quizzes + lessons + bonuses)
   const levelInfo = getLevelInfo(xp);
 
+  const { displayName, avatarId } = parseProfileName(profile, currentUser?.displayName || "Learner");
+
   // Atomically add points to the profile AND mirror to the public leaderboard.
   // Uses increment() so concurrent writes from multiple devices are race-safe,
   // and the onSnapshot listeners reflect the new value everywhere immediately.
@@ -147,17 +151,23 @@ export const GamificationProvider = ({ children }) => {
     }
     // Public leaderboard mirror (display data only — never email/PII).
     try {
+      const publicFields = {
+        uid,
+        fullName: `${displayName}|${avatarId || ""}`,
+        displayName,
+        avatarId,
+        totalPoints: increment(amount),
+        xp: increment(amount),
+        streak: Number(profile?.streak) || 1,
+        badges: (badges || []).map((b) => (typeof b === "string" ? b : b.name || "Badge")),
+        updatedAt: new Date(),
+      };
+      if (profile?.displayName) publicFields.displayName = profile.displayName;
+      if (profile?.avatarId) publicFields.avatarId = profile.avatarId;
+
       await setDoc(
         doc(db, "PublicLeaderboard", uid),
-        {
-          uid,
-          fullName: profile?.fullName || currentUser.displayName || "Learner",
-          totalPoints: increment(amount),
-          xp: increment(amount),
-          streak: Number(profile?.streak) || 1,
-          badges: (badges || []).map((b) => (typeof b === "string" ? b : b.name || "Badge")),
-          updatedAt: new Date(),
-        },
+        publicFields,
         { merge: true }
       );
     } catch { /* leaderboard mirror is best-effort */ }
@@ -242,6 +252,9 @@ export const GamificationProvider = ({ children }) => {
   return (
     <GamificationContext.Provider
       value={{
+        profile,
+        displayName: profile?.displayName || null,
+        avatarId: profile?.avatarId || null,
         xp,
         totalPoints,
         levelInfo,
