@@ -4,9 +4,16 @@ import {
   onAuthStateChanged,
   signOut,
   signInWithPopup,
+  GoogleAuthProvider,
 } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { parseProfileName } from "../utils/profileUtils";
 
+/**
+ * AuthContext.jsx
+ * Provides authentication state, admin authority checking, and
+ * profile customization management.
+ */
 const AuthContext = createContext();
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -19,14 +26,19 @@ export function AuthProvider({ children }) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Handle Google Sign-In
+  // True when a signed-in student has NO custom displayName or avatarId yet.
+  // The ProfileSetupModal reads this to decide whether to block the UI.
+  const [needsProfileSetup, setNeedsProfileSetup] = useState(false);
+
+  /**
+   * Google Sign In flow.
+   */
   const googleSignIn = async () => {
+    const provider = new GoogleAuthProvider();
     try {
-      const result = await signInWithPopup(auth, googleProvider);
+      const result = await signInWithPopup(auth, provider);
       const user = result.user;
       
-      // The owner/admin never gets a student profile. Admin authority is the
-      // server-set custom claim only — no email is checked or stored client-side.
       const tokenResult = await user.getIdTokenResult();
       if (tokenResult.claims.admin === true) {
         return user;
@@ -47,12 +59,122 @@ export function AuthProvider({ children }) {
           streak: 1,
           lastLoginDate: todayStr,
         });
+        // Brand-new user → needs profile setup
+        setNeedsProfileSetup(true);
+      } else {
+        // Existing user — check if they already completed profile setup
+        const data = userSnap.data();
+        const { displayName, avatarId } = parseProfileName(data);
+        setNeedsProfileSetup(!displayName || !avatarId);
       }
       return user;
     } catch (error) {
       console.error("Error signing in with Google:", error);
       throw error;
     }
+  };
+
+  /**
+   * Save the user's chosen display name and avatar to both their private
+   * profile and the public leaderboard entry with fallback handling.
+   */
+  const completeProfileSetup = async (displayName, avatarId) => {
+    if (!currentUser) return;
+    const uid = currentUser.uid;
+    const cleanName = displayName.trim();
+    const encodedName = `${cleanName}|${avatarId}`;
+
+    // 1. Instant local storage backup
+    try {
+      localStorage.setItem(
+        `learntopia_custom_profile_${uid}`,
+        JSON.stringify({ displayName: cleanName, avatarId })
+      );
+    } catch (e) {
+      console.warn("localStorage write error:", e);
+    }
+
+    const userRef = doc(db, "Users", uid);
+    let existing = {};
+    try {
+      const userSnap = await getDoc(userRef);
+      if (userSnap.exists()) {
+        existing = userSnap.data();
+      }
+    } catch (e) {
+      console.warn("Error reading user snap before setup:", e);
+    }
+
+    // 2. Primary write with direct + encoded fields
+    try {
+      await setDoc(
+        userRef,
+        {
+          email: existing.email || currentUser.email || "",
+          fullName: encodedName,
+          displayName: cleanName,
+          avatarId: avatarId,
+          totalPoints: existing.totalPoints || 0,
+          streak: existing.streak || 1,
+          badges: existing.badges || ["Newcomer"],
+          updatedAt: new Date(),
+        },
+        { merge: true }
+      );
+    } catch (err) {
+      console.warn("Primary write notice, using encoded fullName write:", err);
+      await setDoc(
+        userRef,
+        {
+          email: existing.email || currentUser.email || "",
+          fullName: encodedName,
+          totalPoints: existing.totalPoints || 0,
+          streak: existing.streak || 1,
+          badges: existing.badges || ["Newcomer"],
+          updatedAt: new Date(),
+        },
+        { merge: true }
+      );
+    }
+
+    // 3. Mirror write for PublicLeaderboard
+    try {
+      const publicRef = doc(db, "PublicLeaderboard", uid);
+      await setDoc(
+        publicRef,
+        {
+          uid,
+          fullName: encodedName,
+          displayName: cleanName,
+          avatarId: avatarId,
+          totalPoints: existing.totalPoints || 0,
+          streak: existing.streak || 1,
+          badges: (existing.badges || ["Newcomer"]).map((b) => (typeof b === "string" ? b : b.name || "Badge")),
+          updatedAt: new Date(),
+        },
+        { merge: true }
+      );
+    } catch (err) {
+      try {
+        const publicRef = doc(db, "PublicLeaderboard", uid);
+        await setDoc(
+          publicRef,
+          {
+            uid,
+            fullName: encodedName,
+            totalPoints: existing.totalPoints || 0,
+            streak: existing.streak || 1,
+            badges: (existing.badges || ["Newcomer"]).map((b) => (typeof b === "string" ? b : b.name || "Badge")),
+            updatedAt: new Date(),
+          },
+          { merge: true }
+        );
+      } catch (e) {
+        console.warn("Leaderboard mirror notice:", e);
+      }
+    }
+
+    setNeedsProfileSetup(false);
   };
 
   const logOut = () => {
@@ -65,6 +187,7 @@ export function AuthProvider({ children }) {
 
       if (!user) {
         setIsAdmin(false);
+        setNeedsProfileSetup(false);
         setLoading(false);
         return;
       }
@@ -78,6 +201,7 @@ export function AuthProvider({ children }) {
       } catch (err) {
         console.error("Error reading auth claims:", err);
       }
+      setIsAdmin(admin);
       // Unblock initial app load immediately (~10ms) so cold start is instant.
       setLoading(false);
 
@@ -113,8 +237,15 @@ export function AuthProvider({ children }) {
               badges: ["Newcomer"],
               updatedAt: new Date()
             }, { merge: true });
+
+            // New profile → needs setup
+            setNeedsProfileSetup(true);
           } else {
             const data = userSnap.data();
+
+            const { displayName: parsedName, avatarId: parsedAvatar } = parseProfileName(data);
+            setNeedsProfileSetup(!parsedName || !parsedAvatar);
+
             const lastDateStr = data.lastLoginDate;
 
             // Only update if the user hasn't been credited for today yet
@@ -156,8 +287,10 @@ export function AuthProvider({ children }) {
     currentUser,
     isAdmin,
     loading,
+    needsProfileSetup,
     googleSignIn,
     logOut,
+    completeProfileSetup,
   };
 
   return (
