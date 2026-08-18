@@ -8,6 +8,7 @@ import {
 } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { parseProfileName } from "../utils/profileUtils";
+import AppLoader from "../Components/ui/AppLoader";
 
 /**
  * AuthContext.jsx
@@ -301,7 +302,9 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {/* Show the branded loader (not a blank screen) while auth resolves, so
+          there's no empty frame between the HTML splash and the real app. */}
+      {loading ? <AppLoader /> : children}
     </AuthContext.Provider>
   );
 }
