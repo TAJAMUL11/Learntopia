@@ -20,15 +20,15 @@ export const translations = {
       motivation: "Consistency is key! Every day you study makes you stronger.",
     },
     aiTutor: {
-          "yourTutor": "Your AI Tutor",
-          "askTutor": "Ask {name}",
-          "typeMessage": "Ask a question about this course...",
-          "thinking": "Thinking...",
-          "errorMessage": "Oops! Couldn't reach your AI tutor. Please try again.",
-          "rateLimitError": "Your AI tutor is taking a quick break! Please wait a moment.",
-          "clearChat": "Clear chat history",
-          "poweredBy": "Powered by Google Gemini 2.0 Flash • Kid-Safe AI",
-          "chatGreeting": "Hi there! 👋 I'm {name}, your {subject} buddy! Ask me anything about this course, and let's learn together!"
+      "yourTutor": "Your AI Tutor",
+      "askTutor": "Ask {name}",
+      "typeMessage": "Ask a question about this course...",
+      "thinking": "Thinking...",
+      "errorMessage": "Oops! Couldn't reach your AI tutor. Please try again.",
+      "rateLimitError": "Your AI tutor is taking a quick break! Please wait a moment.",
+      "clearChat": "Clear chat history",
+      "poweredBy": "Powered by Google Gemini 2.0 Flash • Kid-Safe AI",
+      "chatGreeting": "Hi there! 👋 I'm {name}, your {subject} buddy! Ask me anything about this course, and let's learn together!"
     },
     nav: {
       home: "Home",
@@ -111,7 +111,7 @@ export const translations = {
       searchPlaceholder: "Search by course or subject…",
       enrolling: "Enrolling...",
       enrolledBadge: "Enrolled"
-    ,
+      ,
       searchResultsSingle: "{count} result for “{query}”",
       searchResultsPlural: "{count} results for “{query}”",
       noResults: "No courses match “{query}”",
@@ -213,6 +213,14 @@ export const translations = {
     },
     dashboard: {
       welcome: "Welcome back",
+      greetingMorning: "Good morning, {name}! ☀️",
+      greetingAfternoon: "Good afternoon, {name}! 🌤️",
+      greetingEvening: "Good evening, {name}! 🌙",
+      greetingSubtitle: "Ready to level up your coding & learning skills today?",
+      spotlightTitle: "Continue Learning — Focus Course",
+      resumeModule: "Resume Course ⚡",
+      dailyGoalTitle: "Daily XP Goal",
+      dailyGoalProgress: "{current} / {target} XP Today",
       level: "Level",
       totalXp: "Total XP",
       dayStreak: "Day Streak",
@@ -236,8 +244,22 @@ export const translations = {
       deleteAccount: "Delete Account",
       logout: "Log out",
       profile: "Student Profile",
-      earnedOn: "Earned on {date}"
-    ,
+      earnedOn: "Earned on {date}",
+      memberSince: "Member since {date}",
+      activeToday: "Active Today",
+      viewAllCourses: "View All Enrolled ({count}) →",
+      allEnrolledTitle: "All Enrolled Courses",
+      allEnrolledDesc: "Manage and resume all your enrolled learning tracks.",
+      viewAllCompletedCourses: "View All Completed ({count}) →",
+      allCompletedTitle: "Completed Courses & Badges",
+      allCompletedDesc: "View all your finished learning tracks and earned completion badges.",
+      viewAllQuizzes: "View All Quiz Attempts ({count}) →",
+      allQuizzesTitle: "Quiz History & High Scores",
+      allQuizzesDesc: "Review all your past quiz challenge attempts, scores, and accuracy.",
+      motivationalCompletedTitle: "Complete courses to earn XP & shiny badges!",
+      motivationalCompletedDesc: "Finish all modules in any course track to unlock collectible completion badges.",
+      takeNewQuizBtn: "Take New Quiz →",
+      stepCounter: "Step {current} of {total}",
       dangerZoneTitle: "Account Control — Danger Zone",
       dangerZoneDesc: "Permanently delete your student profile, course enrollments, earned XP, badges, quiz high scores, and remove your score from the global leaderboard.",
       deleteProfileBtn: "Delete My Profile",
@@ -454,198 +476,198 @@ export const translations = {
     },
     courseData: {
       "1": {
-            "title": "Python for Kids: Build Your First Game!",
-            "desc": "Learn to code by building real games. Perfect for beginners aged 7-14. Dive into Python fundamentals and game mechanics!",
-            "category": "Programming",
-            "difficulty": "Beginner",
-            "modules": [
-                  {
-                        "title": "Module 1: Hello Python!",
-                        "desc": "Learn what Python is and write your first lines of code."
-                  },
-                  {
-                        "title": "Module 2: Variables & Data Boxes",
-                        "desc": "Store numbers, text, and player scores in variables."
-                  },
-                  {
-                        "title": "Module 3: Making Decisions with IF",
-                        "desc": "Use logic and conditions to control game choices."
-                  },
-                  {
-                        "title": "Module 4: Loops & Repeating Actions",
-                        "desc": "Repeat code automatically with FOR and WHILE loops."
-                  },
-                  {
-                        "title": "Module 5: Functions & Code Tools",
-                        "desc": "Package your code into reusable helper functions."
-                  },
-                  {
-                        "title": "Module 6: Final Boss: Build Your Game!",
-                        "desc": "Combine everything to build a playable text adventure game!"
-                  }
-            ]
+        "title": "Python for Kids: Build Your First Game!",
+        "desc": "Learn to code by building real games. Perfect for beginners aged 7-14. Dive into Python fundamentals and game mechanics!",
+        "category": "Programming",
+        "difficulty": "Beginner",
+        "modules": [
+          {
+            "title": "Module 1: Hello Python!",
+            "desc": "Learn what Python is and write your first lines of code."
+          },
+          {
+            "title": "Module 2: Variables & Data Boxes",
+            "desc": "Store numbers, text, and player scores in variables."
+          },
+          {
+            "title": "Module 3: Making Decisions with IF",
+            "desc": "Use logic and conditions to control game choices."
+          },
+          {
+            "title": "Module 4: Loops & Repeating Actions",
+            "desc": "Repeat code automatically with FOR and WHILE loops."
+          },
+          {
+            "title": "Module 5: Functions & Code Tools",
+            "desc": "Package your code into reusable helper functions."
+          },
+          {
+            "title": "Module 6: Final Boss: Build Your Game!",
+            "desc": "Combine everything to build a playable text adventure game!"
+          }
+        ]
       },
       "2": {
-            "title": "Math Magic: Puzzles & Logic Fun!",
-            "desc": "Master fun math sequences, 3D geometry shapes, and logical thinking puzzles!",
-            "category": "Mathematics",
-            "difficulty": "Beginner",
-            "modules": [
-                  {
-                        "title": "Module 1: Number Sequences",
-                        "desc": "Spot hidden rules and predict upcoming numbers."
-                  },
-                  {
-                        "title": "Module 2: 2D & 3D Geometry",
-                        "desc": "Explore shapes, angles, cubes, and spheres."
-                  },
-                  {
-                        "title": "Module 3: Logic Puzzles",
-                        "desc": "Use deductive reasoning to solve tricky brain teasers."
-                  },
-                  {
-                        "title": "Module 4: Algorithms & Step Thinking",
-                        "desc": "Break big problems into step-by-step instructions."
-                  },
-                  {
-                        "title": "Module 5: Patterns in Nature",
-                        "desc": "Discover Fibonacci numbers in flowers and shells."
-                  },
-                  {
-                        "title": "Module 6: Math Wizard Challenge",
-                        "desc": "Put all your puzzle skills to the test!"
-                  }
-            ]
+        "title": "Math Magic: Puzzles & Logic Fun!",
+        "desc": "Master fun math sequences, 3D geometry shapes, and logical thinking puzzles!",
+        "category": "Mathematics",
+        "difficulty": "Beginner",
+        "modules": [
+          {
+            "title": "Module 1: Number Sequences",
+            "desc": "Spot hidden rules and predict upcoming numbers."
+          },
+          {
+            "title": "Module 2: 2D & 3D Geometry",
+            "desc": "Explore shapes, angles, cubes, and spheres."
+          },
+          {
+            "title": "Module 3: Logic Puzzles",
+            "desc": "Use deductive reasoning to solve tricky brain teasers."
+          },
+          {
+            "title": "Module 4: Algorithms & Step Thinking",
+            "desc": "Break big problems into step-by-step instructions."
+          },
+          {
+            "title": "Module 5: Patterns in Nature",
+            "desc": "Discover Fibonacci numbers in flowers and shells."
+          },
+          {
+            "title": "Module 6: Math Wizard Challenge",
+            "desc": "Put all your puzzle skills to the test!"
+          }
+        ]
       },
       "3": {
-            "title": "Money Smart: Money & Budgeting for Kids!",
-            "desc": "Understand how money works, budgeting, saving, and earning through interactive simulations.",
-            "category": "Finance",
-            "difficulty": "Beginner",
-            "modules": [
-                  {
-                        "title": "Module 1: History of Money",
-                        "desc": "From trading chickens to using digital coins."
-                  },
-                  {
-                        "title": "Module 2: Income vs. Expenses",
-                        "desc": "Learn where money comes from and where it goes."
-                  },
-                  {
-                        "title": "Module 3: Building a Smart Budget",
-                        "desc": "Allocate your funds for needs, wants, and savings."
-                  },
-                  {
-                        "title": "Module 4: The Power of Interest",
-                        "desc": "Watch your savings grow in a bank account."
-                  },
-                  {
-                        "title": "Module 5: Smart Shopping",
-                        "desc": "Compare prices and avoid impulse buying."
-                  },
-                  {
-                        "title": "Module 6: Junior Tycoon Game",
-                        "desc": "Run your own virtual lemonade stand business!"
-                  }
-            ]
+        "title": "Money Smart: Money & Budgeting for Kids!",
+        "desc": "Understand how money works, budgeting, saving, and earning through interactive simulations.",
+        "category": "Finance",
+        "difficulty": "Beginner",
+        "modules": [
+          {
+            "title": "Module 1: History of Money",
+            "desc": "From trading chickens to using digital coins."
+          },
+          {
+            "title": "Module 2: Income vs. Expenses",
+            "desc": "Learn where money comes from and where it goes."
+          },
+          {
+            "title": "Module 3: Building a Smart Budget",
+            "desc": "Allocate your funds for needs, wants, and savings."
+          },
+          {
+            "title": "Module 4: The Power of Interest",
+            "desc": "Watch your savings grow in a bank account."
+          },
+          {
+            "title": "Module 5: Smart Shopping",
+            "desc": "Compare prices and avoid impulse buying."
+          },
+          {
+            "title": "Module 6: Junior Tycoon Game",
+            "desc": "Run your own virtual lemonade stand business!"
+          }
+        ]
       },
       "4": {
-            "title": "Brand Genius: Marketing & Media Basics!",
-            "desc": "Discover how brands design logos, create viral ads, and talk to audiences.",
-            "category": "Marketing",
-            "difficulty": "Beginner",
-            "modules": [
-                  {
-                        "title": "Module 1: What is a Brand?",
-                        "desc": "Logos, colors, slogans, and brand personality."
-                  },
-                  {
-                        "title": "Module 2: Target Audience",
-                        "desc": "Identify who your product is made for."
-                  },
-                  {
-                        "title": "Module 3: Visual Design & Color",
-                        "desc": "Choose colors that trigger emotions and trust."
-                  },
-                  {
-                        "title": "Module 4: Creating Catchy Ads",
-                        "desc": "Write headlines and design eye-catching posters."
-                  },
-                  {
-                        "title": "Module 5: Digital Media & Socials",
-                        "desc": "Understand video ads, sponsors, and online media."
-                  },
-                  {
-                        "title": "Module 6: Product Launch Campaign",
-                        "desc": "Launch your own imaginary toy or game product!"
-                  }
-            ]
+        "title": "Brand Genius: Marketing & Media Basics!",
+        "desc": "Discover how brands design logos, create viral ads, and talk to audiences.",
+        "category": "Marketing",
+        "difficulty": "Beginner",
+        "modules": [
+          {
+            "title": "Module 1: What is a Brand?",
+            "desc": "Logos, colors, slogans, and brand personality."
+          },
+          {
+            "title": "Module 2: Target Audience",
+            "desc": "Identify who your product is made for."
+          },
+          {
+            "title": "Module 3: Visual Design & Color",
+            "desc": "Choose colors that trigger emotions and trust."
+          },
+          {
+            "title": "Module 4: Creating Catchy Ads",
+            "desc": "Write headlines and design eye-catching posters."
+          },
+          {
+            "title": "Module 5: Digital Media & Socials",
+            "desc": "Understand video ads, sponsors, and online media."
+          },
+          {
+            "title": "Module 6: Product Launch Campaign",
+            "desc": "Launch your own imaginary toy or game product!"
+          }
+        ]
       },
       "5": {
-            "title": "Web Creator: Build Websites with HTML & CSS!",
-            "desc": "Turn your ideas into real webpages with colorful styles, buttons, and layouts.",
-            "category": "Web Design",
-            "difficulty": "Intermediate",
-            "modules": [
-                  {
-                        "title": "Module 1: HTML Building Blocks",
-                        "desc": "Headings, paragraphs, tags, and page structure."
-                  },
-                  {
-                        "title": "Module 2: Adding Images & Links",
-                        "desc": "Connect pages and add vibrant graphics."
-                  },
-                  {
-                        "title": "Module 3: Styling with CSS",
-                        "desc": "Change fonts, text colors, and background gradients."
-                  },
-                  {
-                        "title": "Module 4: Buttons & Hover Effects",
-                        "desc": "Make buttons pop with animations and hover states."
-                  },
-                  {
-                        "title": "Module 5: Responsive Layouts",
-                        "desc": "Design pages that look great on phones and tablets."
-                  },
-                  {
-                        "title": "Module 6: Personal Portfolio Website",
-                        "desc": "Build and publish your personal portfolio page!"
-                  }
-            ]
+        "title": "Web Creator: Build Websites with HTML & CSS!",
+        "desc": "Turn your ideas into real webpages with colorful styles, buttons, and layouts.",
+        "category": "Web Design",
+        "difficulty": "Intermediate",
+        "modules": [
+          {
+            "title": "Module 1: HTML Building Blocks",
+            "desc": "Headings, paragraphs, tags, and page structure."
+          },
+          {
+            "title": "Module 2: Adding Images & Links",
+            "desc": "Connect pages and add vibrant graphics."
+          },
+          {
+            "title": "Module 3: Styling with CSS",
+            "desc": "Change fonts, text colors, and background gradients."
+          },
+          {
+            "title": "Module 4: Buttons & Hover Effects",
+            "desc": "Make buttons pop with animations and hover states."
+          },
+          {
+            "title": "Module 5: Responsive Layouts",
+            "desc": "Design pages that look great on phones and tablets."
+          },
+          {
+            "title": "Module 6: Personal Portfolio Website",
+            "desc": "Build and publish your personal portfolio page!"
+          }
+        ]
       },
       "6": {
-            "title": "Digital Artist: Create Graphics & Digital Art!",
-            "desc": "Master colors, shapes, layers, and digital illustration tools.",
-            "category": "Digital Art",
-            "difficulty": "Beginner",
-            "modules": [
-                  {
-                        "title": "Module 1: Pixels & Canvas",
-                        "desc": "Understand resolution, canvas size, and digital tools."
-                  },
-                  {
-                        "title": "Module 2: Color Theory & Palettes",
-                        "desc": "Combine primary, warm, and cool colors."
-                  },
-                  {
-                        "title": "Module 3: Working with Layers",
-                        "desc": "Stack objects, backgrounds, and shading easily."
-                  },
-                  {
-                        "title": "Module 4: Drawing Character Avatars",
-                        "desc": "Sketch cute cartoon characters step-by-step."
-                  },
-                  {
-                        "title": "Module 5: Digital Painting Tricks",
-                        "desc": "Use brushes, gradients, and lighting effects."
-                  },
-                  {
-                        "title": "Module 6: Art Showcase Exhibition",
-                        "desc": "Create a final poster masterpiece!"
-                  }
-            ]
+        "title": "Digital Artist: Create Graphics & Digital Art!",
+        "desc": "Master colors, shapes, layers, and digital illustration tools.",
+        "category": "Digital Art",
+        "difficulty": "Beginner",
+        "modules": [
+          {
+            "title": "Module 1: Pixels & Canvas",
+            "desc": "Understand resolution, canvas size, and digital tools."
+          },
+          {
+            "title": "Module 2: Color Theory & Palettes",
+            "desc": "Combine primary, warm, and cool colors."
+          },
+          {
+            "title": "Module 3: Working with Layers",
+            "desc": "Stack objects, backgrounds, and shading easily."
+          },
+          {
+            "title": "Module 4: Drawing Character Avatars",
+            "desc": "Sketch cute cartoon characters step-by-step."
+          },
+          {
+            "title": "Module 5: Digital Painting Tricks",
+            "desc": "Use brushes, gradients, and lighting effects."
+          },
+          {
+            "title": "Module 6: Art Showcase Exhibition",
+            "desc": "Create a final poster masterpiece!"
+          }
+        ]
       }
-},
+    },
     common: {
       soundOn: "Sound On",
       soundOff: "Sound Muted",
@@ -671,15 +693,15 @@ export const translations = {
       motivation: "¡La constancia es la clave! Cada día de estudio te hace más fuerte.",
     },
     aiTutor: {
-          "yourTutor": "Tu Tutor IA",
-          "askTutor": "Preguntar a {name}",
-          "typeMessage": "Haz una pregunta sobre este curso...",
-          "thinking": "Pensando...",
-          "errorMessage": "¡Ups! No se pudo contactar con tu tutor IA. Inténtalo de nuevo.",
-          "rateLimitError": "¡Tu tutor IA está tomando un breve descanso! Espera un momento.",
-          "clearChat": "Limpiar historial de chat",
-          "poweredBy": "Desarrollado por Google Gemini 2.0 Flash • IA Segura para Niños",
-          "chatGreeting": "¡Hola! 👋 Soy {name}, ¡tu compañero de {subject}! Pregúntame lo que quieras sobre este curso, ¡y aprendamos juntos!"
+      "yourTutor": "Tu Tutor IA",
+      "askTutor": "Preguntar a {name}",
+      "typeMessage": "Haz una pregunta sobre este curso...",
+      "thinking": "Pensando...",
+      "errorMessage": "¡Ups! No se pudo contactar con tu tutor IA. Inténtalo de nuevo.",
+      "rateLimitError": "¡Tu tutor IA está tomando un breve descanso! Espera un momento.",
+      "clearChat": "Limpiar historial de chat",
+      "poweredBy": "Desarrollado por Google Gemini 2.0 Flash • IA Segura para Niños",
+      "chatGreeting": "¡Hola! 👋 Soy {name}, ¡tu compañero de {subject}! Pregúntame lo que quieras sobre este curso, ¡y aprendamos juntos!"
     },
     nav: {
       home: "Inicio",
@@ -762,7 +784,7 @@ export const translations = {
       searchPlaceholder: "Buscar por curso o materia…",
       enrolling: "Inscribiendo...",
       enrolledBadge: "Inscrito"
-    ,
+      ,
       searchResultsSingle: "{count} resultado para “{query}”",
       searchResultsPlural: "{count} resultados para “{query}”",
       noResults: "Ningún curso coincide con “{query}”",
@@ -864,6 +886,14 @@ export const translations = {
     },
     dashboard: {
       welcome: "Bienvenido de nuevo",
+      greetingMorning: "¡Buenos días, {name}! ☀️",
+      greetingAfternoon: "¡Buenas tardes, {name}! 🌤️",
+      greetingEvening: "¡Buenas noches, {name}! 🌙",
+      greetingSubtitle: "¡Listo para subir de nivel tus habilidades de código hoy?",
+      spotlightTitle: "Continuar Aprendiendo — Curso En Enfoque",
+      resumeModule: "Reanudar Curso ⚡",
+      dailyGoalTitle: "Meta Diaria de XP",
+      dailyGoalProgress: "{current} / {target} XP Hoy",
       level: "Nivel",
       totalXp: "XP Total",
       dayStreak: "Racha de Días",
@@ -887,8 +917,22 @@ export const translations = {
       deleteAccount: "Eliminar Cuenta",
       logout: "Cerrar sesión",
       profile: "Perfil de Estudiante",
-      earnedOn: "Ganado el {date}"
-    ,
+      earnedOn: "Ganado el {date}",
+      memberSince: "Miembro desde {date}",
+      activeToday: "Activo Hoy",
+      viewAllCourses: "Ver todos ({count}) →",
+      allEnrolledTitle: "Todos los Cursos Inscritos",
+      allEnrolledDesc: "Administra y reanuda todas tus rutas de aprendizaje.",
+      viewAllCompletedCourses: "Ver completados ({count}) →",
+      allCompletedTitle: "Cursos Completados e Insignias",
+      allCompletedDesc: "Revisa todos tus cursos terminados y tus insignias obtenidas.",
+      viewAllQuizzes: "Ver todos los cuestionarios ({count}) →",
+      allQuizzesTitle: "Historial de Cuestionarios y Puntuaciones",
+      allQuizzesDesc: "Revisa todos tus intentos pasados y tus mejores puntuaciones.",
+      motivationalCompletedTitle: "¡Completa cursos para ganar XP e insignias!",
+      motivationalCompletedDesc: "Completa todos los módulos de cualquier curso para desbloquear tu insignia.",
+      takeNewQuizBtn: "Hacer Cuestionario →",
+      stepCounter: "Paso {current} de {total}",
       dangerZoneTitle: "Control de Cuenta — Zona de Peligro",
       dangerZoneDesc: "Elimina permanentemente tu perfil de estudiante, inscripciones, XP ganado, insignias, puntuaciones y tu posición en la clasificación.",
       deleteProfileBtn: "Eliminar Mi Perfil",
@@ -1204,15 +1248,15 @@ export const translations = {
 
   fr: {
     aiTutor: {
-          "yourTutor": "Votre Tuteur IA",
-          "askTutor": "Demander à {name}",
-          "typeMessage": "Posez une question sur ce cours...",
-          "thinking": "Réflexion...",
-          "errorMessage": "Oups ! Impossible de joindre votre tuteur IA. Veuillez réessayer.",
-          "rateLimitError": "Votre tuteur IA fait une courte pause ! Veuillez patienter un instant.",
-          "clearChat": "Effacer l'historique du chat",
-          "poweredBy": "Propulsé par Google Gemini 2.0 Flash • IA Sécurisée pour Enfants",
-          "chatGreeting": "Bonjour ! 👋 Je suis {name}, votre compagnon de {subject} ! Posez-moi vos questions sur ce cours, et apprenons ensemble !"
+      "yourTutor": "Votre Tuteur IA",
+      "askTutor": "Demander à {name}",
+      "typeMessage": "Posez une question sur ce cours...",
+      "thinking": "Réflexion...",
+      "errorMessage": "Oups ! Impossible de joindre votre tuteur IA. Veuillez réessayer.",
+      "rateLimitError": "Votre tuteur IA fait une courte pause ! Veuillez patienter un instant.",
+      "clearChat": "Effacer l'historique du chat",
+      "poweredBy": "Propulsé par Google Gemini 2.0 Flash • IA Sécurisée pour Enfants",
+      "chatGreeting": "Bonjour ! 👋 Je suis {name}, votre compagnon de {subject} ! Posez-moi vos questions sur ce cours, et apprenons ensemble !"
     },
     nav: {
       home: "Accueil",
@@ -1295,7 +1339,7 @@ export const translations = {
       searchPlaceholder: "Rechercher par cours ou sujet…",
       enrolling: "Inscription...",
       enrolledBadge: "Inscrit"
-    ,
+      ,
       searchResultsSingle: "{count} résultat pour « {query} »",
       searchResultsPlural: "{count} résultats pour « {query} »",
       noResults: "Aucun cours ne correspond à « {query} »",
@@ -1413,8 +1457,16 @@ export const translations = {
       deleteAccount: "Supprimer le Compte",
       logout: "Se déconnecter",
       profile: "Profil Élève",
-      earnedOn: "Obtenu le {date}"
-    ,
+      earnedOn: "Obtenu le {date}",
+      memberSince: "Membre depuis {date}",
+      activeToday: "Actif Aujourd'hui",
+      viewAllCourses: "Voir tous ({count}) →",
+      allEnrolledTitle: "Tous les Cours Inscrits",
+      allEnrolledDesc: "Gérez et reprenez toutes vos pistes d'apprentissage.",
+      motivationalCompletedTitle: "Terminez des cours pour gagner des badges & +100 XP ! 🏆✨",
+      motivationalCompletedDesc: "Complétez tous les modules d'un cours pour débloquer un badge de réussite.",
+      takeNewQuizBtn: "Faire un Quiz →",
+      stepCounter: "Étape {current} sur {total}",
       dangerZoneTitle: "Contrôle du Compte — Zone Dangereuse",
       dangerZoneDesc: "Supprimez définitivement votre profil d'étudiant, vos inscriptions, XP gagnés, badges, scores et votre classement.",
       deleteProfileBtn: "Supprimer Mon Profil",
@@ -1700,15 +1752,15 @@ export const translations = {
 
   de: {
     aiTutor: {
-          "yourTutor": "Dein KI-Tutor",
-          "askTutor": "Frage {name}",
-          "typeMessage": "Stelle eine Frage zu diesem Kurs...",
-          "thinking": "Überlegt...",
-          "errorMessage": "Ups! Dein KI-Tutor konnte nicht erreicht werden. Bitte versuche es erneut.",
-          "rateLimitError": "Dein KI-Tutor macht eine kurze Pause! Bitte warte einen Moment.",
-          "clearChat": "Chat-Verlauf löschen",
-          "poweredBy": "Unterstützt von Google Gemini 2.0 Flash • Kinder-sichere KI",
-          "chatGreeting": "Hallo! 👋 Ich bin {name}, dein {subject}-Lernpartner! Frage mich alles zu diesem Kurs, und lass uns gemeinsam lernen!"
+      "yourTutor": "Dein KI-Tutor",
+      "askTutor": "Frage {name}",
+      "typeMessage": "Stelle eine Frage zu diesem Kurs...",
+      "thinking": "Überlegt...",
+      "errorMessage": "Ups! Dein KI-Tutor konnte nicht erreicht werden. Bitte versuche es erneut.",
+      "rateLimitError": "Dein KI-Tutor macht eine kurze Pause! Bitte warte einen Moment.",
+      "clearChat": "Chat-Verlauf löschen",
+      "poweredBy": "Unterstützt von Google Gemini 2.0 Flash • Kinder-sichere KI",
+      "chatGreeting": "Hallo! 👋 Ich bin {name}, dein {subject}-Lernpartner! Frage mich alles zu diesem Kurs, und lass uns gemeinsam lernen!"
     },
     nav: {
       home: "Startseite",
@@ -1791,7 +1843,7 @@ export const translations = {
       searchPlaceholder: "Nach Kurs oder Thema suchen…",
       enrolling: "Einschreiben...",
       enrolledBadge: "Eingeschrieben"
-    ,
+      ,
       searchResultsSingle: "{count} Ergebnis für „{query}“",
       searchResultsPlural: "{count} Ergebnisse für „{query}“",
       noResults: "Keine Kurse passen zu „{query}“",
@@ -1909,8 +1961,16 @@ export const translations = {
       deleteAccount: "Konto Löschen",
       logout: "Abmelden",
       profile: "Schülerprofil",
-      earnedOn: "Erhalten am {date}"
-    ,
+      earnedOn: "Erhalten am {date}",
+      memberSince: "Mitglied seit {date}",
+      activeToday: "Heute Aktiv",
+      viewAllCourses: "Alle anzeigen ({count}) →",
+      allEnrolledTitle: "Alle Eingeschriebenen Kurse",
+      allEnrolledDesc: "Verwalte und setze alle deine Lernpfade fort.",
+      motivationalCompletedTitle: "Schließe Kurse ab um Abzeichen & +100 XP zu verdienen! 🏆✨",
+      motivationalCompletedDesc: "Schließe alle Module eines Kurses ab, um ein Abschlussabzeichen freizuschalten.",
+      takeNewQuizBtn: "Quiz starten →",
+      stepCounter: "Schritt {current} von {total}",
       dangerZoneTitle: "Kontoverwaltung — Gefahrenzone",
       dangerZoneDesc: "Lösche dauerhaft dein Schülerprofil, Kurseinschreibungen, verdiente XP, Abzeichen, Quizpunktzahlen und deine Platzierung in der Bestenliste.",
       deleteProfileBtn: "Mein Profil Löschen",
@@ -2196,15 +2256,15 @@ export const translations = {
 
   ar: {
     aiTutor: {
-          "yourTutor": "المعلم الذكي الخاص بك",
-          "askTutor": "اسأل {name}",
-          "typeMessage": "اسأل سؤالاً حول هذه الدورة...",
-          "thinking": "جاري التفكير...",
-          "errorMessage": "عذراً! تعذر الاتصال بـ معلمك الذكي. يرجى المحاولة مرة أخرى.",
-          "rateLimitError": "معلمك الذكي يأخذ استراحة قصيرة! يرجى الانتظار لحظة.",
-          "clearChat": "مسح سجل المحادثة",
-          "poweredBy": "مدعوم من Google Gemini 2.0 Flash • ذكاء آمن للأطفال",
-          "chatGreeting": "مرحباً! 👋 أنا {name}، صديقك في مادة {subject}! اسألني أي شيء عن هذه الدورة، ولنتعلم معاً!"
+      "yourTutor": "المعلم الذكي الخاص بك",
+      "askTutor": "اسأل {name}",
+      "typeMessage": "اسأل سؤالاً حول هذه الدورة...",
+      "thinking": "جاري التفكير...",
+      "errorMessage": "عذراً! تعذر الاتصال بـ معلمك الذكي. يرجى المحاولة مرة أخرى.",
+      "rateLimitError": "معلمك الذكي يأخذ استراحة قصيرة! يرجى الانتظار لحظة.",
+      "clearChat": "مسح سجل المحادثة",
+      "poweredBy": "مدعوم من Google Gemini 2.0 Flash • ذكاء آمن للأطفال",
+      "chatGreeting": "مرحباً! 👋 أنا {name}، صديقك في مادة {subject}! اسألني أي شيء عن هذه الدورة، ولنتعلم معاً!"
     },
     nav: {
       home: "الرئيسية",
@@ -2287,7 +2347,7 @@ export const translations = {
       searchPlaceholder: "ابحث بالدورة أو الموضوع…",
       enrolling: "جاري التسجيل...",
       enrolledBadge: "مسجل"
-    ,
+      ,
       searchResultsSingle: "{count} نتيجة لـ “{query}”",
       searchResultsPlural: "{count} نتائج لـ “{query}”",
       noResults: "لا توجد دورات تطابق “{query}”",
@@ -2405,8 +2465,16 @@ export const translations = {
       deleteAccount: "حذف الحساب",
       logout: "تسجيل الخروج",
       profile: "ملف الطالب",
-      earnedOn: "تم الحصول عليه في {date}"
-    ,
+      earnedOn: "تم الحصول عليه في {date}",
+      memberSince: "عضو منذ {date}",
+      activeToday: "نشط اليوم",
+      viewAllCourses: "عرض الكل ({count}) →",
+      allEnrolledTitle: "جميع الدورات المسجلة",
+      allEnrolledDesc: "أدر واستأنف جميع مسارات التعلم الخاصة بك.",
+      motivationalCompletedTitle: "أكمل الدورات لكسب شارات و +100 نقطة خبرة! 🏆✨",
+      motivationalCompletedDesc: "أكمل جميع الوحدات في أي دورة للحصول على شارة إتمام.",
+      takeNewQuizBtn: "ابدأ اختباراً →",
+      stepCounter: "الخطوة {current} من {total}",
       dangerZoneTitle: "التحكم في الحساب — منطقة الخطر",
       dangerZoneDesc: "احذف ملفك الشخصي ونقاط الخبرة والشارات والتسجيلات ونتائج الاختبارات وترتيبك في لوحة المتصدرين بشكل دائم.",
       deleteProfileBtn: "حذف ملفي الشخصي",

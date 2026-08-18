@@ -43,7 +43,8 @@ The platform is designed to be fast, accessible, and mobile-friendly, with authe
 
 | Feature | Description |
 |---|---|
-| **Custom Avatars & Display Names** | Profile customization system requiring new users to choose a custom display name and an SVG avatar (16 options tailored for ages 7–17: 8 feminine, 8 masculine). Custom name & avatar appear on Dashboard, Leaderboard, and Navbar, fully replacing Google account details. |
+| **Custom Avatars & Profile Photos** | Custom display name and profile customization with 16 pre-generated static SVG avatars (tailored for ages 7–17: 8 feminine, 8 masculine). Authenticated users can optionally toggle their Google account photo on private surfaces (Dashboard, Navbar) with automatic fallback to SVG avatars. Real photos are strictly excluded from public leaderboards for COPPA/child privacy safety. |
+| **Instant Branded Startup Splash** | Fast startup performance with an inline branded splash screen in `index.html` and `AppLoader` that paints on the very first frame to eliminate white/blank screens during initial script loading and auth resolution. |
 | **Multi-Language (i18n)** | Global localization switcher. **English 🇺🇸 and Spanish 🇪🇸 are live and fully translated** (UI, all courses, quizzes, docs, legal pages). French, German, and Arabic translations are staged in the data and hidden until each is complete end-to-end (a partial translation is worse UX than none); the framework already supports RTL for Arabic. |
 | **Gamified Course Overhaul** | Step-by-step interactive courses designed for kids aged 7-14 with rich learning cards (Story, Concept, Fun Fact, Pro Tip, Example, Activity, Recap). |
 | **Web Audio SFX System** | Native Web Audio API sound synthesizer ($0 cost, 0 dependencies) playing audio feedback for clicks, correct answers, module finishes, level-ups, and badge unlocks with persistent mute toggle. |
@@ -53,7 +54,7 @@ The platform is designed to be fast, accessible, and mobile-friendly, with authe
 | **Course Catalog** | Searchable catalog of multi-module course tracks with enrollment, per-module progress, and course completion tracking. |
 | **Timed Quizzes** | 15-second per-question randomized quizzes with instant feedback, score logging, and per-quiz leaderboards. |
 | **Quiz Completion Indicators** | Done badge and best score on completed quiz cards; Start button becomes Retake. Incomplete attempts are never logged. |
-| **Personal Dashboard** | Consolidated view of enrolled courses, completion status, XP, Level progress, badges, total points, and daily streak. |
+| **Personal Dashboard** | Modern student hub featuring clean profile identity, 4 pro metric cards, 3-tier course cards, sub-navigation views (Overview, Enrolled Courses, Completed, Quiz History), and mobile-centered responsive layout. |
 | **Daily Login Streaks** | Consecutive daily login counter tracked in local timezone using `Date.UTC` integer arithmetic — DST-safe, no floating-point rounding. Resets on a missed day. |
 | **Global Leaderboard** | Public leaderboard ranking all users by total points and quiz scores. Access restricted exclusively to authenticated users. |
 | **Guest Score Preservation** | Guest quiz scores are automatically saved to the user profile when signing in or registering from the results screen. |
