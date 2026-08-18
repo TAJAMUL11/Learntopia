@@ -46,7 +46,6 @@ const AnimatedNumber = ({ value, suffix = "" }) => {
       return;
     }
 
-    let start = 0;
     const duration = 800; // ms
     const startTime = performance.now();
 
