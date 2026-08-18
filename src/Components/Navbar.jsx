@@ -17,7 +17,7 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const { currentUser, logOut } = useAuth();
-  const { profile } = useGamification();
+  const { profile, photoURL, usePhoto } = useGamification();
   const { isMuted, toggleMute } = useSound();
   const { t } = useLanguage();
 
@@ -112,6 +112,7 @@ const Navbar = () => {
               >
                 <Avatar
                   avatarId={currentAvatarId}
+                  photoURL={usePhoto ? photoURL : null}
                   size={22}
                   name={currentDisplayName}
                 />
@@ -205,6 +206,7 @@ const Navbar = () => {
                   <div className="flex items-center gap-3">
                     <Avatar
                       avatarId={currentAvatarId}
+                      photoURL={usePhoto ? photoURL : null}
                       size={36}
                       name={currentDisplayName}
                     />

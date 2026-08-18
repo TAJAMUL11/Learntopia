@@ -25,7 +25,7 @@ import { parseProfileName } from "../utils/profileUtils";
 const Dashboard = () => {
   const navigate = useNavigate();
   const { currentUser, isAdmin, logOut } = useAuth();
-  const { xp, levelInfo, badges: gamificationBadges, streak, profile } = useGamification();
+  const { xp, levelInfo, badges: gamificationBadges, streak, profile, photoURL, usePhoto } = useGamification();
   const { playWarningAlert } = useSound();
   const { t } = useLanguage();
 
@@ -242,6 +242,7 @@ const Dashboard = () => {
             <div className="flex items-center gap-4">
               <Avatar
                 avatarId={currentAvatarId}
+                photoURL={usePhoto ? photoURL : null}
                 size={64}
                 name={currentDisplayName || userDetails?.fullName || currentUser.displayName}
                 className="border-2 border-white/20 shadow-md"
@@ -537,6 +538,7 @@ const Dashboard = () => {
         editMode={true}
         initialName={currentDisplayName || ""}
         initialAvatar={currentAvatarId || null}
+        initialUsePhoto={usePhoto}
         onClose={() => setShowEditProfileModal(false)}
       />
     </div>
