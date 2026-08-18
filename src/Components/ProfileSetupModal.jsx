@@ -29,11 +29,15 @@ const ProfileSetupModal = ({
   editMode = false,
   initialName = "",
   initialAvatar = null,
+  initialUsePhoto = false,
 }) => {
   const { currentUser, completeProfileSetup } = useAuth();
   const { t } = useLanguage();
   const [displayName, setDisplayName] = useState(initialName);
   const [avatarId, setAvatarId] = useState(initialAvatar);
+  // A real photo (Google account picture) is available only for Google sign-ins.
+  const googlePhoto = currentUser?.photoURL || null;
+  const [usePhoto, setUsePhoto] = useState(initialUsePhoto && !!googlePhoto);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
@@ -42,9 +46,10 @@ const ProfileSetupModal = ({
     if (isOpen) {
       setDisplayName(initialName);
       setAvatarId(initialAvatar);
+      setUsePhoto(initialUsePhoto && !!googlePhoto);
       setError("");
     }
-  }, [isOpen, initialName, initialAvatar]);
+  }, [isOpen, initialName, initialAvatar, initialUsePhoto, googlePhoto]);
 
   if (!isOpen) return null;
 
@@ -97,7 +102,7 @@ const ProfileSetupModal = ({
         setSaving(false);
         return;
       }
-      await completeProfileSetup(displayName.trim(), avatarId);
+      await completeProfileSetup(displayName.trim(), avatarId, { usePhoto: usePhoto && !!googlePhoto });
       toast.success(
         editMode
           ? t("profileSetup.editSuccess")
@@ -147,7 +152,12 @@ const ProfileSetupModal = ({
 
         {/* Live Preview Bar */}
         <div className="mb-4 flex items-center gap-3 rounded-xl border border-violet-500/20 bg-violet-500/[0.06] p-3">
-          <Avatar avatarId={avatarId} size={48} name={displayName} />
+          <Avatar
+            avatarId={avatarId}
+            photoURL={usePhoto ? googlePhoto : null}
+            size={48}
+            name={displayName}
+          />
           <div className="min-w-0">
             <p className="truncate text-base font-bold text-white">
               {displayName.trim() || t("profileSetup.previewPlaceholder")}
@@ -157,6 +167,38 @@ const ProfileSetupModal = ({
             </p>
           </div>
         </div>
+
+        {/* Google-photo toggle — only when the account has a real photo.
+            Their photo shows on their own Dashboard/Navbar; the leaderboard
+            always uses the chosen avatar (never a real face). */}
+        {googlePhoto && (
+          <label className="mb-4 flex cursor-pointer items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-3 transition-colors hover:bg-white/[0.06]">
+            <Avatar photoURL={googlePhoto} size={36} name={displayName} />
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-semibold text-white">
+                {t("profileSetup.useGooglePhoto")}
+              </p>
+              <p className="mt-0.5 text-[10px] leading-snug text-ink-faint">
+                {t("profileSetup.useGooglePhotoHint")}
+              </p>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={usePhoto}
+              onClick={() => setUsePhoto((v) => !v)}
+              className={`relative h-5 w-9 shrink-0 rounded-full transition-colors ${
+                usePhoto ? "bg-violet-500" : "bg-white/15"
+              }`}
+            >
+              <span
+                className={`absolute top-0.5 h-4 w-4 rounded-full bg-white transition-all ${
+                  usePhoto ? "left-[18px]" : "left-0.5"
+                }`}
+              />
+            </button>
+          </label>
+        )}
 
         {/* Display name input */}
         <div className="mb-4">
