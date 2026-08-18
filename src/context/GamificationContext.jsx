@@ -153,7 +153,9 @@ export const GamificationProvider = ({ children }) => {
     try {
       const publicFields = {
         uid,
-        fullName: `${displayName}|${avatarId || ""}`,
+        // Identity lives in the dedicated displayName/avatarId fields; fullName
+        // just holds the plain display name (no more "name|avatarId" encoding).
+        fullName: displayName,
         displayName,
         avatarId,
         totalPoints: increment(amount),
@@ -255,6 +257,10 @@ export const GamificationProvider = ({ children }) => {
         profile,
         displayName: profile?.displayName || null,
         avatarId: profile?.avatarId || null,
+        // Real photo (Google account picture) + whether the user wants it shown
+        // on their OWN surfaces. Never surfaced on the public leaderboard.
+        photoURL: profile?.photoURL || currentUser?.photoURL || null,
+        usePhoto: !!profile?.usePhoto,
         xp,
         totalPoints,
         levelInfo,

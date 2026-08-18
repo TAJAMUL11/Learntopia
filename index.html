@@ -7,6 +7,28 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="theme-color" content="#0B0713" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Instant paint: dark ground + splash styles apply before any JS loads,
+         so the very first frame is branded instead of a blank white screen. -->
+    <style>
+      html, body { margin: 0; background: #0B0713; }
+      #app-splash {
+        position: fixed; inset: 0; z-index: 9999;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        gap: 22px; background: #0B0713;
+      }
+      #app-splash .ring {
+        width: 40px; height: 40px; border-radius: 50%;
+        border: 3px solid rgba(255,255,255,0.12); border-top-color: #8b63e3;
+        animation: ltspin 0.8s linear infinite;
+      }
+      #app-splash .mark {
+        width: 56px; height: 56px;
+        filter: drop-shadow(0 0 22px rgba(139,99,227,0.55));
+      }
+      @keyframes ltspin { to { transform: rotate(360deg); } }
+      @media (prefers-reduced-motion: reduce) { #app-splash .ring { animation: none; } }
+    </style>
     
     <!-- Primary SEO Metadata -->
     <title>Learntopia | Premium E-Learning & Skill Verification Platform</title>
@@ -120,7 +142,13 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Instant splash — visible immediately, replaced the moment React mounts. -->
+      <div id="app-splash">
+        <img class="mark" src="/favicon.svg" alt="Learntopia" width="56" height="56" />
+        <div class="ring" role="status" aria-label="Loading Learntopia"></div>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

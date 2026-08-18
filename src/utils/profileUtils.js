@@ -1,8 +1,12 @@
 /**
  * profileUtils.js
- * Utility helper to safely parse custom displayName and avatarId from user profile documents.
- * Supports direct `displayName` and `avatarId` fields as well as encoded `fullName` ("Name|avatarId")
- * for 100% compatibility with strict remote Firestore security rules.
+ * Safely resolve a user's displayName and avatarId from a profile document.
+ *
+ * New writes store identity in the dedicated `displayName` / `avatarId` fields.
+ * The encoded `fullName` = "Name|avatarId" format is LEGACY — older documents
+ * written before the security rules allowed the dedicated fields still carry it,
+ * so we keep reading (never writing) that encoding here as a back-compat
+ * fallback. Do not reintroduce the encoded write.
  */
 
 export const parseProfileName = (docData, fallbackName = "Learner") => {
@@ -13,6 +17,7 @@ export const parseProfileName = (docData, fallbackName = "Learner") => {
   let displayName = docData.displayName || "";
   let avatarId = docData.avatarId || null;
 
+  // Legacy fallback: recover identity from the old "Name|avatarId" encoding.
   const rawFullName = docData.fullName || "";
   if (rawFullName.includes("|")) {
     const parts = rawFullName.split("|");

@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test:rules": "node --test test/firestore.rules.test.js",
-    "test:rules:ci": "firebase emulators:exec --only firestore --project demo-learntopia \"node --test test/firestore.rules.test.js\""
+    "test:rules:ci": "firebase emulators:exec --only firestore --project demo-learntopia \"node --test test/firestore.rules.test.js\"",
+    "gen:avatars": "node scripts/gen-avatars.mjs"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.1",
@@ -27,6 +28,8 @@
     "react-toastify": "^10.0.6"
   },
   "devDependencies": {
+    "@dicebear/collection": "^9.4.2",
+    "@dicebear/core": "^9.4.3",
     "@eslint/js": "^9.13.0",
     "@firebase/rules-unit-testing": "^4.0.1",
     "@types/react": "^18.3.12",

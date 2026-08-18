@@ -95,6 +95,25 @@ describe("Users/{uid} profile", () => {
     );
   });
 
+  test("owner can set photoURL and usePhoto on the private profile", async () => {
+    await assertSucceeds(
+      setDoc(doc(alice(), "Users/alice"), {
+        ...validProfile(),
+        photoURL: "https://lh3.googleusercontent.com/a/abc123",
+        usePhoto: true,
+      })
+    );
+  });
+
+  test("rejects a non-boolean usePhoto", async () => {
+    await assertFails(
+      setDoc(doc(alice(), "Users/alice"), {
+        ...validProfile(),
+        usePhoto: "yes",
+      })
+    );
+  });
+
   test("cannot create a profile for someone else", async () => {
     await assertFails(setDoc(doc(alice(), "Users/bob"), validProfile()));
   });
@@ -270,6 +289,15 @@ describe("PublicLeaderboard/{uid}", () => {
         ...validEntry(),
         displayName: "CyberCoder",
         avatarId: "astro-girl",
+      })
+    );
+  });
+
+  test("PRIVACY: cannot write a real photoURL into the public leaderboard", async () => {
+    await assertFails(
+      setDoc(doc(alice(), "PublicLeaderboard/alice"), {
+        ...validEntry(),
+        photoURL: "https://lh3.googleusercontent.com/a/abc123",
       })
     );
   });

@@ -8,6 +8,7 @@ import {
 } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { parseProfileName } from "../utils/profileUtils";
+import AppLoader from "../Components/ui/AppLoader";
 
 /**
  * AuthContext.jsx
@@ -78,11 +79,14 @@ export function AuthProvider({ children }) {
    * Save the user's chosen display name and avatar to both their private
    * profile and the public leaderboard entry with fallback handling.
    */
-  const completeProfileSetup = async (displayName, avatarId) => {
+  const completeProfileSetup = async (displayName, avatarId, options = {}) => {
     if (!currentUser) return;
     const uid = currentUser.uid;
     const cleanName = displayName.trim();
-    const encodedName = `${cleanName}|${avatarId}`;
+    // Whether to show the user's real photo (Google account picture) on their
+    // OWN private surfaces (Dashboard/Navbar). This never touches the public
+    // leaderboard — a child's real face is not shown to other users.
+    const usePhoto = !!options.usePhoto;
 
     // 1. Instant local storage backup
     try {
@@ -105,29 +109,32 @@ export function AuthProvider({ children }) {
       console.warn("Error reading user snap before setup:", e);
     }
 
-    // 2. Primary write with direct + encoded fields
+    // 2. Primary write. Identity is stored in the dedicated displayName/avatarId
+    // fields (the rules allow them); fullName just holds the plain display name.
+    // photoURL is the Google account picture (private surfaces only); only write
+    // it when it's actually a string so the strict rules accept the profile.
+    const photo = currentUser.photoURL || existing.photoURL || null;
+    const profileWrite = {
+      email: existing.email || currentUser.email || "",
+      fullName: cleanName,
+      displayName: cleanName,
+      avatarId: avatarId,
+      totalPoints: existing.totalPoints || 0,
+      streak: existing.streak || 1,
+      badges: existing.badges || ["Newcomer"],
+      usePhoto,
+      updatedAt: new Date(),
+    };
+    if (photo) profileWrite.photoURL = photo;
     try {
-      await setDoc(
-        userRef,
-        {
-          email: existing.email || currentUser.email || "",
-          fullName: encodedName,
-          displayName: cleanName,
-          avatarId: avatarId,
-          totalPoints: existing.totalPoints || 0,
-          streak: existing.streak || 1,
-          badges: existing.badges || ["Newcomer"],
-          updatedAt: new Date(),
-        },
-        { merge: true }
-      );
+      await setDoc(userRef, profileWrite, { merge: true });
     } catch (err) {
-      console.warn("Primary write notice, using encoded fullName write:", err);
+      console.warn("Primary profile write failed, retrying minimal write:", err);
       await setDoc(
         userRef,
         {
           email: existing.email || currentUser.email || "",
-          fullName: encodedName,
+          fullName: cleanName,
           totalPoints: existing.totalPoints || 0,
           streak: existing.streak || 1,
           badges: existing.badges || ["Newcomer"],
@@ -144,7 +151,7 @@ export function AuthProvider({ children }) {
         publicRef,
         {
           uid,
-          fullName: encodedName,
+          fullName: cleanName,
           displayName: cleanName,
           avatarId: avatarId,
           totalPoints: existing.totalPoints || 0,
@@ -161,7 +168,7 @@ export function AuthProvider({ children }) {
           publicRef,
           {
             uid,
-            fullName: encodedName,
+            fullName: cleanName,
             totalPoints: existing.totalPoints || 0,
             streak: existing.streak || 1,
             badges: (existing.badges || ["Newcomer"]).map((b) => (typeof b === "string" ? b : b.name || "Badge")),
@@ -295,7 +302,9 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {/* Show the branded loader (not a blank screen) while auth resolves, so
+          there's no empty frame between the HTML splash and the real app. */}
+      {loading ? <AppLoader /> : children}
     </AuthContext.Provider>
   );
 }
