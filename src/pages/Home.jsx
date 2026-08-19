@@ -107,11 +107,11 @@ const Home = () => {
           className="mt-10 flex w-full animate-fade-up flex-col items-center gap-3 sm:w-auto sm:flex-row"
           style={{ animationDelay: "0.2s" }}
         >
-          <Button size="lg" onClick={() => navigate("/courses")} className="w-full sm:w-auto">
+          <Button size="md" onClick={() => navigate("/courses")} className="w-full sm:w-auto sm:px-7 sm:py-3 sm:text-base">
             {t("hero.exploreCourses")}
-            <Icon name="arrow" size={18} />
+            <Icon name="arrow" size={16} />
           </Button>
-          <Button variant="secondary" size="lg" onClick={() => navigate("/quiz")} className="w-full sm:w-auto">
+          <Button variant="secondary" size="md" onClick={() => navigate("/quiz")} className="w-full sm:w-auto sm:px-7 sm:py-3 sm:text-base">
             {t("hero.takeQuiz")}
           </Button>
         </div>
