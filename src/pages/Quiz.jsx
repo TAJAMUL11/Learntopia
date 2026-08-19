@@ -12,6 +12,7 @@ import { useGamification } from "../context/GamificationContext";
 import Card from "../Components/ui/Card";
 import Button from "../Components/ui/Button";
 import Badge from "../Components/ui/Badge";
+import SectionHeading from "../Components/ui/SectionHeading";
 import Alert from "../Components/ui/Alert";
 import Icon from "../Components/ui/Icon";
 import Modal from "../Components/ui/Modal";
@@ -258,10 +259,12 @@ const Quiz = () => {
       {/* SCREEN 1 — Selection */}
       {screen === "selection" && (
         <div className="w-full max-w-5xl animate-fade-in">
-          <div className="mb-10 text-center">
-            <h1 className="text-3xl font-bold tracking-tight md:text-4xl">{t("quiz.title")}</h1>
-            <p className="mt-2 text-ink-low">{t("quiz.subtitle")}</p>
-          </div>
+          <SectionHeading
+            centered
+            className="mb-10"
+            title={t("quiz.title")}
+            description={t("quiz.subtitle")}
+          />
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {localizedQuizzes.map((quiz) => {

@@ -16,7 +16,7 @@ import EmptyState from "./ui/EmptyState";
 import { Skeleton } from "./ui/Skeleton";
 import { getLocalizedQuiz } from "../utils/localizationUtils";
 import Avatar from "./Avatar";
-import ProfileSetupModal from "./ProfileSetupModal";
+import EditProfileView from "./EditProfileView";
 import { parseProfileName } from "../utils/profileUtils";
 import { COURSES } from "../data/coursesData";
 
@@ -91,7 +91,7 @@ const Dashboard = () => {
   // Modals & Actions
   const [courseToUnenroll, setCourseToUnenroll] = useState(null);
   const [unenrollLoading, setUnenrollLoading] = useState(false);
-  const [showEditProfileModal, setShowEditProfileModal] = useState(false);
+  const [editingProfile, setEditingProfile] = useState(false);
 
   // Destructive profile deletion
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -291,7 +291,22 @@ const Dashboard = () => {
     );
   }
 
-  // Pro Metric Capsule Config
+  // Dedicated Edit Profile view — opened from the "Edit Profile" button at the
+  // top of the dashboard. It replaces the dashboard body (with a Back link) and
+  // is NOT one of the content sub-tabs.
+  if (editingProfile) {
+    return (
+      <EditProfileView
+        onBack={() => setEditingProfile(false)}
+        initialName={parsedDisplayName || ""}
+        initialAvatar={parsedAvatarId || null}
+        initialUsePhoto={usePhoto}
+      />
+    );
+  }
+
+  // Pro Metric Capsule Config — core palette only (violet primary, sky secondary).
+  // Cooler icon chips use a soft gradient with an inner highlight for depth.
   const METRICS = [
     {
       iconName: "zap",
@@ -299,19 +314,15 @@ const Dashboard = () => {
       rawValue: xp,
       suffix: " XP",
       accent: "text-violet-400",
-      iconBg: "bg-violet-500/15 border-violet-500/30 text-violet-300",
-      bgGradient: "from-violet-600/10 via-violet-500/[0.04] to-transparent",
-      borderColor: "border-violet-500/20",
+      iconBg: "bg-gradient-to-br from-violet-500/30 to-violet-500/[0.06] border-violet-500/30 text-violet-300",
     },
     {
       iconName: "flame",
       label: t("dashboard.dayStreak"),
       rawValue: streak,
       suffix: streak === 1 ? " Day" : " Days",
-      accent: "text-orange-400",
-      iconBg: "bg-orange-500/15 border-orange-500/30 text-orange-400",
-      bgGradient: "from-orange-500/10 via-amber-500/[0.04] to-transparent",
-      borderColor: "border-orange-500/20",
+      accent: "text-violet-400",
+      iconBg: "bg-gradient-to-br from-violet-500/30 to-violet-500/[0.06] border-violet-500/30 text-violet-300",
     },
     {
       iconName: "book-open",
@@ -319,9 +330,7 @@ const Dashboard = () => {
       rawValue: enrolledCourses.length,
       suffix: "",
       accent: "text-sky",
-      iconBg: "bg-sky/15 border-sky/30 text-sky",
-      bgGradient: "from-sky-500/10 via-sky-500/[0.04] to-transparent",
-      borderColor: "border-sky-500/20",
+      iconBg: "bg-gradient-to-br from-sky/30 to-sky/[0.06] border-sky/30 text-sky",
       onClickTab: "courses",
     },
     {
@@ -329,10 +338,8 @@ const Dashboard = () => {
       label: t("dashboard.completed"),
       rawValue: completedCourses.length,
       suffix: "",
-      accent: "text-emerald-400",
-      iconBg: "bg-emerald-500/15 border-emerald-500/30 text-emerald-300",
-      bgGradient: "from-emerald-500/10 via-emerald-500/[0.04] to-transparent",
-      borderColor: "border-emerald-500/20",
+      accent: "text-sky",
+      iconBg: "bg-gradient-to-br from-sky/30 to-sky/[0.06] border-sky/30 text-sky",
       onClickTab: "completed",
     },
   ];
@@ -377,7 +384,7 @@ const Dashboard = () => {
               className="h-14 w-14 sm:h-12 sm:w-12 flex-none rounded-xl border border-white/10 object-cover shadow-sm transition-transform duration-300 group-hover:scale-105"
             />
           ) : (
-            <div className="flex h-14 w-14 sm:h-12 sm:w-12 flex-none items-center justify-center rounded-xl border border-violet-500/20 bg-violet-500/10 text-violet-300 font-bold text-base">
+            <div className="flex h-14 w-14 sm:h-12 sm:w-12 flex-none items-center justify-center rounded-xl border border-white/10 bg-gradient-to-br from-violet-500 to-violet-700 text-white font-black text-lg shadow-[0_6px_16px_rgba(109,66,190,0.30),inset_0_1px_0_rgba(255,255,255,0.15)]">
               {category.charAt(0)}
             </div>
           )}
@@ -433,7 +440,7 @@ const Dashboard = () => {
             </div>
             <Button
               size="sm"
-              onClick={() => setShowEditProfileModal(true)}
+              onClick={() => setEditingProfile(true)}
               className="flex-none bg-amber-400 text-slate-950 font-bold border-none hover:bg-amber-300"
             >
               {t("profileSetup.setupBannerBtn")}
@@ -442,7 +449,7 @@ const Dashboard = () => {
         )}
 
         {/* ── ROW 1 — Clean Profile Header Banner ──────────────────────────── */}
-        <Card className="animate-fade-up relative overflow-hidden border-violet-500/25 bg-gradient-to-r from-violet-900/20 via-violet-600/10 to-sky-900/15 p-5 sm:p-8 shadow-card">
+        <Card className="animate-fade-up relative overflow-hidden border-violet-500/25 bg-gradient-to-r from-violet-700/20 via-violet-600/10 to-sky/15 p-5 sm:p-8 shadow-card">
           <div className="relative z-10 flex flex-col gap-5 sm:gap-6 sm:flex-row sm:items-center sm:justify-between text-center sm:text-left">
 
             {/* Avatar & Identity */}
@@ -468,16 +475,12 @@ const Dashboard = () => {
                   </span>
                 </div>
 
-                {/* Details: Email · Member since · Active status */}
+                {/* Details: Member since · Active status (email now lives in Edit Profile) */}
                 <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center sm:justify-start gap-x-3 gap-y-1 text-xs text-ink-low">
-                  <span className="truncate">{userDetails?.email}</span>
                   {memberSince && (
-                    <>
-                      <span className="hidden sm:inline text-ink-faint">·</span>
-                      <span>{t("dashboard.memberSince", { date: memberSince })}</span>
-                    </>
+                    <span>{t("dashboard.memberSince", { date: memberSince })}</span>
                   )}
-                  <span className="hidden sm:inline text-ink-faint">·</span>
+                  {memberSince && <span className="hidden sm:inline text-ink-faint">·</span>}
                   <span className="inline-flex items-center gap-1.5 text-emerald-400 font-semibold mt-0.5 sm:mt-0">
                     <span className="relative flex h-2 w-2">
                       <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
@@ -494,7 +497,7 @@ const Dashboard = () => {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => setShowEditProfileModal(true)}
+                onClick={() => setEditingProfile(true)}
                 className="text-xs border-white/10 hover:bg-white/10 w-full justify-center"
               >
                 <Icon name="edit-3" size={14} /> {t("profileSetup.editBtn")}
@@ -517,7 +520,7 @@ const Dashboard = () => {
                 return (
                   <span
                     key={idx}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-bold text-amber-300 shadow-sm"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-bold text-ink-hi shadow-sm"
                   >
                     <span>{bEmoji}</span>
                     <span>{bName}</span>
@@ -539,10 +542,10 @@ const Dashboard = () => {
                   setActiveTab(m.onClickTab);
                 }
               }}
-              className={`animate-fade-up border bg-gradient-to-b ${m.bgGradient} ${m.borderColor} p-4 sm:p-5 text-center flex flex-col items-center justify-center ${m.onClickTab ? "cursor-pointer hover:bg-white/[0.04]" : ""}`}
+              className={`animate-fade-up border border-white/[0.08] bg-white/[0.02] p-4 sm:p-5 text-center flex flex-col items-center justify-center transition-all duration-200 ${m.onClickTab ? "cursor-pointer hover:bg-white/[0.04] hover:border-violet-500/30 hover:-translate-y-0.5" : ""}`}
               style={{ animationDelay: `${0.04 + i * 0.04}s` }}
             >
-              <div className={`mb-2 flex h-10 w-10 items-center justify-center rounded-xl border ${m.iconBg} shadow-sm`}>
+              <div className={`mb-2 flex h-11 w-11 items-center justify-center rounded-xl border ${m.iconBg} shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]`}>
                 <Icon name={m.iconName} size={20} />
               </div>
               <span className="text-xs font-bold text-ink-low">{m.label}</span>
@@ -593,7 +596,7 @@ const Dashboard = () => {
             <div className="grid gap-6 lg:grid-cols-3">
               {/* Left 2 Cols: Continue Learning Spotlight */}
               <div className="lg:col-span-2">
-                <Card className="h-full border-sky-500/25 bg-gradient-to-r from-sky-950/20 via-violet-950/15 to-transparent p-6 shadow-card flex flex-col justify-between">
+                <Card className="h-full border-sky/25 bg-gradient-to-r from-sky/20 via-violet-700/15 to-transparent p-6 shadow-card flex flex-col justify-between">
                   <div>
                     <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-2 border-b border-white/[0.08] pb-3">
                       <h2 className="flex items-center gap-2.5 text-sm font-extrabold text-sky">
@@ -616,7 +619,7 @@ const Dashboard = () => {
                             className="h-24 w-24 flex-none rounded-2xl border border-white/10 object-cover shadow-md"
                           />
                         ) : (
-                          <div className="flex h-24 w-24 flex-none items-center justify-center rounded-2xl border border-sky-500/20 bg-sky-500/10 text-sky text-2xl font-bold">
+                          <div className="flex h-24 w-24 flex-none items-center justify-center rounded-2xl border border-white/10 bg-gradient-to-br from-sky to-violet-600 text-white text-3xl shadow-[0_8px_20px_rgba(109,66,190,0.30),inset_0_1px_0_rgba(255,255,255,0.15)]">
                             ⚡
                           </div>
                         )}
@@ -686,13 +689,13 @@ const Dashboard = () => {
 
               {/* Right 1 Col: Daily XP Goal Widget */}
               <div>
-                <Card className="h-full border-orange-500/25 bg-gradient-to-b from-orange-950/20 via-amber-950/10 to-transparent p-6 shadow-card flex flex-col justify-between">
+                <Card className="h-full border-violet-500/25 bg-gradient-to-b from-violet-700/20 via-violet-700/10 to-transparent p-6 shadow-card flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
-                      <h2 className="flex items-center gap-2 text-sm font-extrabold text-orange-400">
+                      <h2 className="flex items-center gap-2 text-sm font-extrabold text-violet-400">
                         <Icon name="flame" size={16} /> {t("dashboard.dailyGoalTitle")}
                       </h2>
-                      <span className="font-bold text-xs text-orange-300">
+                      <span className="font-bold text-xs text-violet-300">
                         🔥 {streak} {streak === 1 ? "Day" : "Days"}
                       </span>
                     </div>
@@ -702,12 +705,12 @@ const Dashboard = () => {
                         <span className="text-2xl font-black text-ink-hi tabular-nums">
                           {t("dashboard.dailyGoalProgress", { current: todayXp, target: DAILY_XP_TARGET })}
                         </span>
-                        <span className="text-xs font-bold text-orange-400">{todayXpPct}%</span>
+                        <span className="text-xs font-bold text-violet-400">{todayXpPct}%</span>
                       </div>
 
                       <div className="h-3 w-full overflow-hidden rounded-full bg-white/10 p-0.5 border border-white/5">
                         <div
-                          className="h-full rounded-full bg-gradient-to-r from-orange-500 to-amber-400 transition-[width] duration-700 ease-out"
+                          className="h-full rounded-full bg-gradient-to-r from-violet-600 to-violet-400 transition-[width] duration-700 ease-out"
                           style={{ width: `${todayXpPct}%` }}
                         />
                       </div>
@@ -725,9 +728,9 @@ const Dashboard = () => {
                                 key={idx}
                                 className={`flex h-8 w-8 items-center justify-center rounded-lg text-xs font-bold transition-all ${
                                   isToday
-                                    ? "border-2 border-orange-400 bg-orange-500/25 text-orange-300 shadow-sm scale-105"
+                                    ? "border-2 border-violet-400 bg-violet-500/25 text-violet-300 shadow-sm scale-105"
                                     : isActive
-                                    ? "bg-orange-500/15 text-orange-300 border border-orange-500/20"
+                                    ? "bg-violet-500/15 text-violet-300 border border-violet-500/20"
                                     : "bg-white/[0.03] text-ink-faint border border-white/[0.05]"
                                 }`}
                               >
@@ -798,11 +801,11 @@ const Dashboard = () => {
               <Card className="p-5 sm:p-6 border-white/10">
                 <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-3 border-b border-white/[0.08] pb-3.5">
                   <h2 className="flex items-center gap-2.5 text-base font-extrabold text-ink-hi">
-                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-sky/10 text-sky border border-sky/20">
                       <Icon name="check-circle" size={15} />
                     </span>
                     {t("dashboard.completedCourses")}
-                    <span className="rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-bold text-emerald-400">
+                    <span className="rounded-full bg-sky/10 px-2.5 py-0.5 text-xs font-bold text-sky">
                       {completedCourses.length}
                     </span>
                   </h2>
@@ -811,7 +814,7 @@ const Dashboard = () => {
                     <button
                       type="button"
                       onClick={() => setActiveTab("completed")}
-                      className="text-xs font-bold text-emerald-400 hover:text-emerald-300 transition-colors"
+                      className="text-xs font-bold text-sky hover:text-sky transition-colors"
                     >
                       {t("dashboard.viewAllCompletedCourses", { count: completedCourses.length })}
                     </button>
@@ -826,13 +829,13 @@ const Dashboard = () => {
                         return (
                           <div
                             key={c.courseId}
-                            className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-3 rounded-xl border border-emerald-500/25 bg-emerald-500/[0.05] p-3.5"
+                            className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-3 rounded-xl border border-sky/25 bg-sky/[0.05] p-3.5"
                           >
                             <div className="flex items-center gap-3 min-w-0">
                               <span className="text-xl">🏆</span>
                               <p className="min-w-0 text-sm font-bold text-ink-hi text-center sm:text-left">{localizedTitle}</p>
                             </div>
-                            <span className="flex-none rounded-full border border-emerald-500/30 bg-emerald-500/20 px-3 py-1 text-xs font-bold text-emerald-300">
+                            <span className="flex-none rounded-full border border-sky/30 bg-sky/20 px-3 py-1 text-xs font-bold text-sky">
                               {t("courses.courseCompleted")}
                             </span>
                           </div>
@@ -841,8 +844,8 @@ const Dashboard = () => {
                     </div>
                   ) : (
                     <div className="rounded-2xl border border-violet-500/20 bg-gradient-to-br from-violet-600/10 via-violet-500/[0.05] to-transparent p-6 text-center">
-                      <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl border border-amber-500/30 bg-amber-500/10 shadow-glow">
-                        <Icon name="trophy" size={24} className="text-amber-400" />
+                      <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl border border-violet-500/30 bg-violet-500/10 shadow-glow">
+                        <Icon name="trophy" size={24} className="text-violet-400" />
                       </div>
                       <h3 className="text-base font-extrabold text-ink-hi text-balance max-w-[340px] mx-auto leading-snug">
                         {t("dashboard.motivationalCompletedTitle")}
@@ -863,7 +866,7 @@ const Dashboard = () => {
               <Card className="p-5 sm:p-6 border-white/10">
                 <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-3 border-b border-white/[0.08] pb-3.5">
                   <h2 className="flex items-center gap-2.5 text-base font-extrabold text-ink-hi">
-                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-500/10 text-violet-400 border border-violet-500/20">
                       <Icon name="trophy" size={15} />
                     </span>
                     {t("dashboard.quizHistory")}
@@ -873,7 +876,7 @@ const Dashboard = () => {
                     <button
                       type="button"
                       onClick={() => setActiveTab("quizzes")}
-                      className="text-xs font-bold text-amber-400 hover:text-amber-300 transition-colors"
+                      className="text-xs font-bold text-violet-400 hover:text-violet-300 transition-colors"
                     >
                       {t("dashboard.viewAllQuizzes", { count: quizScores.length })}
                     </button>
@@ -882,7 +885,7 @@ const Dashboard = () => {
                       size="sm"
                       variant="ghost"
                       onClick={() => navigate("/quiz")}
-                      className="text-xs text-amber-400 hover:text-amber-300 font-bold"
+                      className="text-xs text-violet-400 hover:text-violet-300 font-bold"
                     >
                       {t("dashboard.takeNewQuizBtn")}
                     </Button>
@@ -964,11 +967,11 @@ const Dashboard = () => {
 
         {/* ── TAB 3: ALL COMPLETED COURSES & CERTIFICATES ────────────────── */}
         {activeTab === "completed" && (
-          <Card className="p-5 sm:p-8 animate-fade-in border-emerald-500/20">
+          <Card className="p-5 sm:p-8 animate-fade-in border-sky/20">
             <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-4 border-b border-white/[0.08] pb-4 mb-6">
               <div>
                 <h2 className="text-xl font-extrabold text-ink-hi flex items-center justify-center sm:justify-start gap-2">
-                  <Icon name="check-circle" className="text-emerald-400" size={20} />
+                  <Icon name="check-circle" className="text-sky" size={20} />
                   {t("dashboard.allCompletedTitle")} ({completedCourses.length})
                 </h2>
                 <p className="mt-1 text-xs text-ink-low">{t("dashboard.allCompletedDesc")}</p>
@@ -986,18 +989,18 @@ const Dashboard = () => {
                   return (
                     <div
                       key={c.courseId}
-                      className="flex flex-col justify-between rounded-2xl border border-emerald-500/25 bg-emerald-500/[0.05] p-5 shadow-sm"
+                      className="flex flex-col justify-between rounded-2xl border border-sky/25 bg-sky/[0.05] p-5 shadow-sm"
                     >
                       <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4">
                         {img ? (
                           <img src={img} alt="" className="h-14 w-14 rounded-xl object-cover border border-white/10 shadow-sm flex-none" />
                         ) : (
-                          <div className="flex h-14 w-14 flex-none items-center justify-center rounded-xl bg-emerald-500/20 text-2xl">
+                          <div className="flex h-14 w-14 flex-none items-center justify-center rounded-xl bg-sky/20 text-2xl">
                             🏆
                           </div>
                         )}
                         <div className="min-w-0 flex-1 w-full">
-                          <span className="inline-block rounded-full bg-emerald-500/20 px-2.5 py-0.5 text-[10px] font-bold text-emerald-300 border border-emerald-500/30 uppercase tracking-wider">
+                          <span className="inline-block rounded-full bg-sky/20 px-2.5 py-0.5 text-[10px] font-bold text-sky border border-sky/30 uppercase tracking-wider">
                             100% Completed
                           </span>
                           <h3 className="mt-1.5 font-bold text-base text-ink-hi text-center sm:text-left">{localizedTitle}</h3>
@@ -1005,12 +1008,12 @@ const Dashboard = () => {
                         </div>
                       </div>
 
-                      <div className="mt-4 border-t border-emerald-500/20 pt-3 flex justify-center sm:justify-end">
+                      <div className="mt-4 border-t border-sky/20 pt-3 flex justify-center sm:justify-end">
                         <Button
                           size="sm"
                           variant="ghost"
                           onClick={() => navigate(`/course/${c.courseId}`)}
-                          className="w-full sm:w-auto text-xs border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/20 font-bold"
+                          className="w-full sm:w-auto text-xs border-sky/30 text-sky hover:bg-sky/20 font-bold"
                         >
                           Review Course →
                         </Button>
@@ -1021,8 +1024,8 @@ const Dashboard = () => {
               </div>
             ) : (
               <div className="rounded-2xl border border-violet-500/20 bg-gradient-to-br from-violet-600/10 via-violet-500/[0.05] to-transparent p-8 text-center max-w-lg mx-auto">
-                <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-500/30 bg-amber-500/10 shadow-glow">
-                  <Icon name="trophy" size={28} className="text-amber-400" />
+                <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl border border-violet-500/30 bg-violet-500/10 shadow-glow">
+                  <Icon name="trophy" size={28} className="text-violet-400" />
                 </div>
                 <h3 className="text-base font-extrabold text-ink-hi text-balance max-w-[340px] mx-auto leading-snug">
                   {t("dashboard.motivationalCompletedTitle")}
@@ -1040,11 +1043,11 @@ const Dashboard = () => {
 
         {/* ── TAB 4: ALL QUIZ ATTEMPTS & HIGH SCORES ──────────────────────── */}
         {activeTab === "quizzes" && (
-          <Card className="p-5 sm:p-8 animate-fade-in border-amber-500/20">
+          <Card className="p-5 sm:p-8 animate-fade-in border-violet-500/20">
             <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-4 border-b border-white/[0.08] pb-4 mb-6">
               <div>
                 <h2 className="text-xl font-extrabold text-ink-hi flex items-center justify-center sm:justify-start gap-2">
-                  <Icon name="trophy" className="text-amber-400" size={20} />
+                  <Icon name="trophy" className="text-violet-400" size={20} />
                   {t("dashboard.allQuizzesTitle")} ({quizScores.length})
                 </h2>
                 <p className="mt-1 text-xs text-ink-low">{t("dashboard.allQuizzesDesc")}</p>
@@ -1209,15 +1212,6 @@ const Dashboard = () => {
         </Modal>
       )}
 
-      {/* Edit Profile Modal */}
-      <ProfileSetupModal
-        isOpen={showEditProfileModal}
-        editMode
-        initialName={parsedDisplayName || ""}
-        initialAvatar={parsedAvatarId || null}
-        initialUsePhoto={usePhoto}
-        onClose={() => setShowEditProfileModal(false)}
-      />
     </div>
   );
 };

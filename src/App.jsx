@@ -14,7 +14,7 @@ import { GamificationProvider } from "./context/GamificationContext";
 import { SoundProvider } from "./context/SoundContext";
 import { LanguageProvider } from "./context/LanguageContext";
 import CelebrationOverlay from "./Components/CelebrationOverlay";
-import ProfileSetupModal from "./Components/ProfileSetupModal";
+import EditProfileView from "./Components/EditProfileView";
 
 // Lazy-load pages so each route ships as its own chunk. While a chunk loads,
 // RootLayout's Suspense boundary shows a PageSkeleton.
@@ -64,10 +64,16 @@ const router = createBrowserRouter(
   )
 );
 
-const GlobalProfileModal = () => {
-  const { needsProfileSetup, isAdmin } = useAuth();
-  if (isAdmin) return null;
-  return <ProfileSetupModal isOpen={needsProfileSetup} />;
+// First-time users must finish profile setup before using the app. Instead of a
+// blocking modal, they get the full dedicated Edit Profile view in "required"
+// mode (no Back/Cancel) — the same view used for editing later, so the
+// experience is consistent. Admins skip this entirely.
+const AppRoot = () => {
+  const { currentUser, needsProfileSetup, isAdmin } = useAuth();
+  if (currentUser && !isAdmin && needsProfileSetup) {
+    return <EditProfileView required />;
+  }
+  return <RouterProvider router={router} />;
 };
 
 const App = () => {
@@ -76,9 +82,8 @@ const App = () => {
       <GamificationProvider>
         <SoundProvider>
           <LanguageProvider>
-            <RouterProvider router={router} />
+            <AppRoot />
             <CelebrationOverlay />
-            <GlobalProfileModal />
             <ToastContainer
               position="top-right"
               autoClose={3000}

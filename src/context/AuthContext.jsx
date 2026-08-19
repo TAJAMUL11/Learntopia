@@ -28,7 +28,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   // True when a signed-in student has NO custom displayName or avatarId yet.
-  // The ProfileSetupModal reads this to decide whether to block the UI.
+  // App reads this to gate first-time users into the required EditProfileView.
   const [needsProfileSetup, setNeedsProfileSetup] = useState(false);
 
   /**
