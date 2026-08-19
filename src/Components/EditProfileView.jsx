@@ -32,6 +32,12 @@ const EditProfileView = ({ onBack, required = false, initialName = "", initialAv
   const { t } = useLanguage();
 
   const googlePhoto = currentUser?.photoURL || null;
+  const joinedDate = currentUser?.metadata?.creationTime
+    ? new Date(currentUser.metadata.creationTime).toLocaleDateString(undefined, {
+        month: "long",
+        year: "numeric",
+      })
+    : null;
   const [displayName, setDisplayName] = useState(initialName);
   const [avatarId, setAvatarId] = useState(initialAvatar);
   const [usePhoto, setUsePhoto] = useState(initialUsePhoto && !!googlePhoto);
@@ -171,6 +177,22 @@ const EditProfileView = ({ onBack, required = false, initialName = "", initialAv
                 </label>
                 <div className="flex cursor-not-allowed select-none items-center justify-between gap-2 rounded-xl border border-white/10 bg-white/[0.02] px-3.5 py-2.5 text-sm text-ink-low">
                   <span className="truncate">{currentUser.email}</span>
+                  <span className="flex flex-none items-center gap-1.5 text-[10px] text-ink-faint">
+                    <Icon name="lock" size={12} />
+                    {t("profileSetup.emailReadonly")}
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* Joined — read-only (moved here from the dashboard header) */}
+            {joinedDate && (
+              <div className="mt-4">
+                <label className="mb-1.5 block text-xs font-semibold text-ink-hi">
+                  {t("profileSetup.joinedLabel")}
+                </label>
+                <div className="flex cursor-not-allowed select-none items-center justify-between gap-2 rounded-xl border border-white/10 bg-white/[0.02] px-3.5 py-2.5 text-sm text-ink-low">
+                  <span className="truncate">{joinedDate}</span>
                   <span className="flex flex-none items-center gap-1.5 text-[10px] text-ink-faint">
                     <Icon name="lock" size={12} />
                     {t("profileSetup.emailReadonly")}
