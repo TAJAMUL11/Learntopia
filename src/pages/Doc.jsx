@@ -207,10 +207,10 @@ const Doc = () => {
                 {(tRaw("doc.accountCards") || []).map((card, i) => {
                   const styles = [
                     { box: "border-violet-500/20 bg-violet-500/[0.03]", title: "text-violet-300" },
-                    { box: "border-sky-500/20 bg-sky-500/[0.03]", title: "text-sky-300" },
+                    { box: "border-sky/20 bg-sky/[0.03]", title: "text-sky" },
                     { box: "border-violet-500/20 bg-violet-500/[0.03]", title: "text-violet-300" },
-                    { box: "border-emerald-500/20 bg-emerald-500/[0.03]", title: "text-emerald-300" },
-                    { box: "border-amber-500/20 bg-amber-500/[0.04]", title: "text-amber-300" },
+                    { box: "border-sky/20 bg-sky/[0.03]", title: "text-sky" },
+                    { box: "border-violet-500/20 bg-violet-500/[0.03]", title: "text-violet-300" },
                   ];
                   const s = styles[i % styles.length];
                   return (
