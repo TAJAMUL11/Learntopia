@@ -6,6 +6,7 @@ import { quizzes } from "../data/quizData";
 import Card from "../Components/ui/Card";
 import Icon from "../Components/ui/Icon";
 import { Skeleton } from "../Components/ui/Skeleton";
+import SectionHeading from "../Components/ui/SectionHeading";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useAuth } from "../context/AuthContext";
@@ -205,16 +206,13 @@ const Leaderboard = () => {
     <div className="container-page flex min-h-[85vh] flex-col items-center py-8 md:py-16 text-white">
 
       {/* ── Header ── */}
-      <div className="w-full max-w-5xl text-center space-y-3 mb-8 animate-fade-in">
-        <div className="inline-flex items-center gap-2 rounded-full border border-yellow-500/30 bg-yellow-500/10 px-4 py-1 text-xs font-bold uppercase tracking-widest text-yellow-400">
-          <Icon name="trophy" size={14} /> {t("leaderboard.badge")}
-        </div>
-        <h1 className="text-2xl font-black tracking-tight md:text-5xl text-white">
-          {t("leaderboard.title")}
-        </h1>
-        <p className="text-sm md:text-base text-ink-low max-w-lg mx-auto">
-          {t("leaderboard.subtitle")}
-        </p>
+      <div className="w-full max-w-5xl mb-8 animate-fade-in">
+        <SectionHeading
+          centered
+          eyebrow={t("leaderboard.badge")}
+          title={t("leaderboard.title")}
+          description={t("leaderboard.subtitle")}
+        />
       </div>
 
       {/* ── Quiz Filter: Dropdown on mobile, tabs on desktop ── */}
