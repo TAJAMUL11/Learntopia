@@ -7,12 +7,12 @@ import {
 } from "react-router-dom";
 import RootLayout from "./layout/RootLayout";
 import AdminLayout from "./layout/AdminLayout";
-import { ToastContainer, Slide } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { GamificationProvider } from "./context/GamificationContext";
 import { SoundProvider } from "./context/SoundContext";
 import { LanguageProvider } from "./context/LanguageContext";
+import { ToastProvider } from "./context/ToastContext";
+import NotificationModal from "./Components/ui/NotificationModal";
 import CelebrationOverlay from "./Components/CelebrationOverlay";
 import EditProfileView from "./Components/EditProfileView";
 
@@ -78,30 +78,19 @@ const AppRoot = () => {
 
 const App = () => {
   return (
-    <AuthProvider>
-      <GamificationProvider>
-        <SoundProvider>
-          <LanguageProvider>
-            <AppRoot />
-            <CelebrationOverlay />
-            <ToastContainer
-              position="top-right"
-              autoClose={3000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="colored"
-              bodyClassName="toastbody"
-              transition={Slide}
-            />
-          </LanguageProvider>
-        </SoundProvider>
-      </GamificationProvider>
-    </AuthProvider>
+    <ToastProvider>
+      <AuthProvider>
+        <GamificationProvider>
+          <SoundProvider>
+            <LanguageProvider>
+              <AppRoot />
+              <CelebrationOverlay />
+              <NotificationModal />
+            </LanguageProvider>
+          </SoundProvider>
+        </GamificationProvider>
+      </AuthProvider>
+    </ToastProvider>
   );
 };
 
