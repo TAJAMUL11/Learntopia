@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { Link, useBlocker } from "react-router-dom";
-import { toast } from "react-toastify";
 import { db } from "../firebase/firebase";
 import { collection, addDoc, getDocs, doc, setDoc } from "firebase/firestore";
 import { quizzes } from "../data/quizData";
@@ -70,21 +69,27 @@ const Quiz = () => {
     return 20;
   };
 
-  // Save score to Firestore with fail-safe merge
+  // Save score to Firestore with fail-safe merge and incremental retake XP
   const saveScore = async (finalScore) => {
     if (!currentUser || !activeQuiz) return;
     setIsSaving(true);
     try {
       const totalQ = activeQuiz.questions.length;
-      const earnedXP = getScaledXP(finalScore, totalQ);
-      setXpEarned(earnedXP);
+      const previousBest = highScores[activeQuiz.id] || 0;
+
+      const prevMaxXP = getScaledXP(previousBest, totalQ);
+      const newMaxXP = getScaledXP(finalScore, totalQ);
+
+      // Incremental XP is awarded ONLY for new correct answers exceeding previous best score!
+      const incrementalXP = Math.max(0, newMaxXP - prevMaxXP);
+      setXpEarned(incrementalXP);
 
       const attempt = {
         quizId: activeQuiz.id,
         quizTitle: activeQuiz.title,
         score: finalScore,
         totalQuestions: totalQ,
-        xpEarned: earnedXP,
+        xpEarned: incrementalXP,
         completedAt: new Date(),
       };
 
@@ -93,31 +98,33 @@ const Quiz = () => {
         attempt
       );
 
-      if (earnedXP > 0) {
-        // Award XP through GamificationContext — atomically increments the
-        // profile (xp + totalPoints) and mirrors to the public leaderboard, so
-        // it's global across devices and reflects in real time.
-        await addXP(earnedXP, `Quiz completed: ${activeQuiz.title}`);
+      if (incrementalXP > 0) {
+        // Award ONLY the new incremental XP through GamificationContext
+        await addXP(incrementalXP, `Quiz retake improvement: ${activeQuiz.title}`);
 
-        // Sync to global QuizLeaderboard
+        // Sync to global QuizLeaderboard with the overall best score
         const globalScoreRef = doc(db, "QuizLeaderboards", activeQuiz.id, "Scores", currentUser.uid);
         await setDoc(globalScoreRef, {
-          score: earnedXP,
-          rawScore: finalScore,
+          score: newMaxXP,
+          rawScore: Math.max(previousBest, finalScore),
           userFullName: currentUser.displayName || "User",
           userId: currentUser.uid,
           completedAt: new Date()
         }, { merge: true });
-      }
 
-      setHighScores((prev) => ({
-        ...prev,
-        [activeQuiz.id]: Math.max(prev[activeQuiz.id] || 0, finalScore),
-      }));
-      toast.success(t("toasts.quizProgressSaved"));
+        setHighScores((prev) => ({
+          ...prev,
+          [activeQuiz.id]: Math.max(previousBest, finalScore),
+        }));
+      } else {
+        // Retake scored equal to or less than previous best score — 0 XP awarded
+        setHighScores((prev) => ({
+          ...prev,
+          [activeQuiz.id]: Math.max(previousBest, finalScore),
+        }));
+      }
     } catch (err) {
       console.error("Error saving score:", err);
-      toast.error(t("toasts.quizProgressFailed"));
     } finally {
       setIsSaving(false);
     }
@@ -140,14 +147,8 @@ const Quiz = () => {
       } else {
         playIncorrect();
       }
-
-      if (isTimeout) {
-        toast.error(t("toasts.timesUp"), {
-          style: { backgroundColor: "rgba(225, 29, 72, 0.15)", color: "#fecdd3", border: "1px solid rgba(225, 29, 72, 0.3)" }
-        });
-      }
     },
-    [isAnswerSubmitted, activeQuiz, currentQuestionIdx, playCorrect, playIncorrect, t]
+    [isAnswerSubmitted, activeQuiz, currentQuestionIdx, playCorrect, playIncorrect]
   );
 
   const startQuiz = (quiz) => {
