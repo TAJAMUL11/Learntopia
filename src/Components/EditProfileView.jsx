@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../firebase/firebase";
-import { toast } from "react-toastify";
+import { toast } from "../context/ToastContext";
 import AvatarGrid from "./AvatarGrid";
 import Avatar from "./Avatar";
 import Button from "./ui/Button";
