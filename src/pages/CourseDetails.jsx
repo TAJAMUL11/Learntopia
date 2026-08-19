@@ -6,7 +6,6 @@ import { useSound } from "../context/SoundContext";
 import { useLanguage } from "../context/LanguageContext";
 import { db } from "../firebase/firebase";
 import { doc, getDoc, setDoc, deleteField } from "firebase/firestore";
-import { toast } from "react-toastify";
 import { COURSES } from "../data/coursesData";
 import { getLocalizedCourse } from "../utils/localizationUtils";
 import Card from "../Components/ui/Card";
@@ -146,10 +145,8 @@ const CourseDetails = () => {
       
       const xpEarned = course?.xpPerModule || 50;
       addXP(xpEarned, `Completed Module ${moduleIndex + 1}!`);
-      toast.success(`Module complete! 🎉 +${xpEarned} XP!`);
     } catch (err) {
       console.error("Error saving progress:", err);
-      toast.error(t("toasts.saveProgressFailed"));
     } finally {
       setSaving(false);
     }
@@ -177,11 +174,8 @@ const CourseDetails = () => {
         awardBadge(course.badge);
       }
       addXP(100, `Finished ${course?.title || "Course"}!`);
-
-      toast.success(t("toasts.courseCompleted"));
     } catch (err) {
       console.error("Error completing course:", err);
-      toast.error(t("toasts.markCompleteFailed"));
     } finally {
       setSaving(false);
     }
@@ -208,10 +202,8 @@ const CourseDetails = () => {
       setIsCompleted(false);
       setExpandedIndex(0);
       setShowResetModal(false);
-      toast.success(t("toasts.courseReset"));
     } catch (err) {
       console.error("Error resetting course:", err);
-      toast.error(t("toasts.resetFailed"));
     } finally {
       setSaving(false);
     }
