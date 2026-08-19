@@ -339,8 +339,8 @@ const Dashboard = () => {
       label: t("dashboard.dayStreak"),
       rawValue: streak,
       suffix: streak === 1 ? " Day" : " Days",
-      accent: "text-violet-400",
-      iconBg: "bg-gradient-to-br from-violet-500/30 to-violet-500/[0.06] border-violet-500/30 text-violet-300",
+      accent: "text-amber-400",
+      iconBg: "bg-gradient-to-br from-amber-400/30 to-orange-600/[0.12] border-amber-500/40 text-amber-300 shadow-[0_0_16px_rgba(251,191,36,0.20)]",
     },
     {
       iconName: "book-open",
@@ -617,8 +617,8 @@ const Dashboard = () => {
                   <div>
                     <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-2 border-b border-white/[0.08] pb-3">
                       <h2 className="flex flex-col items-center gap-1.5 text-[13px] sm:flex-row sm:gap-2.5 sm:text-sm font-extrabold text-sky">
-                        <span className="flex h-6 w-6 items-center justify-center rounded-md bg-sky/15 text-sky border border-sky/30">
-                          <Icon name="zap" size={14} />
+                        <span className="flex h-9 w-9 sm:h-7 sm:w-7 items-center justify-center rounded-lg bg-sky/15 text-sky border border-sky/30">
+                          <Icon name="zap" size={18} />
                         </span>
                         {t("dashboard.spotlightTitle")}
                       </h2>
@@ -755,8 +755,8 @@ const Dashboard = () => {
             <div className="space-y-4">
               <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-3">
                 <h2 className="flex flex-col items-center gap-1.5 text-sm sm:flex-row sm:gap-2.5 sm:text-base font-extrabold text-ink-hi">
-                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-500/15 text-violet-300 border border-violet-500/30">
-                    <Icon name="book-open" size={15} />
+                  <span className="flex h-9 w-9 sm:h-7 sm:w-7 items-center justify-center rounded-lg bg-violet-500/15 text-violet-300 border border-violet-500/30">
+                    <Icon name="book-open" size={18} />
                   </span>
                   <span className="flex items-center gap-2">
                     {t("dashboard.activeCourses")}
@@ -804,8 +804,8 @@ const Dashboard = () => {
               <Card className="p-5 sm:p-6 border-white/10">
                 <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-3 border-b border-white/[0.08] pb-3.5">
                   <h2 className="flex flex-col items-center gap-1.5 text-sm sm:flex-row sm:gap-2.5 sm:text-base font-extrabold text-ink-hi">
-                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-sky/10 text-sky border border-sky/20">
-                      <Icon name="check-circle" size={15} />
+                    <span className="flex h-9 w-9 sm:h-7 sm:w-7 items-center justify-center rounded-lg bg-sky/10 text-sky border border-sky/20">
+                      <Icon name="check-circle" size={18} />
                     </span>
                     <span className="flex items-center gap-2">
                       {t("dashboard.completedCourses")}
@@ -871,8 +871,8 @@ const Dashboard = () => {
               <Card className="p-5 sm:p-6 border-white/10">
                 <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-3 border-b border-white/[0.08] pb-3.5">
                   <h2 className="flex flex-col items-center gap-1.5 text-sm sm:flex-row sm:gap-2.5 sm:text-base font-extrabold text-ink-hi">
-                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-500/10 text-violet-400 border border-violet-500/20">
-                      <Icon name="trophy" size={15} />
+                    <span className="flex h-9 w-9 sm:h-7 sm:w-7 items-center justify-center rounded-lg bg-violet-500/10 text-violet-400 border border-violet-500/20">
+                      <Icon name="trophy" size={18} />
                     </span>
                     {t("dashboard.quizHistory")}
                   </h2>
@@ -941,7 +941,9 @@ const Dashboard = () => {
             <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-4 border-b border-white/[0.08] pb-4 mb-6">
               <div>
                 <h2 className="flex flex-col items-center gap-1.5 text-base sm:flex-row sm:gap-2 sm:text-xl font-extrabold text-ink-hi">
-                  <Icon name="book-open" className="text-sky" size={20} />
+                  <span className="flex h-11 w-11 sm:h-9 sm:w-9 items-center justify-center rounded-xl border border-sky/20 bg-sky/10 text-sky">
+                    <Icon name="book-open" size={22} />
+                  </span>
                   {t("dashboard.allEnrolledTitle")} ({activeCourses.length})
                 </h2>
                 <p className="mt-1 text-xs text-ink-low">{t("dashboard.allEnrolledDesc")}</p>
@@ -976,7 +978,9 @@ const Dashboard = () => {
             <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-4 border-b border-white/[0.08] pb-4 mb-6">
               <div>
                 <h2 className="flex flex-col items-center gap-1.5 text-base sm:flex-row sm:gap-2 sm:text-xl font-extrabold text-ink-hi">
-                  <Icon name="check-circle" className="text-sky" size={20} />
+                  <span className="flex h-11 w-11 sm:h-9 sm:w-9 items-center justify-center rounded-xl border border-sky/20 bg-sky/10 text-sky">
+                    <Icon name="check-circle" size={22} />
+                  </span>
                   {t("dashboard.allCompletedTitle")} ({completedCourses.length})
                 </h2>
                 <p className="mt-1 text-xs text-ink-low">{t("dashboard.allCompletedDesc")}</p>
@@ -1052,7 +1056,9 @@ const Dashboard = () => {
             <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-4 border-b border-white/[0.08] pb-4 mb-6">
               <div>
                 <h2 className="flex flex-col items-center gap-1.5 text-base sm:flex-row sm:gap-2 sm:text-xl font-extrabold text-ink-hi">
-                  <Icon name="trophy" className="text-violet-400" size={20} />
+                  <span className="flex h-11 w-11 sm:h-9 sm:w-9 items-center justify-center rounded-xl border border-violet-500/20 bg-violet-500/10 text-violet-400">
+                    <Icon name="trophy" size={22} />
+                  </span>
                   {t("dashboard.allQuizzesTitle")} ({quizScores.length})
                 </h2>
                 <p className="mt-1 text-xs text-ink-low">{t("dashboard.allQuizzesDesc")}</p>
