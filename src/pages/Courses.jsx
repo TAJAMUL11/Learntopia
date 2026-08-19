@@ -5,7 +5,6 @@ import { useSound } from "../context/SoundContext";
 import { useLanguage } from "../context/LanguageContext";
 import { db } from "../firebase/firebase";
 import { setDoc, doc, collection, getDocs } from "firebase/firestore";
-import { toast } from "react-toastify";
 import Card from "../Components/ui/Card";
 import Button from "../Components/ui/Button";
 import ImageWithSkeleton from "../Components/ui/ImageWithSkeleton";
@@ -44,7 +43,6 @@ const Courses = () => {
   const handleEnroll = async (course) => {
     if (!currentUser) {
       playClick();
-      toast.info(t("toasts.loginToEnroll"));
       navigate("/login", { state: { returnTo: `/course/${course.id}` } });
       return;
     }
@@ -82,7 +80,6 @@ const Courses = () => {
       }, 3500);
     } catch (err) {
       console.error("Enrollment error:", err);
-      toast.error(t("toasts.enrollFailed"));
     }
   };
 

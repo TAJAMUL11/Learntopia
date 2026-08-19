@@ -3,7 +3,7 @@ import { getDoc, doc, collection, getDocs, deleteDoc } from "firebase/firestore"
 import { deleteUser } from "firebase/auth";
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast } from "../context/ToastContext";
 import { useAuth } from "../context/AuthContext";
 import { useGamification } from "../context/GamificationContext";
 import { useSound } from "../context/SoundContext";

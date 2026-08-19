@@ -44,6 +44,7 @@ The platform is designed to be fast, accessible, and mobile-friendly, with authe
 | Feature | Description |
 |---|---|
 | **Custom Avatars & Profile Photos** | Custom display name and 16 pre-generated static SVG avatars (DiceBear "Adventurer", served as cached files — the library never ships to the client). Authenticated users can optionally toggle their Google account photo on private surfaces (Dashboard, Navbar) with automatic fallback to the avatar. Real photos are strictly excluded from the public leaderboard for COPPA/child-privacy safety (enforced in code, Firestore rules, and tests). |
+| **Centered Glassmorphic Popups** | Native, zero-dependency centered notification system replacing corner toasts. Displays elegant modal popups with glowing status badges, clear titles, detailed text, action buttons, and hover-pausable countdown timers. |
 | **Profile Setup & Editing** | First-time users complete a **required** full-screen profile step (display name + avatar). Editing later opens a **dedicated Edit Profile view** (not a popup) reached from the dashboard — a two-column layout with the account email shown read-only. Both flows share one component. |
 | **Instant Branded Startup Splash** | Fast startup performance with an inline branded splash screen in `index.html` and `AppLoader` that paints on the very first frame to eliminate white/blank screens during initial script loading and auth resolution. |
 | **Multi-Language (i18n)** | Global localization switcher. **English 🇺🇸 and Spanish 🇪🇸 are live and fully translated** (UI, all courses, quizzes, docs, legal pages). Additional languages are staged in the data and stay hidden from the switcher until each is complete end-to-end (a partial translation is worse UX than none). |
@@ -71,7 +72,7 @@ The platform is designed to be fast, accessible, and mobile-friendly, with authe
 | **Fully Responsive** | Mobile, tablet, and desktop layouts. Dynamic viewport height and custom overscroll colours for native-feel scrolling. |
 | **Contact Form** | Redesigned contact page with Firestore-backed submissions (`ContactMessages` collection). No third-party form services — messages are owned entirely and reviewable in the Firebase Console. |
 | **Thank You Page** | Dedicated `/thank-you` page after contact form submission with personalised greeting, animated check icon, and quick-nav cards to Courses and Quizzes. |
-| **Toast Notifications** | Fully styled error/success/warning toasts — solid high-contrast colours, full-width on mobile with readable padding. |
+| **Centered Glassmorphic Popups** | Custom, zero-dependency centered notification modal system featuring glowing status badges, contextual titles, detailed body copy, action buttons, audio SFX, and 5s auto-closing timers. |
 | **Mobile Docs & Navigation** | Mobile jump pill bar on documentation page (`/doc`), responsive scrollable tables (`overflow-x-auto`), and flex-col layout conversions for seamless small-screen reading. |
 | **Delete Profile Control** | Destructive profile deletion feature in Student Dashboard with a warning modal, confirmation safety check ("DELETE"), full Firestore record wiping, and Firebase Auth account deletion. |
 
@@ -88,7 +89,7 @@ The platform is designed to be fast, accessible, and mobile-friendly, with authe
 | Backend | Firebase Authentication + Cloud Firestore |
 | Hosting | Firebase Hosting (CI/CD on push to `main`) |
 | Project Tracking | Linear |
-| Notifications | React Toastify |
+| Notifications | Native Glassmorphic Popups (`ToastContext`) |
 
 ---
 
