@@ -72,7 +72,6 @@ const CourseDetails = () => {
   useEffect(() => {
     if (authLoading) return;
     if (!currentUser) {
-      toast.info(t("toasts.loginToView"));
       navigate("/login", { state: { returnTo: `/course/${id}` }, replace: true });
       return;
     }

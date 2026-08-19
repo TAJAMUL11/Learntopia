@@ -9,6 +9,7 @@ import Button from "../Components/ui/Button";
 import Icon from "../Components/ui/Icon";
 import Card from "../Components/ui/Card";
 import Modal from "../Components/ui/Modal";
+import { Skeleton } from "../Components/ui/Skeleton";
 import { toast } from "../context/ToastContext";
 import google from "../assets/Icons/google.png";
 

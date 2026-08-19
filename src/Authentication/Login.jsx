@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../firebase/firebase";
 import { useAuth } from "../context/AuthContext";
-import { useSound } from "../context/SoundContext";
 import { useLanguage } from "../context/LanguageContext";
 import { setDoc, doc, addDoc, collection, updateDoc, increment, getDoc } from "firebase/firestore";
 import { toast } from "../context/ToastContext";
@@ -20,7 +19,6 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { googleSignIn, currentUser } = useAuth();
-  const { playLevelUp, playIncorrect } = useSound();
   const { t } = useLanguage();
 
   const returnTo = location.state?.returnTo || "/dashboard";

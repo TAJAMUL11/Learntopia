@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useCallback, useEffect } from "react";
 
 /**
@@ -161,7 +162,6 @@ function emitToast(type, message, titleOrOptions, options) {
   }
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export function useToast() {
   const context = useContext(ToastContext);
   if (!context) {

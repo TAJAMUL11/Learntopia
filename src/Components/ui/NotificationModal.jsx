@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "../../context/ToastContext";
 import { useSound } from "../../context/SoundContext";
 import Icon from "./Icon";
@@ -32,7 +32,8 @@ export default function NotificationModal() {
     } else {
       playCorrect();
     }
-  }, [activeToast?.id]); // Only re-run when activeToast ID changes
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeToast?.id]);
 
   // Auto-dismiss countdown timer (5000ms / 5 seconds default) with pause-on-hover logic
   useEffect(() => {
@@ -72,6 +73,7 @@ export default function NotificationModal() {
         cancelAnimationFrame(animId);
       }
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeToast?.id, duration, dismiss, isHovered]);
 
   // Handle keyboard Escape key to dismiss

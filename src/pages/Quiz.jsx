@@ -132,7 +132,7 @@ const Quiz = () => {
 
   // Handle option selection
   const handleAnswerSelect = useCallback(
-    (option, isTimeout = false) => {
+    (option) => {
       if (isAnswerSubmitted) return;
 
       const currentQuestion = activeQuiz.questions[currentQuestionIdx];
