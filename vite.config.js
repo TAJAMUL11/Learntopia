@@ -16,7 +16,6 @@ export default defineConfig({
           'firebase-auth': ['firebase/auth'],
           'firebase-firestore': ['firebase/firestore'],
           'gsap-vendor': ['gsap', '@gsap/react'],
-          'ui-vendor': ['react-toastify'],
         },
       },
     },
