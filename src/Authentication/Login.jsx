@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthContext";
 import { useSound } from "../context/SoundContext";
 import { useLanguage } from "../context/LanguageContext";
 import { setDoc, doc, addDoc, collection, updateDoc, increment, getDoc } from "firebase/firestore";
-import { toast } from "react-toastify";
+import { toast } from "../context/ToastContext";
 import Card from "../Components/ui/Card";
 import Button from "../Components/ui/Button";
 import Field from "../Components/ui/Field";
@@ -98,11 +98,9 @@ const Login = () => {
       const userCredential = await signInWithEmailAndPassword(auth, userEmail, userPassword);
       const user = userCredential.user;
       await handlePendingQuizResult(user, null);
-      playLevelUp();
       toast.success(t("toasts.loginSuccess"));
       navigate(returnTo, { replace: true });
     } catch (err) {
-      playIncorrect();
       if (err.code === "auth/user-not-found" || err.code === "auth/invalid-credential") {
         setNotFoundEmail(userEmail);
         toast.info(t("toasts.noAccount"), { autoClose: 3000 });
@@ -125,11 +123,9 @@ const Login = () => {
       if (user) {
         await handlePendingQuizResult(user, user.displayName);
       }
-      playLevelUp();
       toast.success(t("toasts.loginGoogleSuccess"));
       navigate(returnTo, { replace: true });
     } catch (err) {
-      playIncorrect();
       console.error("Google sign-in error:", err);
       toast.error(t("toasts.googleFailed"));
     }

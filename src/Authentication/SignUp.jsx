@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthContext";
 import { useSound } from "../context/SoundContext";
 import { useLanguage } from "../context/LanguageContext";
 import { setDoc, doc, addDoc, collection, updateDoc, increment, getDoc } from "firebase/firestore";
-import { toast } from "react-toastify";
+import { toast } from "../context/ToastContext";
 import Card from "../Components/ui/Card";
 import Button from "../Components/ui/Button";
 import Field from "../Components/ui/Field";
@@ -123,11 +123,9 @@ const SignUp = () => {
 
         await handlePendingQuizResult(user, userFName);
       }
-      playLevelUp();
       toast.success(t("toasts.signupSuccess"));
       navigate(returnTo, { replace: true });
     } catch (err) {
-      playIncorrect();
       if (err.code === "auth/email-already-in-use") {
         setAlreadyExistsEmail(userEmail);
         toast.info(t("toasts.emailInUse"), { autoClose: 3000 });
@@ -150,11 +148,9 @@ const SignUp = () => {
       if (user) {
         await handlePendingQuizResult(user, user.displayName);
       }
-      playLevelUp();
       toast.success(t("toasts.signupGoogleSuccess"));
       navigate(returnTo, { replace: true });
     } catch (err) {
-      playIncorrect();
       console.error("Google sign-in error:", err);
       toast.error(t("toasts.googleFailed"));
     }
