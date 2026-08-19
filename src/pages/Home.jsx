@@ -68,11 +68,11 @@ const Home = () => {
       {/* ── HERO ── */}
       <section className="mx-auto flex max-w-4xl flex-col items-center text-center">
         <div className="animate-fade-up">
-          <Badge variant="sky">{t("hero.badge")}</Badge>
+          <Badge variant="sky" className="text-[0.7rem] tracking-[0.08em]">{t("hero.badge")}</Badge>
         </div>
 
         <h1
-          className="mt-6 animate-fade-up text-balance text-4xl font-black leading-[1.15] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
+          className="mt-6 animate-fade-up text-balance text-[2.5rem] font-black leading-[1.08] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
           style={{ animationDelay: "0.05s" }}
         >
           <span className="text-ink-hi">{t("hero.titleStart")} </span>
@@ -96,7 +96,7 @@ const Home = () => {
         </div>
 
         <p
-          className="mt-6 max-w-2xl animate-fade-up text-base leading-relaxed text-ink sm:mt-8 sm:text-lg md:text-xl"
+          className="mt-6 max-w-xl animate-fade-up text-pretty text-sm leading-relaxed text-ink sm:mt-8 sm:text-base md:text-lg"
           style={{ animationDelay: "0.15s" }}
         >
           {t("hero.subtitle")}
