@@ -13,6 +13,7 @@ import { SoundProvider } from "./context/SoundContext";
 import { LanguageProvider } from "./context/LanguageContext";
 import { ToastProvider } from "./context/ToastContext";
 import NotificationModal from "./Components/ui/NotificationModal";
+import ToastStack from "./Components/ui/ToastStack";
 import CelebrationOverlay from "./Components/CelebrationOverlay";
 import EditProfileView from "./Components/EditProfileView";
 
@@ -85,6 +86,7 @@ const App = () => {
             <LanguageProvider>
               <AppRoot />
               <CelebrationOverlay />
+              <ToastStack />
               <NotificationModal />
             </LanguageProvider>
           </SoundProvider>
