@@ -254,13 +254,19 @@ const PATHS = {
   ),
 };
 
-const Icon = ({ name, size = 20, strokeWidth = 2, className = "", fill = "none" }) => {
+// Canonical icon size scale — use these so icons stay coherent app-wide.
+//   xs 14 · sm 16 · md 20 · lg 24 · xl 32
+// `size` accepts a token ("xs".."xl") or a raw number (back-compat).
+const SIZES = { xs: 14, sm: 16, md: 20, lg: 24, xl: 32 };
+
+const Icon = ({ name, size = "md", strokeWidth = 2, className = "", fill = "none" }) => {
   const content = PATHS[name];
   if (!content) return null;
+  const px = typeof size === "number" ? size : SIZES[size] || SIZES.md;
   return (
     <svg
-      width={size}
-      height={size}
+      width={px}
+      height={px}
       viewBox="0 0 24 24"
       fill={fill}
       stroke={fill === "none" ? "currentColor" : "none"}
