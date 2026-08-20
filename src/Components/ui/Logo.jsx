@@ -54,7 +54,7 @@ const LogoMark = ({ size = 36, className = "" }) => {
 
 const Logo = ({ withWordmark = true, size = 34, className = "" }) => (
   <span className={`inline-flex items-center gap-2.5 ${className}`}>
-    <LogoMark size={size} className="h-10 w-10 sm:h-[34px] sm:w-[34px]" />
+    <LogoMark size={size} />
     {withWordmark && (
       <span className="hidden sm:inline text-[1.35rem] font-extrabold leading-none tracking-tight text-ink-hi">
         Learn<span className="text-gradient">topia</span>

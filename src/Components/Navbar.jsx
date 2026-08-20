@@ -56,7 +56,7 @@ const Navbar = () => {
     <header className="sticky top-0 z-50 select-none border-b border-white/[0.08] bg-ground-900/80 backdrop-blur-2xl shadow-[0_4px_30px_rgba(0,0,0,0.35)]">
       <nav className="container-page relative flex items-center justify-between py-3.5">
         {/* Zone 1 (Left): Brand Logo */}
-        <NavLink to="/" onClick={closeMenu} className="flex items-center transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]">
+        <NavLink to="/" onClick={closeMenu} className="flex items-center">
           <Logo size={34} />
         </NavLink>
 
