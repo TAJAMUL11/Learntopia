@@ -44,7 +44,7 @@ const Navbar = () => {
     try {
       await logOut();
       closeMenu();
-      toast.success(t("toasts.loggedOut"));
+      toast.logout(t("toasts.loggedOut"));
       navigate("/");
     } catch (err) {
       console.error(err);

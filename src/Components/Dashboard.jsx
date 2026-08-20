@@ -164,7 +164,7 @@ const Dashboard = () => {
   const handleLogout = async () => {
     try {
       await logOut();
-      toast.success(t("toasts.logoutSafe"));
+      toast.logout(t("toasts.logoutSafe"));
       navigate("/", { replace: true });
     } catch (err) {
       console.error("Logout failed:", err);
@@ -180,7 +180,7 @@ const Dashboard = () => {
         doc(db, "Users", currentUser.uid, "enrolledCourses", courseToUnenroll.courseId.toString())
       );
       setEnrolledCourses((prev) => prev.filter((c) => c.courseId !== courseToUnenroll.courseId));
-      toast.success(t("toasts.unenrolledFrom", { title: courseToUnenroll.title }));
+      toast.unenroll(t("toasts.unenrolledFrom", { title: courseToUnenroll.title }));
       setCourseToUnenroll(null);
     } catch (err) {
       console.error("Error unenrolling:", err);
@@ -204,7 +204,7 @@ const Dashboard = () => {
         deleteDoc(doc(db, "PublicLeaderboard", uid)).catch(() => {}),
       ]);
       await deleteUser(currentUser);
-      toast.success(t("toasts.profileDeleted"));
+      toast.accountDeleted(t("toasts.profileDeleted"));
       navigate("/", { replace: true });
     } catch (err) {
       console.error("Profile deletion error:", err);
