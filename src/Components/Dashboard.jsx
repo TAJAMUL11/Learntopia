@@ -192,7 +192,6 @@ const Dashboard = () => {
 
   const handleDeleteProfile = async () => {
     if (deleteConfirmText.trim().toUpperCase() !== "DELETE") {
-      playWarningAlert();
       toast.error(t("toasts.deleteConfirmType"));
       return;
     }

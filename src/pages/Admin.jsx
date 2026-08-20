@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { db } from "../firebase/firebase";
 import { collection, getDocs, addDoc, serverTimestamp, query, orderBy } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
-import { useSound } from "../context/SoundContext";
 import { useLanguage } from "../context/LanguageContext";
 import Button from "../Components/ui/Button";
 import Icon from "../Components/ui/Icon";
@@ -40,7 +39,6 @@ const SECTION_META = {
 const Admin = () => {
   const navigate = useNavigate();
   const { currentUser, isAdmin, loading: authLoading, googleSignIn, logOut } = useAuth();
-  const { playLevelUp, playIncorrect } = useSound();
   const { t } = useLanguage();
 
   const [activeTab, setActiveTab] = useState("overview");
@@ -66,16 +64,13 @@ const Admin = () => {
       const tokenResult = user && (await user.getIdTokenResult());
       if (!tokenResult || tokenResult.claims.admin !== true) {
         await logOut();
-        playIncorrect();
         toast.error(t("toasts.accessDenied"), { autoClose: 4000 });
         navigate("/login");
         return;
       }
 
-      playLevelUp();
       toast.success(t("toasts.adminWelcome"));
     } catch (err) {
-      playIncorrect();
       console.error("Admin Google auth error:", err);
       toast.error(t("toasts.googleAuthFailed"));
     } finally {

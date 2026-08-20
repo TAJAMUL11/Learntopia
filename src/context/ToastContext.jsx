@@ -1,30 +1,39 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useCallback, useEffect } from "react";
+import { MODAL_TYPES } from "../Components/ui/notificationConfig";
 
 /**
- * ToastContext.jsx
- * Native, zero-dependency centered notification & popup dialog context.
- * All notifications auto-close after 5000ms (5 seconds).
+ * ToastContext — native, zero-dependency notifications.
+ *
+ * Two presentations, chosen automatically by type:
+ *  - "toast"  → lightweight corner cards that stack and auto-dismiss (routine).
+ *  - "modal"  → a single centered dialog for "big moments" (sign-up, account
+ *    deletion). Big-moment types are listed in MODAL_TYPES.
+ *
+ * Callers use the semantic `toast.*` API and pass an already-localized message;
+ * titles/buttons are localized by type at render time.
  */
 const ToastContext = createContext();
 
-let globalToastHandler = null;
+const MAX_TOASTS = 3; // most corner toasts visible at once (oldest drop off)
+const TOAST_DURATION = 4500;
+const MODAL_DURATION = 6000;
 
-/**
- * emit — queue one notification.
- * `type` is passed EXPLICITLY by the caller (no fragile message-sniffing), so
- * the modal always shows the right icon/title/button. Title and button text are
- * localized inside NotificationModal by type; callers only pass the (already
- * localized) message, plus optional overrides.
- */
+let globalToastHandler = null;
+let idCounter = 0;
+const nextId = () => `n${Date.now()}_${idCounter++}`;
+
 function emit(type, message, options = {}) {
   if (!globalToastHandler) return undefined;
-  const { autoClose, duration, ...rest } = options;
+  const { autoClose, duration, variant, ...rest } = options;
+  const resolvedVariant = variant || (MODAL_TYPES.has(type) ? "modal" : "toast");
+  const fallback = resolvedVariant === "modal" ? MODAL_DURATION : TOAST_DURATION;
   const resolvedDuration =
-    autoClose === false || duration === 0 ? 0 : autoClose ?? duration ?? 5000;
-  return globalToastHandler.addToast({
+    autoClose === false || duration === 0 ? 0 : autoClose ?? duration ?? fallback;
+  return globalToastHandler.add({
     type,
     message,
+    variant: resolvedVariant,
     title: rest.title,
     confirmLabel: rest.confirmLabel,
     onConfirm: rest.onConfirm,
@@ -49,7 +58,8 @@ export const toast = {
   error: (message, options = {}) => emit("error", message, options),
   info: (message, options = {}) => emit("info", message, options),
   warning: (message, options = {}) => emit("warning", message, options),
-  popup: (customConfig) => globalToastHandler?.addPopup(customConfig),
+  // Force a centered modal regardless of type.
+  modal: (message, options = {}) => emit(options.type || "info", message, { ...options, variant: "modal" }),
   dismiss: (id) => globalToastHandler?.dismiss(id),
 };
 
@@ -62,59 +72,58 @@ export function useToast() {
 }
 
 export function ToastProvider({ children }) {
-  const [queue, setQueue] = useState([]);
-  const [activeToast, setActiveToast] = useState(null);
+  const [toasts, setToasts] = useState([]); // corner stack
+  const [modalQueue, setModalQueue] = useState([]); // big-moment queue
+  const [activeModal, setActiveModal] = useState(null);
+
+  // Promote the next queued modal when none is showing.
+  useEffect(() => {
+    if (!activeModal && modalQueue.length > 0) {
+      setActiveModal(modalQueue[0]);
+      setModalQueue((q) => q.slice(1));
+    }
+  }, [modalQueue, activeModal]);
+
+  const add = useCallback((data) => {
+    const item = { id: nextId(), ...data };
+    if (data.variant === "modal") {
+      setModalQueue((q) => [...q, item]);
+    } else {
+      setToasts((list) => {
+        const next = [...list, item];
+        return next.length > MAX_TOASTS ? next.slice(next.length - MAX_TOASTS) : next;
+      });
+    }
+    return item.id;
+  }, []);
+
+  const dismissToast = useCallback((id) => {
+    setToasts((list) => list.filter((t) => t.id !== id));
+  }, []);
+
+  const dismissModal = useCallback((id) => {
+    setActiveModal((cur) => (cur && (!id || cur.id === id) ? null : cur));
+    setModalQueue((q) => (id ? q.filter((m) => m.id !== id) : q));
+  }, []);
+
+  const dismiss = useCallback(
+    (id) => {
+      dismissToast(id);
+      dismissModal(id);
+    },
+    [dismissToast, dismissModal]
+  );
 
   useEffect(() => {
-    if (!activeToast && queue.length > 0) {
-      const nextToast = queue[0];
-      setActiveToast(nextToast);
-      setQueue((prev) => prev.slice(1));
-    }
-  }, [queue, activeToast]);
-
-  const addToast = useCallback((toastData) => {
-    const id = Date.now() + Math.random().toString(36).substring(2, 6);
-    const newToast = { id, ...toastData };
-    setQueue((prev) => [...prev, newToast]);
-    return id;
-  }, []);
-
-  const addPopup = useCallback((popupData) => {
-    const id = Date.now() + Math.random().toString(36).substring(2, 6);
-    const newPopup = { id, type: "custom", ...popupData };
-    setQueue((prev) => [...prev, newPopup]);
-    return id;
-  }, []);
-
-  const dismiss = useCallback((id) => {
-    setActiveToast((current) => {
-      if (current && (!id || current.id === id)) {
-        return null;
-      }
-      return current;
-    });
-    if (id) {
-      setQueue((prev) => prev.filter((item) => item.id !== id));
-    }
-  }, []);
-
-  useEffect(() => {
-    globalToastHandler = { addToast, addPopup, dismiss };
+    globalToastHandler = { add, dismiss };
     return () => {
       globalToastHandler = null;
     };
-  }, [addToast, addPopup, dismiss]);
+  }, [add, dismiss]);
 
   return (
     <ToastContext.Provider
-      value={{
-        activeToast,
-        queueLength: queue.length,
-        addToast,
-        addPopup,
-        dismiss,
-      }}
+      value={{ toasts, activeModal, add, dismiss, dismissToast, dismissModal }}
     >
       {children}
     </ToastContext.Provider>
