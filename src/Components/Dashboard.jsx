@@ -16,8 +16,12 @@ import EmptyState from "./ui/EmptyState";
 import { Skeleton } from "./ui/Skeleton";
 import { getLocalizedQuiz } from "../utils/localizationUtils";
 import Avatar from "./Avatar";
+import LottieIcon from "./ui/LottieIcon";
+import { AwardIcon } from "./ui/AwardArt";
+import streakLottie from "../assets/lottie/Streak.lottie?url";
 import EditProfileView from "./EditProfileView";
 import { parseProfileName } from "../utils/profileUtils";
+import useMediaQuery from "../hooks/useMediaQuery";
 import { COURSES } from "../data/coursesData";
 
 const PREVIEW_LIMIT = 3;
@@ -77,6 +81,9 @@ const Dashboard = () => {
   } = useGamification();
   const { playWarningAlert, playClick } = useSound();
   const { t } = useLanguage();
+  // On small screens the icon-top cards get noticeably larger icons (SVG + chip),
+  // so they read as the focal point. Desktop keeps the compact sizing.
+  const isSmall = useMediaQuery("(max-width: 639px)");
 
   // ── state ─────────────────────────────────────────────────────────────────
   const [userDetails, setUserDetails] = useState(null);
@@ -335,6 +342,7 @@ const Dashboard = () => {
     },
     {
       iconName: "flame",
+      lottie: streakLottie,
       label: t("dashboard.dayStreak"),
       rawValue: streak,
       suffix: streak === 1 ? " Day" : " Days",
@@ -495,9 +503,9 @@ const Dashboard = () => {
                 {/* GitHub-style achievement medallions (earned only) */}
                 <div className="mt-4 flex flex-wrap justify-center sm:justify-start gap-3">
                   {achievements.map((a, i) => (
-                    <div key={`${a.label}-${i}`} className="flex w-[54px] flex-col items-center gap-1.5" title={a.label}>
-                      <span className={`flex h-11 w-11 items-center justify-center rounded-full border ${ACH_TONE[a.tone]}`}>
-                        <Icon name={a.icon} size={19} />
+                    <div key={`${a.label}-${i}`} className="flex w-16 sm:w-[54px] flex-col items-center gap-1.5" title={a.label}>
+                      <span className={`flex h-14 w-14 sm:h-11 sm:w-11 items-center justify-center rounded-full border ${ACH_TONE[a.tone]}`}>
+                        <AwardIcon name={a.icon} size={isSmall ? 36 : 28} />
                       </span>
                       <span className="text-center text-[9.5px] font-bold leading-tight text-ink-low">{a.label}</span>
                     </div>
@@ -561,8 +569,12 @@ const Dashboard = () => {
               className={`animate-fade-up border border-white/[0.08] bg-white/[0.02] p-4 sm:p-5 text-center flex flex-col items-center justify-center transition-all duration-200 ${m.onClickTab ? "cursor-pointer hover:bg-white/[0.04] hover:border-violet-500/30 hover:-translate-y-0.5" : ""}`}
               style={{ animationDelay: `${0.04 + i * 0.04}s` }}
             >
-              <div className={`mb-2 flex h-11 w-11 items-center justify-center rounded-xl border ${m.iconBg} shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]`}>
-                <Icon name={m.iconName} size={20} />
+              <div className={`mb-2 flex h-14 w-14 sm:h-11 sm:w-11 items-center justify-center rounded-xl border ${m.iconBg} shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]`}>
+                {m.lottie ? (
+                  <LottieIcon src={m.lottie} size={isSmall ? 42 : 30} fallbackIcon={m.iconName} />
+                ) : (
+                  <AwardIcon name={m.iconName} size={isSmall ? 36 : 26} />
+                )}
               </div>
               <span className="text-xs font-bold text-ink-low">{m.label}</span>
               <p className={`mt-1.5 text-2xl sm:text-3xl font-black tabular-nums ${m.accent}`}>
