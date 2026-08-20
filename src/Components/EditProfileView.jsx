@@ -91,7 +91,7 @@ const EditProfileView = ({ onBack, required = false, initialName = "", initialAv
         return;
       }
       await completeProfileSetup(displayName.trim(), avatarId, { usePhoto: usePhoto && !!googlePhoto });
-      toast.success(required ? t("profileSetup.setupSuccess") : t("profileSetup.editSuccess"));
+      toast.profileSaved(required ? t("profileSetup.setupSuccess") : t("profileSetup.editSuccess"));
       onBack?.();
     } catch (err) {
       console.error("Profile update error:", err);

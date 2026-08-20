@@ -83,7 +83,7 @@ const SignUp = () => {
             }, { merge: true });
           }
         }
-        toast.success(t("toasts.quizScoreSaved"));
+        toast.quizSaved(t("toasts.quizScoreSaved"));
       } catch (err) {
         console.error("Error saving pending quiz score:", err);
       }
@@ -121,7 +121,7 @@ const SignUp = () => {
 
         await handlePendingQuizResult(user, userFName);
       }
-      toast.success(t("toasts.signupSuccess"));
+      toast.signup(t("toasts.signupSuccess"));
       navigate(returnTo, { replace: true });
     } catch (err) {
       if (err.code === "auth/email-already-in-use") {
@@ -146,7 +146,7 @@ const SignUp = () => {
       if (user) {
         await handlePendingQuizResult(user, user.displayName);
       }
-      toast.success(t("toasts.signupGoogleSuccess"));
+      toast.signup(t("toasts.signupGoogleSuccess"));
       navigate(returnTo, { replace: true });
     } catch (err) {
       console.error("Google sign-in error:", err);

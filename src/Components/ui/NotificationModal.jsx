@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useToast } from "../../context/ToastContext";
 import { useSound } from "../../context/SoundContext";
+import { useLanguage } from "../../context/LanguageContext";
 import Icon from "./Icon";
 
 /**
@@ -11,6 +12,7 @@ import Icon from "./Icon";
  */
 export default function NotificationModal() {
   const { activeToast, dismiss } = useToast();
+  const { t } = useLanguage();
   const { playCorrect, playIncorrect, playModuleComplete, playWarningAlert, playClick } = useSound();
 
   const [progress, setProgress] = useState(100);
@@ -125,113 +127,62 @@ export default function NotificationModal() {
     }
   };
 
-  // Notification type configurations with relevant icons and default button text
+  // Notification type configs — icon + colours per type; title & button text are
+  // localized (i18n keys), so every language shows the right heading/CTA.
   const typeConfigs = {
     login: {
-      defaultTitle: "Welcome Back",
-      iconName: "user",
-      iconColor: "text-sky-400",
-      bgColor: "bg-sky-500/10",
-      borderColor: "border-sky-500/25",
-      defaultButton: "Explore Dashboard",
+      titleKey: "toasts.titleLogin", btnKey: "toasts.btnLogin",
+      iconName: "user", iconColor: "text-sky", bgColor: "bg-sky/10", borderColor: "border-sky/25",
     },
     signup: {
-      defaultTitle: "Welcome to Learntopia",
-      iconName: "sparkles",
-      iconColor: "text-violet-400",
-      bgColor: "bg-violet-500/10",
-      borderColor: "border-violet-500/25",
-      defaultButton: "Start Learning",
+      titleKey: "toasts.titleSignup", btnKey: "toasts.btnSignup",
+      iconName: "sparkles", iconColor: "text-violet-400", bgColor: "bg-violet-500/10", borderColor: "border-violet-500/25",
     },
     logout: {
-      defaultTitle: "Logged Out Safely",
-      iconName: "close",
-      iconColor: "text-slate-300",
-      bgColor: "bg-white/[0.05]",
-      borderColor: "border-white/10",
-      defaultButton: "See You Soon",
+      titleKey: "toasts.titleLogout", btnKey: "toasts.btnLogout",
+      iconName: "logout", iconColor: "text-ink", bgColor: "bg-white/[0.05]", borderColor: "border-white/10",
     },
     profile: {
-      defaultTitle: "Profile Updated",
-      iconName: "user",
-      iconColor: "text-violet-400",
-      bgColor: "bg-violet-500/10",
-      borderColor: "border-violet-500/25",
-      defaultButton: "Done",
-    },
-    course_complete: {
-      defaultTitle: "Course Completed!",
-      iconName: "trophy",
-      iconColor: "text-amber-400",
-      bgColor: "bg-amber-500/10",
-      borderColor: "border-amber-500/25",
-      defaultButton: "View Achievements",
+      titleKey: "toasts.titleProfile", btnKey: "toasts.btnProfile",
+      iconName: "user", iconColor: "text-violet-400", bgColor: "bg-violet-500/10", borderColor: "border-violet-500/25",
     },
     quiz: {
-      defaultTitle: "Quiz Score Saved",
-      iconName: "target",
-      iconColor: "text-violet-400",
-      bgColor: "bg-violet-500/10",
-      borderColor: "border-violet-500/25",
-      defaultButton: "Check Leaderboard",
+      titleKey: "toasts.titleQuiz", btnKey: "toasts.btnQuiz",
+      iconName: "target", iconColor: "text-violet-400", bgColor: "bg-violet-500/10", borderColor: "border-violet-500/25",
     },
     unenroll: {
-      defaultTitle: "Unenrolled",
-      iconName: "info",
-      iconColor: "text-sky-400",
-      bgColor: "bg-sky-500/10",
-      borderColor: "border-sky-500/25",
-      defaultButton: "Done",
+      titleKey: "toasts.titleUnenroll", btnKey: "toasts.btnUnenroll",
+      iconName: "info", iconColor: "text-sky", bgColor: "bg-sky/10", borderColor: "border-sky/25",
     },
     delete_profile: {
-      defaultTitle: "Profile Removed",
-      iconName: "warning",
-      iconColor: "text-rose-400",
-      bgColor: "bg-rose-500/10",
-      borderColor: "border-rose-500/25",
-      defaultButton: "Goodbye",
+      titleKey: "toasts.titleDelete", btnKey: "toasts.btnDelete",
+      iconName: "warning", iconColor: "text-state-danger", bgColor: "bg-state-danger/10", borderColor: "border-state-danger/25",
     },
     success: {
-      defaultTitle: "Success",
-      iconName: "check",
-      iconColor: "text-sky-400",
-      bgColor: "bg-sky-500/10",
-      borderColor: "border-sky-500/25",
-      defaultButton: "Done",
+      titleKey: "toasts.titleSuccess", btnKey: "toasts.btnGeneric",
+      iconName: "check", iconColor: "text-state-success", bgColor: "bg-state-success/10", borderColor: "border-state-success/25",
     },
     error: {
-      defaultTitle: "Notice",
-      iconName: "warning",
-      iconColor: "text-rose-400",
-      bgColor: "bg-rose-500/10",
-      borderColor: "border-rose-500/25",
-      defaultButton: "Try Again",
+      titleKey: "toasts.titleError", btnKey: "toasts.btnRetry",
+      iconName: "warning", iconColor: "text-state-danger", bgColor: "bg-state-danger/10", borderColor: "border-state-danger/25",
     },
     warning: {
-      defaultTitle: "Attention",
-      iconName: "warning",
-      iconColor: "text-amber-400",
-      bgColor: "bg-amber-500/10",
-      borderColor: "border-amber-500/25",
-      defaultButton: "Understand",
+      titleKey: "toasts.titleWarning", btnKey: "toasts.btnGeneric",
+      iconName: "warning", iconColor: "text-amber-400", bgColor: "bg-amber-500/10", borderColor: "border-amber-500/25",
     },
     info: {
-      defaultTitle: "Information",
-      iconName: "info",
-      iconColor: "text-violet-400",
-      bgColor: "bg-violet-500/10",
-      borderColor: "border-violet-500/25",
-      defaultButton: "Understood",
+      titleKey: "toasts.titleInfo", btnKey: "toasts.btnGeneric",
+      iconName: "info", iconColor: "text-violet-400", bgColor: "bg-violet-500/10", borderColor: "border-violet-500/25",
     },
   };
 
   const config = typeConfigs[type] || typeConfigs.info;
-  const displayTitle = title || config.defaultTitle;
-  const displayButtonText = confirmLabel || config.defaultButton;
+  const displayTitle = title || t(config.titleKey);
+  const displayButtonText = confirmLabel || t(config.btnKey);
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md transition-opacity duration-200 animate-fade-in cursor-pointer"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-ground/80 backdrop-blur-md transition-opacity duration-200 animate-fade-in cursor-pointer"
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
@@ -253,7 +204,7 @@ export default function NotificationModal() {
         {/* Clean Centered Icon Badge */}
         <div className="pt-1 flex justify-center">
           <div
-            className={`w-13 h-13 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center ${config.bgColor} ${config.borderColor} border ${config.iconColor}`}
+            className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center ${config.bgColor} ${config.borderColor} border ${config.iconColor}`}
           >
             <Icon name={config.iconName} className="w-6 h-6 stroke-[2.2]" />
           </div>
@@ -261,11 +212,11 @@ export default function NotificationModal() {
 
         {/* Title & Detailed Body Message */}
         <div className="space-y-1.5 relative z-10">
-          <h3 className="text-lg sm:text-xl font-bold text-[#F1EEF8] tracking-tight">
+          <h3 className="text-lg sm:text-xl font-bold text-ink-hi tracking-tight">
             {displayTitle}
           </h3>
           {message && (
-            <p className="text-slate-300 text-sm leading-relaxed max-w-xs mx-auto font-normal">
+            <p className="text-ink text-sm leading-relaxed max-w-xs mx-auto font-normal">
               {message}
             </p>
           )}
@@ -277,7 +228,7 @@ export default function NotificationModal() {
             <button
               onClick={handleCancel}
               type="button"
-              className="w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all active:scale-95 cursor-pointer"
+              className="w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-ink-low hover:text-ink-hi bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all active:scale-95 cursor-pointer"
             >
               {cancelLabel}
             </button>
@@ -286,7 +237,7 @@ export default function NotificationModal() {
           <button
             onClick={handleConfirm}
             type="button"
-            className="w-full sm:w-auto min-w-[130px] px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-violet-600 to-sky-500 hover:from-violet-500 hover:to-sky-400 rounded-xl shadow-md transition-all active:scale-95 cursor-pointer tracking-wide"
+            className="w-full sm:w-auto min-w-[130px] px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-violet-600 to-sky hover:from-violet-500 hover:brightness-110 rounded-xl shadow-md transition-all active:scale-95 cursor-pointer tracking-wide"
           >
             {displayButtonText}
           </button>

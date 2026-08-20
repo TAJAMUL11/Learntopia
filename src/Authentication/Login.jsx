@@ -96,7 +96,7 @@ const Login = () => {
       const userCredential = await signInWithEmailAndPassword(auth, userEmail, userPassword);
       const user = userCredential.user;
       await handlePendingQuizResult(user, null);
-      toast.success(t("toasts.loginSuccess"));
+      toast.login(t("toasts.loginSuccess"));
       navigate(returnTo, { replace: true });
     } catch (err) {
       if (err.code === "auth/user-not-found" || err.code === "auth/invalid-credential") {
@@ -121,7 +121,7 @@ const Login = () => {
       if (user) {
         await handlePendingQuizResult(user, user.displayName);
       }
-      toast.success(t("toasts.loginGoogleSuccess"));
+      toast.login(t("toasts.loginGoogleSuccess"));
       navigate(returnTo, { replace: true });
     } catch (err) {
       console.error("Google sign-in error:", err);
