@@ -80,8 +80,10 @@ export const ZapArt = ({ size = 48, className = "" }) => {
           <stop stopColor="#CBBAF5" /><stop offset="0.5" stopColor="#8B63E3" /><stop offset="1" stopColor="#7BBFF2" />
         </linearGradient>
       </defs>
-      <path d="M27 4 11 27h10l-3 17 18-23H24l3-17Z" fill={`url(#${id}g)`} stroke="#E9E2FB" strokeWidth="1" strokeLinejoin="round" />
-      <path d="M27 4 11 27h5l7-23Z" fill="#FFFFFF" fillOpacity="0.25" />
+      <g transform="translate(24 24) scale(0.86) translate(-24 -24)">
+        <path d="M27 4 11 27h10l-3 17 18-23H24l3-17Z" fill={`url(#${id}g)`} stroke="#E9E2FB" strokeWidth="1" strokeLinejoin="round" />
+        <path d="M27 4 11 27h5l7-23Z" fill="#FFFFFF" fillOpacity="0.25" />
+      </g>
     </svg>
   );
 };
@@ -95,8 +97,10 @@ export const StarArt = ({ size = 48, className = "" }) => {
           <stop stopColor="#FDE68A" /><stop offset="0.55" stopColor="#F59E0B" /><stop offset="1" stopColor="#B45309" />
         </linearGradient>
       </defs>
-      <path d="M24 5 29.3 18.5 43.5 19.4 32.6 28.6 36 42.3 24 34.6 12 42.3 15.4 28.6 4.5 19.4 18.7 18.5Z" fill={`url(#${id}g)`} stroke="#FDE68A" strokeWidth="1" strokeLinejoin="round" />
-      <ellipse cx="19" cy="17" rx="3" ry="2" fill="#FFFFFF" fillOpacity="0.4" />
+      <g transform="translate(24 24) scale(0.85) translate(-24 -23.5)">
+        <path d="M24 5 29.3 18.5 43.5 19.4 32.6 28.6 36 42.3 24 34.6 12 42.3 15.4 28.6 4.5 19.4 18.7 18.5Z" fill={`url(#${id}g)`} stroke="#FDE68A" strokeWidth="1" strokeLinejoin="round" />
+        <ellipse cx="19" cy="17" rx="3" ry="2" fill="#FFFFFF" fillOpacity="0.4" />
+      </g>
     </svg>
   );
 };
@@ -110,13 +114,13 @@ export const TargetArt = ({ size = 48, className = "" }) => {
           <stop stopColor="#CBBAF5" /><stop offset="1" stopColor="#8B63E3" />
         </linearGradient>
       </defs>
-      <circle cx="21" cy="27" r="15" fill="#150E28" stroke="#7BBFF2" strokeWidth="2.4" />
-      <circle cx="21" cy="27" r="9.6" fill="none" stroke="#7BBFF2" strokeWidth="2.2" strokeOpacity="0.6" />
-      <circle cx="21" cy="27" r="4.4" fill="#7BBFF2" />
-      <circle cx="21" cy="27" r="1.6" fill="#150E28" />
-      <path d="M42 7 26 23" stroke={`url(#${id}d)`} strokeWidth="3" strokeLinecap="round" />
-      <path d="M42 7l-4.4.7 3.7 3.7Z" fill="#8B63E3" />
-      <circle cx="21" cy="27" r="2.4" fill="#F59E0B" />
+      <circle cx="24" cy="25" r="14" fill="#150E28" stroke="#7BBFF2" strokeWidth="2.4" />
+      <circle cx="24" cy="25" r="9" fill="none" stroke="#7BBFF2" strokeWidth="2.2" strokeOpacity="0.6" />
+      <circle cx="24" cy="25" r="4.2" fill="#7BBFF2" />
+      <circle cx="24" cy="25" r="1.6" fill="#150E28" />
+      <path d="M43 6 29 20" stroke={`url(#${id}d)`} strokeWidth="3" strokeLinecap="round" />
+      <path d="M43 6l-4.2.6 3.6 3.6Z" fill="#8B63E3" />
+      <circle cx="27" cy="22" r="2.2" fill="#F59E0B" />
     </svg>
   );
 };
@@ -151,9 +155,11 @@ export const SparkleArt = ({ size = 48, className = "" }) => {
           <stop stopColor="#CBBAF5" /><stop offset="0.5" stopColor="#8B63E3" /><stop offset="1" stopColor="#7BBFF2" />
         </linearGradient>
       </defs>
-      <path d="M24 6c1.2 10 8 16.8 18 18-10 1.2-16.8 8-18 18-1.2-10-8-16.8-18-18 10-1.2 16.8-8 18-18Z" fill={`url(#${id}g)`} />
-      <path d="M37 8c.5 3 2 4.5 5 5-3 .5-4.5 2-5 5-.5-3-2-4.5-5-5 3-.5 4.5-2 5-5Z" fill="#FDE047" />
-      <ellipse cx="18" cy="18" rx="3.2" ry="2.2" fill="#FFFFFF" fillOpacity="0.4" />
+      <g transform="translate(24 24) scale(0.9) translate(-24 -24)">
+        <path d="M24 6c1.2 10 8 16.8 18 18-10 1.2-16.8 8-18 18-1.2-10-8-16.8-18-18 10-1.2 16.8-8 18-18Z" fill={`url(#${id}g)`} />
+        <path d="M37 8c.5 3 2 4.5 5 5-3 .5-4.5 2-5 5-.5-3-2-4.5-5-5 3-.5 4.5-2 5-5Z" fill="#FDE047" />
+        <ellipse cx="18" cy="18" rx="3.2" ry="2.2" fill="#FFFFFF" fillOpacity="0.4" />
+      </g>
     </svg>
   );
 };

@@ -500,16 +500,25 @@ const Dashboard = () => {
                   </span>
                 </div>
 
-                {/* GitHub-style achievement medallions (earned only) */}
-                <div className="mt-4 flex flex-wrap justify-center sm:justify-start gap-3">
-                  {achievements.map((a, i) => (
-                    <div key={`${a.label}-${i}`} className="flex w-16 sm:w-[54px] flex-col items-center gap-1.5" title={a.label}>
-                      <span className={`flex h-14 w-14 sm:h-11 sm:w-11 items-center justify-center rounded-full border ${ACH_TONE[a.tone]}`}>
-                        <AwardIcon name={a.icon} size={isSmall ? 36 : 28} />
-                      </span>
-                      <span className="text-center text-[9.5px] font-bold leading-tight text-ink-low">{a.label}</span>
-                    </div>
-                  ))}
+                {/* Achievement / badge medallions (earned only) */}
+                <div className="mt-4">
+                  <p className="mb-2 text-center text-[10px] font-bold uppercase tracking-[0.14em] text-ink-low/70 sm:text-left">
+                    {t("dashboard.badges")}
+                  </p>
+                  <div className="flex flex-wrap justify-center sm:justify-start gap-3">
+                    {achievements.map((a, i) => (
+                      <div key={`${a.label}-${i}`} className="flex w-14 sm:w-[54px] flex-col items-center gap-1.5" title={a.label}>
+                        <span className={`flex h-12 w-12 sm:h-11 sm:w-11 items-center justify-center rounded-full border ${ACH_TONE[a.tone]}`}>
+                          {a.icon === "flame" ? (
+                            <LottieIcon src={streakLottie} size={isSmall ? 30 : 26} fallbackIcon="flame" />
+                          ) : (
+                            <AwardIcon name={a.icon} size={isSmall ? 30 : 26} />
+                          )}
+                        </span>
+                        <span className="text-center text-[9.5px] font-bold leading-tight text-ink-low">{a.label}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -569,11 +578,11 @@ const Dashboard = () => {
               className={`animate-fade-up border border-white/[0.08] bg-white/[0.02] p-4 sm:p-5 text-center flex flex-col items-center justify-center transition-all duration-200 ${m.onClickTab ? "cursor-pointer hover:bg-white/[0.04] hover:border-violet-500/30 hover:-translate-y-0.5" : ""}`}
               style={{ animationDelay: `${0.04 + i * 0.04}s` }}
             >
-              <div className={`mb-2 flex h-14 w-14 sm:h-11 sm:w-11 items-center justify-center rounded-xl border ${m.iconBg} shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]`}>
+              <div className={`mb-2 flex h-12 w-12 sm:h-11 sm:w-11 items-center justify-center rounded-xl border ${m.iconBg} shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]`}>
                 {m.lottie ? (
-                  <LottieIcon src={m.lottie} size={isSmall ? 42 : 30} fallbackIcon={m.iconName} />
+                  <LottieIcon src={m.lottie} size={isSmall ? 30 : 26} fallbackIcon={m.iconName} />
                 ) : (
-                  <AwardIcon name={m.iconName} size={isSmall ? 36 : 26} />
+                  <AwardIcon name={m.iconName} size={isSmall ? 30 : 26} />
                 )}
               </div>
               <span className="text-xs font-bold text-ink-low">{m.label}</span>
