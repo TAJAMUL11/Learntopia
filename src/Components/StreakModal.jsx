@@ -69,7 +69,7 @@ const StreakModal = () => {
 
       {/* Main Glassmorphism Card — clicks inside must NOT close the modal. */}
       <div
-        className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-amber-500/40 bg-gradient-to-b from-ground-800/95 via-ground-850 to-ground-900 p-6 text-center shadow-[0_0_60px_rgba(245,158,11,0.3)] animate-scale-up md:p-8"
+        className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-amber-500/40 bg-gradient-to-b from-ground-800/95 via-ground-800 to-ground-900 p-6 text-center shadow-[0_0_60px_rgba(245,158,11,0.3)] animate-scale-up md:p-8"
         onClick={(e) => e.stopPropagation()}
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
@@ -114,7 +114,7 @@ const StreakModal = () => {
                         ? "border border-emerald-500/50 bg-emerald-500/20 text-emerald-400"
                         : isFinal
                         ? "border border-violet-500/40 bg-violet-500/20 text-violet-300"
-                        : "border border-white/10 bg-ground-800/50 text-ink-muted opacity-70"
+                        : "border border-white/10 bg-ground-800/50 text-ink-faint opacity-70"
                     }`}
                   >
                     {isCompleted ? "✓" : isActive ? "🔥" : isFinal ? "🎁" : day}
@@ -136,7 +136,7 @@ const StreakModal = () => {
         </div>
 
         {/* Motivation Quote */}
-        <p className="mb-6 text-xs italic text-ink-muted">
+        <p className="mb-6 text-xs italic text-ink-low">
           {t("streakModal.motivation")}
         </p>
 
