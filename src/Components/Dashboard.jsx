@@ -500,16 +500,25 @@ const Dashboard = () => {
                   </span>
                 </div>
 
-                {/* GitHub-style achievement medallions (earned only) */}
-                <div className="mt-4 flex flex-wrap justify-center sm:justify-start gap-3">
-                  {achievements.map((a, i) => (
-                    <div key={`${a.label}-${i}`} className="flex w-16 sm:w-[54px] flex-col items-center gap-1.5" title={a.label}>
-                      <span className={`flex h-14 w-14 sm:h-11 sm:w-11 items-center justify-center rounded-full border ${ACH_TONE[a.tone]}`}>
-                        <AwardIcon name={a.icon} size={isSmall ? 36 : 28} />
-                      </span>
-                      <span className="text-center text-[9.5px] font-bold leading-tight text-ink-low">{a.label}</span>
-                    </div>
-                  ))}
+                {/* Achievement / badge medallions (earned only) */}
+                <div className="mt-4">
+                  <p className="mb-2 text-center text-[10px] font-bold uppercase tracking-[0.14em] text-ink-low/70 sm:text-left">
+                    {t("dashboard.badges")}
+                  </p>
+                  <div className="flex flex-wrap justify-center sm:justify-start gap-3">
+                    {achievements.map((a, i) => (
+                      <div key={`${a.label}-${i}`} className="flex w-14 sm:w-[54px] flex-col items-center gap-1.5" title={a.label}>
+                        <span className={`flex h-12 w-12 sm:h-11 sm:w-11 items-center justify-center rounded-full border ${ACH_TONE[a.tone]}`}>
+                          {a.icon === "flame" ? (
+                            <LottieIcon src={streakLottie} size={isSmall ? 30 : 26} fallbackIcon="flame" />
+                          ) : (
+                            <AwardIcon name={a.icon} size={isSmall ? 30 : 26} />
+                          )}
+                        </span>
+                        <span className="text-center text-[9.5px] font-bold leading-tight text-ink-low">{a.label}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -569,11 +578,11 @@ const Dashboard = () => {
               className={`animate-fade-up border border-white/[0.08] bg-white/[0.02] p-4 sm:p-5 text-center flex flex-col items-center justify-center transition-all duration-200 ${m.onClickTab ? "cursor-pointer hover:bg-white/[0.04] hover:border-violet-500/30 hover:-translate-y-0.5" : ""}`}
               style={{ animationDelay: `${0.04 + i * 0.04}s` }}
             >
-              <div className={`mb-2 flex h-14 w-14 sm:h-11 sm:w-11 items-center justify-center rounded-xl border ${m.iconBg} shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]`}>
+              <div className={`mb-2 flex h-12 w-12 sm:h-11 sm:w-11 items-center justify-center rounded-xl border ${m.iconBg} shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]`}>
                 {m.lottie ? (
-                  <LottieIcon src={m.lottie} size={isSmall ? 42 : 30} fallbackIcon={m.iconName} />
+                  <LottieIcon src={m.lottie} size={isSmall ? 30 : 26} fallbackIcon={m.iconName} />
                 ) : (
-                  <AwardIcon name={m.iconName} size={isSmall ? 36 : 26} />
+                  <AwardIcon name={m.iconName} size={isSmall ? 30 : 26} />
                 )}
               </div>
               <span className="text-xs font-bold text-ink-low">{m.label}</span>
@@ -628,8 +637,8 @@ const Dashboard = () => {
                   <div>
                     <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-2 border-b border-white/[0.08] pb-3">
                       <h2 className="flex flex-col items-center gap-1.5 text-[13px] sm:flex-row sm:gap-2.5 sm:text-sm font-extrabold text-sky">
-                        <span className="flex h-9 w-9 sm:h-7 sm:w-7 items-center justify-center rounded-lg bg-sky/15 text-sky border border-sky/30">
-                          <Icon name="zap" size={18} />
+                        <span className="flex h-10 w-10 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-sky/15 text-sky border border-sky/30">
+                          <Icon name="zap" size={isSmall ? 20 : 18} />
                         </span>
                         {t("dashboard.spotlightTitle")}
                       </h2>
@@ -766,8 +775,8 @@ const Dashboard = () => {
             <div className="space-y-4">
               <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-3">
                 <h2 className="flex flex-col items-center gap-1.5 text-sm sm:flex-row sm:gap-2.5 sm:text-base font-extrabold text-ink-hi">
-                  <span className="flex h-9 w-9 sm:h-7 sm:w-7 items-center justify-center rounded-lg bg-violet-500/15 text-violet-300 border border-violet-500/30">
-                    <Icon name="book-open" size={18} />
+                  <span className="flex h-10 w-10 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-violet-500/15 text-violet-300 border border-violet-500/30">
+                    <Icon name="book-open" size={isSmall ? 20 : 18} />
                   </span>
                   <span className="flex items-center gap-2">
                     {t("dashboard.activeCourses")}
@@ -815,8 +824,8 @@ const Dashboard = () => {
               <Card className="p-5 sm:p-6 border-white/10">
                 <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-3 border-b border-white/[0.08] pb-3.5">
                   <h2 className="flex flex-col items-center gap-1.5 text-sm sm:flex-row sm:gap-2.5 sm:text-base font-extrabold text-ink-hi">
-                    <span className="flex h-9 w-9 sm:h-7 sm:w-7 items-center justify-center rounded-lg bg-sky/10 text-sky border border-sky/20">
-                      <Icon name="check-circle" size={18} />
+                    <span className="flex h-10 w-10 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-sky/10 text-sky border border-sky/20">
+                      <Icon name="check-circle" size={isSmall ? 20 : 18} />
                     </span>
                     <span className="flex items-center gap-2">
                       {t("dashboard.completedCourses")}
@@ -882,8 +891,8 @@ const Dashboard = () => {
               <Card className="p-5 sm:p-6 border-white/10">
                 <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-3 border-b border-white/[0.08] pb-3.5">
                   <h2 className="flex flex-col items-center gap-1.5 text-sm sm:flex-row sm:gap-2.5 sm:text-base font-extrabold text-ink-hi">
-                    <span className="flex h-9 w-9 sm:h-7 sm:w-7 items-center justify-center rounded-lg bg-violet-500/10 text-violet-400 border border-violet-500/20">
-                      <Icon name="trophy" size={18} />
+                    <span className="flex h-10 w-10 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400 border border-violet-500/20">
+                      <Icon name="trophy" size={isSmall ? 20 : 18} />
                     </span>
                     {t("dashboard.quizHistory")}
                   </h2>
@@ -952,8 +961,8 @@ const Dashboard = () => {
             <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-4 border-b border-white/[0.08] pb-4 mb-6">
               <div>
                 <h2 className="flex flex-col items-center gap-1.5 text-base sm:flex-row sm:gap-2 sm:text-xl font-extrabold text-ink-hi">
-                  <span className="flex h-11 w-11 sm:h-9 sm:w-9 items-center justify-center rounded-xl border border-sky/20 bg-sky/10 text-sky">
-                    <Icon name="book-open" size={22} />
+                  <span className="flex h-10 w-10 sm:h-9 sm:w-9 items-center justify-center rounded-xl border border-sky/20 bg-sky/10 text-sky">
+                    <Icon name="book-open" size={isSmall ? 20 : 18} />
                   </span>
                   {t("dashboard.allEnrolledTitle")} ({activeCourses.length})
                 </h2>
@@ -989,8 +998,8 @@ const Dashboard = () => {
             <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-4 border-b border-white/[0.08] pb-4 mb-6">
               <div>
                 <h2 className="flex flex-col items-center gap-1.5 text-base sm:flex-row sm:gap-2 sm:text-xl font-extrabold text-ink-hi">
-                  <span className="flex h-11 w-11 sm:h-9 sm:w-9 items-center justify-center rounded-xl border border-sky/20 bg-sky/10 text-sky">
-                    <Icon name="check-circle" size={22} />
+                  <span className="flex h-10 w-10 sm:h-9 sm:w-9 items-center justify-center rounded-xl border border-sky/20 bg-sky/10 text-sky">
+                    <Icon name="check-circle" size={isSmall ? 20 : 18} />
                   </span>
                   {t("dashboard.allCompletedTitle")} ({completedCourses.length})
                 </h2>
@@ -1067,8 +1076,8 @@ const Dashboard = () => {
             <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-4 border-b border-white/[0.08] pb-4 mb-6">
               <div>
                 <h2 className="flex flex-col items-center gap-1.5 text-base sm:flex-row sm:gap-2 sm:text-xl font-extrabold text-ink-hi">
-                  <span className="flex h-11 w-11 sm:h-9 sm:w-9 items-center justify-center rounded-xl border border-violet-500/20 bg-violet-500/10 text-violet-400">
-                    <Icon name="trophy" size={22} />
+                  <span className="flex h-10 w-10 sm:h-9 sm:w-9 items-center justify-center rounded-xl border border-violet-500/20 bg-violet-500/10 text-violet-400">
+                    <Icon name="trophy" size={isSmall ? 20 : 18} />
                   </span>
                   {t("dashboard.allQuizzesTitle")} ({quizScores.length})
                 </h2>
