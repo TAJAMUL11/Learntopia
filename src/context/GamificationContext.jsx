@@ -231,7 +231,7 @@ export const GamificationProvider = ({ children }) => {
     if (!currentUser || streak < 30) return;
     const hasBadge = badges.some((b) => (typeof b === "string" ? b : b.name) === "Streak Master");
     if (!hasBadge) {
-      awardBadge({ name: "Streak Master", emoji: "⚡", art: "zap" }, { silent: true });
+      awardBadge({ name: "Streak Master", emoji: "🔥", art: "flame" }, { silent: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [streak, badges, currentUser]);
@@ -249,6 +249,13 @@ export const GamificationProvider = ({ children }) => {
       message: `You finished ${course?.title || "the course"}. Great work!`,
     });
   };
+
+  // Anti-farming / accuracy awards. Both go through awardBadge, so they are
+  // deduped (granted once) and fire the standard badge celebration.
+  const awardPerfectScore = () =>
+    awardBadge({ name: "Perfect Score", emoji: "💯", art: "zap" });
+  const awardSharpMemory = () =>
+    awardBadge({ name: "Sharp Memory", emoji: "🤖", art: "robotic" });
 
   // Claim the daily streak bonus (+20 XP). Guarded to once per calendar day via
   // lastStreakClaimDate stored in Firestore, so it can't be re-claimed on
@@ -313,6 +320,8 @@ export const GamificationProvider = ({ children }) => {
         addXP,
         awardBadge,
         awardCourseCompletion,
+        awardPerfectScore,
+        awardSharpMemory,
         triggerCelebration,
         closeCelebration,
         loading,

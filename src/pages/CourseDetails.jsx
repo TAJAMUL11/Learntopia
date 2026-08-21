@@ -1,11 +1,12 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { useParams, useNavigate, useBlocker } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useGamification } from "../context/GamificationContext";
 import { useSound } from "../context/SoundContext";
 import { useLanguage } from "../context/LanguageContext";
+import { toast } from "../context/ToastContext";
 import { db } from "../firebase/firebase";
-import { doc, getDoc, setDoc, deleteField } from "firebase/firestore";
+import { doc, getDoc, setDoc, deleteField, increment } from "firebase/firestore";
 import { COURSES } from "../data/coursesData";
 import { getLocalizedCourse } from "../utils/localizationUtils";
 import Card from "../Components/ui/Card";
@@ -23,7 +24,7 @@ const CourseDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { currentUser, loading: authLoading } = useAuth();
-  const { addXP, awardCourseCompletion } = useGamification();
+  const { addXP, awardCourseCompletion, awardSharpMemory } = useGamification();
   const { playClick } = useSound();
   const { t } = useLanguage();
 
@@ -124,24 +125,46 @@ const CourseDetails = () => {
     return doc(db, "Users", currentUser.uid, "enrolledCourses", course.id.toString());
   };
 
+  // First-try accuracy per module (from ExerciseEngine), used to accumulate a
+  // course-wide accuracy for the Sharp Memory award. Keyed by module index.
+  const moduleFirstStatsRef = useRef({});
+  const recordFirstAttempt = (moduleIndex, correct, totalForModule) => {
+    moduleFirstStatsRef.current[moduleIndex] = { correct, total: totalForModule };
+  };
+
   const checkAnswersAndComplete = async (moduleIndex) => {
     if (saving) return;
     const ref = courseRef();
     if (!ref) return;
 
+    // Anti-farming: award module XP and count accuracy ONCE per module. Re-doing a
+    // module the user already finished grants no new XP.
+    if (completedModules.includes(moduleIndex)) {
+      toast.info(t("toasts.noNewXpModule"));
+      return;
+    }
+
     // ExerciseEngine has already validated all answers are correct
     setSaving(true);
     const newCompleted = [...completedModules, moduleIndex];
+    const stat = moduleFirstStatsRef.current[moduleIndex] || { correct: 0, total: 0 };
     try {
       await setDoc(
         ref,
-        { completedModules: newCompleted, totalModules: total, progressUpdatedAt: new Date() },
+        {
+          completedModules: newCompleted,
+          totalModules: total,
+          progressUpdatedAt: new Date(),
+          // Accumulate first-try accuracy for the course-level Sharp Memory check.
+          correctTotal: increment(stat.correct),
+          answeredTotal: increment(stat.total),
+        },
         { merge: true }
       );
       setCompletedModules(newCompleted);
       setLessonPhase(true);
       setExpandedIndex(newCompleted.length < total ? newCompleted.length : moduleIndex);
-      
+
       const xpEarned = course?.xpPerModule || 50;
       addXP(xpEarned, `Completed Module ${moduleIndex + 1}!`);
     } catch (err) {
@@ -171,6 +194,18 @@ const CourseDetails = () => {
 
       // One Trophy moment for finishing the course; badge + XP persist quietly.
       await awardCourseCompletion(course);
+
+      // Sharp Memory: 90%+ first-try accuracy across the whole course. Read the
+      // accumulated totals back from the doc so it holds across devices/sessions.
+      try {
+        const snap = await getDoc(ref);
+        const d = snap.exists() ? snap.data() : {};
+        const answered = Number(d.answeredTotal) || 0;
+        const correct = Number(d.correctTotal) || 0;
+        if (answered > 0 && correct / answered >= 0.9) {
+          await awardSharpMemory();
+        }
+      } catch { /* award is best-effort */ }
     } catch (err) {
       console.error("Error completing course:", err);
     } finally {
@@ -500,6 +535,7 @@ const CourseDetails = () => {
                           exercises={module.exercises || []}
                           isCompleted={done}
                           saving={saving}
+                          onFirstAttempt={(correct, totalForModule) => recordFirstAttempt(moduleIndex, correct, totalForModule)}
                           onAllCorrect={() => checkAnswersAndComplete(moduleIndex)}
                         />
                       )}

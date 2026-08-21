@@ -163,6 +163,20 @@ describe("Users/{uid} profile", () => {
     await assertFails(updateDoc(doc(alice(), "Users/alice"), { badges: [] }));
   });
 
+  test("owner can add one new badge", async () => {
+    await seed("Users/alice", { ...validProfile(), badges: ["first-quiz"] });
+    await assertSucceeds(
+      updateDoc(doc(alice(), "Users/alice"), { badges: ["first-quiz", "scholar"] })
+    );
+  });
+
+  test("ANTI-CHEAT: cannot add more than one badge in a single write", async () => {
+    await seed("Users/alice", { ...validProfile(), badges: ["first-quiz"] });
+    await assertFails(
+      updateDoc(doc(alice(), "Users/alice"), { badges: ["first-quiz", "scholar", "champion"] })
+    );
+  });
+
   test("profiles cannot be deleted from the client", async () => {
     await seed("Users/alice", validProfile());
     await assertFails(deleteDoc(doc(alice(), "Users/alice")));
@@ -199,6 +213,16 @@ describe("Users/{uid}/quizAttempts (append-only)", () => {
       setDoc(doc(alice(), "Users/alice/quizAttempts/a1"), {
         ...validAttempt(),
         cheat: true,
+      })
+    );
+  });
+
+  test("ANTI-FARMING: rejects a score higher than totalQuestions", async () => {
+    await assertFails(
+      setDoc(doc(alice(), "Users/alice/quizAttempts/a1"), {
+        ...validAttempt(),
+        score: 12,
+        totalQuestions: 10,
       })
     );
   });
@@ -247,6 +271,30 @@ describe("Users/{uid}/enrolledCourses", () => {
         completed: true,
         completedModules: ["m1", "m2", "m3", "m4", "m5"],
         totalModules: 5,
+      })
+    );
+  });
+
+  test("accepts course-accuracy counters when correct <= answered", async () => {
+    await assertSucceeds(
+      setDoc(doc(alice(), "Users/alice/enrolledCourses/c1"), {
+        completed: false,
+        completedModules: ["m1"],
+        totalModules: 5,
+        correctTotal: 4,
+        answeredTotal: 4,
+      })
+    );
+  });
+
+  test("ANTI-FARMING: rejects accuracy counters with more correct than answered", async () => {
+    await assertFails(
+      setDoc(doc(alice(), "Users/alice/enrolledCourses/c1"), {
+        completed: false,
+        completedModules: ["m1"],
+        totalModules: 5,
+        correctTotal: 9,
+        answeredTotal: 4,
       })
     );
   });

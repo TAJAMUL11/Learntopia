@@ -29,6 +29,7 @@ import starLottie from "../assets/lottie/star.lottie?url";
 import wizardLottie from "../assets/lottie/Wizard.lottie?url";
 import trophyLottie from "../assets/lottie/Trophy.lottie?url";
 import crownLottie from "../assets/lottie/crown.lottie?url";
+import roboticLottie from "../assets/lottie/robotic_memory.lottie?url";
 import EditProfileView from "./EditProfileView";
 import { parseProfileName } from "../utils/profileUtils";
 import useMediaQuery from "../hooks/useMediaQuery";
@@ -46,11 +47,13 @@ const ACH_LOTTIE = {
   award: awardLottie,
   "book-open": bookLottie,
   "graduation-cap": capLottie,
+  flame: streakLottie,
   star: starLottie,
   code: wizardLottie,
   trophy: trophyLottie,
   crown: crownLottie,
   zap: lighteningLottie,
+  robotic: roboticLottie,
   medal: awardLottie,
 };
 
@@ -58,12 +61,24 @@ const ACH_LOTTIE = {
 // rest; nudge just those up so every medallion looks the same visual size.
 const ACH_LOTTIE_CLASS = {
   target: "scale-[1.45]",
+  star: "scale-[1.85]",
 };
 
 // Tooltip descriptions for server-awarded (stored) badges, keyed by badge name.
 const BADGE_DESC = {
   "Streak Master": "Reached a 30-day login streak",
   Champion: "Ranked #1 on the leaderboard",
+  "Sharp Memory": "Barely any mistakes across your quizzes or a full course",
+  "Perfect Score": "Scored 100% on a quiz",
+};
+
+// Canonical art per stored badge name. Resolving by name (not the stored art)
+// keeps one art per badge and repairs any legacy badge saved with an older art.
+const BADGE_ART = {
+  Champion: "crown",
+  "Streak Master": "flame",
+  "Sharp Memory": "robotic",
+  "Perfect Score": "zap",
 };
 
 // Ids owned by the derived achievements above. A stored badge with any of these
@@ -337,7 +352,7 @@ const Dashboard = () => {
     if (levelInfo.level < 3) {
       add("newcomer", "sparkles", t("dashboard.achNewcomer"), "violet", t("dashboard.achNewcomerDesc", "Welcome to Learntopia"));
     }
-    if (quizScores.length >= 1) add("first-quiz", "target", t("dashboard.achFirstQuiz"), "sky", t("dashboard.achFirstQuizDesc", "Completed your first quiz"));
+    if (quizScores.length === 1) add("first-quiz", "target", t("dashboard.achFirstQuiz"), "sky", t("dashboard.achFirstQuizDesc", "Completed your first quiz"));
     if (quizScores.length >= 3) add("quiz-ace", "award", t("dashboard.achQuizAce"), "sky", t("dashboard.achQuizAceDesc", "Completed three or more quizzes"));
     if (completedCourses.length >= 1) add("first-course", "book-open", t("dashboard.achFirstCourse"), "sky", t("dashboard.achFirstCourseDesc", "Completed your first course"));
     if (completedCourses.length >= 3) add("scholar", "graduation-cap", t("dashboard.achScholar"), "sky", t("dashboard.achScholarDesc", "Completed three or more courses"));
@@ -354,7 +369,7 @@ const Dashboard = () => {
       const name = typeof b === "string" ? b : b.name || "Badge";
       const id = name.toLowerCase().trim().replace(/\s+/g, "-");
       if (DERIVED_IDS.has(id)) return; // never let stored data duplicate a derived achievement
-      const icon = (typeof b === "object" && b.art) || "trophy";
+      const icon = BADGE_ART[name] || (typeof b === "object" && b.art) || "trophy";
       add(id, icon, name, "violet", BADGE_DESC[name]);
     });
     return list;

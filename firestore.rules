@@ -47,7 +47,9 @@ service cloud.firestore {
     }
 
     // Quiz attempts are validated so a client can't write garbage or an
-    // impossible score. Shape mirrors Quiz.jsx -> saveScore().
+    // impossible score. Shape mirrors Quiz.jsx -> saveScore(). The score is
+    // bounded by the number of questions so a client can't claim more correct
+    // answers than exist (anti-farming).
     function isValidAttempt() {
       let d = request.resource.data;
       return d.keys().hasOnly(['quizId', 'quizTitle', 'score', 'totalQuestions', 'xpEarned', 'completedAt'])
@@ -55,7 +57,10 @@ service cloud.firestore {
           && d.quizTitle is string
           && d.score is number
           && d.totalQuestions is number
+          && d.totalQuestions > 0
           && d.score >= 0
+          && d.score <= d.totalQuestions
+          && (!('xpEarned' in d) || (d.xpEarned is number && d.xpEarned >= 0))
           && d.completedAt is timestamp;
     }
 
@@ -65,10 +70,16 @@ service cloud.firestore {
     // database, not just in the UI.
     function isValidEnrollment() {
       let d = request.resource.data;
-      return d.get('completed', false) == false
-          || (d.completedModules is list
-              && d.totalModules is number
-              && d.completedModules.size() >= d.totalModules);
+      // Course-accuracy counters (for the Sharp Memory award) must be sane:
+      // non-negative, and never more correct than answered.
+      let statsOk = (!('correctTotal' in d) || (d.correctTotal is number && d.correctTotal >= 0))
+          && (!('answeredTotal' in d) || (d.answeredTotal is number && d.answeredTotal >= 0))
+          && d.get('correctTotal', 0) <= d.get('answeredTotal', 0);
+      return statsOk
+          && (d.get('completed', false) == false
+              || (d.completedModules is list
+                  && d.totalModules is number
+                  && d.completedModules.size() >= d.totalModules));
     }
 
     // Public leaderboard entries carry DISPLAY data only — never email/PII.
@@ -97,8 +108,15 @@ service cloud.firestore {
       let nextXp = next.get('xp', 0);
 
       // Prevent badges cheating:
-      // 1. Badges list size must be equal to or greater than before (no deleting badges).
+      // 1. Badges list may only grow (no deleting badges).
       // 2. Existing badges must not be modified or cleared.
+      // 3. At most ONE badge added per write. Each award is its own write, so a
+      //    single write can never inject a batch of forged badges. Note: rules
+      //    can't verify an added badge was actually earned (badges are objects,
+      //    not queryable, and some conditions live in subcollections / leaderboard
+      //    rank). Badges are cosmetic and never affect XP/points/score, which stay
+      //    monotonically guarded above. Full per-badge validation is tracked in
+      //    LT-45 and would need a trusted backend (out of the free tier).
       let currentBadges = current.get('badges', []);
       let nextBadges = next.get('badges', []);
 
@@ -106,6 +124,7 @@ service cloud.firestore {
           && nextPoints >= currentPoints
           && nextXp >= currentXp
           && nextBadges.size() >= currentBadges.size()
+          && nextBadges.size() <= currentBadges.size() + 1
           && (currentBadges.size() == 0 || nextBadges.hasAll(currentBadges));
     }
 
