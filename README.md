@@ -44,19 +44,19 @@ The platform is designed to be fast, accessible, and mobile-friendly, with authe
 | Feature | Description |
 |---|---|
 | **Custom Avatars & Profile Photos** | Custom display name and 16 pre-generated static SVG avatars (DiceBear "Adventurer", served as cached files — the library never ships to the client). Authenticated users can optionally toggle their Google account photo on private surfaces (Dashboard, Navbar) with automatic fallback to the avatar. Real photos are strictly excluded from the public leaderboard for COPPA/child-privacy safety (enforced in code, Firestore rules, and tests). |
-| **Centered Glassmorphic Popups** | Native, zero-dependency centered notification system replacing corner toasts. Displays elegant modal popups with glowing status badges, clear titles, detailed text, action buttons, and hover-pausable countdown timers. |
+| **Hybrid Notifications** | Zero-dependency, i18n notification system: corner toasts (auto-dismiss, hover-pause, progress bar) for routine feedback, and a centered glassmorphic modal for big moments (sign-up welcome, profile deletion). One shared config drives each type's tone, icon, localized copy, and a distinct sound played once per trigger. |
 | **Profile Setup & Editing** | First-time users complete a **required** full-screen profile step (display name + avatar). Editing later opens a **dedicated Edit Profile view** (not a popup) reached from the dashboard — a two-column layout with the account email shown read-only. Both flows share one component. |
 | **Instant Branded Startup Splash** | Fast startup performance with an inline branded splash screen in `index.html` and `AppLoader` that paints on the very first frame to eliminate white/blank screens during initial script loading and auth resolution. |
 | **Multi-Language (i18n)** | Global localization switcher. **English 🇺🇸 and Spanish 🇪🇸 are live and fully translated** (UI, all courses, quizzes, docs, legal pages). Additional languages are staged in the data and stay hidden from the switcher until each is complete end-to-end (a partial translation is worse UX than none). |
 | **Gamified Course Overhaul** | Step-by-step interactive courses designed for kids aged 7-14 with rich learning cards (Story, Concept, Fun Fact, Pro Tip, Example, Activity, Recap). |
-| **Web Audio SFX System** | Native Web Audio API sound synthesizer ($0 cost, 0 dependencies) playing audio feedback for clicks, correct answers, module finishes, level-ups, and badge unlocks with persistent mute toggle. |
+| **Web Audio SFX System** | Native Web Audio API sound synthesizer ($0 cost, 0 dependencies) with a persistent mute toggle. Distinct cues for clicks, correct/incorrect answers, module completion, level-ups, badge unlocks, streak milestones, and account actions (login, logout, profile saved/deleted), each played once per trigger. |
 | **LessonPlayer Engine** | Paginated step-by-step lesson player with visual theme cards, progress dots, and code syntax blocks. |
 | **Multi-Type Exercise Engine** | Comprehension challenges featuring Multiple Choice, True/False, Fill-in-the-Blank, and Tap-to-Connect Matching Pairs. |
-| **XP, Levels & Badges** | Earn XP per module (+50 XP) and course (+100 XP). Level up from Rookie Coder to Grandmaster with animated celebration overlays and collectible course badges. |
+| **XP, Levels & Animated Badges** | Earn XP per module (+50) and course (+100), leveling from Rookie Coder to Grandmaster. Achievements appear as animated badge medallions (dotLottie, each with a detailed SVG fallback): Newcomer (retires at Level 3), First Quiz, Quiz Ace, First Course, Scholar, Rising Star, and Code Wizard, plus stored awards — Champion (leaderboard #1) and Streak Master (30-day streak). Milestone moments (course complete, level up, badge unlock, streak bonus, reaching #1) play a matching celebration animation. The player's WASM is self-hosted rather than loaded from a CDN, and every animation degrades to its SVG if it cannot load. |
 | **Course Catalog** | Searchable catalog of multi-module course tracks with enrollment, per-module progress, and course completion tracking. |
 | **Timed Quizzes** | 15-second per-question randomized quizzes with instant feedback, score logging, and per-quiz leaderboards. |
 | **Quiz Completion Indicators** | Done badge and best score on completed quiz cards; Start button becomes Retake. Incomplete attempts are never logged. |
-| **Personal Dashboard** | Student hub with a clean profile header, 4 metric cards (XP, streak, enrolled, completed), 3-tier course cards, sub-navigation views (Overview, Enrolled Courses, Completed, Quiz History), a Continue-Learning spotlight, and a daily XP goal. Restrained core-color design (violet + sky; status colors only for status) and fully responsive. |
+| **Personal Dashboard** | Student hub with a profile header (avatar, level badge, animated achievement medallions, real level-XP progress bar), 4 metric cards (XP, streak, enrolled, completed), 3-tier course cards, sub-navigation views (Overview, Enrolled Courses, Completed, Quiz History), a Continue-Learning spotlight, and a Daily Streak weekly tracker. Restrained core-color design (violet + sky; status colors only for status) and fully responsive. |
 | **Daily Streaks & Milestone Rewards** | Consecutive daily login counter tracked with `Date.UTC` integer arithmetic (DST-safe), global and real-time across devices. Milestone popups at **7 / 15 / 30 days** grant bonus XP (**+20 / +40 / +80**), shown once per day from server-confirmed data. Resets on a missed day. |
 | **Global Leaderboard** | Public leaderboard ranking all users by total points and quiz scores. Access restricted exclusively to authenticated users. |
 | **Guest Score Preservation** | Guest quiz scores are automatically saved to the user profile when signing in or registering from the results screen. |
@@ -72,7 +72,6 @@ The platform is designed to be fast, accessible, and mobile-friendly, with authe
 | **Fully Responsive** | Mobile, tablet, and desktop layouts. Dynamic viewport height and custom overscroll colours for native-feel scrolling. |
 | **Contact Form** | Redesigned contact page with Firestore-backed submissions (`ContactMessages` collection). No third-party form services — messages are owned entirely and reviewable in the Firebase Console. |
 | **Thank You Page** | Dedicated `/thank-you` page after contact form submission with personalised greeting, animated check icon, and quick-nav cards to Courses and Quizzes. |
-| **Centered Glassmorphic Popups** | Custom, zero-dependency centered notification modal system featuring glowing status badges, contextual titles, detailed body copy, action buttons, audio SFX, and 5s auto-closing timers. |
 | **Mobile Docs & Navigation** | Mobile jump pill bar on documentation page (`/doc`), responsive scrollable tables (`overflow-x-auto`), and flex-col layout conversions for seamless small-screen reading. |
 | **Delete Profile Control** | Destructive profile deletion feature in Student Dashboard with a warning modal, confirmation safety check ("DELETE"), full Firestore record wiping, and Firebase Auth account deletion. |
 
@@ -88,8 +87,8 @@ The platform is designed to be fast, accessible, and mobile-friendly, with authe
 | Animation | GSAP + @gsap/react |
 | Backend | Firebase Authentication + Cloud Firestore |
 | Hosting | Firebase Hosting (CI/CD on push to `main`) |
-| Project Tracking | Linear |
-| Notifications | Native Glassmorphic Popups (`ToastContext`) |
+| Notifications | Hybrid toasts + centered modal (`ToastContext`) |
+| Animation (icons) | dotLottie player (self-hosted WASM) with SVG fallback |
 
 ---
 
