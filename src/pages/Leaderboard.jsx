@@ -10,13 +10,18 @@ import SectionHeading from "../Components/ui/SectionHeading";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useAuth } from "../context/AuthContext";
+import { useGamification } from "../context/GamificationContext";
 import { useLanguage } from "../context/LanguageContext";
 import Avatar from "../Components/Avatar";
+import LottieIcon from "../Components/ui/LottieIcon";
+import crownLottie from "../assets/lottie/crown.lottie?url";
 import { parseProfileName } from "../utils/profileUtils";
+import { getLocalizedQuiz } from "../utils/localizationUtils";
 
 const Leaderboard = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
+  const { awardBadge } = useGamification();
   const { t } = useLanguage();
   const [allEntries, setAllEntries] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,7 +30,7 @@ const Leaderboard = () => {
 
   const TABS = useMemo(() => [
     { id: "all", label: t("leaderboard.allQuizzes") },
-    ...quizzes.map((q) => ({ id: q.id, label: q.title })),
+    ...quizzes.map((q) => ({ id: q.id, label: getLocalizedQuiz(q, t)?.title || q.title })),
   ], [t]);
 
   useEffect(() => {
@@ -153,6 +158,17 @@ const Leaderboard = () => {
 
     return () => unsub();
   }, [currentUser, activeTab]);
+
+  // ── Crown "Champion" badge for the overall #1. Awards once (awardBadge dedupes
+  // by name); requires the user to actually top a board of at least two people, so
+  // being the only entry does not count. Scoped to the overall points board. ──
+  useEffect(() => {
+    if (activeTab !== "all" || !currentUser || allEntries.length < 2) return;
+    const ranked = [...allEntries].sort((a, b) => b.score - a.score);
+    if (ranked[0]?.userId === currentUser.uid && ranked[0]?.score > 0) {
+      awardBadge({ name: "Champion", emoji: "👑", art: "crown" });
+    }
+  }, [allEntries, activeTab, currentUser, awardBadge]);
 
   // ── Filter by search query and sort ──
   const filteredEntries = useMemo(() => {
@@ -320,8 +336,10 @@ const Leaderboard = () => {
                   } ${isYou ? "!bg-violet-500/[0.1] !border-violet-500/20" : ""}`}
                 >
                   {/* Rank */}
-                  <div className="w-8 shrink-0 text-center">
-                    {medal ? (
+                  <div className="w-8 shrink-0 text-center flex items-center justify-center">
+                    {rank === 1 ? (
+                      <LottieIcon src={crownLottie} size={26} fallbackIcon="crown" />
+                    ) : medal ? (
                       <span className="text-xl leading-none">{medal}</span>
                     ) : (
                       <span className={`text-sm font-bold tabular-nums ${getRankColor(rank)}`}>{rank}</span>
@@ -354,7 +372,7 @@ const Leaderboard = () => {
                       )}
                     </div>
                     {activeTab === "all" && (
-                      <p className="text-[11px] text-ink-faint mt-0.5 truncate">{item.quizTitle}</p>
+                      <p className="text-[11px] text-ink-faint mt-0.5 truncate">{t("leaderboard.allQuizzes")}</p>
                     )}
                   </div>
 
@@ -417,7 +435,9 @@ const Leaderboard = () => {
                       {/* Rank */}
                       <td className="py-5 pl-7 pr-3">
                         <div className="flex items-center gap-2">
-                          {medal ? (
+                          {rank === 1 ? (
+                            <LottieIcon src={crownLottie} size={30} fallbackIcon="crown" />
+                          ) : medal ? (
                             <span className="text-xl leading-none">{medal}</span>
                           ) : (
                             <span className={`text-sm font-bold tabular-nums ${getRankColor(rank)}`}>{rank}</span>
@@ -445,7 +465,7 @@ const Leaderboard = () => {
                             </span>
                             {isYou && (
                               <span className="shrink-0 rounded-full bg-sky/15 border border-sky/30 px-2 py-0.5 text-[10px] font-bold uppercase text-sky">
-                                You
+                                {t("leaderboard.youBadge")}
                               </span>
                             )}
                           </div>
@@ -456,7 +476,7 @@ const Leaderboard = () => {
                       {activeTab === "all" && (
                         <td className="py-5 px-5">
                           <span className="text-sm text-ink-low group-hover:text-ink transition-colors">
-                            {item.quizTitle}
+                            {t("leaderboard.allQuizzes")}
                           </span>
                         </td>
                       )}
@@ -477,10 +497,10 @@ const Leaderboard = () => {
             {/* Desktop footer */}
             <div className="border-t border-white/[0.06] bg-white/[0.02] px-7 py-3.5 flex items-center justify-between">
               <span className="text-xs font-medium text-ink-faint">
-                Top {filteredEntries.length} {filteredEntries.length === 1 ? "entry" : "entries"}
+                {t("leaderboard.top")} {filteredEntries.length} {filteredEntries.length === 1 ? t("leaderboard.entry") : t("leaderboard.entries")}
               </span>
               <span className="text-xs font-medium text-ink-faint">
-                {activeTab === "all" ? "All quizzes" : TABS.find((t) => t.id === activeTab)?.label}
+                {activeTab === "all" ? t("leaderboard.allQuizzes") : TABS.find((tab) => tab.id === activeTab)?.label}
               </span>
             </div>
           </div>
