@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Icon from "./ui/Icon";
 import Button from "./ui/Button";
 import { useSound } from "../context/SoundContext";
@@ -10,16 +10,23 @@ import { useLanguage } from "../context/LanguageContext";
  * Props:
  *  - exercises: Array of exercise objects (with type field)
  *  - onAllCorrect: Callback when all exercises are answered correctly
+ *  - onFirstAttempt: Callback fired ONCE on the first submit with
+ *      (correctCount, totalQ) — used to record how accurately the learner did
+ *      before any retries, which feeds the course-accuracy / Sharp Memory award.
  *  - isCompleted: Whether this module is already completed (review mode)
  *  - saving: Whether we're currently saving progress
  */
-const ExerciseEngine = ({ exercises = [], onAllCorrect, isCompleted = false, saving = false }) => {
+const ExerciseEngine = ({ exercises = [], onAllCorrect, onFirstAttempt, isCompleted = false, saving = false }) => {
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [showFeedback, setShowFeedback] = useState({});
   const [matchState, setMatchState] = useState({}); // Track match exercise state
   const { playClick, playIncorrect, playModuleComplete } = useSound();
   const { t } = useLanguage();
+
+  // Fire onFirstAttempt only once per mount, so a retry never overwrites the
+  // learner's genuine first-try accuracy for this module.
+  const firstAttemptFiredRef = useRef(false);
 
   const totalQ = exercises.length;
 
@@ -116,12 +123,20 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, isCompleted = false, sav
 
     const feedback = {};
     let allCorrect = true;
+    let correct = 0;
     exercises.forEach((_, i) => {
-      const correct = checkIsCorrect(i);
+      const isRight = checkIsCorrect(i);
       feedback[i] = true;
-      if (!correct) allCorrect = false;
+      if (isRight) correct += 1;
+      else allCorrect = false;
     });
     setShowFeedback(feedback);
+
+    // Record first-try accuracy once (before any retry).
+    if (!firstAttemptFiredRef.current) {
+      firstAttemptFiredRef.current = true;
+      onFirstAttempt?.(correct, totalQ);
+    }
 
     if (allCorrect) {
       playModuleComplete();
