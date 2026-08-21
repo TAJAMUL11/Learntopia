@@ -8,6 +8,7 @@ import { useAuth } from "../context/AuthContext";
 import { useSound } from "../context/SoundContext";
 import { useLanguage } from "../context/LanguageContext";
 import { useGamification } from "../context/GamificationContext";
+import { toast } from "../context/ToastContext";
 import Card from "../Components/ui/Card";
 import Button from "../Components/ui/Button";
 import Badge from "../Components/ui/Badge";
@@ -20,7 +21,7 @@ import { Skeleton } from "../Components/ui/Skeleton";
 const Quiz = () => {
   const { playClick, playCorrect, playIncorrect, playLevelUp, playTimerTick, playTimerUrgent } = useSound();
   const { t } = useLanguage();
-  const { addXP } = useGamification();
+  const { addXP, awardPerfectScore, awardSharpMemory } = useGamification();
 
   // Localize quiz metadata + questions/options for the active language.
   const localizedQuizzes = useMemo(() => quizzes.map((q) => getLocalizedQuiz(q, t)), [t]);
@@ -98,6 +99,18 @@ const Quiz = () => {
         attempt
       );
 
+      // Perfect Score badge for a full-mark quiz (deduped in awardBadge).
+      if (finalScore === totalQ) awardPerfectScore();
+
+      // Sharp Memory: near-perfect (at most one mistake) on two or more quizzes.
+      const bestByQuiz = { ...highScores, [activeQuiz.id]: Math.max(highScores[activeQuiz.id] || 0, finalScore) };
+      const sharpCount = Object.entries(bestByQuiz).filter(([qid, best]) => {
+        const q = quizzes.find((x) => x.id === qid);
+        const totalForQuiz = q?.questions?.length || 0;
+        return totalForQuiz > 0 && best >= totalForQuiz - 1;
+      }).length;
+      if (sharpCount >= 2) awardSharpMemory();
+
       if (incrementalXP > 0) {
         // Award ONLY the new incremental XP through GamificationContext
         await addXP(incrementalXP, `Quiz retake improvement: ${activeQuiz.title}`);
@@ -117,7 +130,8 @@ const Quiz = () => {
           [activeQuiz.id]: Math.max(previousBest, finalScore),
         }));
       } else {
-        // Retake scored equal to or less than previous best score — 0 XP awarded
+        // Retake scored equal to or less than previous best score — 0 XP awarded.
+        toast.info(t("toasts.noNewXpQuiz"));
         setHighScores((prev) => ({
           ...prev,
           [activeQuiz.id]: Math.max(previousBest, finalScore),
