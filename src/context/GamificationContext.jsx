@@ -175,7 +175,11 @@ export const GamificationProvider = ({ children }) => {
     } catch { /* leaderboard mirror is best-effort */ }
   };
 
-  const addXP = async (amount, reason = "") => {
+  // `silent` persists XP (and detects level-ups) without firing its own popup.
+  // Used when a bigger moment (e.g. course completion) owns the celebration, so
+  // the same action never stacks two overlays. A level-up still surfaces because
+  // it is a milestone in its own right.
+  const addXP = async (amount, reason = "", { silent = false } = {}) => {
     const oldLevel = getLevelInfo(xp);
     const newLevel = getLevelInfo(xp + amount);
     await awardPoints(amount);
@@ -184,17 +188,20 @@ export const GamificationProvider = ({ children }) => {
       setTimeout(() => {
         setCelebration({
           type: "level",
+          art: "level",
           title: `Level Up! ${newLevel.icon}`,
           message: `You reached Level ${newLevel.level}: ${newLevel.name}!`,
           xpEarned: amount,
         });
       }, 500);
-    } else if (reason) {
-      setCelebration({ type: "xp", title: `+${amount} XP Earned! ⚡`, message: reason, xpEarned: amount });
+    } else if (reason && !silent) {
+      setCelebration({ type: "xp", art: "xp", title: `+${amount} XP Earned!`, message: reason, xpEarned: amount });
     }
   };
 
-  const awardBadge = async (badge) => {
+  // `silent` persists the badge without its own popup, letting the caller own the
+  // celebration (course completion shows one Trophy moment instead of two popups).
+  const awardBadge = async (badge, { silent = false } = {}) => {
     if (badges.some((b) => (typeof b === "string" ? b : b.name) === badge.name)) return;
     const updated = [...badges, { ...badge, earnedAt: new Date().toISOString() }];
     try {
@@ -206,11 +213,40 @@ export const GamificationProvider = ({ children }) => {
     } catch (err) {
       console.error("Error awarding badge:", err);
     }
+    if (silent) return;
     setCelebration({
       type: "badge",
-      title: `Badge Unlocked! ${badge.emoji || "🏆"}`,
+      art: badge.art || "badge",
+      title: `Badge Unlocked! ${badge.emoji || ""}`.trim(),
       message: `You earned the "${badge.name}" badge!`,
       badge,
+    });
+  };
+
+  // Permanent "Streak Master" badge for reaching a 30-day login streak. Awarded
+  // once (awardBadge dedupes by name) and stored, so it stays on the profile even
+  // if the streak later breaks - the user still completed the 30 days. Silent
+  // because the streak milestone modal already celebrates the 30-day moment.
+  useEffect(() => {
+    if (!currentUser || streak < 30) return;
+    const hasBadge = badges.some((b) => (typeof b === "string" ? b : b.name) === "Streak Master");
+    if (!hasBadge) {
+      awardBadge({ name: "Streak Master", emoji: "⚡", art: "zap" }, { silent: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [streak, badges, currentUser]);
+
+  // One clear "moment" for finishing a course: persist the course badge and XP
+  // quietly, then show a single Trophy celebration. Any level-up from the XP still
+  // surfaces on its own (addXP handles that even when silent).
+  const awardCourseCompletion = async (course) => {
+    if (course?.badge) await awardBadge(course.badge, { silent: true });
+    await addXP(100, `Finished ${course?.title || "Course"}!`, { silent: true });
+    setCelebration({
+      type: "course",
+      art: "trophy",
+      title: "Course Complete!",
+      message: `You finished ${course?.title || "the course"}. Great work!`,
     });
   };
 
@@ -227,7 +263,8 @@ export const GamificationProvider = ({ children }) => {
     await awardPoints(amount, { lastStreakClaimDate: todayKey, lastStreakPopupDate: todayKey });
     setCelebration({
       type: "xp",
-      title: `+${amount} XP! 🔥`,
+      art: "streak",
+      title: `+${amount} XP!`,
       message: `${streak}-day streak bonus claimed!`,
       xpEarned: amount,
     });
@@ -275,6 +312,7 @@ export const GamificationProvider = ({ children }) => {
         dismissStreakModal,
         addXP,
         awardBadge,
+        awardCourseCompletion,
         triggerCelebration,
         closeCelebration,
         loading,
