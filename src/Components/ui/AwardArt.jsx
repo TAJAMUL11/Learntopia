@@ -224,6 +224,35 @@ export const MedalArt = ({ size = 48, className = "" }) => {
 
 // Maps an Icon name to its detailed award art. Falls back to the flat Icon for
 // utility names that don't have (and don't need) a detailed version.
+export const RoboticArt = ({ size = 48, className = "" }) => {
+  const id = useId();
+  return (
+    <svg width={size} height={size} viewBox="0 0 48 48" fill="none" className={className} aria-hidden="true">
+      <defs>
+        <linearGradient id={`${id}g`} x1="10" y1="10" x2="38" y2="40" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#A78BFA" /><stop offset="0.55" stopColor="#7C3AED" /><stop offset="1" stopColor="#5B21B6" />
+        </linearGradient>
+      </defs>
+      {/* antenna */}
+      <line x1="24" y1="6" x2="24" y2="12" stroke="#7BBFF2" strokeWidth="2.5" strokeLinecap="round" />
+      <circle cx="24" cy="5" r="2.5" fill="#7BBFF2" />
+      {/* head */}
+      <rect x="10" y="12" width="28" height="24" rx="7" fill={`url(#${id}g)`} stroke="#C4B5FD" strokeWidth="1" />
+      {/* face screen */}
+      <rect x="14" y="17" width="20" height="14" rx="4" fill="#1E1B3A" />
+      {/* eyes */}
+      <circle cx="20" cy="24" r="2.6" fill="#7BBFF2" />
+      <circle cx="28" cy="24" r="2.6" fill="#7BBFF2" />
+      <circle cx="20.8" cy="23.2" r="0.9" fill="#FFFFFF" />
+      <circle cx="28.8" cy="23.2" r="0.9" fill="#FFFFFF" />
+      {/* side ears */}
+      <rect x="7" y="20" width="3" height="8" rx="1.5" fill="#7C3AED" />
+      <rect x="38" y="20" width="3" height="8" rx="1.5" fill="#7C3AED" />
+      <ellipse cx="16" cy="15.5" rx="3" ry="1.6" fill="#FFFFFF" fillOpacity="0.25" />
+    </svg>
+  );
+};
+
 const ART_BY_NAME = {
   sparkles: SparkleArt,
   target: TargetArt,
@@ -237,6 +266,7 @@ const ART_BY_NAME = {
   trophy: TrophyArt,
   crown: CrownArt,
   medal: MedalArt,
+  robotic: RoboticArt,
 };
 
 export function AwardIcon({ name, size = 40, className = "" }) {

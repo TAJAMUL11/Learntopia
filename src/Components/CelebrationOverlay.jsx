@@ -10,17 +10,25 @@ import awardLottie from "../assets/lottie/award.lottie?url";
 import starLottie from "../assets/lottie/star.lottie?url";
 import streakLottie from "../assets/lottie/Streak.lottie?url";
 import lighteningLottie from "../assets/lottie/lightening.lottie?url";
+import roboticLottie from "../assets/lottie/robotic_memory.lottie?url";
+import celebrationLottie from "../assets/lottie/celebration.lottie?url";
 
 // Each celebration carries an `art` token (set in GamificationContext) that picks
 // the Lottie played in the overlay. Falls back to the raw celebration type, then
 // to the generic badge art, so an unknown moment still shows something sensible.
+// `cls` scales up the few animations whose source art sits small in its frame,
+// so every moment reads at a similar size in the overlay circle.
 const MOMENT_ART = {
-  level: { lottie: starLottie, fallback: "star" },
-  xp: { lottie: lighteningLottie, fallback: "zap" },
+  level: { lottie: starLottie, fallback: "star", cls: "scale-[1.9]" },
+  star: { lottie: starLottie, fallback: "star", cls: "scale-[1.9]" },
+  xp: { lottie: celebrationLottie, fallback: "sparkles" },
+  zap: { lottie: lighteningLottie, fallback: "zap" },
   streak: { lottie: streakLottie, fallback: "flame" },
+  flame: { lottie: streakLottie, fallback: "flame" },
   course: { lottie: trophyLottie, fallback: "trophy" },
   trophy: { lottie: trophyLottie, fallback: "trophy" },
   crown: { lottie: crownLottie, fallback: "crown" },
+  robotic: { lottie: roboticLottie, fallback: "robotic" },
   badge: { lottie: awardLottie, fallback: "award" },
 };
 
@@ -55,8 +63,8 @@ const CelebrationOverlay = () => {
       {/* Main Card */}
       <div className="relative w-full max-w-md overflow-hidden rounded-3xl border border-violet-500/40 bg-gradient-to-b from-ground-800 to-ground-900 p-8 text-center shadow-[0_0_50px_rgba(139,92,246,0.3)] animate-scale-up">
         {/* Animated award art for the moment (Lottie, static SVG fallback) */}
-        <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full border-2 border-violet-500/50 bg-gradient-to-br from-violet-500/20 to-sky/20 shadow-[0_0_30px_rgba(139,92,246,0.4)]">
-          <LottieIcon src={art.lottie} size={64} fallbackIcon={art.fallback} loop={false} />
+        <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-2 border-violet-500/50 bg-gradient-to-br from-violet-500/20 to-sky/20 shadow-[0_0_30px_rgba(139,92,246,0.4)]">
+          <LottieIcon src={art.lottie} size={72} fallbackIcon={art.fallback} loop={false} className={art.cls} />
         </div>
 
         {/* Title */}
