@@ -31,6 +31,21 @@ export async function initMonitoring() {
       tracesSampleRate: 0.1,
       // Don't send default PII (IP address etc.) for a kid-facing app.
       sendDefaultPii: false,
+      // Drop non-actionable noise that comes from browser extensions on a
+      // visitor's machine, not from our code. "Object Not Found Matching Id"
+      // is thrown by Outlook/Editor-style content scripts; the ResizeObserver
+      // lines are benign layout notifications no browser treats as real errors.
+      ignoreErrors: [
+        "Object Not Found Matching Id",
+        "ResizeObserver loop limit exceeded",
+        "ResizeObserver loop completed with undelivered notifications",
+      ],
+      // Ignore anything whose stack originates in an extension bundle.
+      denyUrls: [
+        /^chrome-extension:\/\//i,
+        /^moz-extension:\/\//i,
+        /^safari-(web-)?extension:\/\//i,
+      ],
     });
     sentry = Sentry;
   } catch (err) {
