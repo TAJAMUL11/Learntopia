@@ -1,12 +1,19 @@
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, Component, useState } from "react";
 import { AwardIcon } from "./AwardArt";
+// The WASM runtime is bundled and served from our own origin (fingerprinted by
+// Vite), not fetched from a public CDN. This removes the external dependency and
+// the ~1.2 MB cross-origin download, and keeps animations working even if a CDN
+// is blocked or down.
+import wasmUrl from "@lottiefiles/dotlottie-web/dotlottie-player.wasm?url";
 
 /**
  * LottieIcon — plays a dotLottie (.lottie) animation for celebratory/award icons.
  *
- * The player is lazy-loaded (code-split) so it never touches the initial bundle.
- * Falls back to a static SVG icon when the user prefers reduced motion, while the
- * player is still loading, or if no src is given.
+ * Resilience model: a static SVG (AwardArt) is shown at every point where the
+ * animation is not on screen — no src, while the player chunk loads, if the
+ * chunk import fails, if the WASM/animation fails to load, or if the render
+ * throws. As soon as the animation is ready it replaces the SVG. So the UI never
+ * shows a blank box, and it degrades to the SVG whenever Lottie can't play.
  *
  * Props:
  *  - src          (string)  imported .lottie URL — `import x from "…/x.lottie?url"`
@@ -17,13 +24,31 @@ import { AwardIcon } from "./AwardArt";
  *  - className
  */
 const DotLottieReact = lazy(() =>
-  import("@lottiefiles/dotlottie-react").then((m) => ({ default: m.DotLottieReact }))
+  import("@lottiefiles/dotlottie-react").then((m) => {
+    // Point the player at our self-hosted WASM before the first instance loads.
+    try {
+      m.setWasmUrl(wasmUrl);
+    } catch {
+      /* older/newer players may not expose this; CDN default still works */
+    }
+    return { default: m.DotLottieReact };
+  })
 );
 
-const prefersReducedMotion = () =>
-  typeof window !== "undefined" &&
-  typeof window.matchMedia === "function" &&
-  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+// Catches a failed chunk import or a render error in the player subtree and
+// shows the SVG fallback instead of crashing the surrounding UI.
+class LottieBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { failed: false };
+  }
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  render() {
+    return this.state.failed ? this.props.fallback : this.props.children;
+  }
+}
 
 export default function LottieIcon({
   src,
@@ -33,10 +58,13 @@ export default function LottieIcon({
   fallbackIcon = "sparkles",
   className = "",
 }) {
+  // Set true if the animation itself fails to load (bad file, WASM unavailable).
+  const [loadFailed, setLoadFailed] = useState(false);
+
   const box = { width: size, height: size };
   const fallback = <AwardIcon name={fallbackIcon} size={size} />;
 
-  if (!src || prefersReducedMotion()) {
+  if (!src || loadFailed) {
     return (
       <span className={`inline-flex items-center justify-center ${className}`} style={box}>
         {fallback}
@@ -46,9 +74,19 @@ export default function LottieIcon({
 
   return (
     <span className={`inline-flex items-center justify-center ${className}`} style={box} aria-hidden="true">
-      <Suspense fallback={fallback}>
-        <DotLottieReact src={src} loop={loop} autoplay={autoplay} style={box} />
-      </Suspense>
+      <LottieBoundary fallback={fallback}>
+        <Suspense fallback={fallback}>
+          <DotLottieReact
+            src={src}
+            loop={loop}
+            autoplay={autoplay}
+            style={box}
+            dotLottieRefCallback={(dl) => {
+              if (dl) dl.addEventListener("loadError", () => setLoadFailed(true));
+            }}
+          />
+        </Suspense>
+      </LottieBoundary>
     </span>
   );
 }

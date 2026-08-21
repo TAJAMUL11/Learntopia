@@ -23,7 +23,7 @@ const CourseDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { currentUser, loading: authLoading } = useAuth();
-  const { addXP, awardBadge } = useGamification();
+  const { addXP, awardCourseCompletion } = useGamification();
   const { playClick } = useSound();
   const { t } = useLanguage();
 
@@ -169,10 +169,8 @@ const CourseDetails = () => {
       );
       setIsCompleted(true);
 
-      if (course?.badge) {
-        awardBadge(course.badge);
-      }
-      addXP(100, `Finished ${course?.title || "Course"}!`);
+      // One Trophy moment for finishing the course; badge + XP persist quietly.
+      await awardCourseCompletion(course);
     } catch (err) {
       console.error("Error completing course:", err);
     } finally {

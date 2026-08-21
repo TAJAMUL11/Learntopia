@@ -19,12 +19,93 @@ import Avatar from "./Avatar";
 import LottieIcon from "./ui/LottieIcon";
 import { AwardIcon } from "./ui/AwardArt";
 import streakLottie from "../assets/lottie/Streak.lottie?url";
+import lighteningLottie from "../assets/lottie/lightening.lottie?url";
+import bookLottie from "../assets/lottie/Open_Book.lottie?url";
+import awardLottie from "../assets/lottie/award.lottie?url";
+import coolUserLottie from "../assets/lottie/cool_user.lottie?url";
+import targetLottie from "../assets/lottie/Target.lottie?url";
+import capLottie from "../assets/lottie/graduation_cap.lottie?url";
+import starLottie from "../assets/lottie/star.lottie?url";
+import wizardLottie from "../assets/lottie/Wizard.lottie?url";
+import trophyLottie from "../assets/lottie/Trophy.lottie?url";
+import crownLottie from "../assets/lottie/crown.lottie?url";
 import EditProfileView from "./EditProfileView";
 import { parseProfileName } from "../utils/profileUtils";
 import useMediaQuery from "../hooks/useMediaQuery";
 import { COURSES } from "../data/coursesData";
 
 const PREVIEW_LIMIT = 3;
+
+// Profile badge medallion -> animated Lottie. Every earned badge plays its
+// matching animation to make the profile feel premium; LottieIcon falls back to
+// the detailed AwardArt SVG (same icon name) if a file is missing, still loading,
+// or the player fails to run.
+const ACH_LOTTIE = {
+  sparkles: coolUserLottie,
+  target: targetLottie,
+  award: awardLottie,
+  "book-open": bookLottie,
+  "graduation-cap": capLottie,
+  star: starLottie,
+  code: wizardLottie,
+  trophy: trophyLottie,
+  crown: crownLottie,
+  zap: lighteningLottie,
+  medal: awardLottie,
+};
+
+// A few source files carry extra internal padding and render smaller than the
+// rest; nudge just those up so every medallion looks the same visual size.
+const ACH_LOTTIE_CLASS = {
+  target: "scale-[1.45]",
+};
+
+// Tooltip descriptions for server-awarded (stored) badges, keyed by badge name.
+const BADGE_DESC = {
+  "Streak Master": "Reached a 30-day login streak",
+  Champion: "Ranked #1 on the leaderboard",
+};
+
+// Ids owned by the derived achievements above. A stored badge with any of these
+// ids (e.g. legacy "Newcomer" data) is dropped so it can't duplicate a derived
+// medallion in any language.
+const DERIVED_IDS = new Set([
+  "newcomer",
+  "first-quiz",
+  "quiz-ace",
+  "first-course",
+  "scholar",
+  "rising-star",
+  "code-wizard",
+]);
+
+// Shared tone styles for section-header icon chips (core palette only).
+const HEAD_TONE = {
+  violet: "border-violet-500/25 bg-violet-500/10 text-violet-400",
+  sky: "border-sky/25 bg-sky/10 text-sky",
+};
+
+// One consistent header cluster (icon chip + title + optional subtext) used by
+// every dashboard section and sub-tab, so the icon size, title size, and the
+// title/subtext hierarchy read identically across Overview, Enrolled, Completed
+// and Quiz History on all screen sizes. Icon and chip are a fixed size on
+// purpose (no per-device scaling) so nothing looks uneven between tabs.
+const SectionHead = ({ icon, tone = "violet", title, desc, trailing }) => (
+  <div className="flex flex-col items-center gap-2.5 text-center sm:flex-row sm:gap-3 sm:text-left min-w-0">
+    {/* Icon chip is desktop-only; on small screens the header is just the title
+       and subtext (per design request). Empty-state icons are separate and stay. */}
+    <span className={`hidden h-11 w-11 flex-none items-center justify-center rounded-xl border sm:flex ${HEAD_TONE[tone]}`}>
+      <Icon name={icon} size={22} />
+    </span>
+    <div className="min-w-0">
+      <h2 className="flex items-center justify-center gap-2 text-base font-extrabold leading-tight text-ink-hi sm:justify-start sm:text-lg">
+        {title}
+        {trailing}
+      </h2>
+      {desc && <p className="mt-0.5 text-xs text-ink-low">{desc}</p>}
+    </div>
+  </div>
+);
 
 // Helper to look up official course thumbnail image from coursesData
 const getCourseImage = (courseId) => {
@@ -80,7 +161,7 @@ const Dashboard = () => {
     profile, photoURL, usePhoto,
   } = useGamification();
   const { playWarningAlert, playClick } = useSound();
-  const { t } = useLanguage();
+  const { t, tRaw } = useLanguage();
   // On small screens the icon-top cards get noticeably larger icons (SVG + chip),
   // so they read as the focal point. Desktop keeps the compact sizing.
   const isSmall = useMediaQuery("(max-width: 639px)");
@@ -236,35 +317,48 @@ const Dashboard = () => {
   const studentName = parsedDisplayName || userDetails?.fullName || currentUser?.displayName || "Learner";
 
   // Days of week for the streak tracker — fills only days within the current streak.
-  const daysOfWeek = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
+  const daysOfWeek = tRaw("dashboard.weekdays") || ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
   const currentDayIndex = (new Date().getDay() + 6) % 7;
 
   // Achievements — GitHub-style medallions derived from real data (earned only).
   const achievements = useMemo(() => {
     const list = [];
     const seen = new Set();
-    const add = (icon, label, tone) => {
-      const key = label.toLowerCase().trim();
-      if (seen.has(key)) return;
-      seen.add(key);
-      list.push({ icon, label, tone });
+    // Dedup by a stable, language-independent id (NOT the translated label), so
+    // switching language can never surface a duplicate badge. `desc` becomes the
+    // medallion's title tooltip explaining how the badge was earned.
+    const add = (id, icon, label, tone, desc) => {
+      if (seen.has(id)) return;
+      seen.add(id);
+      list.push({ id, icon, label, tone, desc: desc || label });
     };
-    add("sparkles", t("dashboard.achNewcomer"), "violet");
-    if (quizScores.length >= 1) add("target", t("dashboard.achFirstQuiz"), "sky");
-    if (quizScores.length >= 3) add("award", t("dashboard.achQuizAce"), "sky");
-    if (completedCourses.length >= 1) add("book-open", t("dashboard.achFirstCourse"), "sky");
-    if (completedCourses.length >= 3) add("graduation-cap", t("dashboard.achScholar"), "sky");
-    if (streak >= 3) add("flame", t("dashboard.achOnFire"), "amber");
-    if (streak >= 7) add("zap", t("dashboard.achUnstoppable"), "amber");
-    if (levelInfo.level >= 3) add("star", t("dashboard.achRisingStar"), "violet");
-    if (levelInfo.level >= 5) add("code", t("dashboard.achCodeWizard"), "violet");
-    // Fold in any server-awarded badges not already represented.
+    // Newcomer is a starter badge; it retires at Level 3 when Rising Star takes
+    // its place, so the profile never shows both.
+    if (levelInfo.level < 3) {
+      add("newcomer", "sparkles", t("dashboard.achNewcomer"), "violet", t("dashboard.achNewcomerDesc", "Welcome to Learntopia"));
+    }
+    if (quizScores.length >= 1) add("first-quiz", "target", t("dashboard.achFirstQuiz"), "sky", t("dashboard.achFirstQuizDesc", "Completed your first quiz"));
+    if (quizScores.length >= 3) add("quiz-ace", "award", t("dashboard.achQuizAce"), "sky", t("dashboard.achQuizAceDesc", "Completed three or more quizzes"));
+    if (completedCourses.length >= 1) add("first-course", "book-open", t("dashboard.achFirstCourse"), "sky", t("dashboard.achFirstCourseDesc", "Completed your first course"));
+    if (completedCourses.length >= 3) add("scholar", "graduation-cap", t("dashboard.achScholar"), "sky", t("dashboard.achScholarDesc", "Completed three or more courses"));
+    // The everyday streak is NOT a badge (it has its own metric + widget). The
+    // 30-day milestone IS a permanent award, granted server-side as "Streak
+    // Master" and folded in with the other stored badges below.
+    if (levelInfo.level >= 3) add("rising-star", "star", t("dashboard.achRisingStar"), "violet", t("dashboard.achRisingStarDesc", "Reached Level 3"));
+    if (levelInfo.level >= 5) add("code-wizard", "code", t("dashboard.achCodeWizard"), "violet", t("dashboard.achCodeWizardDesc", "Reached Level 5"));
+    // Fold in any server-awarded badges not already represented. A stored badge
+    // whose id matches a derived achievement (e.g. legacy "Newcomer" data) is
+    // skipped so it can never double up, in any language. Use the badge's own art
+    // token (Champion -> crown, Streak Master -> zap) so the medallion matches.
     gamificationBadges.forEach((b) => {
       const name = typeof b === "string" ? b : b.name || "Badge";
-      add("trophy", name, "violet");
+      const id = name.toLowerCase().trim().replace(/\s+/g, "-");
+      if (DERIVED_IDS.has(id)) return; // never let stored data duplicate a derived achievement
+      const icon = (typeof b === "object" && b.art) || "trophy";
+      add(id, icon, name, "violet", BADGE_DESC[name]);
     });
     return list;
-  }, [quizScores, completedCourses, streak, levelInfo, gamificationBadges, t]);
+  }, [quizScores, completedCourses, levelInfo, gamificationBadges, t]);
 
   const ACH_TONE = {
     violet: "border-violet-500/45 bg-violet-500/[0.12] text-violet-300 shadow-[0_0_14px_rgba(139,99,227,0.16)]",
@@ -345,7 +439,7 @@ const Dashboard = () => {
       lottie: streakLottie,
       label: t("dashboard.dayStreak"),
       rawValue: streak,
-      suffix: streak === 1 ? " Day" : " Days",
+      suffix: ` ${streak === 1 ? t("dashboard.day") : t("dashboard.days")}`,
       accent: "text-amber-400",
       iconBg: "bg-gradient-to-br from-amber-400/30 to-orange-600/[0.12] border-amber-500/40 text-amber-300 shadow-[0_0_16px_rgba(251,191,36,0.20)]",
     },
@@ -435,7 +529,7 @@ const Dashboard = () => {
             />
           </div>
           <Button
-            size="sm"
+            size="md"
             fullWidth
             onClick={() => navigate(`/course/${c.courseId}`)}
             className="font-bold shadow-glow"
@@ -506,16 +600,12 @@ const Dashboard = () => {
                     {t("dashboard.badges")}
                   </p>
                   <div className="flex flex-wrap justify-center sm:justify-start gap-3">
-                    {achievements.map((a, i) => (
-                      <div key={`${a.label}-${i}`} className="flex w-14 sm:w-[54px] flex-col items-center gap-1.5" title={a.label}>
-                        <span className={`flex h-12 w-12 sm:h-11 sm:w-11 items-center justify-center rounded-full border ${ACH_TONE[a.tone]}`}>
-                          {a.icon === "flame" ? (
-                            <LottieIcon src={streakLottie} size={isSmall ? 30 : 26} fallbackIcon="flame" />
-                          ) : (
-                            <AwardIcon name={a.icon} size={isSmall ? 30 : 26} />
-                          )}
+                    {achievements.map((a) => (
+                      <div key={a.id} className="flex min-w-14 flex-col items-center gap-1.5 px-1" title={`${a.label} — ${a.desc}`}>
+                        <span className={`flex h-11 w-11 sm:h-11 sm:w-11 items-center justify-center overflow-hidden rounded-full border ${ACH_TONE[a.tone]}`}>
+                          <LottieIcon src={ACH_LOTTIE[a.icon]} size={isSmall ? 36 : 34} fallbackIcon={a.icon} className={ACH_LOTTIE_CLASS[a.icon]} />
                         </span>
-                        <span className="text-center text-[9.5px] font-bold leading-tight text-ink-low">{a.label}</span>
+                        <span className="whitespace-nowrap text-center text-[9px] font-bold leading-tight text-ink-low">{a.label}</span>
                       </div>
                     ))}
                   </div>
@@ -575,18 +665,18 @@ const Dashboard = () => {
                   setActiveTab(m.onClickTab);
                 }
               }}
-              className={`animate-fade-up border border-white/[0.08] bg-white/[0.02] p-4 sm:p-5 text-center flex flex-col items-center justify-center transition-all duration-200 ${m.onClickTab ? "cursor-pointer hover:bg-white/[0.04] hover:border-violet-500/30 hover:-translate-y-0.5" : ""}`}
+              className={`animate-fade-up border border-white/[0.08] bg-white/[0.02] p-3 sm:p-5 text-center flex flex-col items-center justify-center transition-all duration-200 ${m.onClickTab ? "cursor-pointer hover:bg-white/[0.04] hover:border-violet-500/30 hover:-translate-y-0.5" : ""}`}
               style={{ animationDelay: `${0.04 + i * 0.04}s` }}
             >
-              <div className={`mb-2 flex h-12 w-12 sm:h-11 sm:w-11 items-center justify-center rounded-xl border ${m.iconBg} shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]`}>
+              <div className={`mb-1.5 sm:mb-2 flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-xl border ${m.iconBg} shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]`}>
                 {m.lottie ? (
-                  <LottieIcon src={m.lottie} size={isSmall ? 30 : 26} fallbackIcon={m.iconName} />
+                  <LottieIcon src={m.lottie} size={isSmall ? 26 : 26} fallbackIcon={m.iconName} className={m.lottieClass} />
                 ) : (
-                  <AwardIcon name={m.iconName} size={isSmall ? 30 : 26} />
+                  <AwardIcon name={m.iconName} size={isSmall ? 26 : 26} />
                 )}
               </div>
-              <span className="text-xs font-bold text-ink-low">{m.label}</span>
-              <p className={`mt-1.5 text-2xl sm:text-3xl font-black tabular-nums ${m.accent}`}>
+              <span className="text-[11px] sm:text-xs font-bold text-ink-low">{m.label}</span>
+              <p className={`mt-1 sm:mt-1.5 text-xl sm:text-3xl font-black tabular-nums ${m.accent}`}>
                 <AnimatedNumber value={m.rawValue} suffix={m.suffix} />
               </p>
             </Card>
@@ -596,10 +686,10 @@ const Dashboard = () => {
         {/* ── DASHBOARD SUB-NAVIGATION BAR (Mobile 2-Col Grid) ─────────────────── */}
         <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center border-b border-white/[0.08] pb-3">
           {[
-            { id: "overview", label: "Overview" },
-            { id: "courses", label: `Enrolled Courses (${activeCourses.length})` },
-            { id: "completed", label: `Completed (${completedCourses.length})` },
-            { id: "quizzes", label: `Quiz History (${quizScores.length})` },
+            { id: "overview", label: t("dashboard.tabOverview") },
+            { id: "courses", label: `${t("dashboard.tabEnrolled")} (${activeCourses.length})` },
+            { id: "completed", label: `${t("dashboard.tabCompleted")} (${completedCourses.length})` },
+            { id: "quizzes", label: `${t("dashboard.tabQuizHistory")} (${quizScores.length})` },
           ].map((tab) => {
             const isActive = activeTab === tab.id;
             return (
@@ -636,14 +726,9 @@ const Dashboard = () => {
                 <Card className="h-full border-sky/25 bg-gradient-to-r from-sky/20 via-violet-700/15 to-transparent p-6 shadow-card flex flex-col justify-between">
                   <div>
                     <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-2 border-b border-white/[0.08] pb-3">
-                      <h2 className="flex flex-col items-center gap-1.5 text-[13px] sm:flex-row sm:gap-2.5 sm:text-sm font-extrabold text-sky">
-                        <span className="flex h-10 w-10 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-sky/15 text-sky border border-sky/30">
-                          <Icon name="zap" size={isSmall ? 20 : 18} />
-                        </span>
-                        {t("dashboard.spotlightTitle")}
-                      </h2>
+                      <SectionHead icon="zap" tone="sky" title={t("dashboard.spotlightTitle")} />
                       <span className="flex-none rounded-full bg-sky/10 px-2.5 py-0.5 text-[11px] font-bold text-sky border border-sky/20">
-                        Active Focus
+                        {t("dashboard.activeFocus")}
                       </span>
                     </div>
 
@@ -679,7 +764,7 @@ const Dashboard = () => {
                                 ((spotlightCourse.completedModules ? spotlightCourse.completedModules.length : 0) /
                                   (spotlightCourse.totalModules || 4)) *
                                   100
-                              )}% Completed
+                              )}% {t("dashboard.completedWord")}
                             </span>
                           </p>
                         </div>
@@ -729,11 +814,14 @@ const Dashboard = () => {
                 <Card className="h-full border-amber-500/20 bg-gradient-to-b from-amber-500/[0.06] via-amber-500/[0.02] to-transparent p-6 shadow-card flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
-                      <h2 className="flex items-center gap-2 text-sm font-extrabold text-amber-300">
-                        <Icon name="flame" size={16} /> {t("dashboard.streakTitle")}
+                      <h2 className="flex items-center gap-2.5 text-sm font-extrabold text-amber-300">
+                        <span className="flex h-10 w-10 items-center justify-center rounded-full border border-amber-500/40 bg-amber-500/[0.12] shadow-[0_0_14px_rgba(251,191,36,0.15)]">
+                          <LottieIcon src={streakLottie} size={26} fallbackIcon="flame" />
+                        </span>
+                        {t("dashboard.streakTitle")}
                       </h2>
-                      <span className="flex items-center gap-1.5 text-xs font-extrabold text-amber-300">
-                        <Icon name="flame" size={14} /> {streak} {streak === 1 ? "Day" : "Days"}
+                      <span className="text-xs font-extrabold text-amber-300">
+                        {streak} {streak === 1 ? t("dashboard.day") : t("dashboard.days")}
                       </span>
                     </div>
 
@@ -774,17 +862,16 @@ const Dashboard = () => {
             {/* Enrolled Courses Grid (Max 3 Preview) */}
             <div className="space-y-4">
               <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-3">
-                <h2 className="flex flex-col items-center gap-1.5 text-sm sm:flex-row sm:gap-2.5 sm:text-base font-extrabold text-ink-hi">
-                  <span className="flex h-10 w-10 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-violet-500/15 text-violet-300 border border-violet-500/30">
-                    <Icon name="book-open" size={isSmall ? 20 : 18} />
-                  </span>
-                  <span className="flex items-center gap-2">
-                    {t("dashboard.activeCourses")}
+                <SectionHead
+                  icon="book-open"
+                  tone="violet"
+                  title={t("dashboard.activeCourses")}
+                  trailing={
                     <span className="rounded-full bg-white/10 px-2.5 py-0.5 text-xs font-bold text-violet-300">
                       {activeCourses.length}
                     </span>
-                  </span>
-                </h2>
+                  }
+                />
 
                 {activeCourses.length > PREVIEW_LIMIT && (
                   <button
@@ -823,17 +910,16 @@ const Dashboard = () => {
               {/* Completed Courses Showcase */}
               <Card className="p-5 sm:p-6 border-white/10">
                 <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-3 border-b border-white/[0.08] pb-3.5">
-                  <h2 className="flex flex-col items-center gap-1.5 text-sm sm:flex-row sm:gap-2.5 sm:text-base font-extrabold text-ink-hi">
-                    <span className="flex h-10 w-10 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-sky/10 text-sky border border-sky/20">
-                      <Icon name="check-circle" size={isSmall ? 20 : 18} />
-                    </span>
-                    <span className="flex items-center gap-2">
-                      {t("dashboard.completedCourses")}
+                  <SectionHead
+                    icon="check-circle"
+                    tone="sky"
+                    title={t("dashboard.completedCourses")}
+                    trailing={
                       <span className="rounded-full bg-sky/10 px-2.5 py-0.5 text-xs font-bold text-sky">
                         {completedCourses.length}
                       </span>
-                    </span>
-                  </h2>
+                    }
+                  />
 
                   {completedCourses.length > PREVIEW_LIMIT && (
                     <button
@@ -890,12 +976,7 @@ const Dashboard = () => {
               {/* Quiz High Scores Hub */}
               <Card className="p-5 sm:p-6 border-white/10">
                 <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-3 border-b border-white/[0.08] pb-3.5">
-                  <h2 className="flex flex-col items-center gap-1.5 text-sm sm:flex-row sm:gap-2.5 sm:text-base font-extrabold text-ink-hi">
-                    <span className="flex h-10 w-10 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-violet-500/10 text-violet-400 border border-violet-500/20">
-                      <Icon name="trophy" size={isSmall ? 20 : 18} />
-                    </span>
-                    {t("dashboard.quizHistory")}
-                  </h2>
+                  <SectionHead icon="trophy" tone="violet" title={t("dashboard.quizHistory")} />
 
                   {quizScores.length > PREVIEW_LIMIT ? (
                     <button
@@ -908,9 +989,8 @@ const Dashboard = () => {
                   ) : (
                     <Button
                       size="sm"
-                      variant="ghost"
                       onClick={() => navigate("/quiz")}
-                      className="text-xs text-violet-400 hover:text-violet-300 font-bold"
+                      className="font-bold shadow-glow"
                     >
                       {t("dashboard.takeNewQuizBtn")}
                     </Button>
@@ -959,16 +1039,13 @@ const Dashboard = () => {
         {activeTab === "courses" && (
           <Card className="p-5 sm:p-8 animate-fade-in border-violet-500/20">
             <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-4 border-b border-white/[0.08] pb-4 mb-6">
-              <div>
-                <h2 className="flex flex-col items-center gap-1.5 text-base sm:flex-row sm:gap-2 sm:text-xl font-extrabold text-ink-hi">
-                  <span className="flex h-10 w-10 sm:h-9 sm:w-9 items-center justify-center rounded-xl border border-sky/20 bg-sky/10 text-sky">
-                    <Icon name="book-open" size={isSmall ? 20 : 18} />
-                  </span>
-                  {t("dashboard.allEnrolledTitle")} ({activeCourses.length})
-                </h2>
-                <p className="mt-1 text-xs text-ink-low">{t("dashboard.allEnrolledDesc")}</p>
-              </div>
-              <Button onClick={() => navigate("/courses")} size="sm" className="w-full sm:w-auto font-bold flex-none">
+              <SectionHead
+                icon="book-open"
+                tone="sky"
+                title={`${t("dashboard.allEnrolledTitle")} (${activeCourses.length})`}
+                desc={t("dashboard.allEnrolledDesc")}
+              />
+              <Button onClick={() => navigate("/courses")} size="md" className="w-full sm:w-auto font-bold flex-none">
                 {t("dashboard.exploreBtn")} →
               </Button>
             </div>
@@ -996,16 +1073,13 @@ const Dashboard = () => {
         {activeTab === "completed" && (
           <Card className="p-5 sm:p-8 animate-fade-in border-sky/20">
             <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-4 border-b border-white/[0.08] pb-4 mb-6">
-              <div>
-                <h2 className="flex flex-col items-center gap-1.5 text-base sm:flex-row sm:gap-2 sm:text-xl font-extrabold text-ink-hi">
-                  <span className="flex h-10 w-10 sm:h-9 sm:w-9 items-center justify-center rounded-xl border border-sky/20 bg-sky/10 text-sky">
-                    <Icon name="check-circle" size={isSmall ? 20 : 18} />
-                  </span>
-                  {t("dashboard.allCompletedTitle")} ({completedCourses.length})
-                </h2>
-                <p className="mt-1 text-xs text-ink-low">{t("dashboard.allCompletedDesc")}</p>
-              </div>
-              <Button onClick={() => navigate("/courses")} size="sm" className="w-full sm:w-auto font-bold flex-none">
+              <SectionHead
+                icon="check-circle"
+                tone="sky"
+                title={`${t("dashboard.allCompletedTitle")} (${completedCourses.length})`}
+                desc={t("dashboard.allCompletedDesc")}
+              />
+              <Button onClick={() => navigate("/courses")} size="md" className="w-full sm:w-auto font-bold flex-none">
                 {t("dashboard.exploreBtn")} →
               </Button>
             </div>
@@ -1030,21 +1104,21 @@ const Dashboard = () => {
                         )}
                         <div className="min-w-0 flex-1 w-full">
                           <span className="inline-block rounded-full bg-sky/20 px-2.5 py-0.5 text-[10px] font-bold text-sky border border-sky/30 uppercase tracking-wider">
-                            100% Completed
+                            100% {t("dashboard.completedWord")}
                           </span>
-                          <h3 className="mt-1.5 font-bold text-base text-ink-hi text-center sm:text-left">{localizedTitle}</h3>
-                          <p className="text-xs text-ink-low mt-0.5 text-center sm:text-left">Certificate Unlocked · +100 Bonus XP</p>
+                          <h3 className="mt-1.5 font-bold text-sm sm:text-base text-ink-hi text-center sm:text-left">{localizedTitle}</h3>
+                          <p className="text-xs text-ink-low mt-0.5 text-center sm:text-left">{t("dashboard.certificateUnlocked")}</p>
                         </div>
                       </div>
 
                       <div className="mt-4 border-t border-sky/20 pt-3 flex justify-center sm:justify-end">
                         <Button
-                          size="sm"
+                          size="md"
                           variant="ghost"
                           onClick={() => navigate(`/course/${c.courseId}`)}
-                          className="w-full sm:w-auto text-xs border-sky/30 text-sky hover:bg-sky/20 font-bold"
+                          className="w-full sm:w-auto border-sky/30 text-sky hover:bg-sky/20 font-bold"
                         >
-                          Review Course →
+                          {t("dashboard.reviewCourse")} →
                         </Button>
                       </div>
                     </div>
@@ -1074,16 +1148,13 @@ const Dashboard = () => {
         {activeTab === "quizzes" && (
           <Card className="p-5 sm:p-8 animate-fade-in border-violet-500/20">
             <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-4 border-b border-white/[0.08] pb-4 mb-6">
-              <div>
-                <h2 className="flex flex-col items-center gap-1.5 text-base sm:flex-row sm:gap-2 sm:text-xl font-extrabold text-ink-hi">
-                  <span className="flex h-10 w-10 sm:h-9 sm:w-9 items-center justify-center rounded-xl border border-violet-500/20 bg-violet-500/10 text-violet-400">
-                    <Icon name="trophy" size={isSmall ? 20 : 18} />
-                  </span>
-                  {t("dashboard.allQuizzesTitle")} ({quizScores.length})
-                </h2>
-                <p className="mt-1 text-xs text-ink-low">{t("dashboard.allQuizzesDesc")}</p>
-              </div>
-              <Button onClick={() => navigate("/quiz")} size="sm" className="w-full sm:w-auto font-bold flex-none">
+              <SectionHead
+                icon="trophy"
+                tone="violet"
+                title={`${t("dashboard.allQuizzesTitle")} (${quizScores.length})`}
+                desc={t("dashboard.allQuizzesDesc")}
+              />
+              <Button onClick={() => navigate("/quiz")} size="md" className="w-full sm:w-auto font-bold flex-none">
                 {t("dashboard.takeNewQuizBtn")}
               </Button>
             </div>
@@ -1100,20 +1171,13 @@ const Dashboard = () => {
                       className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-3 rounded-xl border border-white/10 bg-white/[0.02] p-4 hover:bg-white/[0.04] transition-colors"
                     >
                       <div className="min-w-0 flex-1 text-center sm:text-left">
-                        <h3 className="font-bold text-sm text-ink-hi">{localizedTitle}</h3>
-                        <p className="text-xs text-ink-low mt-0.5">High Score Record</p>
+                        <h3 className="font-bold text-sm sm:text-base text-ink-hi">{localizedTitle}</h3>
+                        <p className="text-xs text-ink-low mt-0.5">{t("dashboard.highScoreRecord")}</p>
                       </div>
                       <div className="flex items-center gap-3 flex-none w-full sm:w-auto justify-center">
                         <span className="rounded-lg border border-violet-500/30 bg-violet-500/20 px-3 py-1 text-sm font-extrabold text-violet-300">
                           {q.score} XP
                         </span>
-                        <Button
-                          size="sm"
-                          onClick={() => navigate("/quiz")}
-                          className="text-xs font-bold"
-                        >
-                          Retake Quiz
-                        </Button>
                       </div>
                     </div>
                   );
