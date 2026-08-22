@@ -4,6 +4,8 @@ import { useSound } from "../../context/SoundContext";
 import { useLanguage } from "../../context/LanguageContext";
 import { getNotificationConfig, TONE_STYLES, shouldPlaySound } from "./notificationConfig";
 import Icon from "./Icon";
+import LottieIcon from "./LottieIcon";
+import successLottie from "../../assets/lottie/Success.lottie?url";
 
 /**
  * NotificationModal — the centered "big moment" dialog (sign-up welcome, account
@@ -19,7 +21,7 @@ export default function NotificationModal() {
   const [progress, setProgress] = useState(100);
   const [isHovered, setIsHovered] = useState(false);
 
-  const duration = activeModal?.duration || 6000;
+  const duration = activeModal?.duration || 4500;
 
   // One SFX per modal (from the shared config; guarded so it never plays twice).
   useEffect(() => {
@@ -96,7 +98,7 @@ export default function NotificationModal() {
       aria-modal="true"
     >
       <div
-        className="relative w-[92%] max-w-md overflow-hidden rounded-3xl border border-white/[0.12] bg-gradient-to-b from-ground-800 to-ground-900 p-7 text-center shadow-[0_24px_60px_rgba(0,0,0,0.6)] animate-popup-pop cursor-default"
+        className={`relative w-[92%] max-w-md overflow-hidden rounded-3xl border border-white/[0.14] bg-gradient-to-b from-ground-800 to-ground-900 p-7 text-center ${tone.glow} animate-popup-pop cursor-default`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={(e) => e.stopPropagation()}
@@ -107,8 +109,12 @@ export default function NotificationModal() {
           </div>
         )}
 
-        <div className={`mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border ${tone.chip}`}>
-          <Icon name={cfg.icon} size={26} />
+        <div className={`mx-auto flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl border ${tone.chip}`}>
+          {cfg.art === "success" ? (
+            <LottieIcon src={successLottie} size={40} fallbackIcon="check" />
+          ) : (
+            <Icon name={cfg.icon} size={26} />
+          )}
         </div>
 
         <h3 className="mt-4 text-xl font-extrabold tracking-tight text-ink-hi">{displayTitle}</h3>
