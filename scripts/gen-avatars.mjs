@@ -18,9 +18,21 @@ import { writeFileSync, mkdirSync } from "node:fs";
 // @dicebear/collection: bigSmile, funEmoji, bottts, thumbs, micah, personas.
 const STYLE = adventurer;
 
+// Hair is the reliable gender cue in Adventurer (the style is otherwise
+// neutral). We pin the girl set to LONG hair and the boy set to SHORT hair so
+// each avatar clearly matches its picker tab, while the seed still varies the
+// exact style, hair color, and face across the set.
+const LONG_HAIR = Array.from({ length: 26 }, (_, i) => `long${String(i + 1).padStart(2, "0")}`);
+const SHORT_HAIR = Array.from({ length: 19 }, (_, i) => `short${String(i + 1).padStart(2, "0")}`);
+
+// Per-set options layered on top of the seed. Earrings are a secondary feminine
+// cue (only sometimes, for variety); the boy set never gets them.
+const FEMININE_OPTS = { hair: LONG_HAIR, hairProbability: 100, earringsProbability: 50 };
+const MASCULINE_OPTS = { hair: SHORT_HAIR, hairProbability: 100, earringsProbability: 0 };
+
 // [id, backgroundColor]. IDs are unchanged from the original set so existing
 // users keep their avatar; each ID doubles as the deterministic DiceBear seed.
-const AVATARS = [
+const FEMININE = [
   ["astro-girl", "c7d2fe"],
   ["pixel-princess", "fbcfe8"],
   ["skater-girl", "e9d5ff"],
@@ -29,6 +41,8 @@ const AVATARS = [
   ["coder-girl", "a7f3d0"],
   ["artist-girl", "fed7aa"],
   ["science-girl", "fde68a"],
+];
+const MASCULINE = [
   ["ninja-boy", "cbd5e1"],
   ["gamer-boy", "bfdbfe"],
   ["robot-boy", "c7d2fe"],
@@ -39,19 +53,23 @@ const AVATARS = [
   ["dino-boy", "bbf7d0"],
 ];
 
-const svg = (seed, bg) =>
+const svg = (seed, bg, opts) =>
   createAvatar(STYLE, {
     seed,
     size: 96,
     radius: 50,
     backgroundColor: [bg],
     backgroundType: ["solid"],
+    ...opts,
   }).toString();
 
 const outDir = new URL("../public/avatars/", import.meta.url);
 mkdirSync(outDir, { recursive: true });
 
-for (const [id, bg] of AVATARS) {
-  writeFileSync(new URL(`${id}.svg`, outDir), svg(id, bg));
+for (const [id, bg] of FEMININE) {
+  writeFileSync(new URL(`${id}.svg`, outDir), svg(id, bg, FEMININE_OPTS));
 }
-console.log("Wrote " + AVATARS.length + " avatars to public/avatars/");
+for (const [id, bg] of MASCULINE) {
+  writeFileSync(new URL(`${id}.svg`, outDir), svg(id, bg, MASCULINE_OPTS));
+}
+console.log("Wrote " + (FEMININE.length + MASCULINE.length) + " avatars to public/avatars/");
