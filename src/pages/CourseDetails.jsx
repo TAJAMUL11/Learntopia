@@ -473,7 +473,7 @@ const CourseDetails = () => {
                     <div
                       className={`grid h-12 w-12 flex-none place-items-center rounded-2xl text-sm font-extrabold transition-colors ${
                         done
-                          ? "bg-state-success/20 text-state-success shadow-[0_0_10px_rgba(34,197,94,0.3)]"
+                          ? "bg-state-success/20 text-state-success shadow-[0_0_10px_rgba(52,211,153,0.3)]"
                           : active
                           ? "bg-violet-500/20 text-violet-400 shadow-[0_0_10px_rgba(139,92,246,0.3)]"
                           : "bg-white/[0.05] text-ink-low"

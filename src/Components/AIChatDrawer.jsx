@@ -108,7 +108,7 @@ const AIChatDrawer = ({ isOpen, onClose, course, currentModule }) => {
         return (
           <pre
             key={i}
-            className="my-3 overflow-x-auto rounded-xl bg-slate-950/80 p-3.5 text-xs font-mono leading-relaxed text-emerald-300 border border-emerald-500/20 shadow-inner"
+            className="my-3 overflow-x-auto rounded-xl bg-ground-900/80 p-3.5 text-xs font-mono leading-relaxed text-state-success border border-state-success/20 shadow-inner"
           >
             <code>{code.trim()}</code>
           </pre>
@@ -122,7 +122,7 @@ const AIChatDrawer = ({ isOpen, onClose, course, currentModule }) => {
               return (
                 <code
                   key={j}
-                  className="rounded-md bg-violet-500/20 px-1.5 py-0.5 text-xs font-mono font-semibold text-violet-200 border border-violet-500/30"
+                  className="rounded-md bg-violet-500/20 px-1.5 py-0.5 text-xs font-mono font-semibold text-violet-300 border border-violet-500/30"
                 >
                   {ip.slice(1, -1)}
                 </code>
@@ -173,16 +173,16 @@ const AIChatDrawer = ({ isOpen, onClose, course, currentModule }) => {
         aria-label={`Chat with ${tutor.name}`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-white/10 bg-gradient-to-r from-violet-900/40 via-purple-900/20 to-ground-900 p-4 shadow-lg">
+        <div className="flex items-center justify-between border-b border-white/10 bg-gradient-to-r from-violet-700/40 via-violet-700/20 to-ground-900 p-4 shadow-lg">
           <div className="flex items-center gap-3 min-w-0">
             <div className="relative flex-none">
               <BotAvatar name={tutor.name} size="sm" />
-              <div className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-ground-900 bg-emerald-400 shadow-sm" />
+              <div className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-ground-900 bg-state-success shadow-sm" />
             </div>
             <div className="min-w-0">
               <h3 className="text-base font-extrabold text-white truncate leading-snug">{tutor.name}</h3>
               <div className="flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping" />
+                <span className="h-1.5 w-1.5 rounded-full bg-state-success animate-ping" />
                 <span className="text-xs font-semibold text-violet-300 truncate">{tutor.role}</span>
               </div>
             </div>
@@ -221,7 +221,7 @@ const AIChatDrawer = ({ isOpen, onClose, course, currentModule }) => {
               <div
                 className={`max-w-[82%] rounded-2xl p-4 text-sm leading-relaxed shadow-lg ${
                   msg.role === "user"
-                    ? "bg-gradient-to-r from-violet-600 via-indigo-600 to-sky-500 text-white rounded-tr-none font-medium shadow-violet-500/20"
+                    ? "bg-gradient-to-r from-violet-600 via-violet-500 to-sky text-white rounded-tr-none font-medium shadow-violet-500/20"
                     : "bg-white/[0.07] border border-white/10 text-ink-hi rounded-tl-none backdrop-blur-md"
                 }`}
               >
@@ -257,7 +257,7 @@ const AIChatDrawer = ({ isOpen, onClose, course, currentModule }) => {
 
           {/* Error display */}
           {error && (
-            <div className="mx-auto my-2 max-w-sm rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-center text-xs font-semibold text-red-200 shadow-lg">
+            <div className="mx-auto my-2 max-w-sm rounded-xl border border-state-danger/30 bg-state-danger/10 p-3 text-center text-xs font-semibold text-state-danger shadow-lg">
               {error}
             </div>
           )}
@@ -301,7 +301,7 @@ const AIChatDrawer = ({ isOpen, onClose, course, currentModule }) => {
               type="button"
               onClick={() => handleSend()}
               disabled={!input.trim() || isLoading}
-              className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-gradient-to-tr from-violet-600 via-purple-500 to-sky-400 text-white shadow-lg shadow-violet-500/30 hover:scale-105 active:scale-95 transition-all disabled:opacity-40 disabled:scale-100 disabled:shadow-none"
+              className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-gradient-to-tr from-violet-600 via-violet-500 to-sky text-white shadow-lg shadow-violet-500/30 hover:scale-105 active:scale-95 transition-all disabled:opacity-40 disabled:scale-100 disabled:shadow-none"
               title={t("aiTutor.askTutor", { name: tutor.name })}
             >
               <Icon name="send" size={17} className="text-white" />

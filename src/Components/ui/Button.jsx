@@ -11,7 +11,7 @@ const VARIANTS = {
   ghost:
     "bg-transparent text-ink border-white/[0.13] hover:bg-white/[0.05] hover:text-ink-hi",
   danger:
-    "bg-state-danger/[0.14] text-rose-200 border-state-danger/40 hover:bg-state-danger/25",
+    "bg-state-danger/[0.14] text-state-danger border-state-danger/40 hover:bg-state-danger/25",
 };
 
 const SIZES = {

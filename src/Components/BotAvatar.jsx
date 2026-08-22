@@ -10,7 +10,7 @@
  */
 const BOT_THEMES = {
   "Robo-Py": {
-    bg: "from-cyan-500/20 via-sky-500/10 to-blue-600/20 border-cyan-500/40",
+    bg: "from-sky/20 via-sky/10 to-violet-600/20 border-sky/40",
     glow: "shadow-[0_0_20px_rgba(6,182,212,0.35)]",
     svg: (
       <svg viewBox="0 0 100 100" className="w-full h-full">
@@ -47,7 +47,7 @@ const BOT_THEMES = {
     ),
   },
   "Count AI-Cula": {
-    bg: "from-purple-500/20 via-violet-500/10 to-indigo-600/20 border-purple-500/40",
+    bg: "from-violet-500/20 via-violet-400/10 to-violet-700/20 border-violet-500/40",
     glow: "shadow-[0_0_20px_rgba(168,85,247,0.35)]",
     svg: (
       <svg viewBox="0 0 100 100" className="w-full h-full">
@@ -80,7 +80,7 @@ const BOT_THEMES = {
     ),
   },
   "CoinBot": {
-    bg: "from-emerald-500/20 via-teal-500/10 to-green-600/20 border-emerald-500/40",
+    bg: "from-state-success/20 via-sky/10 to-state-success/20 border-state-success/40",
     glow: "shadow-[0_0_20px_rgba(16,185,129,0.35)]",
     svg: (
       <svg viewBox="0 0 100 100" className="w-full h-full">
@@ -110,7 +110,7 @@ const BOT_THEMES = {
     ),
   },
   "PixelBot": {
-    bg: "from-sky-500/20 via-indigo-500/10 to-purple-600/20 border-sky-500/40",
+    bg: "from-sky/20 via-violet-500/10 to-violet-600/20 border-sky/40",
     glow: "shadow-[0_0_20px_rgba(56,189,248,0.35)]",
     svg: (
       <svg viewBox="0 0 100 100" className="w-full h-full">
@@ -171,8 +171,8 @@ const BOT_THEMES = {
     ),
   },
   "ArtBot": {
-    bg: "from-rose-500/20 via-pink-500/10 to-fuchsia-600/20 border-rose-500/40",
-    glow: "shadow-[0_0_20px_rgba(244,63,94,0.35)]",
+    bg: "from-state-danger/20 via-violet-500/10 to-violet-500/20 border-state-danger/40",
+    glow: "shadow-[0_0_20px_rgba(251,113,133,0.35)]",
     svg: (
       <svg viewBox="0 0 100 100" className="w-full h-full">
         <defs>

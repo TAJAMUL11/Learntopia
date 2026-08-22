@@ -144,8 +144,8 @@ export const LanguageProvider = ({ children }) => {
 
       {/* Smooth, non-blocking glassmorphism language transition overlay */}
       {isChangingLang && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/60 backdrop-blur-md transition-opacity duration-300 animate-fade-in">
-          <div className="flex flex-col items-center gap-3 rounded-2xl border border-violet-500/30 bg-slate-900/90 px-6 py-5 shadow-2xl shadow-violet-500/20 text-center">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-ground-900/60 backdrop-blur-md transition-opacity duration-300 animate-fade-in">
+          <div className="flex flex-col items-center gap-3 rounded-2xl border border-violet-500/30 bg-ground-800/90 px-6 py-5 shadow-2xl shadow-violet-500/20 text-center">
             <div className="relative flex items-center justify-center">
               <div className="h-10 w-10 animate-spin rounded-full border-2 border-violet-500 border-t-transparent" />
               <span className="absolute text-base">{targetLangObj?.flag || activeLangObj.flag}</span>

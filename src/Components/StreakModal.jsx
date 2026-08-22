@@ -111,7 +111,7 @@ const StreakModal = () => {
                       isActive
                         ? "scale-110 border-2 border-amber-400 bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-[0_0_20px_rgba(245,158,11,0.6)]"
                         : isCompleted
-                        ? "border border-emerald-500/50 bg-emerald-500/20 text-emerald-400"
+                        ? "border border-state-success/50 bg-state-success/20 text-state-success"
                         : isFinal
                         ? "border border-violet-500/40 bg-violet-500/20 text-violet-300"
                         : "border border-white/10 bg-ground-800/50 text-ink-faint opacity-70"
@@ -120,7 +120,7 @@ const StreakModal = () => {
                     {isCompleted ? "✓" : isActive ? "🔥" : isFinal ? "🎁" : day}
                   </div>
                   <span className="text-xs font-bold text-ink-hi">{day}d</span>
-                  <span className="text-[10px] font-semibold text-emerald-400/90">
+                  <span className="text-[10px] font-semibold text-state-success/90">
                     +{reward} XP
                   </span>
                 </div>
@@ -130,7 +130,7 @@ const StreakModal = () => {
         </div>
 
         {/* Bonus XP Badge — reflects the milestone just reached */}
-        <div className="mb-6 inline-flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-xs font-bold text-emerald-400">
+        <div className="mb-6 inline-flex items-center gap-2 rounded-xl border border-state-success/30 bg-state-success/10 px-4 py-2 text-xs font-bold text-state-success">
           <span>⚡</span>
           <span>{t("streakModal.streakBonus", { amount: streakBonusXp })}</span>
         </div>

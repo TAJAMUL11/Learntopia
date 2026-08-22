@@ -29,18 +29,18 @@ const Contact = () => {
       icon: "clock",
       label: t("contact.responseTitle"),
       value: t("contact.responseSub"),
-      color: "from-sky-500/20 to-sky/10 border-sky-500/20",
-      iconColor: "text-sky-400",
-      glow: "bg-sky-600/10",
+      color: "from-sky/20 to-sky/10 border-sky/20",
+      iconColor: "text-sky",
+      glow: "bg-sky/10",
     },
     {
       icon: "book",
       label: t("contact.docTitle"),
       value: t("contact.docSub"),
       to: "/doc",
-      color: "from-emerald-500/20 to-teal-600/10 border-emerald-500/20",
-      iconColor: "text-emerald-400",
-      glow: "bg-emerald-600/10",
+      color: "from-state-success/20 to-sky/10 border-state-success/20",
+      iconColor: "text-state-success",
+      glow: "bg-state-success/10",
     },
     {
       icon: "shield",
@@ -168,7 +168,7 @@ const Contact = () => {
         <div className="order-1 lg:order-2 relative overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.03] p-7 backdrop-blur-md md:p-9">
           {/* Ambient glows */}
           <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-violet-600/8 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-sky-600/6 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-sky/6 blur-3xl" />
 
           <div className="relative mb-7">
             <h2 className="text-xl font-bold text-ink-hi">{t("contact.formHeading")}</h2>
