@@ -16,8 +16,8 @@ import { MODAL_TYPES } from "../Components/ui/notificationConfig";
 const ToastContext = createContext();
 
 const MAX_TOASTS = 3; // most corner toasts visible at once (oldest drop off)
-const TOAST_DURATION = 4500;
-const MODAL_DURATION = 6000;
+const TOAST_DURATION = 3000;
+const MODAL_DURATION = 4500;
 
 let globalToastHandler = null;
 let idCounter = 0;
