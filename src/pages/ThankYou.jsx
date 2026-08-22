@@ -29,8 +29,8 @@ const ThankYou = () => {
 
       {/* ── Decorative ambient glows ── */}
       <div className="pointer-events-none absolute left-1/2 top-1/3 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-600/10 blur-[120px]" />
-      <div className="pointer-events-none absolute left-1/4 top-2/3 h-64 w-64 rounded-full bg-sky-600/8 blur-[80px]" />
-      <div className="pointer-events-none absolute right-1/4 top-1/4 h-48 w-48 rounded-full bg-emerald-600/8 blur-[80px]" />
+      <div className="pointer-events-none absolute left-1/4 top-2/3 h-64 w-64 rounded-full bg-sky/8 blur-[80px]" />
+      <div className="pointer-events-none absolute right-1/4 top-1/4 h-48 w-48 rounded-full bg-state-success/8 blur-[80px]" />
 
       {/* Decorative dots */}
       {PARTICLES.map((p, i) => (
@@ -47,12 +47,12 @@ const ThankYou = () => {
         {/* Animated check icon */}
         <div className="relative mx-auto mb-8 flex h-28 w-28 items-center justify-center">
           {/* Outer pulse ring */}
-          <div className="absolute inset-0 animate-ping rounded-full bg-emerald-500/20 [animation-duration:2s]" />
+          <div className="absolute inset-0 animate-ping rounded-full bg-state-success/20 [animation-duration:2s]" />
           {/* Middle ring */}
-          <div className="absolute inset-2 rounded-full border border-emerald-500/30 bg-emerald-500/10" />
+          <div className="absolute inset-2 rounded-full border border-state-success/30 bg-state-success/10" />
           {/* Inner icon */}
-          <div className="relative grid h-20 w-20 place-items-center rounded-full border border-emerald-500/40 bg-gradient-to-br from-emerald-500/30 to-teal-600/20 shadow-[0_0_40px_-8px_rgba(52,211,153,0.4)]">
-            <Icon name="check-circle" size={40} className="text-emerald-400" />
+          <div className="relative grid h-20 w-20 place-items-center rounded-full border border-state-success/40 bg-gradient-to-br from-state-success/30 to-sky/20 shadow-[0_0_40px_-8px_rgba(52,211,153,0.4)]">
+            <Icon name="check-circle" size={40} className="text-state-success" />
           </div>
         </div>
 
@@ -78,9 +78,9 @@ const ThankYou = () => {
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           <Link
             to="/courses"
-            className="group flex flex-col items-center gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.03] p-5 transition-all duration-200 hover:border-sky-500/30 hover:bg-white/[0.06]"
+            className="group flex flex-col items-center gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.03] p-5 transition-all duration-200 hover:border-sky/30 hover:bg-white/[0.06]"
           >
-            <div className="grid h-10 w-10 place-items-center rounded-xl border border-white/[0.08] bg-sky-500/10 text-sky-400 transition-transform duration-200 group-hover:scale-110">
+            <div className="grid h-10 w-10 place-items-center rounded-xl border border-white/[0.08] bg-sky/10 text-sky transition-transform duration-200 group-hover:scale-110">
               <Icon name="book" size={18} />
             </div>
             <span className="text-sm font-semibold text-ink-hi">{t("nav.courses")}</span>

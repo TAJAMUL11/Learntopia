@@ -39,20 +39,20 @@ const SECTION_LABELS = {
 const SECTION_STYLES = {
   story: {
     border: "border-violet-500/30",
-    bg: "bg-gradient-to-br from-violet-500/15 to-violet-900/5",
+    bg: "bg-gradient-to-br from-violet-500/15 to-violet-700/5",
     iconBg: "bg-violet-500/20",
     iconColor: "text-violet-400",
     labelColor: "text-violet-300",
-    titleColor: "text-violet-200",
+    titleColor: "text-violet-300",
     glow: "shadow-[0_0_30px_rgba(139,99,227,0.12)]",
   },
   concept: {
     border: "border-violet-500/30",
-    bg: "bg-gradient-to-br from-violet-500/15 to-violet-900/5",
+    bg: "bg-gradient-to-br from-violet-500/15 to-violet-700/5",
     iconBg: "bg-violet-500/20",
     iconColor: "text-violet-400",
     labelColor: "text-violet-300",
-    titleColor: "text-violet-200",
+    titleColor: "text-violet-300",
     glow: "shadow-[0_0_30px_rgba(139,99,227,0.12)]",
   },
   fact: {
@@ -60,8 +60,8 @@ const SECTION_STYLES = {
     bg: "bg-gradient-to-br from-sky/15 to-sky/5",
     iconBg: "bg-sky/20",
     iconColor: "text-sky",
-    labelColor: "text-sky-300",
-    titleColor: "text-sky-200",
+    labelColor: "text-sky",
+    titleColor: "text-sky",
     glow: "shadow-[0_0_30px_rgba(56,189,248,0.12)]",
   },
   tip: {
@@ -79,16 +79,16 @@ const SECTION_STYLES = {
     iconBg: "bg-violet-500/20",
     iconColor: "text-violet-400",
     labelColor: "text-violet-300",
-    titleColor: "text-violet-200",
+    titleColor: "text-violet-300",
     glow: "shadow-[0_0_30px_rgba(139,99,227,0.12)]",
   },
   activity: {
-    border: "border-emerald-500/30",
-    bg: "bg-gradient-to-br from-emerald-500/15 to-emerald-900/5",
-    iconBg: "bg-emerald-500/20",
-    iconColor: "text-emerald-400",
-    labelColor: "text-emerald-300",
-    titleColor: "text-emerald-200",
+    border: "border-state-success/30",
+    bg: "bg-gradient-to-br from-state-success/15 to-state-success/5",
+    iconBg: "bg-state-success/20",
+    iconColor: "text-state-success",
+    labelColor: "text-state-success",
+    titleColor: "text-state-success",
     glow: "shadow-[0_0_30px_rgba(52,211,153,0.12)]",
   },
   recap: {
@@ -201,7 +201,7 @@ const LessonPlayer = ({ sections = [], onComplete }) => {
           /^[a-z_]+ ?=/.test(trimmed))
       ) {
         return (
-          <code key={i} className="block rounded bg-black/30 px-3 py-1 font-mono text-sm text-emerald-300 my-0.5">
+          <code key={i} className="block rounded bg-black/30 px-3 py-1 font-mono text-sm text-state-success my-0.5">
             {trimmed}
           </code>
         );
@@ -219,7 +219,7 @@ const LessonPlayer = ({ sections = [], onComplete }) => {
       // Operator/comparison lines in examples
       if (sectionType === "example" && (/^[><=!]+ /.test(trimmed) || /means '/.test(trimmed))) {
         return (
-          <code key={i} className="block rounded bg-black/20 px-3 py-0.5 font-mono text-sm text-emerald-200/80 my-0.5">
+          <code key={i} className="block rounded bg-black/20 px-3 py-0.5 font-mono text-sm text-state-success/80 my-0.5">
             {trimmed}
           </code>
         );

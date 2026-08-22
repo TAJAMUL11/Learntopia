@@ -91,7 +91,7 @@ const Navbar = () => {
               onClick={toggleMute}
               className={`h-[34px] flex items-center gap-1.5 rounded-full border px-3 text-xs font-semibold backdrop-blur-md transition-all duration-200 ${
                 isMuted
-                  ? "border-rose-500/30 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20"
+                  ? "border-state-danger/30 bg-state-danger/10 text-state-danger hover:bg-state-danger/20"
                   : "border-sky/25 bg-sky/10 text-sky hover:border-sky/50 hover:bg-sky/20 hover:shadow-glow"
               }`}
               title={isMuted ? "Sound Effects: Muted (Click to Enable)" : "Sound Effects: Active (Click to Mute)"}
@@ -121,7 +121,7 @@ const Navbar = () => {
                 </span>
               </div>
 
-              <Button variant="ghost" size="sm" onClick={handleLogout} className="h-[34px] px-2.5 text-xs text-ink-low hover:text-rose-400">
+              <Button variant="ghost" size="sm" onClick={handleLogout} className="h-[34px] px-2.5 text-xs text-ink-low hover:text-state-danger">
                 {t("nav.logout")}
               </Button>
             </div>
@@ -153,7 +153,7 @@ const Navbar = () => {
             onClick={toggleMute}
             className={`grid h-9 w-9 place-items-center rounded-full border transition-colors ${
               isMuted
-                ? "border-rose-500/30 bg-rose-500/10 text-rose-300"
+                ? "border-state-danger/30 bg-state-danger/10 text-state-danger"
                 : "border-sky/30 bg-sky/10 text-sky"
             }`}
             title={isMuted ? "Sound: Muted" : "Sound: Enabled"}
@@ -224,7 +224,7 @@ const Navbar = () => {
                   <Icon name="chevron-right" size={18} className="text-ink-low group-hover:text-sky transition-colors" />
                 </div>
 
-                <Button variant="ghost" fullWidth onClick={handleLogout} className="text-rose-400 hover:bg-rose-500/10">
+                <Button variant="ghost" fullWidth onClick={handleLogout} className="text-state-danger hover:bg-state-danger/10">
                   {t("nav.logout")}
                 </Button>
               </div>

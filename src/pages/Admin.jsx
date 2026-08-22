@@ -276,7 +276,7 @@ const Admin = () => {
                 type="button"
                 disabled={adminLoading}
                 onClick={handleAdminGoogleAuth}
-                className="flex w-full items-center justify-center gap-3 rounded-xl border border-violet-500/40 bg-violet-500/10 p-3.5 text-xs font-bold uppercase tracking-wider text-violet-200 transition-colors hover:bg-violet-500/20 disabled:opacity-50 shadow-lg"
+                className="flex w-full items-center justify-center gap-3 rounded-xl border border-violet-500/40 bg-violet-500/10 p-3.5 text-xs font-bold uppercase tracking-wider text-violet-300 transition-colors hover:bg-violet-500/20 disabled:opacity-50 shadow-lg"
               >
                 <img src={google} alt="" className="h-5 w-5 object-contain" />
                 {adminLoading ? "Authenticating Admin…" : "Authenticate Admin with Google"}
@@ -302,9 +302,9 @@ const Admin = () => {
 
   const KPIS = [
     { label: "Students", value: students.length, icon: "users", tint: "text-violet-300", ring: "border-violet-500/25 bg-violet-500/[0.06]" },
-    { label: "Messages", value: contactMessages.length, icon: "mail", tint: "text-sky", ring: "border-sky-500/25 bg-sky-500/[0.06]" },
+    { label: "Messages", value: contactMessages.length, icon: "mail", tint: "text-sky", ring: "border-sky/25 bg-sky/[0.06]" },
     { label: "System Logs", value: bugReports.length, icon: "alert-circle", tint: "text-amber-300", ring: "border-amber-500/25 bg-amber-500/[0.06]" },
-    { label: "Total Points", value: totalPoints, icon: "trophy", tint: "text-emerald-300", ring: "border-emerald-500/25 bg-emerald-500/[0.06]" },
+    { label: "Total Points", value: totalPoints, icon: "trophy", tint: "text-state-success", ring: "border-state-success/25 bg-state-success/[0.06]" },
   ];
 
   const meta = SECTION_META[activeTab];
@@ -317,13 +317,13 @@ const Admin = () => {
         key={item.id}
         onClick={() => setActiveTab(item.id)}
         className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors ${
-          active ? "bg-violet-500/15 text-violet-200" : "text-ink-low hover:bg-white/[0.04] hover:text-ink-hi"
+          active ? "bg-violet-500/15 text-violet-300" : "text-ink-low hover:bg-white/[0.04] hover:text-ink-hi"
         }`}
       >
         <Icon name={item.icon} size={17} className={active ? "text-violet-300" : ""} />
         <span className="flex-1 text-left">{item.label}</span>
         {count !== undefined && (
-          <span className={`rounded-md px-1.5 py-0.5 text-[11px] font-bold tabular-nums ${active ? "bg-violet-500/25 text-violet-100" : "bg-white/[0.06] text-ink-low"}`}>
+          <span className={`rounded-md px-1.5 py-0.5 text-[11px] font-bold tabular-nums ${active ? "bg-violet-500/25 text-violet-300" : "bg-white/[0.06] text-ink-low"}`}>
             {count}
           </span>
         )}
@@ -345,7 +345,7 @@ const Admin = () => {
 
         <div className="flex items-center gap-4">
           <div className="hidden items-center gap-3 text-[11px] text-ink-faint md:flex">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-state-success" />
             <span>{dateStr}</span>
             <span className="font-mono tabular-nums">{timeStr}</span>
           </div>
@@ -353,13 +353,13 @@ const Admin = () => {
           <div className="hidden items-center gap-2 sm:flex">
             <div className="flex items-center gap-1.5 rounded-lg border border-violet-500/30 bg-violet-500/10 px-2.5 py-1">
               <Icon name="shield" size={12} className="text-violet-400" />
-              <span className="text-[11px] font-bold text-violet-200 truncate max-w-[120px]">{currentUser?.displayName || "Admin"}</span>
+              <span className="text-[11px] font-bold text-violet-300 truncate max-w-[120px]">{currentUser?.displayName || "Admin"}</span>
             </div>
           </div>
 
           <button
             onClick={handleAdminLogout}
-            className="flex items-center gap-1.5 rounded-lg border border-red-500/20 bg-red-500/10 px-3 py-1.5 text-[11px] font-semibold text-red-400 transition-colors hover:bg-red-500/20"
+            className="flex items-center gap-1.5 rounded-lg border border-state-danger/20 bg-state-danger/10 px-3 py-1.5 text-[11px] font-semibold text-state-danger transition-colors hover:bg-state-danger/20"
           >
             <Icon name="log-out" size={13} />
             <span className="hidden sm:inline">Exit</span>
@@ -379,7 +379,7 @@ const Admin = () => {
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
                 className={`flex flex-none items-center gap-2 rounded-lg border px-3.5 py-2 text-xs font-semibold transition-colors ${
-                  active ? "border-violet-500/40 bg-violet-500/15 text-violet-200" : "border-white/[0.08] bg-white/[0.02] text-ink-low"
+                  active ? "border-violet-500/40 bg-violet-500/15 text-violet-300" : "border-white/[0.08] bg-white/[0.02] text-ink-low"
                 }`}
               >
                 <Icon name={item.icon} size={14} /> {item.label}
@@ -417,13 +417,13 @@ const Admin = () => {
 
               <button
                 onClick={handleAdminLogout}
-                className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-red-500/20 bg-red-500/10 py-2.5 text-xs font-semibold text-red-400 hover:bg-red-500/20 transition-colors"
+                className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-state-danger/20 bg-state-danger/10 py-2.5 text-xs font-semibold text-state-danger hover:bg-state-danger/20 transition-colors"
               >
                 <Icon name="log-out" size={14} /> Exit Admin Portal
               </button>
 
               <div className="mt-3 flex items-center gap-1.5 px-2 text-[11px] text-ink-faint">
-                <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400" /> Live system
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-state-success" /> Live system
               </div>
             </div>
           </aside>
@@ -639,7 +639,7 @@ const Admin = () => {
                       <div key={bug.id} className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-5">
                         <div className="mb-2 flex items-center justify-between">
                           <span className="text-[11px] font-bold uppercase tracking-wider text-amber-300">{bug.priority || "Medium"} priority</span>
-                          <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-bold uppercase text-emerald-300">{bug.status || "Open"}</span>
+                          <span className="rounded-full bg-state-success/15 px-2 py-0.5 text-[10px] font-bold uppercase text-state-success">{bug.status || "Open"}</span>
                         </div>
                         <h4 className="font-bold text-white">{bug.title}</h4>
                         <p className="mt-1.5 text-sm leading-relaxed text-ink-low">{bug.description}</p>

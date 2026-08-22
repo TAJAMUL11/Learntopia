@@ -501,7 +501,7 @@ const Dashboard = () => {
           <button
             type="button"
             onClick={() => setCourseToUnenroll(c)}
-            className="flex-none rounded-lg p-1.5 text-ink-faint transition-colors hover:bg-rose-500/10 hover:text-rose-400"
+            className="flex-none rounded-lg p-1.5 text-ink-faint transition-colors hover:bg-state-danger/10 hover:text-state-danger"
             title={t("dashboard.unenroll")}
             aria-label={`Unenroll from ${localizedTitle}`}
           >
@@ -575,7 +575,7 @@ const Dashboard = () => {
             <Button
               size="sm"
               onClick={() => setEditingProfile(true)}
-              className="flex-none bg-amber-400 text-slate-950 font-bold border-none hover:bg-amber-300"
+              className="flex-none bg-amber-400 text-ground-900 font-bold border-none hover:bg-amber-300"
             >
               {t("profileSetup.setupBannerBtn")}
             </Button>
@@ -1214,12 +1214,12 @@ const Dashboard = () => {
 
         {/* ── ROW 6 — Account Control Danger Zone ─────────────────────────── */}
         <Card
-          className="animate-fade-up border-rose-500/20 bg-rose-500/[0.02] p-6"
+          className="animate-fade-up border-state-danger/20 bg-state-danger/[0.02] p-6"
           style={{ animationDelay: "0.32s" }}
         >
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h3 className="flex items-center gap-2 text-sm font-bold text-rose-400">
+              <h3 className="flex items-center gap-2 text-sm font-bold text-state-danger">
                 <Icon name="alert-triangle" size={16} />
                 {t("dashboard.dangerZoneTitle")}
               </h3>
@@ -1284,8 +1284,8 @@ const Dashboard = () => {
           actionDisabled={deleteConfirmText.trim().toUpperCase() !== "DELETE"}
         >
           <div className="space-y-4">
-            <div className="rounded-xl border border-red-500/25 bg-red-500/[0.08] p-4 text-xs leading-relaxed text-red-200">
-              <p className="mb-1 font-bold text-red-300">{t("dashboard.deleteWarningTitle")}</p>
+            <div className="rounded-xl border border-state-danger/25 bg-state-danger/[0.08] p-4 text-xs leading-relaxed text-state-danger">
+              <p className="mb-1 font-bold text-state-danger">{t("dashboard.deleteWarningTitle")}</p>
               <p>{t("dashboard.deleteWarningText")}</p>
             </div>
 
@@ -1295,8 +1295,8 @@ const Dashboard = () => {
               </p>
               <ul className="space-y-1.5 pl-1">
                 {[1, 2, 3, 4, 5].map((n) => (
-                  <li key={n} className="flex items-center gap-2 text-red-300">
-                    <Icon name="x-circle" size={14} className="flex-none text-red-400" />
+                  <li key={n} className="flex items-center gap-2 text-state-danger">
+                    <Icon name="x-circle" size={14} className="flex-none text-state-danger" />
                     {t(`dashboard.deleteList${n}`)}
                   </li>
                 ))}
@@ -1307,7 +1307,7 @@ const Dashboard = () => {
               <label className="mb-1.5 block text-xs font-semibold text-ink-hi">
                 {t("dashboard.deleteConfirmLabel", { keyword: "" })}
                 {" "}
-                <span className="font-mono font-bold text-red-400">DELETE</span>
+                <span className="font-mono font-bold text-state-danger">DELETE</span>
               </label>
               <input
                 type="text"
@@ -1315,7 +1315,7 @@ const Dashboard = () => {
                 onChange={(e) => setDeleteConfirmText(e.target.value)}
                 placeholder={t("dashboard.deleteConfirmPlaceholder")}
                 disabled={deleteLoading}
-                className="w-full rounded-lg border border-red-500/25 bg-white/[0.03] px-3 py-2 text-xs font-mono text-ink-hi placeholder:text-ink-faint focus:border-red-500 focus:outline-none"
+                className="w-full rounded-lg border border-state-danger/25 bg-white/[0.03] px-3 py-2 text-xs font-mono text-ink-hi placeholder:text-ink-faint focus:border-state-danger focus:outline-none"
               />
             </div>
           </div>

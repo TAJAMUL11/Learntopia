@@ -288,11 +288,11 @@ const Quiz = () => {
                 <Card
                   key={quiz.id}
                   hoverable
-                  className={`relative flex flex-col p-6 transition-all ${attempted ? "border-emerald-500/20 bg-emerald-500/[0.03]" : ""}`}
+                  className={`relative flex flex-col p-6 transition-all ${attempted ? "border-state-success/20 bg-state-success/[0.03]" : ""}`}
                 >
                   {/* Attempted badge — top-right corner */}
                   {attempted && (
-                    <div className="absolute right-4 top-4 flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-emerald-400">
+                    <div className="absolute right-4 top-4 flex items-center gap-1 rounded-full border border-state-success/30 bg-state-success/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-state-success">
                       <Icon name="check-circle" size={10} /> Done
                     </div>
                   )}
@@ -306,7 +306,7 @@ const Quiz = () => {
                       {loadingScores ? (
                         <Skeleton className="h-4 w-24" />
                       ) : attempted ? (
-                        <span className="flex items-center gap-1.5 font-semibold text-emerald-400">
+                        <span className="flex items-center gap-1.5 font-semibold text-state-success">
                           <Icon name="trophy" size={14} /> Best: {highScores[quiz.id]} / {Math.min(quiz.questions.length, 10)}
                         </span>
                       ) : (
@@ -318,7 +318,7 @@ const Quiz = () => {
                         size="sm"
                         variant="secondary"
                         onClick={() => startQuiz(quiz)}
-                        className="flex items-center gap-1.5 !border-emerald-500/30 !text-emerald-400 hover:!bg-emerald-500/10"
+                        className="flex items-center gap-1.5 !border-state-success/30 !text-state-success hover:!bg-state-success/10"
                       >
                         <Icon name="refresh-cw" size={12} /> Retake
                       </Button>
@@ -375,8 +375,8 @@ const Quiz = () => {
 
               let style = "border-white/[0.08] bg-white/[0.03] hover:border-violet-500 hover:bg-white/[0.06]";
               if (isAnswerSubmitted) {
-                if (isCorrectAnswer) style = "border-state-success bg-state-success/15 text-emerald-200";
-                else if (isSelected) style = "border-state-danger bg-state-danger/15 text-rose-200";
+                if (isCorrectAnswer) style = "border-state-success bg-state-success/15 text-state-success";
+                else if (isSelected) style = "border-state-danger bg-state-danger/15 text-state-danger";
                 else style = "border-white/[0.05] opacity-60";
               } else if (isSelected) {
                 style = "border-violet-500 bg-white/[0.08]";

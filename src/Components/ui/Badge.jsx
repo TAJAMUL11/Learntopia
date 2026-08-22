@@ -7,7 +7,7 @@ const VARIANTS = {
   sky: "bg-sky/[0.16] text-sky border-sky/35",
   success: "bg-state-success/[0.14] text-state-success border-state-success/35",
   warning: "bg-state-warning/[0.14] text-state-warning border-state-warning/35",
-  danger: "bg-state-danger/[0.14] text-rose-300 border-state-danger/35",
+  danger: "bg-state-danger/[0.14] text-state-danger border-state-danger/35",
 };
 
 const Badge = ({ variant = "default", className = "", children }) => (

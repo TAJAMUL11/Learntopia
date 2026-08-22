@@ -196,12 +196,12 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, onFirstAttempt, isComple
           let style = "border-white/[0.08] bg-white/[0.02] hover:border-violet-500/50 hover:bg-white/[0.05]";
 
           if (isDone) {
-            if (isOptionCorrect) style = "border-state-success bg-state-success/15 text-emerald-200 shadow-[0_0_10px_rgba(34,197,94,0.1)]";
+            if (isOptionCorrect) style = "border-state-success bg-state-success/15 text-state-success shadow-[0_0_10px_rgba(52,211,153,0.1)]";
             else style = "border-white/[0.03] opacity-40";
           } else if (hasFeedback) {
-            if (isSelected && isOptionCorrect) style = "border-state-success bg-state-success/20 text-emerald-200 shadow-[0_0_10px_rgba(34,197,94,0.2)]";
-            else if (isSelected && !isOptionCorrect) style = "border-state-danger bg-state-danger/20 text-rose-200 shadow-[0_0_10px_rgba(244,63,94,0.2)]";
-            else if (isOptionCorrect) style = "border-state-success/50 bg-state-success/10 text-emerald-200";
+            if (isSelected && isOptionCorrect) style = "border-state-success bg-state-success/20 text-state-success shadow-[0_0_10px_rgba(52,211,153,0.2)]";
+            else if (isSelected && !isOptionCorrect) style = "border-state-danger bg-state-danger/20 text-state-danger shadow-[0_0_10px_rgba(251,113,133,0.2)]";
+            else if (isOptionCorrect) style = "border-state-success/50 bg-state-success/10 text-state-success";
             else style = "border-white/[0.03] opacity-40";
           } else if (isSelected) {
             style = "border-violet-500 bg-violet-500/20 text-white shadow-[0_0_15px_rgba(139,92,246,0.3)]";
@@ -242,13 +242,13 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, onFirstAttempt, isComple
 
       if (isDone) {
         return isThisCorrect
-          ? "border-state-success bg-state-success/15 text-emerald-200 shadow-[0_0_10px_rgba(34,197,94,0.15)] scale-[1.02]"
+          ? "border-state-success bg-state-success/15 text-state-success shadow-[0_0_10px_rgba(52,211,153,0.15)] scale-[1.02]"
           : "border-white/[0.03] opacity-40";
       }
       if (hasFeedback) {
-        if (isSelected && isThisCorrect) return "border-state-success bg-state-success/20 text-emerald-200 shadow-[0_0_10px_rgba(34,197,94,0.2)] scale-[1.02]";
-        if (isSelected && !isThisCorrect) return "border-state-danger bg-state-danger/20 text-rose-200 shadow-[0_0_10px_rgba(244,63,94,0.2)]";
-        if (isThisCorrect) return "border-state-success/50 bg-state-success/10 text-emerald-200";
+        if (isSelected && isThisCorrect) return "border-state-success bg-state-success/20 text-state-success shadow-[0_0_10px_rgba(52,211,153,0.2)] scale-[1.02]";
+        if (isSelected && !isThisCorrect) return "border-state-danger bg-state-danger/20 text-state-danger shadow-[0_0_10px_rgba(251,113,133,0.2)]";
+        if (isThisCorrect) return "border-state-success/50 bg-state-success/10 text-state-success";
         return "border-white/[0.03] opacity-40";
       }
       if (isSelected) return "border-violet-500 bg-violet-500/20 text-white shadow-[0_0_15px_rgba(139,92,246,0.3)] scale-[1.02]";
@@ -285,9 +285,9 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, onFirstAttempt, isComple
     const hasBlankInline = parts.length > 1;
 
     let inputStyle = "border-white/[0.15] bg-white/[0.05] focus:border-violet-500 focus:ring-violet-500/30";
-    if (isDone) inputStyle = "border-state-success/50 bg-state-success/10 text-emerald-200";
-    else if (hasFeedback && isCorrect) inputStyle = "border-state-success bg-state-success/15 text-emerald-200";
-    else if (hasFeedback && !isCorrect) inputStyle = "border-state-danger bg-state-danger/15 text-rose-200";
+    if (isDone) inputStyle = "border-state-success/50 bg-state-success/10 text-state-success";
+    else if (hasFeedback && isCorrect) inputStyle = "border-state-success bg-state-success/15 text-state-success";
+    else if (hasFeedback && !isCorrect) inputStyle = "border-state-danger bg-state-danger/15 text-state-danger";
 
     return (
       <div className="space-y-4">
@@ -340,9 +340,9 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, onFirstAttempt, isComple
         <div className="space-y-3">
           {pairs.map((pair, i) => (
             <div key={i} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 rounded-xl border border-state-success/30 bg-state-success/10 px-4 py-3">
-              <span className="text-sm font-bold text-emerald-200">{pair.term}</span>
+              <span className="text-sm font-bold text-state-success">{pair.term}</span>
               <Icon name="arrow-right" size={16} className="text-state-success hidden sm:inline flex-none" />
-              <span className="text-sm text-emerald-200/80">{pair.definition}</span>
+              <span className="text-sm text-state-success/80">{pair.definition}</span>
             </div>
           ))}
         </div>
@@ -364,9 +364,9 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, onFirstAttempt, isComple
               const isWrongMatch = hasFeedback && state.matched.some(m => m.left === pair.term && m.right !== pair.definition);
 
               let s = "border-white/[0.08] bg-white/[0.02] hover:border-violet-500/50";
-              if (isCorrectMatch) s = "border-state-success bg-state-success/15 text-emerald-200";
-              else if (isWrongMatch) s = "border-state-danger bg-state-danger/15 text-rose-200";
-              else if (isMatched) s = "border-sky/30 bg-sky/10 text-sky-200";
+              if (isCorrectMatch) s = "border-state-success bg-state-success/15 text-state-success";
+              else if (isWrongMatch) s = "border-state-danger bg-state-danger/15 text-state-danger";
+              else if (isMatched) s = "border-sky/30 bg-sky/10 text-sky";
               else if (isActive) s = "border-violet-500 bg-violet-500/20 text-white shadow-[0_0_12px_rgba(139,92,246,0.3)]";
 
               return (
@@ -385,7 +385,7 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, onFirstAttempt, isComple
 
           {/* Right column — Definitions */}
           <div className="space-y-2">
-            <p className="text-xs font-bold uppercase tracking-wider text-sky-400 mb-2">Definitions</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-sky mb-2">Definitions</p>
             {shuffledDefs.map((def, i) => {
               const isMatched = state.matched.some(m => m.right === def);
               const isActive = state.right === def;
@@ -395,9 +395,9 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, onFirstAttempt, isComple
               const isWrongMatch = hasFeedback && matchedPair && matchedPair.left !== correctPair?.term;
 
               let s = "border-white/[0.08] bg-white/[0.02] hover:border-sky/50";
-              if (isCorrectMatch) s = "border-state-success bg-state-success/15 text-emerald-200";
-              else if (isWrongMatch) s = "border-state-danger bg-state-danger/15 text-rose-200";
-              else if (isMatched) s = "border-sky/30 bg-sky/10 text-sky-200";
+              if (isCorrectMatch) s = "border-state-success bg-state-success/15 text-state-success";
+              else if (isWrongMatch) s = "border-state-danger bg-state-danger/15 text-state-danger";
+              else if (isMatched) s = "border-sky/30 bg-sky/10 text-sky";
               else if (isActive) s = "border-sky bg-sky/20 text-white shadow-[0_0_12px_rgba(56,189,248,0.3)]";
 
               return (
@@ -449,7 +449,7 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, onFirstAttempt, isComple
       case "fill-blank":
         return { label: "Fill in the Blank", icon: "edit-3", color: "text-sky bg-sky/15 border-sky/30" };
       case "match":
-        return { label: "Match the Pairs", icon: "code", color: "text-emerald-400 bg-emerald-500/15 border-emerald-500/30" };
+        return { label: "Match the Pairs", icon: "code", color: "text-state-success bg-state-success/15 border-state-success/30" };
       case "mcq":
       default:
         return { label: "Multiple Choice", icon: "check-circle", color: "text-violet-400 bg-violet-500/15 border-violet-500/30" };

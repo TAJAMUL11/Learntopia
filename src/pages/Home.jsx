@@ -51,12 +51,12 @@ const SUBJECTS = [
 
 const ICON_GRADIENTS = [
   "from-violet-500/30 to-violet-600/20 border-violet-500/20",
-  "from-sky-500/30 to-sky/20 border-sky-500/20",
+  "from-sky/30 to-sky/20 border-sky/20",
   "from-amber-500/30 to-orange-600/20 border-amber-500/20",
 ];
 
-const ICON_COLORS = ["text-violet-400", "text-sky-400", "text-amber-400"];
-const GLOW_COLORS = ["via-violet-500/60", "via-sky-500/60", "via-amber-500/60"];
+const ICON_COLORS = ["text-violet-400", "text-sky", "text-amber-400"];
+const GLOW_COLORS = ["via-violet-500/60", "via-sky/60", "via-amber-500/60"];
 
 const Home = () => {
   const navigate = useNavigate();
@@ -222,7 +222,7 @@ const Home = () => {
 
         {/* Quote card */}
         <div className="relative overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.03] p-8 backdrop-blur-md">
-          <div className="pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full bg-sky-500/10 blur-3xl" />
+          <div className="pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full bg-sky/10 blur-3xl" />
 
           {/* Decorative large quote mark */}
           <span className="pointer-events-none absolute right-7 top-4 select-none text-[7rem] font-black leading-none text-white/[0.04]">&ldquo;</span>
