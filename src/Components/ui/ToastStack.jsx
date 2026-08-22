@@ -4,6 +4,9 @@ import { useLanguage } from "../../context/LanguageContext";
 import { useSound } from "../../context/SoundContext";
 import { getNotificationConfig, TONE_STYLES, shouldPlaySound } from "./notificationConfig";
 import Icon from "./Icon";
+import LottieIcon from "./LottieIcon";
+import successLottie from "../../assets/lottie/Success.lottie?url";
+import useMediaQuery from "../../hooks/useMediaQuery";
 
 /**
  * ToastStack — lightweight corner notifications for routine messages.
@@ -16,7 +19,8 @@ function ToastCard({ toast: item, onDismiss }) {
   const { playSound } = useSound();
   const cfg = getNotificationConfig(item.type);
   const tone = TONE_STYLES[cfg.tone] || TONE_STYLES.violet;
-  const duration = item.duration ?? 4500;
+  const duration = item.duration ?? 3000;
+  const isSmall = useMediaQuery("(max-width: 639px)");
 
   const [progress, setProgress] = useState(100);
   const [leaving, setLeaving] = useState(false);
@@ -61,18 +65,27 @@ function ToastCard({ toast: item, onDismiss }) {
       role="status"
       onMouseEnter={() => (hovered.current = true)}
       onMouseLeave={() => (hovered.current = false)}
-      className={`pointer-events-auto relative w-full overflow-hidden rounded-2xl border border-white/[0.09] bg-gradient-to-b from-ground-700/95 to-ground-800/95 pl-3 pr-9 py-3 shadow-[0_14px_34px_rgba(0,0,0,0.5)] backdrop-blur-md transition-all duration-200 sm:w-[350px] ${
-        leaving ? "translate-x-2 opacity-0" : "animate-fade-up"
+      className={`pointer-events-auto relative w-full overflow-hidden rounded-2xl border ${tone.edge} bg-gradient-to-b from-ground-700/95 to-ground-800/95 pl-4 pr-10 py-4 ${tone.glow} backdrop-blur-md transition-all duration-200 sm:w-[400px] ${
+        leaving ? "translate-x-2 opacity-0" : "animate-scale-up"
       }`}
     >
-      <div className="flex gap-3">
-        <span className={`mt-0.5 flex h-9 w-9 flex-none items-center justify-center rounded-xl border ${tone.chip}`}>
-          <Icon name={cfg.icon} size={18} />
+      {/* Faint tone wash so each toast carries its color, fading across the card. */}
+      <div className={`pointer-events-none absolute inset-0 bg-gradient-to-r ${tone.wash} to-transparent`} />
+      {/* Tone accent bar — a clear left edge so the toast reads instantly. */}
+      <div className={`absolute inset-y-0 left-0 w-1.5 ${tone.accent}`} />
+
+      <div className="relative flex gap-3.5">
+        <span className={`mt-0.5 flex h-10 w-10 sm:h-12 sm:w-12 flex-none items-center justify-center overflow-hidden rounded-xl border ${tone.chip}`}>
+          {cfg.art === "success" ? (
+            <LottieIcon src={successLottie} size={isSmall ? 44 : 60} fallbackIcon="check" />
+          ) : (
+            <Icon name={cfg.icon} size={isSmall ? 18 : 22} />
+          )}
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-[13px] font-bold leading-tight text-ink-hi">{title}</p>
+          <p className="text-sm sm:text-[15px] font-bold leading-tight text-ink-hi">{title}</p>
           {item.message && (
-            <p className="mt-0.5 text-xs leading-relaxed text-ink-low">{item.message}</p>
+            <p className="mt-0.5 sm:mt-1 text-[11px] sm:text-[13px] leading-relaxed text-ink-low">{item.message}</p>
           )}
           {item.confirmLabel && item.onConfirm && (
             <button
