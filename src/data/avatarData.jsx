@@ -13,13 +13,16 @@
  *
  * Avatar art: "Adventurer" by Lisa Wischofsky, licensed CC BY 4.0 (see README).
  *
- * Categories: "feminine" | "masculine" (kept only to drive the picker's filter
- * tabs — the avatar style itself is gender-neutral).
+ * Categories: "feminine" | "masculine" drive the picker's Girls/Boys filter
+ * tabs. The generator (scripts/gen-avatars.mjs) pins the girl set to long hair
+ * and the boy set to short hair, so each face clearly matches its tab.
  */
 
 // Return a render fn compatible with the Avatar/AvatarGrid API: `svg(size)`.
 const build = (id) => {
   const src = `/avatars/${id}.svg`;
+  // `size` sets the intrinsic pixel size; the img fills its wrapper so the grid
+  // can scale avatars responsively (bigger on wider screens) via the cell width.
   const render = (size = 48) => (
     <img
       src={src}
@@ -28,8 +31,7 @@ const build = (id) => {
       draggable={false}
       width={size}
       height={size}
-      className="rounded-full"
-      style={{ width: size, height: size }}
+      className="h-full w-full rounded-full"
     />
   );
   return render;

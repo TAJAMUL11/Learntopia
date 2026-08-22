@@ -42,8 +42,9 @@ const AvatarGrid = ({ selectedId, onSelect }) => {
         ))}
       </div>
 
-      {/* Avatar grid */}
-      <div className="grid grid-cols-4 gap-3 sm:grid-cols-5 md:grid-cols-8">
+      {/* Avatar grid — 4 columns so the picker runs taller (matching the
+          identity card) with larger, responsive avatars. */}
+      <div className="grid grid-cols-4 gap-3 sm:gap-4">
         {visible.map((avatar) => {
           const isSelected = selectedId === avatar.id;
           return (
@@ -52,19 +53,19 @@ const AvatarGrid = ({ selectedId, onSelect }) => {
               type="button"
               onClick={() => onSelect(avatar.id)}
               title={avatar.label}
-              className={`group relative flex flex-col items-center gap-1.5 rounded-xl p-2 transition-all duration-200 border-2 ${
+              className={`group relative flex flex-col items-center gap-2 rounded-2xl p-2.5 sm:p-3 transition-all duration-200 border-2 ${
                 isSelected
                   ? "border-violet-500 bg-violet-500/15 shadow-glow scale-105"
                   : "border-transparent bg-white/[0.03] hover:bg-white/[0.07] hover:scale-105"
               }`}
             >
-              {/* Avatar SVG */}
-              <div className="relative">
-                {avatar.svg(48)}
+              {/* Avatar SVG — fills the responsive wrapper */}
+              <div className="relative w-12 sm:w-14 lg:w-16 aspect-square">
+                {avatar.svg(96)}
                 {/* Checkmark overlay */}
                 {isSelected && (
-                  <div className="absolute -right-1 -top-1 grid h-5 w-5 place-items-center rounded-full bg-violet-500 text-white shadow-md">
-                    <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+                  <div className="absolute -right-1 -top-1 grid h-6 w-6 place-items-center rounded-full bg-violet-500 text-white shadow-md">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
                       <path d="M2 6L5 9L10 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </div>
@@ -72,7 +73,7 @@ const AvatarGrid = ({ selectedId, onSelect }) => {
               </div>
 
               {/* Label */}
-              <span className={`text-[10px] font-semibold leading-tight text-center ${
+              <span className={`text-[11px] font-semibold leading-tight text-center ${
                 isSelected ? "text-violet-300" : "text-ink-faint group-hover:text-ink-low"
               }`}>
                 {avatar.label}

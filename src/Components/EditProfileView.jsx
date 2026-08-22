@@ -127,10 +127,10 @@ const EditProfileView = ({ onBack, required = false, initialName = "", initialAv
           </p>
         </div>
 
-        <div className="grid items-start gap-4 lg:grid-cols-[360px_1fr]">
+        <div className="grid items-stretch gap-4 lg:grid-cols-[360px_1fr]">
 
-          {/* ── LEFT: identity + fields ── */}
-          <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 shadow-card sm:p-6">
+          {/* ── LEFT: identity + fields (below the avatar picker on mobile) ── */}
+          <div className="order-2 lg:order-1 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 shadow-card sm:p-6">
             <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.1em] text-ink-low">
               {t("profileSetup.identitySection")}
             </p>
@@ -230,23 +230,24 @@ const EditProfileView = ({ onBack, required = false, initialName = "", initialAv
             )}
           </div>
 
-          {/* ── RIGHT: avatar grid ── */}
-          <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 shadow-card sm:p-6">
+          {/* ── RIGHT: avatar picker (above the identity fields on mobile) ── */}
+          <div className="order-1 lg:order-2 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 shadow-card sm:p-6">
             <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.1em] text-ink-low">
               {t("profileSetup.avatarLabel")}
             </p>
 
             <AvatarGrid selectedId={avatarId} onSelect={setAvatarId} />
+          </div>
 
+          {/* ── Actions + error: full-width footer, always last ── */}
+          <div className="order-3 lg:col-span-2">
             {error && (
-              <div className="mt-4 flex items-center gap-2 rounded-lg border border-state-danger/30 bg-state-danger/10 px-3 py-2 text-xs text-state-danger">
+              <div className="mb-4 flex items-center gap-2 rounded-lg border border-state-danger/30 bg-state-danger/10 px-3 py-2 text-xs text-state-danger">
                 <Icon name="alert-circle" size={14} className="flex-none" />
                 {error}
               </div>
             )}
-
-            {/* Actions */}
-            <div className="mt-5 flex items-center justify-end gap-2.5 border-t border-white/[0.08] pt-4">
+            <div className="flex items-center justify-end gap-2.5 border-t border-white/[0.08] pt-4">
               {!required && (
                 <Button variant="ghost" size="sm" onClick={onBack} disabled={saving} className="text-xs">
                   {t("profileSetup.cancelBtn")}
