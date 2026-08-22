@@ -7,28 +7,32 @@
  * (modal-only) button, and a `sound` (a key into SoundContext's playSound). The
  * sound plays exactly once per notification. Titles/buttons are localized.
  */
+// `art: "success"` plays the green Success animation (LottieIcon) in the icon
+// slot for positive confirmations, instead of the flat icon.
 export const NOTIFICATION_CONFIG = {
-  login:          { tone: "sky",     icon: "user",     sound: "levelUp",      titleKey: "toasts.titleLogin",    btnKey: "toasts.btnLogin" },
+  login:          { tone: "sky",     icon: "user",     art: "success", sound: "levelUp",      titleKey: "toasts.titleLogin",    btnKey: "toasts.btnLogin" },
   signup:         { tone: "violet",  icon: "sparkles", sound: "badgeUnlock",  titleKey: "toasts.titleSignup",   btnKey: "toasts.btnSignup" },
-  logout:         { tone: "neutral", icon: "logout",   sound: "click",        titleKey: "toasts.titleLogout",   btnKey: "toasts.btnLogout" },
-  profile:        { tone: "green",   icon: "check",    sound: "correct",      titleKey: "toasts.titleProfile",  btnKey: "toasts.btnProfile" },
+  logout:         { tone: "neutral", icon: "logout",   art: "success", sound: "click",        titleKey: "toasts.titleLogout",   btnKey: "toasts.btnLogout" },
+  profile:        { tone: "green",   icon: "check",    art: "success", sound: "correct",      titleKey: "toasts.titleProfile",  btnKey: "toasts.btnProfile" },
   quiz:           { tone: "violet",  icon: "target",   sound: "correct",      titleKey: "toasts.titleQuiz",     btnKey: "toasts.btnQuiz" },
   unenroll:       { tone: "sky",     icon: "info",     sound: "click",        titleKey: "toasts.titleUnenroll", btnKey: "toasts.btnUnenroll" },
   delete_profile: { tone: "danger",  icon: "warning",  sound: "warningAlert", titleKey: "toasts.titleDelete",   btnKey: "toasts.btnDelete" },
-  success:        { tone: "green",   icon: "check",    sound: "correct",      titleKey: "toasts.titleSuccess",  btnKey: "toasts.btnGeneric" },
+  success:        { tone: "green",   icon: "check",    art: "success", sound: "correct",      titleKey: "toasts.titleSuccess",  btnKey: "toasts.btnGeneric" },
   error:          { tone: "danger",  icon: "warning",  sound: "incorrect",    titleKey: "toasts.titleError",    btnKey: "toasts.btnRetry" },
   warning:        { tone: "amber",   icon: "warning",  sound: "warningAlert", titleKey: "toasts.titleWarning",  btnKey: "toasts.btnGeneric" },
   info:           { tone: "violet",  icon: "info",     sound: "click",        titleKey: "toasts.titleInfo",     btnKey: "toasts.btnGeneric" },
 };
 
-// Tailwind classes per tone (core palette + status tokens only).
+// Tailwind classes per tone (core palette + status tokens only). `glow` is a soft
+// tone-colored halo layered over the base drop shadow so a toast/modal reads
+// clearly against the dark background without looking flashy.
 export const TONE_STYLES = {
-  sky:     { chip: "text-sky border-sky/40 bg-sky/[0.12]",                       bar: "bg-sky" },
-  violet:  { chip: "text-violet-400 border-violet-500/40 bg-violet-500/[0.14]",  bar: "bg-violet-500" },
-  green:   { chip: "text-state-success border-state-success/40 bg-state-success/[0.12]", bar: "bg-state-success" },
-  danger:  { chip: "text-state-danger border-state-danger/40 bg-state-danger/[0.12]",    bar: "bg-state-danger" },
-  amber:   { chip: "text-amber-400 border-amber-500/40 bg-amber-500/[0.12]",     bar: "bg-amber-400" },
-  neutral: { chip: "text-ink border-white/10 bg-white/[0.05]",                   bar: "bg-ink-faint" },
+  sky:     { chip: "text-sky border-sky/40 bg-sky/[0.12]",                       bar: "bg-sky",           accent: "bg-sky",            edge: "border-sky/30",            wash: "from-sky/[0.14]",           glow: "shadow-[0_14px_34px_rgba(0,0,0,0.5),0_0_22px_rgba(123,191,242,0.22)]" },
+  violet:  { chip: "text-violet-400 border-violet-500/40 bg-violet-500/[0.14]",  bar: "bg-violet-500",    accent: "bg-violet-500",     edge: "border-violet-500/30",     wash: "from-violet-500/[0.14]",    glow: "shadow-[0_14px_34px_rgba(0,0,0,0.5),0_0_22px_rgba(139,92,246,0.26)]" },
+  green:   { chip: "text-state-success border-state-success/40 bg-state-success/[0.12]", bar: "bg-state-success", accent: "bg-state-success", edge: "border-state-success/30", wash: "from-state-success/[0.14]", glow: "shadow-[0_14px_34px_rgba(0,0,0,0.5),0_0_22px_rgba(52,211,153,0.24)]" },
+  danger:  { chip: "text-state-danger border-state-danger/40 bg-state-danger/[0.12]",    bar: "bg-state-danger",  accent: "bg-state-danger",  edge: "border-state-danger/30",  wash: "from-state-danger/[0.14]",  glow: "shadow-[0_14px_34px_rgba(0,0,0,0.5),0_0_22px_rgba(251,113,133,0.26)]" },
+  amber:   { chip: "text-amber-400 border-amber-500/40 bg-amber-500/[0.12]",     bar: "bg-amber-400",     accent: "bg-amber-400",      edge: "border-amber-500/30",      wash: "from-amber-500/[0.14]",     glow: "shadow-[0_14px_34px_rgba(0,0,0,0.5),0_0_22px_rgba(251,191,36,0.24)]" },
+  neutral: { chip: "text-ink border-white/10 bg-white/[0.05]",                   bar: "bg-ink-faint",     accent: "bg-white/25",       edge: "border-white/15",          wash: "from-white/[0.06]",         glow: "shadow-[0_14px_34px_rgba(0,0,0,0.5)]" },
 };
 
 // Which types are shown as the centered "big moment" modal (everything else is a
