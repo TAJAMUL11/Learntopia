@@ -1,5 +1,5 @@
 import { db } from "../firebase/firebase";
-import { getDoc, doc, collection, getDocs, deleteDoc } from "firebase/firestore";
+import { getDoc, doc, collection, getDocs, deleteDoc, setDoc } from "firebase/firestore";
 import { deleteUser } from "firebase/auth";
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
@@ -279,10 +279,16 @@ const Dashboard = () => {
     if (!courseToUnenroll || !currentUser) return;
     setUnenrollLoading(true);
     try {
-      await deleteDoc(
-        doc(db, "Users", currentUser.uid, "enrolledCourses", courseToUnenroll.courseId.toString())
+      // Soft unenroll: flag the course instead of deleting it, so XP and
+      // completed-module progress are kept and it can be rejoined.
+      await setDoc(
+        doc(db, "Users", currentUser.uid, "enrolledCourses", courseToUnenroll.courseId.toString()),
+        { unenrolled: true, unenrolledAt: new Date() },
+        { merge: true }
       );
-      setEnrolledCourses((prev) => prev.filter((c) => c.courseId !== courseToUnenroll.courseId));
+      setEnrolledCourses((prev) =>
+        prev.map((c) => (c.courseId === courseToUnenroll.courseId ? { ...c, unenrolled: true } : c))
+      );
       toast.unenroll(t("toasts.unenrolledFrom", { title: courseToUnenroll.title }));
       setCourseToUnenroll(null);
     } catch (err) {
@@ -290,6 +296,28 @@ const Dashboard = () => {
       toast.error(t("toasts.unenrollFailed"));
     } finally {
       setUnenrollLoading(false);
+    }
+  };
+
+  // Rejoin a previously unenrolled course — clears the flag; progress and XP are
+  // intact (nothing was deleted). Completed modules never re-award XP.
+  const handleRejoin = async (course) => {
+    if (!currentUser) return;
+    try {
+      await setDoc(
+        doc(db, "Users", currentUser.uid, "enrolledCourses", course.courseId.toString()),
+        { unenrolled: false },
+        { merge: true }
+      );
+      setEnrolledCourses((prev) =>
+        prev.map((c) => (c.courseId === course.courseId ? { ...c, unenrolled: false } : c))
+      );
+      // If that was the last unenrolled course, the tab disappears — move to Enrolled.
+      if (unenrolledCourses.length <= 1) setActiveTab("courses");
+      toast.success(t("toasts.rejoined", { title: course.title }));
+    } catch (err) {
+      console.error("Error rejoining:", err);
+      toast.error(t("toasts.rejoinFailed"));
     }
   };
 
@@ -317,8 +345,9 @@ const Dashboard = () => {
   };
 
   // Derived datasets
-  const activeCourses = useMemo(() => enrolledCourses.filter((c) => !c.completed), [enrolledCourses]);
-  const completedCourses = useMemo(() => enrolledCourses.filter((c) => c.completed), [enrolledCourses]);
+  const activeCourses = useMemo(() => enrolledCourses.filter((c) => !c.completed && !c.unenrolled), [enrolledCourses]);
+  const completedCourses = useMemo(() => enrolledCourses.filter((c) => c.completed && !c.unenrolled), [enrolledCourses]);
+  const unenrolledCourses = useMemo(() => enrolledCourses.filter((c) => c.unenrolled), [enrolledCourses]);
   const previewCourses = useMemo(() => activeCourses.slice(0, PREVIEW_LIMIT), [activeCourses]);
   const previewCompleted = useMemo(() => completedCourses.slice(0, PREVIEW_LIMIT), [completedCourses]);
   const previewQuizzes = useMemo(() => quizScores.slice(0, PREVIEW_LIMIT), [quizScores]);
@@ -461,7 +490,7 @@ const Dashboard = () => {
     {
       iconName: "book-open",
       label: t("dashboard.enrolled"),
-      rawValue: enrolledCourses.length,
+      rawValue: activeCourses.length + completedCourses.length,
       suffix: "",
       accent: "text-sky",
       iconBg: "bg-gradient-to-br from-sky/30 to-sky/[0.06] border-sky/30 text-sky",
@@ -492,7 +521,7 @@ const Dashboard = () => {
         key={c.courseId}
         className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 transition-all duration-300 hover:-translate-y-1.5 hover:border-violet-500/35 hover:bg-white/[0.04] hover:shadow-card"
       >
-        {/* Tier 1: Category Tag + Trash Icon */}
+        {/* Tier 1: Category Tag + Unenroll Button */}
         <div className="flex items-center justify-between gap-2 border-b border-white/[0.06] pb-3 mb-3">
           <span className="inline-block rounded-md bg-violet-500/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-violet-300 border border-violet-500/20">
             {category}
@@ -501,11 +530,12 @@ const Dashboard = () => {
           <button
             type="button"
             onClick={() => setCourseToUnenroll(c)}
-            className="flex-none rounded-lg p-1.5 text-ink-faint transition-colors hover:bg-state-danger/10 hover:text-state-danger"
+            className="flex-none inline-flex items-center gap-1 rounded-lg border border-white/[0.1] px-2 py-1 text-[11px] font-semibold text-ink-faint transition-colors hover:border-state-danger/30 hover:bg-state-danger/10 hover:text-state-danger"
             title={t("dashboard.unenroll")}
             aria-label={`Unenroll from ${localizedTitle}`}
           >
-            <Icon name="trash-2" size={15} />
+            <Icon name="x-circle" size={13} />
+            {t("dashboard.unenroll")}
           </button>
         </div>
 
@@ -705,6 +735,9 @@ const Dashboard = () => {
             { id: "courses", label: `${t("dashboard.tabEnrolled")} (${activeCourses.length})` },
             { id: "completed", label: `${t("dashboard.tabCompleted")} (${completedCourses.length})` },
             { id: "quizzes", label: `${t("dashboard.tabQuizHistory")} (${quizScores.length})` },
+            ...(unenrolledCourses.length > 0
+              ? [{ id: "unenrolled", label: `${t("dashboard.tabUnenrolled")} (${unenrolledCourses.length})` }]
+              : []),
           ].map((tab) => {
             const isActive = activeTab === tab.id;
             return (
@@ -1208,6 +1241,61 @@ const Dashboard = () => {
                   {t("dashboard.takeNewQuizBtn")}
                 </Button>
               </div>
+            )}
+          </Card>
+        )}
+
+        {/* ── TAB 5: UNENROLLED COURSES (soft-unenroll, rejoinable) ───────── */}
+        {activeTab === "unenrolled" && (
+          <Card className="p-5 sm:p-8 animate-fade-in border-white/10">
+            <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-4 border-b border-white/[0.08] pb-4 mb-6">
+              <SectionHead
+                icon="x-circle"
+                tone="violet"
+                title={`${t("dashboard.tabUnenrolled")} (${unenrolledCourses.length})`}
+                desc={t("dashboard.unenrolledDesc")}
+              />
+            </div>
+
+            {unenrolledCourses.length > 0 ? (
+              <div className="grid gap-4 sm:grid-cols-2">
+                {unenrolledCourses.map((c) => {
+                  const localizedTitle = t(`courseData.${c.courseId}.title`, c.title);
+                  const img = getCourseImage(c.courseId);
+                  const done = c.completedModules ? c.completedModules.length : 0;
+                  const total = c.totalModules || 4;
+                  const pct = Math.round((done / total) * 100);
+                  return (
+                    <div key={c.courseId} className="flex flex-col justify-between rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5">
+                      <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4">
+                        {img ? (
+                          <img src={img} alt="" className="h-14 w-14 flex-none rounded-xl border border-white/10 object-cover shadow-sm" />
+                        ) : (
+                          <div className="flex h-14 w-14 flex-none items-center justify-center rounded-xl bg-violet-500/15 text-lg font-black text-violet-300">
+                            {getCourseCategory(c.courseId).charAt(0)}
+                          </div>
+                        )}
+                        <div className="min-w-0 flex-1 w-full">
+                          <h3 className="text-sm sm:text-base font-bold text-ink-hi text-center sm:text-left">{localizedTitle}</h3>
+                          <p className="mt-0.5 text-xs text-ink-low text-center sm:text-left">
+                            {t("dashboard.stepCounter", { current: done, total })}
+                            <span className="mx-1.5 text-ink-faint">·</span>
+                            <span className="font-bold text-violet-400">{pct}%</span>
+                          </p>
+                          <p className="mt-1 text-[11px] text-ink-faint text-center sm:text-left">{t("dashboard.unenrolledHint")}</p>
+                        </div>
+                      </div>
+                      <div className="mt-4 flex justify-center border-t border-white/[0.06] pt-3 sm:justify-end">
+                        <Button size="md" onClick={() => handleRejoin(c)} className="w-full font-bold sm:w-auto">
+                          <Icon name="refresh-cw" size={14} /> {t("dashboard.rejoin")}
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <EmptyState icon="book-open" title={t("dashboard.unenrolledEmptyTitle")} description={t("dashboard.unenrolledEmptyDesc")} />
             )}
           </Card>
         )}

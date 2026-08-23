@@ -23,6 +23,8 @@ const Courses = () => {
   const { t } = useLanguage();
   const [query, setQuery] = useState("");
   const [enrolledIds, setEnrolledIds] = useState([]);
+  // Courses the user left but can rejoin — their saved progress still exists.
+  const [unenrolledIds, setUnenrolledIds] = useState([]);
   const [enrollingId, setEnrollingId] = useState(null);
 
   useEffect(() => {
@@ -30,8 +32,11 @@ const Courses = () => {
       const fetchEnrolled = async () => {
         try {
           const snap = await getDocs(collection(db, "Users", currentUser.uid, "enrolledCourses"));
-          const ids = snap.docs.map((d) => d.id);
-          setEnrolledIds(ids);
+          const active = [];
+          const left = [];
+          snap.docs.forEach((d) => (d.data().unenrolled ? left.push(d.id) : active.push(d.id)));
+          setEnrolledIds(active);
+          setUnenrolledIds(left);
         } catch (e) {
           console.error("Error fetching enrolled courses", e);
         }
@@ -47,30 +52,45 @@ const Courses = () => {
       return;
     }
 
-    const isEnrolled = enrolledIds.includes(course.id.toString());
+    const idStr = course.id.toString();
+    const isEnrolled = enrolledIds.includes(idStr);
     if (isEnrolled) {
       playClick();
       navigate(`/course/${course.id}`);
       return;
     }
 
+    // Rejoin path: the user unenrolled earlier, so their progress is still on
+    // file — only clear the flag, never reset completedModules.
+    const isRejoin = unenrolledIds.includes(idStr);
+
     try {
       playBadgeUnlock();
-      await setDoc(
-        doc(db, "Users", currentUser.uid, "enrolledCourses", course.id.toString()),
-        {
-          courseId: course.id,
-          title: course.title,
-          category: course.category,
-          enrolledAt: new Date(),
-          completed: false,
-          completedModules: [],
-          totalModules: course.syllabus ? course.syllabus.length : 0,
-        },
-        { merge: true }
-      );
-      
-      setEnrolledIds((prev) => [...prev, course.id.toString()]);
+      if (isRejoin) {
+        await setDoc(
+          doc(db, "Users", currentUser.uid, "enrolledCourses", idStr),
+          { unenrolled: false },
+          { merge: true }
+        );
+        setUnenrolledIds((prev) => prev.filter((x) => x !== idStr));
+      } else {
+        await setDoc(
+          doc(db, "Users", currentUser.uid, "enrolledCourses", idStr),
+          {
+            courseId: course.id,
+            title: course.title,
+            category: course.category,
+            enrolledAt: new Date(),
+            unenrolled: false,
+            completed: false,
+            completedModules: [],
+            totalModules: course.syllabus ? course.syllabus.length : 0,
+          },
+          { merge: true }
+        );
+      }
+
+      setEnrolledIds((prev) => [...prev, idStr]);
       setEnrollingId(course.id);
       
       // 3.5 second fun loader
@@ -126,6 +146,7 @@ const Courses = () => {
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((course) => {
             const isEnrolled = enrolledIds.includes(course.id.toString());
+            const isRejoin = !isEnrolled && unenrolledIds.includes(course.id.toString());
 
             return (
               <Card key={course.id} hoverable className="group flex flex-col p-5">
@@ -138,6 +159,12 @@ const Courses = () => {
                       <span className="flex items-center gap-1 text-xs font-bold text-state-success bg-state-success/10 px-2 py-0.5 rounded-md border border-state-success/20">
                         <Icon name="check-circle" size={12} />
                         {t("courses.enrolledBadge")}
+                      </span>
+                    )}
+                    {isRejoin && (
+                      <span className="flex items-center gap-1 text-xs font-bold text-state-warning bg-state-warning/10 px-2 py-0.5 rounded-md border border-state-warning/20">
+                        <Icon name="refresh-cw" size={12} />
+                        {t("courses.rejoinBadge")}
                       </span>
                     )}
                     <span className="flex items-center gap-1.5 rounded-full border border-white/[0.13] bg-white/[0.06] px-3 py-1 text-xs font-bold text-ink-hi">
@@ -169,13 +196,22 @@ const Courses = () => {
                     <p className="mt-1.5 text-xs text-ink-low">{course.students} {String(t("stats.studentsLegend") || "").toLowerCase()}</p>
                   </div>
                   {isEnrolled ? (
-                    <Button 
+                    <Button
                       variant="ghost"
-                      size="sm" 
+                      size="sm"
                       onClick={() => handleEnroll(course)}
                       className="border-state-success/30 bg-state-success/[0.08] text-state-success hover:bg-state-success/[0.15]"
                     >
                       {t("courses.continueLearning")}
+                    </Button>
+                  ) : isRejoin ? (
+                    <Button
+                      size="sm"
+                      onClick={() => handleEnroll(course)}
+                      className="border-state-warning/30 bg-state-warning/[0.10] text-state-warning hover:bg-state-warning/[0.18]"
+                    >
+                      <Icon name="refresh-cw" size={14} />
+                      {t("courses.rejoin")}
                     </Button>
                   ) : (
                     <Button size="sm" onClick={() => handleEnroll(course)}>
