@@ -6,7 +6,7 @@ import { useSound } from "../context/SoundContext";
 import { useLanguage } from "../context/LanguageContext";
 import { toast } from "../context/ToastContext";
 import { db } from "../firebase/firebase";
-import { doc, getDoc, setDoc, deleteField, increment } from "firebase/firestore";
+import { doc, getDoc, setDoc, deleteField, increment, arrayUnion } from "firebase/firestore";
 import { COURSES } from "../data/coursesData";
 import { getLocalizedCourse } from "../utils/localizationUtils";
 import Card from "../Components/ui/Card";
@@ -34,6 +34,11 @@ const CourseDetails = () => {
   }, [id, t]);
 
   const [completedModules, setCompletedModules] = useState([]);
+  // Modules that have EVER paid out XP, and whether the +100 completion bonus was
+  // ever granted. These persist across a course restart (unlike completedModules,
+  // which resets), so replaying a course lets the user re-learn without re-earning.
+  const [xpAwardedModules, setXpAwardedModules] = useState([]);
+  const [courseXpAwarded, setCourseXpAwarded] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const [expandedIndex, setExpandedIndex] = useState(0);
   const [loadingData, setLoadingData] = useState(true);
@@ -92,6 +97,8 @@ const CourseDetails = () => {
           const data = snap.data();
           const done = Array.isArray(data.completedModules) ? data.completedModules : [];
           setCompletedModules(done);
+          setXpAwardedModules(Array.isArray(data.xpAwardedModules) ? data.xpAwardedModules : []);
+          setCourseXpAwarded(!!data.courseXpAwarded);
           setIsCompleted(!!data.completed);
           setExpandedIndex(done.length < total ? done.length : total - 1);
         } else {
@@ -137,12 +144,17 @@ const CourseDetails = () => {
     const ref = courseRef();
     if (!ref) return;
 
-    // Anti-farming: award module XP and count accuracy ONCE per module. Re-doing a
-    // module the user already finished grants no new XP.
+    // Can't re-submit a module already done in the current run.
     if (completedModules.includes(moduleIndex)) {
       toast.info(t("toasts.noNewXpModule"));
       return;
     }
+
+    // Anti-farming: a module pays XP (and counts first-try accuracy) exactly ONCE,
+    // ever. `xpAwardedModules` persists across a course restart, so replaying an
+    // already-earned module still tracks progress but grants no new XP — the user
+    // gets an encouraging nudge instead.
+    const earnXp = !xpAwardedModules.includes(moduleIndex);
 
     // ExerciseEngine has already validated all answers are correct
     setSaving(true);
@@ -155,18 +167,28 @@ const CourseDetails = () => {
           completedModules: newCompleted,
           totalModules: total,
           progressUpdatedAt: new Date(),
-          // Accumulate first-try accuracy for the course-level Sharp Memory check.
-          correctTotal: increment(stat.correct),
-          answeredTotal: increment(stat.total),
+          // First-try accuracy + the XP-awarded marker only move on the paid run.
+          ...(earnXp
+            ? {
+                correctTotal: increment(stat.correct),
+                answeredTotal: increment(stat.total),
+                xpAwardedModules: arrayUnion(moduleIndex),
+              }
+            : {}),
         },
         { merge: true }
       );
       setCompletedModules(newCompleted);
+      if (earnXp) setXpAwardedModules((prev) => [...prev, moduleIndex]);
       setLessonPhase(true);
       setExpandedIndex(newCompleted.length < total ? newCompleted.length : moduleIndex);
 
-      const xpEarned = course?.xpPerModule || 50;
-      addXP(xpEarned, `Completed Module ${moduleIndex + 1}!`);
+      if (earnXp) {
+        const xpEarned = course?.xpPerModule || 50;
+        addXP(xpEarned, t("gamification.celReasonModule", { n: moduleIndex + 1 }));
+      } else {
+        toast.info(t("toasts.replayModuleNoXp"));
+      }
     } catch (err) {
       console.error("Error saving progress:", err);
     } finally {
@@ -178,6 +200,9 @@ const CourseDetails = () => {
     if (!allDone || saving) return;
     const ref = courseRef();
     if (!ref) return;
+    // The +100 completion bonus pays out once, ever. Replaying a finished course
+    // (after a restart) still shows the Trophy moment, just without new XP.
+    const grantXp = !courseXpAwarded;
     setSaving(true);
     try {
       await setDoc(
@@ -187,13 +212,16 @@ const CourseDetails = () => {
           completedAt: new Date(),
           completedModules: course?.syllabus ? course.syllabus.map((_, i) => i) : [],
           totalModules: total,
+          ...(grantXp ? { courseXpAwarded: true } : {}),
         },
         { merge: true }
       );
       setIsCompleted(true);
+      if (grantXp) setCourseXpAwarded(true);
 
       // One Trophy moment for finishing the course; badge + XP persist quietly.
-      await awardCourseCompletion(course);
+      // On a replay we still celebrate but skip the XP grant.
+      await awardCourseCompletion(course, { grantXp });
 
       // Sharp Memory: 90%+ first-try accuracy across the whole course. Read the
       // accumulated totals back from the doc so it holds across devices/sessions.

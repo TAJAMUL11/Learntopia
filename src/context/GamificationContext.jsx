@@ -2,7 +2,7 @@
 import { createContext, useContext, useState, useEffect, useRef } from "react";
 import { useAuth } from "./AuthContext";
 import { db } from "../firebase/firebase";
-import { doc, onSnapshot, setDoc, increment } from "firebase/firestore";
+import { doc, onSnapshot, setDoc, increment, runTransaction } from "firebase/firestore";
 
 import { parseProfileName } from "../utils/profileUtils";
 
@@ -50,7 +50,13 @@ export const GamificationProvider = ({ children }) => {
   const [xp, setXp] = useState(0);
   const [badges, setBadges] = useState([]);
   const [streak, setStreak] = useState(1);
-  const [celebration, setCelebration] = useState(null);
+  // A QUEUE of celebration moments. Several can fire at once (e.g. a course
+  // completion that also crosses a level), so they play one after another
+  // instead of a later write clobbering an earlier moment. `celebration` is the
+  // head — the moment the auto-fading overlay is currently showing.
+  const [celebrationQueue, setCelebrationQueue] = useState([]);
+  const celebration = celebrationQueue[0] || null;
+  const celIdRef = useRef(0);
   const [showStreakModal, setShowStreakModal] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -129,6 +135,31 @@ export const GamificationProvider = ({ children }) => {
     }
   }, []);
 
+  // DEV-ONLY: preview the auto-fading celebration overlay without earning anything.
+  // Visit e.g. http://localhost:5173/?celTest=course, or ?celTest=all to see every
+  // moment play back-to-back (the queue sequences them). Options: level | xp |
+  // badge | champion | sharp | perfect | course | streak | all. Purely visual —
+  // enqueues moments, never writes XP/badges. Stripped from production builds.
+  useEffect(() => {
+    if (!import.meta.env.DEV) return;
+    const which = new URLSearchParams(window.location.search).get("celTest");
+    if (!which) return;
+    const samples = {
+      level: { type: "level", art: "level", kind: "level", params: { icon: "👑", level: 4, name: "Logic Legend" } },
+      xp: { type: "xp", art: "xp", kind: "xp", params: { amount: 50 }, message: "Completed Module 1!" },
+      badge: { type: "badge", art: "badge", kind: "badge", params: { name: "Quiz Ace", emoji: "🎯" }, badge: { name: "Quiz Ace", emoji: "🎯" } },
+      champion: { type: "badge", art: "crown", kind: "badge", params: { name: "Champion", emoji: "👑" }, badge: { name: "Champion", emoji: "👑" } },
+      sharp: { type: "badge", art: "robotic", kind: "badge", params: { name: "Sharp Memory", emoji: "🤖" }, badge: { name: "Sharp Memory", emoji: "🤖" } },
+      perfect: { type: "badge", art: "zap", kind: "badge", params: { name: "Perfect Score", emoji: "💯" }, badge: { name: "Perfect Score", emoji: "💯" } },
+      course: { type: "course", art: "trophy", kind: "course", params: { course: "Python for Kids: Build Your First Game!" } },
+      streak: { type: "xp", art: "streak", kind: "streakBonus", params: { amount: 40, streak: 15 } },
+    };
+    const order = which === "all"
+      ? ["level", "course", "champion", "sharp", "perfect", "xp", "streak"]
+      : [which];
+    order.forEach((k) => samples[k] && enqueueCelebration(samples[k]));
+  }, []);
+
   const totalPoints = xp; // XP is the single unified score (quizzes + lessons + bonuses)
   const levelInfo = getLevelInfo(xp);
 
@@ -186,39 +217,55 @@ export const GamificationProvider = ({ children }) => {
 
     if (newLevel.level > oldLevel.level) {
       setTimeout(() => {
-        setCelebration({
+        enqueueCelebration({
           type: "level",
           art: "level",
-          title: `Level Up! ${newLevel.icon}`,
-          message: `You reached Level ${newLevel.level}: ${newLevel.name}!`,
+          kind: "level",
+          params: { icon: newLevel.icon, level: newLevel.level, name: newLevel.name },
           xpEarned: amount,
         });
       }, 500);
     } else if (reason && !silent) {
-      setCelebration({ type: "xp", art: "xp", title: `+${amount} XP Earned!`, message: reason, xpEarned: amount });
+      // `reason` is already localized by the caller (it has the language context).
+      enqueueCelebration({ type: "xp", art: "xp", kind: "xp", params: { amount }, message: reason, xpEarned: amount });
     }
   };
 
   // `silent` persists the badge without its own popup, letting the caller own the
   // celebration (course completion shows one Trophy moment instead of two popups).
+  //
+  // Runs inside a TRANSACTION so concurrent awards are race-safe. Course
+  // completion fires two awards almost at once (the course badge, then Sharp
+  // Memory); a plain read-modify-write from React state let the second clobber
+  // the first, and the only-grow Firestore rule then rejected the "shrinking"
+  // write, silently dropping a badge. The transaction reads the freshest badges
+  // from the server each attempt and appends exactly one, so both persist.
   const awardBadge = async (badge, { silent = false } = {}) => {
-    if (badges.some((b) => (typeof b === "string" ? b : b.name) === badge.name)) return;
-    const updated = [...badges, { ...badge, earnedAt: new Date().toISOString() }];
+    if (!currentUser) return;
+    const ref = doc(db, "Users", currentUser.uid);
+    let added = false;
     try {
-      await setDoc(
-        doc(db, "Users", currentUser.uid),
-        { badges: updated, updatedAt: new Date() },
-        { merge: true }
-      );
+      await runTransaction(db, async (tx) => {
+        const snap = await tx.get(ref);
+        const cur = Array.isArray(snap.data()?.badges) ? snap.data().badges : [];
+        if (cur.some((b) => (typeof b === "string" ? b : b.name) === badge.name)) return;
+        tx.set(
+          ref,
+          { badges: [...cur, { ...badge, earnedAt: new Date().toISOString() }], updatedAt: new Date() },
+          { merge: true }
+        );
+        added = true;
+      });
     } catch (err) {
       console.error("Error awarding badge:", err);
     }
-    if (silent) return;
-    setCelebration({
+    // Nothing persisted (already owned, or the write failed) → no celebration.
+    if (silent || !added) return;
+    enqueueCelebration({
       type: "badge",
       art: badge.art || "badge",
-      title: `Badge Unlocked! ${badge.emoji || ""}`.trim(),
-      message: `You earned the "${badge.name}" badge!`,
+      kind: "badge",
+      params: { emoji: badge.emoji || "", name: badge.name },
       badge,
     });
   };
@@ -236,18 +283,21 @@ export const GamificationProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [streak, badges, currentUser]);
 
-  // One clear "moment" for finishing a course: persist the course badge and XP
-  // quietly, then show a single Trophy celebration. Any level-up from the XP still
-  // surfaces on its own (addXP handles that even when silent).
-  const awardCourseCompletion = async (course) => {
-    if (course?.badge) await awardBadge(course.badge, { silent: true });
-    await addXP(100, `Finished ${course?.title || "Course"}!`, { silent: true });
-    setCelebration({
+  // One clear "moment" for finishing a course: show a single Trophy celebration,
+  // then persist the course badge and XP quietly. The celebration is enqueued
+  // FIRST so the moment always fires even if a background award write fails. Any
+  // level-up from the XP still surfaces on its own (addXP handles that).
+  const awardCourseCompletion = async (course, { grantXp = true } = {}) => {
+    enqueueCelebration({
       type: "course",
       art: "trophy",
-      title: "Course Complete!",
-      message: `You finished ${course?.title || "the course"}. Great work!`,
+      kind: "course",
+      // courseId lets the overlay resolve the LOCALIZED course title at render.
+      params: { course: course?.title || "", courseId: course?.id },
     });
+    if (course?.badge) await awardBadge(course.badge, { silent: true });
+    // Skip the bonus on a replay (the caller gates this via courseXpAwarded).
+    if (grantXp) await addXP(100, "", { silent: true });
   };
 
   // Anti-farming / accuracy awards. Both go through awardBadge, so they are
@@ -268,11 +318,11 @@ export const GamificationProvider = ({ children }) => {
       return false;
     }
     await awardPoints(amount, { lastStreakClaimDate: todayKey, lastStreakPopupDate: todayKey });
-    setCelebration({
+    enqueueCelebration({
       type: "xp",
       art: "streak",
-      title: `+${amount} XP!`,
-      message: `${streak}-day streak bonus claimed!`,
+      kind: "streakBonus",
+      params: { amount, streak },
       xpEarned: amount,
     });
     setShowStreakModal(false);
@@ -292,8 +342,13 @@ export const GamificationProvider = ({ children }) => {
     setShowStreakModal(false);
   };
 
-  const triggerCelebration = (celebrationObj) => setCelebration(celebrationObj);
-  const closeCelebration = () => setCelebration(null);
+  // Push a moment onto the queue, stamping a unique id so the overlay can key
+  // (and sound-dedupe) each one. `closeCelebration` drops the head — the
+  // auto-fading overlay calls it when a moment finishes, revealing the next.
+  const enqueueCelebration = (obj) =>
+    setCelebrationQueue((q) => [...q, { ...obj, id: (celIdRef.current += 1) }]);
+  const triggerCelebration = (obj) => enqueueCelebration(obj);
+  const closeCelebration = () => setCelebrationQueue((q) => q.slice(1));
 
   return (
     <GamificationContext.Provider

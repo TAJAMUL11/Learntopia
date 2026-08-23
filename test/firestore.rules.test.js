@@ -320,6 +320,47 @@ describe("Users/{uid}/enrolledCourses", () => {
       })
     );
   });
+
+  test("accepts growing the XP-awarded module list", async () => {
+    await seed("Users/alice/enrolledCourses/c1", {
+      completed: false, completedModules: [0], totalModules: 5, xpAwardedModules: [0],
+    });
+    await assertSucceeds(
+      setDoc(doc(alice(), "Users/alice/enrolledCourses/c1"),
+        { completedModules: [0, 1], xpAwardedModules: [0, 1] }, { merge: true })
+    );
+  });
+
+  test("ANTI-FARMING: rejects shrinking the XP-awarded module list", async () => {
+    await seed("Users/alice/enrolledCourses/c1", {
+      completed: true, completedModules: [0, 1, 2, 3, 4], totalModules: 5, xpAwardedModules: [0, 1, 2, 3, 4],
+    });
+    // A restart that tries to wipe the XP markers so modules pay out again.
+    await assertFails(
+      setDoc(doc(alice(), "Users/alice/enrolledCourses/c1"),
+        { completed: false, completedModules: [], xpAwardedModules: [] }, { merge: true })
+    );
+  });
+
+  test("ANTI-FARMING: rejects flipping courseXpAwarded back to false", async () => {
+    await seed("Users/alice/enrolledCourses/c1", {
+      completed: true, completedModules: [0, 1, 2, 3, 4], totalModules: 5, courseXpAwarded: true,
+    });
+    await assertFails(
+      setDoc(doc(alice(), "Users/alice/enrolledCourses/c1"),
+        { courseXpAwarded: false }, { merge: true })
+    );
+  });
+
+  test("ANTI-FARMING: rejects lowering the accuracy counters", async () => {
+    await seed("Users/alice/enrolledCourses/c1", {
+      completed: false, completedModules: [0], totalModules: 5, correctTotal: 8, answeredTotal: 10,
+    });
+    await assertFails(
+      setDoc(doc(alice(), "Users/alice/enrolledCourses/c1"),
+        { correctTotal: 0, answeredTotal: 0 }, { merge: true })
+    );
+  });
 });
 
 describe("PublicLeaderboard/{uid}", () => {

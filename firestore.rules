@@ -75,9 +75,20 @@ service cloud.firestore {
       let statsOk = (!('correctTotal' in d) || (d.correctTotal is number && d.correctTotal >= 0))
           && (!('answeredTotal' in d) || (d.answeredTotal is number && d.answeredTotal >= 0))
           && d.get('correctTotal', 0) <= d.get('answeredTotal', 0);
-      // Soft-unenroll flag (moves the course to the Unenrolled tab; rejoinable).
-      let flagsOk = (!('unenrolled' in d) || d.unenrolled is bool);
-      return statsOk && flagsOk
+      // Soft-unenroll flag + anti-farming XP markers must be the right shape.
+      let flagsOk = (!('unenrolled' in d) || d.unenrolled is bool)
+          && (!('xpAwardedModules' in d) || d.xpAwardedModules is list)
+          && (!('courseXpAwarded' in d) || d.courseXpAwarded is bool);
+      // Anti-farming integrity (updates only): the XP-awarded markers and the
+      // accuracy counters can only GROW, so a tampered client can't wipe them to
+      // re-earn XP by restarting a finished course.
+      let antiTamperOk = resource == null || (
+          d.get('xpAwardedModules', []).size() >= resource.data.get('xpAwardedModules', []).size()
+          && (resource.data.get('courseXpAwarded', false) == false || d.get('courseXpAwarded', false) == true)
+          && d.get('correctTotal', 0) >= resource.data.get('correctTotal', 0)
+          && d.get('answeredTotal', 0) >= resource.data.get('answeredTotal', 0)
+      );
+      return statsOk && flagsOk && antiTamperOk
           && (d.get('completed', false) == false
               || (d.completedModules is list
                   && d.totalModules is number
