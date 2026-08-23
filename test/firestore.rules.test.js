@@ -298,6 +298,28 @@ describe("Users/{uid}/enrolledCourses", () => {
       })
     );
   });
+
+  test("accepts a soft-unenroll flag", async () => {
+    await assertSucceeds(
+      setDoc(doc(alice(), "Users/alice/enrolledCourses/c1"), {
+        completed: false,
+        completedModules: ["m1"],
+        totalModules: 5,
+        unenrolled: true,
+      })
+    );
+  });
+
+  test("rejects a non-boolean unenrolled flag", async () => {
+    await assertFails(
+      setDoc(doc(alice(), "Users/alice/enrolledCourses/c1"), {
+        completed: false,
+        completedModules: [],
+        totalModules: 5,
+        unenrolled: "yes",
+      })
+    );
+  });
 });
 
 describe("PublicLeaderboard/{uid}", () => {

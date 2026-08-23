@@ -65,7 +65,7 @@ function ToastCard({ toast: item, onDismiss }) {
       role="status"
       onMouseEnter={() => (hovered.current = true)}
       onMouseLeave={() => (hovered.current = false)}
-      className={`pointer-events-auto relative w-full overflow-hidden rounded-2xl border ${tone.edge} bg-gradient-to-b from-ground-700/95 to-ground-800/95 pl-4 pr-10 py-4 ${tone.glow} backdrop-blur-md transition-all duration-200 sm:w-[400px] ${
+      className={`pointer-events-auto relative w-full overflow-hidden rounded-xl border ${tone.edge} bg-gradient-to-b from-ground-700/95 to-ground-800/95 pl-3.5 pr-9 py-3 ${tone.glow} backdrop-blur-md transition-all duration-200 sm:w-[350px] ${
         leaving ? "translate-x-2 opacity-0" : "animate-scale-up"
       }`}
     >
@@ -74,18 +74,18 @@ function ToastCard({ toast: item, onDismiss }) {
       {/* Tone accent bar — a clear left edge so the toast reads instantly. */}
       <div className={`absolute inset-y-0 left-0 w-1.5 ${tone.accent}`} />
 
-      <div className="relative flex gap-3.5">
-        <span className={`mt-0.5 flex h-10 w-10 sm:h-12 sm:w-12 flex-none items-center justify-center overflow-hidden rounded-xl border ${tone.chip}`}>
+      <div className="relative flex gap-3">
+        <span className={`mt-0.5 flex h-9 w-9 sm:h-10 sm:w-10 flex-none items-center justify-center overflow-hidden rounded-lg border ${tone.chip}`}>
           {cfg.art === "success" ? (
-            <LottieIcon src={successLottie} size={isSmall ? 44 : 60} fallbackIcon="check" />
+            <LottieIcon src={successLottie} size={isSmall ? 38 : 46} fallbackIcon="check" />
           ) : (
-            <Icon name={cfg.icon} size={isSmall ? 18 : 22} />
+            <Icon name={cfg.icon} size={isSmall ? 16 : 19} />
           )}
         </span>
         <div className="min-w-0 flex-1">
           <p className="text-sm sm:text-[15px] font-bold leading-tight text-ink-hi">{title}</p>
           {item.message && (
-            <p className="mt-0.5 sm:mt-1 text-[11px] sm:text-[13px] leading-relaxed text-ink-low">{item.message}</p>
+            <p className="mt-0.5 text-[11px] sm:text-xs leading-relaxed text-ink-low">{item.message}</p>
           )}
           {item.confirmLabel && item.onConfirm && (
             <button
