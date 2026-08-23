@@ -62,6 +62,8 @@ const ACH_LOTTIE = {
 const ACH_LOTTIE_CLASS = {
   target: "scale-[1.45]",
   star: "scale-[1.85]",
+  trophy: "scale-[1.3] sm:scale-[1.5]",
+  zap: "scale-[0.85]",
 };
 
 // Tooltip descriptions for server-awarded (stored) badges, keyed by badge name.
