@@ -116,6 +116,7 @@ function CelebrationCard({ celebration }) {
     : kind === "streakBonus" ? t("gamification.celStreakTitle", { amount: p.amount })
     : kind === "badge" ? t("gamification.celBadgeTitle")
     : kind === "course" ? t("gamification.celCourseTitle")
+    : kind === "champion" ? t("gamification.celChampionTitle")
     : celebration.title;
   // Level name and course title have localized sources — resolve them so the
   // whole line translates (falling back to the raw value if a key is missing).
@@ -126,6 +127,7 @@ function CelebrationCard({ celebration }) {
     : kind === "badge" ? t("gamification.celBadgeMsg", { name: p.name })
     : kind === "course" ? t("gamification.celCourseMsg", { course: courseName })
     : kind === "streakBonus" ? t("gamification.celStreakMsg", { streak: p.streak })
+    : kind === "champion" ? t("gamification.celChampionMsg")
     : celebration.message; // xp carries a caller-localized reason
 
   const show = entered && !leaving;
