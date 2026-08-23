@@ -61,7 +61,7 @@ The platform is designed to be fast, accessible, and mobile-friendly, with authe
 | **Daily Streaks & Milestone Rewards** | Consecutive daily login counter tracked with `Date.UTC` integer arithmetic (DST-safe), global and real-time across devices. Milestone popups at **7 / 15 / 30 days** grant bonus XP (**+20 / +40 / +80**), shown once per day from server-confirmed data. Resets on a missed day. |
 | **Global Leaderboard** | Public leaderboard ranking all users by total points and quiz scores. Access restricted exclusively to authenticated users. |
 | **Guest Score Preservation** | Guest quiz scores are automatically saved to the user profile when signing in or registering from the results screen. |
-| **Google Gemini AI Tutor** | Interactive slide-out AI assistant powered by Google Gemini (`AIChatDrawer.jsx`). Each course features a persona-driven AI tutor (*Robo-Py, Count AI-Cula, CoinBot, PixelBot, MarketBot, ArtBot*) rendering stylized vector SVG robot avatars (`BotAvatar.jsx`), providing kid-friendly, course-contextual responses and hints in real-time. |
+| **Google Gemini AI Tutor** | Interactive slide-out AI assistant powered by Google Gemini (`AIChatDrawer.jsx`). Each course features a persona-driven AI tutor (*Robo-Py, Count AI-Cula, CoinBot, PixelBot, MarketBot, ArtBot*) rendering stylized vector SVG robot avatars (`BotAvatar.jsx`), providing kid-friendly, course-contextual responses and hints in real-time. Calls go through a **Cloudflare Worker proxy** (`worker/`) that holds the Gemini API key server-side, so it never ships in the client bundle; the app only knows the proxy URL. |
 | **Strict Focus Mode** | Route-level navigation blocker prevents accidental loss of quiz or module progress. |
 | **Course Controls** | Unenroll, resume, or reset completed courses directly from the dashboard. |
 | **Google OAuth** | One-tap sign-in with Google alongside standard email/password authentication. |
@@ -88,6 +88,7 @@ The platform is designed to be fast, accessible, and mobile-friendly, with authe
 | Animation | GSAP + @gsap/react |
 | Backend | Firebase Authentication + Cloud Firestore |
 | Hosting | Firebase Hosting (CI/CD on push to `main`) |
+| AI Tutor | Google Gemini via a Cloudflare Worker proxy (key server-side — see `worker/`) |
 | Notifications | Hybrid toasts + centered modal (`ToastContext`) |
 | Animation (icons) | dotLottie player (self-hosted WASM) with SVG fallback |
 
@@ -191,8 +192,9 @@ VITE_API_KEY=
 VITE_MESSAGING_SENDER_ID=
 VITE_APP_ID=
 
-# Google Gemini — required for the AI Tutor chat.
-VITE_GEMINI_API_KEY=
+# AI Tutor — URL of the deployed Gemini proxy Worker (see worker/README.md).
+# The Gemini key lives ONLY in the Worker's secret, never in the client.
+VITE_GEMINI_PROXY_URL=
 
 # Optional hardening — leave blank to disable. Each feature no-ops when unset,
 # so the app runs identically with or without these.
@@ -202,12 +204,9 @@ VITE_RECAPTCHA_SITE_KEY=      # Firebase App Check reCAPTCHA v3 site key
 
 All variables use the `VITE_` prefix so Vite exposes them to the client build.
 
-The two optional keys are **public-safe**, unlike the Gemini secret: the Sentry
-DSN can only send crash events, and the reCAPTCHA site key is designed to be
-embedded in the page. When either is blank the corresponding feature stays
-completely dormant (the code is only loaded when its key is present).
+These values are **public-safe**: the Firebase web API key is protected by Firestore rules and authorized domains (not secrecy); the Sentry DSN can only send crash events; the reCAPTCHA site key is meant to be embedded; and `VITE_GEMINI_PROXY_URL` is just an endpoint. When an optional key is blank the corresponding feature stays dormant.
 
-> ⚠️ **Security note:** any `VITE_`-prefixed value is embedded in the public JavaScript bundle and is therefore visible to anyone. The Firebase web API key is safe to expose (it is protected by Firestore security rules and authorized domains, not by secrecy). A **Gemini API key is a billable secret** — before shipping it in the client, restrict it in Google Cloud (limit to the Generative Language API, set a hard quota/budget cap, and add an HTTP-referrer restriction), or proxy the calls through a serverless function.
+> ⚠️ **Security note:** any `VITE_`-prefixed value is embedded in the public JavaScript bundle, so **no real secret may be a `VITE_` variable.** The billable **Gemini API key is never shipped to the client** — it lives as a secret in the Gemini proxy Worker (`worker/`), and the app only holds the Worker's public URL. See `worker/README.md` to deploy it.
 
 ---
 

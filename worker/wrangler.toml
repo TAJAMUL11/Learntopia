@@ -1,0 +1,6 @@
+name = "learntopia-gemini-proxy"
+main = "worker.js"
+compatibility_date = "2024-11-01"
+
+# The Gemini key is NOT stored here. Set it as a secret (never committed):
+#   npx wrangler secret put GEMINI_API_KEY
