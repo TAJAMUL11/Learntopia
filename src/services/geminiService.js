@@ -1,9 +1,11 @@
 /**
- * Gemini AI Service — Handles communication with the Google Gemini API
- * for the AI Tutor chat feature. Never exposes the API key publicly.
+ * Gemini AI Service — talks to the Gemini API for the AI Tutor chat, THROUGH a
+ * server-side proxy (a Cloudflare Worker) so the API key never ships in the
+ * client bundle. The browser only knows the proxy URL (VITE_GEMINI_PROXY_URL);
+ * the key lives as a secret in the Worker. See worker/README.md.
  */
 
-const getApiKey = () => (import.meta.env.VITE_GEMINI_API_KEY || "").trim();
+const getProxyUrl = () => (import.meta.env.VITE_GEMINI_PROXY_URL || "").trim();
 
 const MODELS = [
   "gemini-3.6-flash",
@@ -50,11 +52,11 @@ RULES (STRICTLY FOLLOW):
  * Send a message to Gemini and get the AI response.
  */
 export const sendMessageToGemini = async (chatHistory, userMessage, systemPrompt) => {
-  const apiKey = getApiKey();
-  if (!apiKey) {
-    console.error("VITE_GEMINI_API_KEY is missing in import.meta.env");
+  const proxyUrl = getProxyUrl();
+  if (!proxyUrl) {
+    console.error("VITE_GEMINI_PROXY_URL is missing in import.meta.env");
     throw new Error(
-      "Gemini API key is not configured. Please add VITE_GEMINI_API_KEY to your .env file and restart your Vite dev server."
+      "AI Tutor is not configured. Set VITE_GEMINI_PROXY_URL to the deployed Gemini proxy Worker URL and restart your Vite dev server."
     );
   }
 
@@ -94,11 +96,12 @@ export const sendMessageToGemini = async (chatHistory, userMessage, systemPrompt
 
   for (const modelName of MODELS) {
     try {
-      const url = `https://generativelanguage.googleapis.com/v1/models/${modelName}:generateContent?key=${apiKey}`;
-      const response = await fetch(url, {
+      // Call the proxy Worker, not Google directly. The Worker attaches the key
+      // server-side and forwards to Gemini, returning the response verbatim.
+      const response = await fetch(proxyUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify({ model: modelName, body: requestBody }),
       });
 
       if (!response.ok) {
