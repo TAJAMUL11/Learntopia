@@ -362,7 +362,20 @@ export const translations = {
       badgeUnlocked: "BADGE UNLOCKED!",
       congrats: "Awesome Work!",
       close: "Awesome! 🚀",
-      earnedBadge: "{name} Badge"
+      earnedBadge: "{name} Badge",
+      tapToDismiss: "Tap anywhere to dismiss",
+      celLevelTitle: "Level Up!",
+      celLevelMsg: "You reached Level {level}: {name}!",
+      celXpTitle: "+{amount} XP Earned!",
+      celStreakTitle: "+{amount} XP!",
+      celStreakMsg: "{streak}-day streak bonus claimed!",
+      celBadgeTitle: "Badge Unlocked!",
+      celBadgeMsg: "You earned the \"{name}\" badge!",
+      celCourseTitle: "Course Complete!",
+      celCourseMsg: "You finished {course}. Great work!",
+      celCourseThe: "the course",
+      celReasonModule: "Completed Module {n}!",
+      celReasonQuiz: "Quiz retake improvement: {title}"
     },
     levelNames: {
       level1: "Rookie Coder",
@@ -1146,7 +1159,20 @@ export const translations = {
       badgeUnlocked: "¡INSIGNIA DESBLOQUEADA!",
       congrats: "¡Excelente Trabajo!",
       close: "¡Fantástico! 🚀",
-      earnedBadge: "Insignia {name}"
+      earnedBadge: "Insignia {name}",
+      tapToDismiss: "Toca en cualquier lugar para cerrar",
+      celLevelTitle: "¡Subiste de nivel!",
+      celLevelMsg: "¡Llegaste al Nivel {level}: {name}!",
+      celXpTitle: "¡+{amount} XP ganados!",
+      celStreakTitle: "¡+{amount} XP!",
+      celStreakMsg: "¡Bono de racha de {streak} días reclamado!",
+      celBadgeTitle: "¡Insignia desbloqueada!",
+      celBadgeMsg: "¡Ganaste la insignia \"{name}\"!",
+      celCourseTitle: "¡Curso completado!",
+      celCourseMsg: "Terminaste {course}. ¡Buen trabajo!",
+      celCourseThe: "el curso",
+      celReasonModule: "¡Módulo {n} completado!",
+      celReasonQuiz: "Mejora en el cuestionario: {title}"
     },
     levelNames: {
       level1: "Novato Coder",
