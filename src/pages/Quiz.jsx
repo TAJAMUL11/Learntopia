@@ -113,7 +113,7 @@ const Quiz = () => {
 
       if (incrementalXP > 0) {
         // Award ONLY the new incremental XP through GamificationContext
-        await addXP(incrementalXP, `Quiz retake improvement: ${activeQuiz.title}`);
+        await addXP(incrementalXP, t("gamification.celReasonQuiz", { title: activeQuiz.title }));
 
         // Sync to global QuizLeaderboard with the overall best score
         const globalScoreRef = doc(db, "QuizLeaderboards", activeQuiz.id, "Scores", currentUser.uid);
