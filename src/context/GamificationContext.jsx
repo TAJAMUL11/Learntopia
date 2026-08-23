@@ -148,7 +148,7 @@ export const GamificationProvider = ({ children }) => {
       level: { type: "level", art: "level", kind: "level", params: { icon: "👑", level: 4, name: "Logic Legend" } },
       xp: { type: "xp", art: "xp", kind: "xp", params: { amount: 50 }, message: "Completed Module 1!" },
       badge: { type: "badge", art: "badge", kind: "badge", params: { name: "Quiz Ace", emoji: "🎯" }, badge: { name: "Quiz Ace", emoji: "🎯" } },
-      champion: { type: "badge", art: "crown", kind: "badge", params: { name: "Champion", emoji: "👑" }, badge: { name: "Champion", emoji: "👑" } },
+      champion: { type: "champion", art: "crown", kind: "champion" },
       sharp: { type: "badge", art: "robotic", kind: "badge", params: { name: "Sharp Memory", emoji: "🤖" }, badge: { name: "Sharp Memory", emoji: "🤖" } },
       perfect: { type: "badge", art: "zap", kind: "badge", params: { name: "Perfect Score", emoji: "💯" }, badge: { name: "Perfect Score", emoji: "💯" } },
       course: { type: "course", art: "trophy", kind: "course", params: { course: "Python for Kids: Build Your First Game!" } },

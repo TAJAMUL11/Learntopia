@@ -1,5 +1,5 @@
 import { db } from "../firebase/firebase";
-import { getDoc, doc, collection, getDocs, deleteDoc, setDoc } from "firebase/firestore";
+import { getDoc, doc, collection, getDocs, deleteDoc, setDoc, query, orderBy, limit } from "firebase/firestore";
 import { deleteUser } from "firebase/auth";
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
@@ -94,6 +94,9 @@ const DERIVED_IDS = new Set([
   "scholar",
   "rising-star",
   "code-wizard",
+  // Champion is dynamic (only the CURRENT #1). Listing it here stops a stale
+  // stored "Champion" badge from a former #1 being folded into the grid.
+  "champion",
 ]);
 
 // Shared tone styles for section-header icon chips (core palette only).
@@ -184,6 +187,9 @@ const Dashboard = () => {
   const isSmall = useMediaQuery("(max-width: 639px)");
 
   // ── state ─────────────────────────────────────────────────────────────────
+  // Whether THIS user is currently the overall #1 (drives the dynamic Champion
+  // medallion). Champion is not a stored badge — it reflects live standing only.
+  const [isChampion, setIsChampion] = useState(false);
   const [userDetails, setUserDetails] = useState(null);
   const [enrolledCourses, setEnrolledCourses] = useState([]);
   const [quizScores, setQuizScores] = useState([]);
@@ -211,6 +217,30 @@ const Dashboard = () => {
   useEffect(() => {
     if (isAdmin) navigate("/admin", { replace: true });
   }, [isAdmin, navigate]);
+
+  // Live Champion status: is this user CURRENTLY the overall #1? Mirrors the
+  // leaderboard's rule (top of PublicLeaderboard by totalPoints, score > 0, and a
+  // board of at least two). Re-checked whenever the user's own XP changes.
+  useEffect(() => {
+    if (!currentUser) { setIsChampion(false); return undefined; }
+    let cancelled = false;
+    (async () => {
+      try {
+        const snap = await getDocs(
+          query(collection(db, "PublicLeaderboard"), orderBy("totalPoints", "desc"), limit(2))
+        );
+        const top = snap.docs[0];
+        const champ =
+          snap.docs.length >= 2 &&
+          top?.id === currentUser.uid &&
+          (Number(top.data().totalPoints) || 0) > 0;
+        if (!cancelled) setIsChampion(champ);
+      } catch {
+        if (!cancelled) setIsChampion(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [currentUser, xp]);
 
   // Fetch Firestore data
   useEffect(() => {
@@ -392,6 +422,9 @@ const Dashboard = () => {
     // Master" and folded in with the other stored badges below.
     if (levelInfo.level >= 3) add("rising-star", "star", t("dashboard.achRisingStar"), "violet", t("dashboard.achRisingStarDesc", "Reached Level 3"));
     if (levelInfo.level >= 5) add("code-wizard", "code", t("dashboard.achCodeWizard"), "violet", t("dashboard.achCodeWizardDesc", "Reached Level 5"));
+    // Champion is DYNAMIC — shown only while the user is the current overall #1,
+    // never from stored data (see DERIVED_IDS). A former champion loses it.
+    if (isChampion) add("champion", "crown", t("dashboard.achChampion"), "violet", t("dashboard.achChampionDesc", "Currently #1 on the leaderboard"));
     // Fold in any server-awarded badges not already represented. A stored badge
     // whose id matches a derived achievement (e.g. legacy "Newcomer" data) is
     // skipped so it can never double up, in any language. Use the badge's own art
@@ -404,7 +437,7 @@ const Dashboard = () => {
       add(id, icon, name, "violet", BADGE_DESC[name]);
     });
     return list;
-  }, [quizScores, completedCourses, levelInfo, gamificationBadges, t]);
+  }, [quizScores, completedCourses, levelInfo, gamificationBadges, isChampion, t]);
 
   const ACH_TONE = {
     violet: "border-violet-500/45 bg-violet-500/[0.12] text-violet-300 shadow-[0_0_14px_rgba(139,99,227,0.16)]",

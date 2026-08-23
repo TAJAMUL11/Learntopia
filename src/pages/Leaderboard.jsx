@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { collection, query, orderBy, limit, getDocs, doc, getDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase/firebase";
@@ -21,7 +21,7 @@ import { getLocalizedQuiz } from "../utils/localizationUtils";
 const Leaderboard = () => {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
-  const { awardBadge } = useGamification();
+  const { triggerCelebration } = useGamification();
   const { t } = useLanguage();
   const [allEntries, setAllEntries] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -159,16 +159,22 @@ const Leaderboard = () => {
     return () => unsub();
   }, [currentUser, activeTab]);
 
-  // ── Crown "Champion" badge for the overall #1. Awards once (awardBadge dedupes
-  // by name); requires the user to actually top a board of at least two people, so
-  // being the only entry does not count. Scoped to the overall points board. ──
+  // ── Champion is DYNAMIC: only the CURRENT overall #1 holds it (shown as the
+  // crown on rank 1 here, and as a live medallion on the dashboard). It is NOT a
+  // stored badge — a former #1 must lose it. Here we only CELEBRATE the moment the
+  // current user newly overtakes #1 while watching (a real transition), never on a
+  // plain visit and never for someone who was #1 before. Needs a board of 2+. ──
+  const prevTopRef = useRef(null);
   useEffect(() => {
-    if (activeTab !== "all" || !currentUser || allEntries.length < 2) return;
+    if (activeTab !== "all" || allEntries.length < 2) return;
     const ranked = [...allEntries].sort((a, b) => b.score - a.score);
-    if (ranked[0]?.userId === currentUser.uid && ranked[0]?.score > 0) {
-      awardBadge({ name: "Champion", emoji: "👑", art: "crown" });
+    const topUid = ranked[0]?.score > 0 ? ranked[0].userId : null;
+    const prev = prevTopRef.current;
+    prevTopRef.current = topUid;
+    if (prev && prev !== currentUser?.uid && topUid === currentUser?.uid) {
+      triggerCelebration({ type: "champion", art: "crown", kind: "champion" });
     }
-  }, [allEntries, activeTab, currentUser, awardBadge]);
+  }, [allEntries, activeTab, currentUser, triggerCelebration]);
 
   // ── Filter by search query and sort ──
   const filteredEntries = useMemo(() => {
