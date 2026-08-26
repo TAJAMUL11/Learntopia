@@ -32,6 +32,7 @@ import crownLottie from "../assets/lottie/crown.lottie?url";
 import roboticLottie from "../assets/lottie/robotic_memory.lottie?url";
 import EditProfileView from "./EditProfileView";
 import { parseProfileName } from "../utils/profileUtils";
+import { localizeBadgeName, localizeBadgeDesc } from "../utils/badgeI18n";
 import useMediaQuery from "../hooks/useMediaQuery";
 import { COURSES } from "../data/coursesData";
 
@@ -82,6 +83,7 @@ const BADGE_ART = {
   "Sharp Memory": "robotic",
   "Perfect Score": "zap",
 };
+
 
 // Ids owned by the derived achievements above. A stored badge with any of these
 // ids (e.g. legacy "Newcomer" data) is dropped so it can't duplicate a derived
@@ -434,7 +436,11 @@ const Dashboard = () => {
       const id = name.toLowerCase().trim().replace(/\s+/g, "-");
       if (DERIVED_IDS.has(id)) return; // never let stored data duplicate a derived achievement
       const icon = BADGE_ART[name] || (typeof b === "object" && b.art) || "trophy";
-      add(id, icon, name, "violet", BADGE_DESC[name]);
+      // Localize the label + tooltip when the badge is mapped; otherwise keep the
+      // raw stored name so an unknown badge never renders a bare i18n key path.
+      const label = localizeBadgeName(name, t);
+      const desc = localizeBadgeDesc(name, t, BADGE_DESC[name]);
+      add(id, icon, label, "violet", desc);
     });
     return list;
   }, [quizScores, completedCourses, levelInfo, gamificationBadges, isChampion, t]);
@@ -670,7 +676,7 @@ const Dashboard = () => {
                     {studentName}
                   </h1>
                   <span className="inline-flex flex-none items-center gap-1.5 rounded-full border border-violet-500/30 bg-violet-500/15 px-3 py-1 text-xs font-bold text-violet-300 shadow-sm">
-                    {levelInfo.icon} {t("dashboard.level")} {levelInfo.level} · {levelInfo.name}
+                    {levelInfo.icon} {t("dashboard.level")} {levelInfo.level} · {t(`levelNames.level${levelInfo.level}`)}
                   </span>
                 </div>
 
@@ -713,7 +719,7 @@ const Dashboard = () => {
           <div className="relative z-10 mt-5 border-t border-white/[0.08] pt-4">
             <div className="mb-2 flex items-baseline justify-between gap-3">
               <span className="text-xs font-semibold text-ink-hi">
-                {t("dashboard.level")} {levelInfo.level} · {levelInfo.name}
+                {t("dashboard.level")} {levelInfo.level} · {t(`levelNames.level${levelInfo.level}`)}
               </span>
               <span className="text-xs tabular-nums text-ink-low">
                 {levelInfo.nextLevel
