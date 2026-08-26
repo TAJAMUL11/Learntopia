@@ -3,6 +3,7 @@ import { useGamification } from "../context/GamificationContext";
 import { useSound } from "../context/SoundContext";
 import { useLanguage } from "../context/LanguageContext";
 import { shouldPlaySound } from "./ui/notificationConfig";
+import { localizeBadgeName } from "../utils/badgeI18n";
 import LottieIcon from "./ui/LottieIcon";
 import useMediaQuery from "../hooks/useMediaQuery";
 import trophyLottie from "../assets/lottie/Trophy.lottie?url";
@@ -122,9 +123,10 @@ function CelebrationCard({ celebration }) {
   // whole line translates (falling back to the raw value if a key is missing).
   const levelName = t(`levelNames.level${p.level}`, p.name);
   const courseName = (p.courseId ? t(`courseData.${p.courseId}.title`, p.course) : p.course) || t("gamification.celCourseThe");
+  const badgeName = localizeBadgeName(p.name, t); // localized, English identity as fallback
   const message =
     kind === "level" ? t("gamification.celLevelMsg", { level: p.level, name: levelName })
-    : kind === "badge" ? t("gamification.celBadgeMsg", { name: p.name })
+    : kind === "badge" ? t("gamification.celBadgeMsg", { name: badgeName })
     : kind === "course" ? t("gamification.celCourseMsg", { course: courseName })
     : kind === "streakBonus" ? t("gamification.celStreakMsg", { streak: p.streak })
     : kind === "champion" ? t("gamification.celChampionMsg")
@@ -160,7 +162,7 @@ function CelebrationCard({ celebration }) {
         {celebration.badge && (
           <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm font-bold text-amber-300">
             <span>{celebration.badge.emoji}</span>
-            <span>{t("gamification.earnedBadge", { name: celebration.badge.name })}</span>
+            <span>{t("gamification.earnedBadge", { name: localizeBadgeName(celebration.badge.name, t) })}</span>
           </div>
         )}
 
