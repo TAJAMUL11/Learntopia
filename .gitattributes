@@ -1,0 +1,20 @@
+# Normalize line endings across Windows and WSL/Linux.
+# Store all text files with LF in the repo so the two platforms stop showing
+# every file as "modified". Git auto-detects text vs binary; text files are
+# checked out and committed as LF.
+* text=auto eol=lf
+
+# Binary files git must never touch (belt-and-suspenders; usually auto-detected).
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.gif    binary
+*.ico    binary
+*.webp   binary
+*.woff   binary
+*.woff2  binary
+*.ttf    binary
+*.otf    binary
+*.lottie binary
+*.wasm   binary
+*.pdf    binary
