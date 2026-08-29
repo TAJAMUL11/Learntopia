@@ -37,4 +37,10 @@ export default [
       ],
     },
   },
+  // Config files (playwright/vite/etc.) and test files run in Node, not the
+  // browser — give them Node globals so `process`, etc. aren't flagged as undefined.
+  {
+    files: ['**/*.config.js', 'e2e/**/*.js', 'test/**/*.js'],
+    languageOptions: { globals: { ...globals.node } },
+  },
 ]
