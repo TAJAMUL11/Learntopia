@@ -10,7 +10,8 @@ Structured courses, timed quizzes, real-time progress tracking, and a global lea
 [![Live Demo](https://img.shields.io/badge/Live-learntopia--react.web.app-7c3aed?style=for-the-badge&logo=firebase&logoColor=white)](https://learntopia-react.web.app)
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactjs.org)
 [![Firebase](https://img.shields.io/badge/Firebase-Firestore%20%2B%20Auth-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com)
-[![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
+[![Vite](https://img.shields.io/badge/Vite-7-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
+[![Playwright](https://img.shields.io/badge/Tested_with-Playwright-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)](https://playwright.dev)
 
 </div>
 
@@ -91,6 +92,7 @@ The platform is designed to be fast, accessible, and mobile-friendly, with authe
 | AI Tutor | Google Gemini via a Cloudflare Worker proxy (key server-side — see `worker/`) |
 | Notifications | Hybrid toasts + centered modal (`ToastContext`) |
 | Animation (icons) | dotLottie player (self-hosted WASM) with SVG fallback |
+| Testing | Playwright (end-to-end) + Firestore rules tests (emulator) — run in CI on every PR |
 
 ---
 
@@ -98,7 +100,7 @@ The platform is designed to be fast, accessible, and mobile-friendly, with authe
 
 ### Prerequisites
 
-- Node.js ≥ 18
+- Node.js ≥ 20 (Vite 7 requirement)
 - npm ≥ 9
 - A Firebase project with Authentication and Firestore enabled
 
@@ -129,6 +131,8 @@ npm run dev        # Start Vite dev server with HMR
 npm run build      # Production build to /dist
 npm run preview    # Preview production build locally
 npm run lint       # ESLint check
+npm run test:e2e       # Playwright end-to-end tests (auto-starts the dev server)
+npm run test:e2e:ui    # Playwright interactive UI mode (watch + debug)
 npm run test:rules:ci  # Firestore rules tests in the local emulator (needs Java)
 ```
 

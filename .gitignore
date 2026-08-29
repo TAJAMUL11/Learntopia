@@ -1,3 +1,6 @@
+# Local-only instruction / reference docs (never published)
+TESTING.md
+
 # Logs
 logs
 *.log
@@ -35,3 +38,10 @@ dist-ssr
 
 # Private Product Roadmap & Suggestions Tracking
 PRODUCT_ROADMAP_SUGGESTIONS.md
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
