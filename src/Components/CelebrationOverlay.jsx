@@ -5,6 +5,7 @@ import { useLanguage } from "../context/LanguageContext";
 import { shouldPlaySound } from "./ui/notificationConfig";
 import { localizeBadgeName } from "../utils/badgeI18n";
 import LottieIcon from "./ui/LottieIcon";
+import Icon from "./ui/Icon";
 import useMediaQuery from "../hooks/useMediaQuery";
 import trophyLottie from "../assets/lottie/Trophy.lottie?url";
 import crownLottie from "../assets/lottie/crown.lottie?url";
@@ -150,7 +151,7 @@ function CelebrationCard({ celebration }) {
 
       {/* Main card — scales in unless reduced motion is requested (then fade only) */}
       <div
-        className={`relative w-full max-w-md overflow-hidden rounded-3xl border border-violet-500/40 bg-gradient-to-b from-ground-800 to-ground-900 p-6 text-center shadow-[0_0_50px_rgba(139,92,246,0.3)] transition-all ${dur} sm:p-8 ${show ? "opacity-100" : "opacity-0"} ${reduce ? "" : show ? "scale-100" : "scale-95"}`}
+        className={`relative w-full max-w-md overflow-hidden rounded-3xl border border-white/10 bg-surface p-6 text-center shadow-clay transition-all ${dur} sm:p-8 ${show ? "opacity-100" : "opacity-0"} ${reduce ? "" : show ? "scale-100" : "scale-95"}`}
       >
         <div className="mx-auto mb-5 flex h-[68px] w-[68px] items-center justify-center overflow-hidden rounded-full border-2 border-violet-500/50 bg-gradient-to-br from-violet-500/20 to-sky/20 shadow-[0_0_30px_rgba(139,92,246,0.4)] md:mb-6 md:h-24 md:w-24">
           <LottieIcon src={art.lottie} size={isSmall ? 46 : 72} fallbackIcon={art.fallback} loop className={art.cls} />
@@ -161,7 +162,7 @@ function CelebrationCard({ celebration }) {
 
         {celebration.badge && (
           <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm font-bold text-amber-300">
-            <span>{celebration.badge.emoji}</span>
+            <Icon name={celebration.badge.icon || "award"} size="sm" className="text-amber-300" />
             <span>{t("gamification.earnedBadge", { name: localizeBadgeName(celebration.badge.name, t) })}</span>
           </div>
         )}

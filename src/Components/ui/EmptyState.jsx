@@ -5,7 +5,7 @@ import Icon from "./Icon";
 
 const EmptyState = ({ icon = "search", title, description, action, className = "" }) => (
   <div className={`flex flex-col items-center text-center ${className}`}>
-    <div className="mb-4 grid h-14 w-14 place-items-center rounded-2xl border border-white/[0.08] bg-white/[0.05] text-violet-400">
+    <div className="mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-surface-2 shadow-clay-sm text-violet-400">
       <Icon name={icon} size={26} strokeWidth={1.8} />
     </div>
     {title && <h3 className="mb-1.5 text-lg font-bold text-ink-hi">{title}</h3>}

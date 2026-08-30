@@ -11,7 +11,7 @@ import useMediaQuery from "../../hooks/useMediaQuery";
 /**
  * ToastStack — lightweight corner notifications for routine messages.
  * Top-centre on mobile (full-width), top-right on larger screens. Toasts stack,
- * auto-dismiss (pause on hover), and can be closed with the ✕. No backdrop, no
+ * auto-dismiss (pause on hover), and can be closed with the X. No backdrop, no
  * bulky button — an optional inline action link only.
  */
 function ToastCard({ toast: item, onDismiss }) {
@@ -65,7 +65,7 @@ function ToastCard({ toast: item, onDismiss }) {
       role="status"
       onMouseEnter={() => (hovered.current = true)}
       onMouseLeave={() => (hovered.current = false)}
-      className={`pointer-events-auto relative w-full overflow-hidden rounded-xl border ${tone.edge} bg-gradient-to-b from-ground-700/95 to-ground-800/95 pl-3.5 pr-9 py-3 ${tone.glow} backdrop-blur-md transition-all duration-200 sm:w-[350px] ${
+      className={`pointer-events-auto relative w-full overflow-hidden rounded-2xl border ${tone.edge} bg-surface ${tone.glow} pl-3 pr-9 py-2.5 transition-all duration-200 sm:w-[340px] ${
         leaving ? "translate-x-2 opacity-0" : "animate-scale-up"
       }`}
     >
@@ -74,18 +74,18 @@ function ToastCard({ toast: item, onDismiss }) {
       {/* Tone accent bar — a clear left edge so the toast reads instantly. */}
       <div className={`absolute inset-y-0 left-0 w-1.5 ${tone.accent}`} />
 
-      <div className="relative flex gap-3">
-        <span className={`mt-0.5 flex h-9 w-9 sm:h-10 sm:w-10 flex-none items-center justify-center overflow-hidden rounded-lg border ${tone.chip}`}>
+      <div className="relative flex gap-2.5">
+        <span className={`mt-px flex h-8 w-8 sm:h-9 sm:w-9 flex-none items-center justify-center overflow-hidden rounded-lg border shadow-clay-sm ${tone.chip}`}>
           {cfg.art === "success" ? (
-            <LottieIcon src={successLottie} size={isSmall ? 38 : 46} fallbackIcon="check" />
+            <LottieIcon src={successLottie} size={isSmall ? 34 : 40} fallbackIcon="check" />
           ) : (
-            <Icon name={cfg.icon} size={isSmall ? 16 : 19} />
+            <Icon name={cfg.icon} size={isSmall ? 15 : 17} />
           )}
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-sm sm:text-[15px] font-bold leading-tight text-ink-hi">{title}</p>
+          <p className="text-[13px] sm:text-sm font-bold leading-tight text-ink-hi">{title}</p>
           {item.message && (
-            <p className="mt-0.5 text-[11px] sm:text-xs leading-relaxed text-ink-low">{item.message}</p>
+            <p className="mt-0.5 line-clamp-2 text-[11px] leading-snug text-ink-low">{item.message}</p>
           )}
           {item.confirmLabel && item.onConfirm && (
             <button
@@ -107,7 +107,7 @@ function ToastCard({ toast: item, onDismiss }) {
         type="button"
         onClick={close}
         aria-label="Dismiss notification"
-        className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-md text-ink-faint transition-colors hover:bg-white/[0.06] hover:text-ink"
+        className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-md text-ink-faint transition-colors hover:bg-surface-2 hover:text-ink"
       >
         <Icon name="close" size={13} />
       </button>

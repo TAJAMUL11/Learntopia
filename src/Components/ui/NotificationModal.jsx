@@ -98,7 +98,7 @@ export default function NotificationModal() {
       aria-modal="true"
     >
       <div
-        className={`relative w-[92%] max-w-md overflow-hidden rounded-3xl border border-white/[0.14] bg-gradient-to-b from-ground-800 to-ground-900 p-7 text-center ${tone.glow} animate-popup-pop cursor-default`}
+        className={`relative w-[92%] max-w-md overflow-hidden rounded-3xl border border-white/10 bg-surface shadow-clay p-7 text-center ${tone.glow} animate-popup-pop cursor-default`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={(e) => e.stopPropagation()}
@@ -109,7 +109,7 @@ export default function NotificationModal() {
           </div>
         )}
 
-        <div className={`mx-auto flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl border ${tone.chip}`}>
+        <div className={`mx-auto flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl border shadow-clay-sm ${tone.chip}`}>
           {cfg.art === "success" ? (
             <LottieIcon src={successLottie} size={40} fallbackIcon="check" />
           ) : (
@@ -133,7 +133,7 @@ export default function NotificationModal() {
           <button
             type="button"
             onClick={handleCancel}
-            className="mt-2.5 w-full rounded-xl border border-white/10 bg-transparent px-6 py-2.5 text-xs font-semibold text-ink-low transition-colors hover:bg-white/[0.04] hover:text-ink"
+            className="mt-2.5 w-full rounded-xl border border-white/10 bg-transparent px-6 py-2.5 text-xs font-semibold text-ink-low transition-colors hover:bg-surface-2 hover:text-ink"
           >
             {cancelLabel}
           </button>
