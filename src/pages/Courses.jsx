@@ -167,14 +167,14 @@ const Courses = () => {
                         {t("courses.rejoinBadge")}
                       </span>
                     )}
-                    <span className="flex items-center gap-1.5 rounded-full border border-white/[0.13] bg-white/[0.06] px-3 py-1 text-xs font-bold text-ink-hi">
+                    <span className="flex items-center gap-1.5 rounded-full border border-white/10 bg-surface-2 px-3 py-1 text-xs font-bold text-ink-hi shadow-clay-sm">
                       <img src={star} alt="" className="h-3.5 w-3.5" />
                       {course.rating}
                     </span>
                   </div>
                 </div>
 
-                <div className="relative mb-4 flex justify-center overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-white/[0.08] to-white/[0.02] py-8">
+                <div className="relative mb-4 flex justify-center overflow-hidden rounded-2xl clay-inset py-8">
                   <div className="pointer-events-none absolute left-1/2 top-3 h-20 w-32 -translate-x-1/2 rounded-full bg-violet-500/30 blur-2xl transition-opacity duration-500 group-hover:bg-sky/30" />
                   <ImageWithSkeleton
                     src={course.image}
