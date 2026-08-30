@@ -5,7 +5,19 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 
 export default [
-  { ignores: ['dist'] },
+  // Never lint build output, reports, or minified vendor bundles — flat-config
+  // needs the `/**` glob to skip nested files, not just the bare dir name.
+  {
+    ignores: [
+      'dist/**',
+      'build/**',
+      'coverage/**',
+      'playwright-report/**',
+      'test-results/**',
+      'worker/dist/**',
+      '**/*.min.js',
+    ],
+  },
   {
     files: ['**/*.{js,jsx}'],
     languageOptions: {
