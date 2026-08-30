@@ -40,12 +40,12 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="mt-20 select-none border-t border-white/[0.07] bg-ground-900/60 backdrop-blur-md">
+    <footer className="mt-20 select-none border-t border-white/[0.07] bg-ground-900">
       <div className="container-page py-12">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr_1fr]">
           {/* Brand column */}
           <div>
-            <Logo size={34} />
+            <Logo />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-ink-low">
               {t("footer.tagline")}
             </p>

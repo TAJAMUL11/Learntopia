@@ -21,34 +21,30 @@ const Contact = () => {
       label: t("contact.emailCardTitle"),
       value: t("contact.emailCardSub"),
       href: "mailto:tajamul.270@gmail.com",
-      color: "from-violet-500/20 to-violet-600/10 border-violet-500/20",
-      iconColor: "text-violet-400",
-      glow: "bg-violet-600/10",
+      border: "border-violet-500/20",
+      chip: "bg-violet-500/15 border-violet-500/30 text-violet-400",
     },
     {
       icon: "clock",
       label: t("contact.responseTitle"),
       value: t("contact.responseSub"),
-      color: "from-sky/20 to-sky/10 border-sky/20",
-      iconColor: "text-sky",
-      glow: "bg-sky/10",
+      border: "border-sky/20",
+      chip: "bg-sky/15 border-sky/30 text-sky",
     },
     {
       icon: "book",
       label: t("contact.docTitle"),
       value: t("contact.docSub"),
       to: "/doc",
-      color: "from-state-success/20 to-sky/10 border-state-success/20",
-      iconColor: "text-state-success",
-      glow: "bg-state-success/10",
+      border: "border-state-success/20",
+      chip: "bg-state-success/15 border-state-success/30 text-state-success",
     },
     {
       icon: "shield",
       label: t("contact.privacyTitle"),
       value: t("contact.privacySub"),
-      color: "from-amber-500/20 to-orange-600/10 border-amber-500/20",
-      iconColor: "text-amber-400",
-      glow: "bg-amber-600/10",
+      border: "border-amber-500/20",
+      chip: "bg-amber-500/15 border-amber-500/30 text-amber-400",
     },
   ];
 
@@ -130,11 +126,10 @@ const Contact = () => {
           {CONTACT_CARDS.map((card) => (
             <div
               key={card.label}
-              className={`group relative overflow-hidden rounded-2xl border bg-gradient-to-br p-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_4px_24px_-4px_rgba(139,99,227,0.18)] ${card.color}`}
+              className={`group relative overflow-hidden rounded-2xl border bg-surface shadow-clay p-5 transition-all duration-300 hover:-translate-y-0.5 ${card.border}`}
             >
-              <div className={`pointer-events-none absolute -right-6 -top-6 h-20 w-20 rounded-full blur-2xl ${card.glow}`} />
               <div className="flex items-start gap-4">
-                <div className={`grid h-11 w-11 flex-none place-items-center rounded-xl border border-white/[0.1] bg-white/[0.05] ${card.iconColor}`}>
+                <div className={`grid h-11 w-11 flex-none place-items-center rounded-xl border shadow-clay-sm ${card.chip}`}>
                   <Icon name={card.icon} size={20} />
                 </div>
                 <div className="min-w-0">
@@ -165,11 +160,7 @@ const Contact = () => {
         </div>
 
         {/* ── Contact form (first on mobile, second/right on lg+) ── */}
-        <div className="order-1 lg:order-2 relative overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.03] p-7 backdrop-blur-md md:p-9">
-          {/* Ambient glows */}
-          <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-violet-600/8 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-sky/6 blur-3xl" />
-
+        <div className="order-1 lg:order-2 relative overflow-hidden rounded-2xl border border-white/10 bg-surface shadow-clay p-7 md:p-9">
           <div className="relative mb-7">
             <h2 className="text-xl font-bold text-ink-hi">{t("contact.formHeading")}</h2>
             <p className="mt-1 text-sm text-ink-low">
@@ -302,7 +293,7 @@ const Contact = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-violet-500 px-6 py-3.5 text-sm font-bold text-white shadow-[0_4px_20px_-4px_rgba(139,99,227,0.5)] transition-all duration-200 hover:brightness-110 hover:shadow-[0_4px_28px_-4px_rgba(139,99,227,0.65)] disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2.5 rounded-xl bg-violet-600 px-6 py-3.5 text-sm font-bold text-white shadow-clay-btn transition-all duration-200 hover:bg-violet-500 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {isSubmitting ? (
                 <>

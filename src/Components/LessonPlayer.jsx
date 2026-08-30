@@ -36,69 +36,72 @@ const SECTION_LABELS = {
 // Section-type styling grouped by meaning onto the brand + semantic palette so
 // the whole app stays coherent: learn = violet, info = sky, tip = amber,
 // activity = emerald, recap = neutral.
+// Solid clay content cards; the section-type identity now comes from the
+// semantic border + icon chip + label/title tints only (no gradient wash), with
+// the molded look from shadow-clay.
 const SECTION_STYLES = {
   story: {
     border: "border-violet-500/30",
-    bg: "bg-gradient-to-br from-violet-500/15 to-violet-700/5",
-    iconBg: "bg-violet-500/20",
+    bg: "bg-surface",
+    iconBg: "bg-violet-500/15 border border-violet-500/30 shadow-clay-sm",
     iconColor: "text-violet-400",
     labelColor: "text-violet-300",
     titleColor: "text-violet-300",
-    glow: "shadow-[0_0_30px_rgba(139,99,227,0.12)]",
+    glow: "shadow-clay",
   },
   concept: {
     border: "border-violet-500/30",
-    bg: "bg-gradient-to-br from-violet-500/15 to-violet-700/5",
-    iconBg: "bg-violet-500/20",
+    bg: "bg-surface",
+    iconBg: "bg-violet-500/15 border border-violet-500/30 shadow-clay-sm",
     iconColor: "text-violet-400",
     labelColor: "text-violet-300",
     titleColor: "text-violet-300",
-    glow: "shadow-[0_0_30px_rgba(139,99,227,0.12)]",
+    glow: "shadow-clay",
   },
   fact: {
     border: "border-sky/30",
-    bg: "bg-gradient-to-br from-sky/15 to-sky/5",
-    iconBg: "bg-sky/20",
+    bg: "bg-surface",
+    iconBg: "bg-sky/15 border border-sky/30 shadow-clay-sm",
     iconColor: "text-sky",
     labelColor: "text-sky",
     titleColor: "text-sky",
-    glow: "shadow-[0_0_30px_rgba(56,189,248,0.12)]",
+    glow: "shadow-clay",
   },
   tip: {
     border: "border-amber-500/30",
-    bg: "bg-gradient-to-br from-amber-500/15 to-amber-900/5",
-    iconBg: "bg-amber-500/20",
+    bg: "bg-surface",
+    iconBg: "bg-amber-500/15 border border-amber-500/30 shadow-clay-sm",
     iconColor: "text-amber-400",
     labelColor: "text-amber-300",
     titleColor: "text-amber-200",
-    glow: "shadow-[0_0_30px_rgba(245,158,11,0.12)]",
+    glow: "shadow-clay",
   },
   example: {
     border: "border-violet-500/30",
-    bg: "bg-gradient-to-br from-violet-500/10 to-transparent",
-    iconBg: "bg-violet-500/20",
+    bg: "bg-surface",
+    iconBg: "bg-violet-500/15 border border-violet-500/30 shadow-clay-sm",
     iconColor: "text-violet-400",
     labelColor: "text-violet-300",
     titleColor: "text-violet-300",
-    glow: "shadow-[0_0_30px_rgba(139,99,227,0.12)]",
+    glow: "shadow-clay",
   },
   activity: {
     border: "border-state-success/30",
-    bg: "bg-gradient-to-br from-state-success/15 to-state-success/5",
-    iconBg: "bg-state-success/20",
+    bg: "bg-surface",
+    iconBg: "bg-state-success/15 border border-state-success/30 shadow-clay-sm",
     iconColor: "text-state-success",
     labelColor: "text-state-success",
     titleColor: "text-state-success",
-    glow: "shadow-[0_0_30px_rgba(52,211,153,0.12)]",
+    glow: "shadow-clay",
   },
   recap: {
-    border: "border-white/[0.14]",
-    bg: "bg-gradient-to-br from-white/[0.06] to-white/[0.02]",
-    iconBg: "bg-white/[0.08]",
+    border: "border-white/10",
+    bg: "bg-surface",
+    iconBg: "bg-surface-2 border border-white/10 shadow-clay-sm",
     iconColor: "text-ink",
     labelColor: "text-ink-low",
     titleColor: "text-ink-hi",
-    glow: "shadow-[0_0_20px_rgba(255,255,255,0.05)]",
+    glow: "shadow-clay",
   },
 };
 
@@ -174,8 +177,11 @@ const LessonPlayer = ({ sections = [], onComplete }) => {
       const trimmed = line.trim();
       if (trimmed === "") return <br key={i} />;
 
-      // Bullet points
-      if (trimmed.startsWith("•") || trimmed.startsWith("-") || trimmed.startsWith("✅") || trimmed.startsWith("❌") || trimmed.startsWith("🌟") || trimmed.startsWith("⚠️")) {
+      // Bullet points and labeled callouts (Good:/Bad:/Correct:/Wrong:/Notice:/
+      // difficulty tiers, plus localized equivalents) — these read as indented
+      // block lines. Kept defensive so unknown labels simply fall through.
+      const LABELS = /^(Good|Bad|Correct|Wrong|Notice|Easy|Medium|Hard|Expert|Bien|Mal|Correcto|Incorrecto|Fíjate|Fácil|Medio|Difícil|Experto):/;
+      if (trimmed.startsWith("•") || trimmed.startsWith("-") || LABELS.test(trimmed)) {
         return (
           <span key={i} className="block pl-1 py-0.5">
             {trimmed}
@@ -249,7 +255,7 @@ const LessonPlayer = ({ sections = [], onComplete }) => {
                   ? "bg-violet-500 shadow-[0_0_6px_rgba(139,92,246,0.5)]"
                   : i === currentStep
                   ? "bg-gradient-to-r from-violet-500 to-sky shadow-[0_0_8px_rgba(139,92,246,0.4)]"
-                  : "bg-white/[0.08]"
+                  : "clay-inset"
               }`}
             />
           ))}
@@ -268,9 +274,7 @@ const LessonPlayer = ({ sections = [], onComplete }) => {
       >
         {/* Decorative glow blob */}
         <div
-          className={`pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full blur-3xl opacity-20 ${
-            style.iconBg.replace("bg-", "bg-")
-          }`}
+          className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full blur-3xl opacity-20"
           style={{
             background: `radial-gradient(circle, ${
               sectionType === "fact" || sectionType === "example"

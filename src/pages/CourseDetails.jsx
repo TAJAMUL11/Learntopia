@@ -297,7 +297,7 @@ const CourseDetails = () => {
 
         {/* Header Revamp */}
         <div className="mb-10 flex flex-col items-center gap-8 md:flex-row md:items-start md:text-left text-center">
-          <div className="relative flex h-48 w-full max-w-[260px] sm:w-64 flex-none items-center justify-center overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.08] to-white/[0.02] p-6 shadow-2xl">
+          <div className="relative flex h-48 w-full max-w-[260px] sm:w-64 flex-none items-center justify-center overflow-hidden rounded-3xl clay-inset p-6">
             <div className="pointer-events-none absolute left-1/2 top-4 h-24 w-32 -translate-x-1/2 rounded-full bg-violet-500/20 blur-3xl transition-all duration-700 hover:scale-150" />
             <ImageWithSkeleton
               src={course.image}
@@ -308,7 +308,7 @@ const CourseDetails = () => {
           
           <div className="flex-grow">
             <div className="flex items-center justify-center gap-3 md:justify-start">
-              <span className="inline-block rounded-full border border-white/[0.13] bg-white/[0.06] px-3 py-1 text-xs font-bold uppercase tracking-wider text-sky">
+              <span className="inline-block rounded-full border border-white/10 bg-surface-2 px-3 py-1 text-xs font-bold uppercase tracking-wider text-sky shadow-clay-sm">
                 {course.category}
               </span>
               <span className="flex items-center gap-1 text-xs font-bold text-state-warning">
@@ -320,15 +320,15 @@ const CourseDetails = () => {
             <p className="mt-4 text-lg leading-relaxed text-ink-low">{course.desc}</p>
             
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3 md:justify-start">
-              <div className="flex items-center gap-2 rounded-xl bg-white/[0.03] px-3.5 py-2 text-sm font-medium text-ink-hi border border-white/[0.05]">
+              <div className="flex items-center gap-2 rounded-xl bg-surface-2 px-3.5 py-2 text-sm font-medium text-ink-hi border border-white/10 shadow-clay-sm">
                 <Icon name="clock" size={16} className="text-violet-400" />
                 {course.duration || "N/A"}
               </div>
-              <div className="flex items-center gap-2 rounded-xl bg-white/[0.03] px-3.5 py-2 text-sm font-medium text-ink-hi border border-white/[0.05]">
+              <div className="flex items-center gap-2 rounded-xl bg-surface-2 px-3.5 py-2 text-sm font-medium text-ink-hi border border-white/10 shadow-clay-sm">
                 <Icon name="book" size={16} className="text-violet-400" />
                 {course.difficulty || "All Levels"}
               </div>
-              <div className="flex items-center gap-2 rounded-xl bg-white/[0.03] px-3.5 py-2 text-sm font-medium text-ink-hi border border-white/[0.05]">
+              <div className="flex items-center gap-2 rounded-xl bg-surface-2 px-3.5 py-2 text-sm font-medium text-ink-hi border border-white/10 shadow-clay-sm">
                 <Icon name="users" size={16} className="text-violet-400" />
                 {course.students} {t("courses.enrolledBadge").toLowerCase()}
               </div>
@@ -337,14 +337,14 @@ const CourseDetails = () => {
         </div>
 
         {/* Progress bar */}
-        <Card className="mb-10 p-5 md:p-6 shadow-xl">
+        <Card className="mb-10 p-5 md:p-6">
           <div className="mb-3 flex items-center justify-between text-sm">
             <span className="font-semibold text-ink-hi">{t("dashboard.enrolled")}</span>
             <span className="font-bold tabular-nums text-sky">
               {completedModules.length} / {total} {t("courses.modules").toLowerCase()} · {progressPct}%
             </span>
           </div>
-          <div className="h-3 overflow-hidden rounded-full bg-white/[0.06] border border-white/[0.05]">
+          <div className="h-3 overflow-hidden rounded-full clay-inset">
             <div
               className="h-full rounded-full bg-gradient-to-r from-violet-600 to-sky transition-[width] duration-1000 ease-out relative overflow-hidden"
               style={{ width: `${progressPct}%` }}
@@ -409,7 +409,7 @@ const CourseDetails = () => {
                 <h3 className="mb-5 text-2xl font-bold text-ink-hi">{t("courseDetails.takeaways")}</h3>
                 <div className="grid gap-4 sm:grid-cols-2">
                   {course.learningObjectives?.map((obj, i) => (
-                    <div key={i} className="flex items-start gap-3 rounded-2xl border border-white/[0.05] bg-white/[0.02] p-5 transition-colors hover:bg-white/[0.04]">
+                    <div key={i} className="flex items-start gap-3 rounded-2xl border border-white/10 bg-surface p-5 shadow-clay transition-colors hover:bg-surface-2">
                       <Icon name="check-circle" size={20} className="mt-0.5 flex-none text-sky" />
                       <span className="text-sm font-medium leading-relaxed text-ink-low">{obj}</span>
                     </div>
@@ -419,7 +419,7 @@ const CourseDetails = () => {
 
               <section>
                 <h3 className="mb-5 text-2xl font-bold text-ink-hi">{t("courseDetails.prerequisites")}</h3>
-                <ul className="space-y-3 rounded-2xl border border-white/[0.05] bg-white/[0.01] p-6">
+                <ul className="space-y-3 rounded-2xl border border-white/10 bg-surface p-6 shadow-clay">
                   {course.prerequisites?.map((req, i) => (
                     <li key={i} className="flex items-center gap-3 text-sm font-medium text-ink-low">
                       <div className="h-1.5 w-1.5 flex-none rounded-full bg-violet-500 shadow-[0_0_8px_rgba(139,92,246,0.8)]" />
@@ -432,8 +432,8 @@ const CourseDetails = () => {
 
             <div className="space-y-6">
               {/* AI Tutor Card */}
-              <Card className="p-6 sticky top-24 border-violet-500/30 bg-gradient-to-b from-violet-500/10 to-transparent">
-                <div className="absolute top-4 right-4 flex h-6 w-6 items-center justify-center rounded-full bg-violet-500/20">
+              <Card className="p-6 sticky top-24 border-violet-500/15">
+                <div className="absolute top-4 right-4 flex h-6 w-6 items-center justify-center rounded-full border border-violet-500/30 bg-violet-500/15 shadow-clay-sm">
                   <Icon name="cpu" size={14} className="text-violet-400" />
                 </div>
                 <h4 className="mb-5 text-xs font-bold uppercase tracking-[0.1em] text-violet-300">
@@ -504,7 +504,7 @@ const CourseDetails = () => {
                           ? "bg-state-success/20 text-state-success shadow-[0_0_10px_rgba(52,211,153,0.3)]"
                           : active
                           ? "bg-violet-500/20 text-violet-400 shadow-[0_0_10px_rgba(139,92,246,0.3)]"
-                          : "bg-white/[0.05] text-ink-low"
+                          : "bg-surface-2 text-ink-low shadow-clay-sm"
                       }`}
                     >
                       {done ? <Icon name="check" size={20} /> : locked ? <Icon name="lock" size={16} /> : moduleIndex + 1}
@@ -526,7 +526,7 @@ const CourseDetails = () => {
 
                   {/* Expanded body */}
                   {open && (
-                    <div className="border-t border-white/[0.07] bg-white/[0.01] p-5 md:p-8">
+                    <div className="border-t border-white/[0.07] p-5 md:p-8">
                       
                       {/* Step-by-step Lesson Player (active modules only) */}
                       {active && lessonPhase && module.contentSections?.length > 0 && (
@@ -548,7 +548,7 @@ const CourseDetails = () => {
                           </div>
                           <div className="grid gap-2 sm:grid-cols-2">
                             {module.contentSections?.map((section, idx) => (
-                              <div key={idx} className="flex items-center gap-2 rounded-xl border border-white/[0.05] bg-white/[0.02] px-4 py-3 text-sm text-ink-low">
+                              <div key={idx} className="flex items-center gap-2 rounded-xl border border-white/10 bg-surface-2 px-4 py-3 text-sm text-ink-low shadow-clay-sm">
                                 <Icon name="check-circle" size={14} className="text-state-success flex-none" />
                                 <span className="truncate">{section.title}</span>
                               </div>
@@ -574,7 +574,7 @@ const CourseDetails = () => {
             })}
 
             {/* Completion Card now placed at the bottom of the Syllabus tab */}
-            <Card className={`mt-10 p-6 shadow-2xl md:p-8 transition-colors duration-500 ${isCompleted ? "border-state-success/40 bg-state-success/[0.05]" : "border-violet-500/20 bg-violet-500/[0.02]"}`}>
+            <Card className={`mt-10 p-6 md:p-8 transition-colors duration-500 ${isCompleted ? "border-state-success/40 bg-state-success/[0.05]" : "border-violet-500/20"}`}>
               <div className="flex flex-col items-center justify-between gap-6 text-center sm:flex-row sm:text-left">
                 <div>
                   <h4 className="flex items-center justify-center gap-2 text-xl font-bold text-ink-hi sm:justify-start md:text-2xl">
@@ -642,7 +642,7 @@ const CourseDetails = () => {
         }}
       >
         <p className="mb-4 text-ink-hi">{t("modals.leaveBody")}</p>
-        <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4 text-sm">
+        <div className="rounded-xl border border-white/10 bg-surface-2 p-4 text-sm shadow-clay-sm">
           <ul className="list-disc pl-5 space-y-1 text-ink-low">
             <li>{t("modals.leaveResetPre")}<strong className="text-white">{t("modals.leaveResetBold")}</strong>{t("modals.leaveResetPost")}</li>
             <li>{t("modals.leaveSavedPre")}<strong className="text-state-success">{t("modals.leaveSavedBold")}</strong>{t("modals.leaveSavedPost")}</li>

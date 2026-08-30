@@ -205,10 +205,10 @@ const Quiz = () => {
 
   const getGradingFeedback = () => {
     const pct = (score / activeQuiz.questions.length) * 100;
-    if (pct === 100) return { title: "Mastery achieved", msg: "Flawless score — you're a subject expert." };
-    if (pct >= 80) return { title: "Outstanding work", msg: "Excellent job, you have a solid understanding!" };
-    if (pct >= 60) return { title: "Good effort", msg: "Nice try — a little more practice to master it." };
-    return { title: "Keep learning", msg: "A great chance to review the topics and try again." };
+    if (pct === 100) return { title: t("quiz.gradeMasteryTitle"), msg: t("quiz.gradeMasteryMsg") };
+    if (pct >= 80) return { title: t("quiz.gradeGreatTitle"), msg: t("quiz.gradeGreatMsg") };
+    if (pct >= 60) return { title: t("quiz.gradeGoodTitle"), msg: t("quiz.gradeGoodMsg") };
+    return { title: t("quiz.gradeKeepTitle"), msg: t("quiz.gradeKeepMsg") };
   };
 
   // Listen for auth state & fetch high scores
@@ -288,12 +288,12 @@ const Quiz = () => {
                 <Card
                   key={quiz.id}
                   hoverable
-                  className={`relative flex flex-col p-6 transition-all ${attempted ? "border-state-success/20 bg-state-success/[0.03]" : ""}`}
+                  className={`relative flex flex-col p-6 transition-all ${attempted ? "border-state-success/25" : ""}`}
                 >
                   {/* Attempted badge — top-right corner */}
                   {attempted && (
                     <div className="absolute right-4 top-4 flex items-center gap-1 rounded-full border border-state-success/30 bg-state-success/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-state-success">
-                      <Icon name="check-circle" size={10} /> Done
+                      <Icon name="check-circle" size={10} /> {t("quiz.done")}
                     </div>
                   )}
 
@@ -307,10 +307,10 @@ const Quiz = () => {
                         <Skeleton className="h-4 w-24" />
                       ) : attempted ? (
                         <span className="flex items-center gap-1.5 font-semibold text-state-success">
-                          <Icon name="trophy" size={14} /> Best: {highScores[quiz.id]} / {Math.min(quiz.questions.length, 10)}
+                          <Icon name="trophy" size={14} /> {t("quiz.best", { score: highScores[quiz.id], total: Math.min(quiz.questions.length, 10) })}
                         </span>
                       ) : (
-                        <span className="text-ink-low">Not attempted yet</span>
+                        <span className="text-ink-low">{t("quiz.notAttempted")}</span>
                       )}
                     </div>
                     {attempted ? (
@@ -320,7 +320,7 @@ const Quiz = () => {
                         onClick={() => startQuiz(quiz)}
                         className="flex items-center gap-1.5 !border-state-success/30 !text-state-success hover:!bg-state-success/10"
                       >
-                        <Icon name="refresh-cw" size={12} /> Retake
+                        <Icon name="refresh-cw" size={12} /> {t("quiz.retake")}
                       </Button>
                     ) : (
                       <Button size="sm" onClick={() => startQuiz(quiz)}>{t("quiz.start")}</Button>
@@ -340,7 +340,7 @@ const Quiz = () => {
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.12em] text-sky">{activeQuiz.title}</p>
               <h2 className="mt-1 text-base font-bold text-ink">
-                Question {currentQuestionIdx + 1} of {activeQuiz.questions.length}
+                {t("quiz.questionProgress", { current: currentQuestionIdx + 1, total: activeQuiz.questions.length })}
               </h2>
             </div>
               <span
@@ -355,7 +355,7 @@ const Quiz = () => {
           </div>
 
           {/* Timer bar */}
-          <div className="mb-8 h-1.5 overflow-hidden rounded-full bg-white/[0.08]">
+          <div className="mb-8 h-1.5 overflow-hidden rounded-full clay-inset">
             <div
               className={`h-full rounded-full transition-[width] duration-1000 ease-linear ${
                 urgent ? "bg-state-danger" : "bg-gradient-to-r from-violet-500 to-sky"
@@ -373,13 +373,13 @@ const Quiz = () => {
               const isSelected = selectedAnswer === option;
               const isCorrectAnswer = option === activeQuiz.questions[currentQuestionIdx].correctAnswer;
 
-              let style = "border-white/[0.08] bg-white/[0.03] hover:border-violet-500 hover:bg-white/[0.06]";
+              let style = "border-white/10 bg-surface-2 shadow-clay-sm hover:border-violet-500 hover:bg-surface";
               if (isAnswerSubmitted) {
                 if (isCorrectAnswer) style = "border-state-success bg-state-success/15 text-state-success";
                 else if (isSelected) style = "border-state-danger bg-state-danger/15 text-state-danger";
                 else style = "border-white/[0.05] opacity-60";
               } else if (isSelected) {
-                style = "border-violet-500 bg-white/[0.08]";
+                style = "border-violet-500 bg-surface shadow-clay-sm";
               }
 
               return (
@@ -391,10 +391,10 @@ const Quiz = () => {
                 >
                   <span>{option}</span>
                   {isAnswerSubmitted && isCorrectAnswer && (
-                    <span className="text-xs font-bold uppercase text-state-success">✓ {t("exerciseEngine.correctTitle")}</span>
+                    <span className="flex items-center gap-1 text-xs font-bold uppercase text-state-success"><Icon name="check" size={14} /> {t("exerciseEngine.correctTitle")}</span>
                   )}
                   {isAnswerSubmitted && isSelected && !isCorrectAnswer && (
-                    <span className="text-xs font-bold uppercase text-state-danger">✗ {t("exerciseEngine.incorrectTitle")}</span>
+                    <span className="flex items-center gap-1 text-xs font-bold uppercase text-state-danger"><Icon name="x" size={14} /> {t("exerciseEngine.incorrectTitle")}</span>
                   )}
                 </button>
               );
@@ -423,7 +423,7 @@ const Quiz = () => {
           <h2 className="text-2xl font-bold text-ink-hi md:text-3xl">{getGradingFeedback().title}</h2>
           <p className="mt-1.5 text-sm text-ink-low">{getGradingFeedback().msg}</p>
 
-          <div className="mx-auto my-7 grid h-36 w-36 place-items-center rounded-full border-4 border-violet-600 bg-white/[0.04]">
+          <div className="mx-auto my-7 grid h-36 w-36 place-items-center rounded-full border-4 border-violet-600 bg-surface-2 shadow-clay-sm">
             <div>
               <span className="text-4xl font-extrabold text-ink-hi">{score}</span>
               <span className="text-xl text-ink-low"> / {activeQuiz.questions.length}</span>
@@ -474,14 +474,14 @@ const Quiz = () => {
           ) : (
             <div className="mb-7">
               {isSaving ? (
-                <p className="animate-pulse text-sm text-ink-low">Saving score to your profile…</p>
+                <p className="animate-pulse text-sm text-ink-low">{t("quiz.savingScore")}</p>
               ) : (
                 <div className="flex flex-col items-center gap-1.5">
                   <p className="flex items-center justify-center gap-1.5 text-sm font-semibold text-state-success">
                     <Icon name="check-circle" size={16} /> {t("quiz.resultsTitle")}
                   </p>
                   {xpEarned > 0 && (
-                    <p className="text-xs font-bold text-violet-400">+{xpEarned} XP Earned ⚡</p>
+                    <p className="flex items-center justify-center gap-1 text-xs font-bold text-violet-400">{t("quiz.xpEarned", { xp: xpEarned })} <Icon name="zap" size={14} /></p>
                   )}
                 </div>
               )}

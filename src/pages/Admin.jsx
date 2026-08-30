@@ -242,7 +242,7 @@ const Admin = () => {
     return (
       <div className="flex min-h-screen flex-col">
         {/* ── Minimal Top Bar (Login State) ── */}
-        <header className="flex items-center justify-between border-b border-white/[0.06] bg-surface-primary/80 px-5 py-3 backdrop-blur-md">
+        <header className="flex items-center justify-between border-b border-white/[0.06] bg-surface px-5 py-3">
           <div className="flex items-center gap-2.5">
             <div className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-violet-600 to-sky text-white shadow-md">
               <Icon name="shield" size={16} />
@@ -301,10 +301,10 @@ const Admin = () => {
   };
 
   const KPIS = [
-    { label: "Students", value: students.length, icon: "users", tint: "text-violet-300", ring: "border-violet-500/25 bg-violet-500/[0.06]" },
-    { label: "Messages", value: contactMessages.length, icon: "mail", tint: "text-sky", ring: "border-sky/25 bg-sky/[0.06]" },
-    { label: "System Logs", value: bugReports.length, icon: "alert-circle", tint: "text-amber-300", ring: "border-amber-500/25 bg-amber-500/[0.06]" },
-    { label: "Total Points", value: totalPoints, icon: "trophy", tint: "text-state-success", ring: "border-state-success/25 bg-state-success/[0.06]" },
+    { label: "Students", value: students.length, icon: "users", tint: "text-violet-300", ring: "border-violet-500/25" },
+    { label: "Messages", value: contactMessages.length, icon: "mail", tint: "text-sky", ring: "border-sky/25" },
+    { label: "System Logs", value: bugReports.length, icon: "alert-circle", tint: "text-amber-300", ring: "border-amber-500/25" },
+    { label: "Total Points", value: totalPoints, icon: "trophy", tint: "text-state-success", ring: "border-state-success/25" },
   ];
 
   const meta = SECTION_META[activeTab];
@@ -334,7 +334,7 @@ const Admin = () => {
   return (
     <div className="flex min-h-screen flex-col text-ink-hi">
       {/* ── Executive Top Bar ── */}
-      <header className="sticky top-0 z-30 flex items-center justify-between border-b border-white/[0.06] bg-surface-primary/80 px-5 py-3 backdrop-blur-md">
+      <header className="sticky top-0 z-30 flex items-center justify-between border-b border-white/[0.06] bg-surface px-5 py-3">
         <div className="flex items-center gap-2.5">
           <div className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-violet-600 to-sky text-white shadow-md">
             <Icon name="shield" size={16} />
@@ -379,7 +379,7 @@ const Admin = () => {
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
                 className={`flex flex-none items-center gap-2 rounded-lg border px-3.5 py-2 text-xs font-semibold transition-colors ${
-                  active ? "border-violet-500/40 bg-violet-500/15 text-violet-300" : "border-white/[0.08] bg-white/[0.02] text-ink-low"
+                  active ? "border-violet-500/40 bg-violet-500/15 text-violet-300" : "border-white/10 bg-surface-2 shadow-clay-sm text-ink-low"
                 }`}
               >
                 <Icon name={item.icon} size={14} /> {item.label}
@@ -394,7 +394,7 @@ const Admin = () => {
           {/* ── Sidebar ── */}
           <aside className="hidden w-60 flex-none lg:block">
             <div className="sticky top-20">
-              <div className="rounded-xl border border-violet-500/30 bg-violet-500/[0.04] p-4 shadow-card">
+              <div className="rounded-xl border border-violet-500/30 bg-surface shadow-clay p-4">
                 <div className="flex items-center gap-3">
                   <div className="grid h-10 w-10 flex-none place-items-center rounded-xl bg-gradient-to-br from-violet-600 to-sky text-white shadow-md">
                     <Icon name="shield" size={20} />
@@ -411,7 +411,7 @@ const Admin = () => {
                 </div>
               </div>
 
-              <nav className="mt-3 space-y-1 rounded-xl border border-white/[0.08] bg-white/[0.02] p-2">
+              <nav className="mt-3 space-y-1 rounded-xl border border-white/10 bg-surface shadow-clay p-2">
                 {NAV_ITEMS.map(navItem)}
               </nav>
 
@@ -457,7 +457,7 @@ const Admin = () => {
                 {/* KPI cards */}
                 <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
                   {KPIS.map((k) => (
-                    <div key={k.label} className={`rounded-xl border p-5 ${k.ring}`}>
+                    <div key={k.label} className={`rounded-xl border bg-surface shadow-clay p-5 ${k.ring}`}>
                       <div className={`flex items-center gap-2 text-xs font-semibold uppercase tracking-wider ${k.tint}`}>
                         <Icon name={k.icon} size={16} /> {k.label}
                       </div>
@@ -469,7 +469,7 @@ const Admin = () => {
                 {/* Recent activity split */}
                 <div className="grid gap-6 lg:grid-cols-2">
                   {/* Top students */}
-                  <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-5">
+                  <div className="rounded-xl border border-white/10 bg-surface shadow-clay p-5">
                     <div className="mb-4 flex items-center justify-between">
                       <h3 className="flex items-center gap-2 text-sm font-bold text-white"><Icon name="trophy" size={16} className="text-amber-400" /> Top students</h3>
                       <button onClick={() => setActiveTab("students")} className="text-xs font-semibold text-violet-400 hover:underline">View all</button>
@@ -479,7 +479,7 @@ const Admin = () => {
                     ) : topStudents.length > 0 ? (
                       <ul className="space-y-2">
                         {topStudents.map((s, i) => (
-                          <li key={s.id} className="flex items-center gap-3 rounded-lg border border-white/[0.05] bg-white/[0.02] px-3 py-2.5">
+                          <li key={s.id} className="flex items-center gap-3 rounded-lg border border-white/10 bg-surface-2 shadow-clay-sm px-3 py-2.5">
                             <span className="w-4 flex-none text-center text-xs font-bold text-ink-faint tabular-nums">{i + 1}</span>
                             <div className="grid h-8 w-8 flex-none place-items-center rounded-full bg-gradient-to-tr from-violet-600 to-sky text-xs font-bold text-white">
                               {s.fullName ? s.fullName.charAt(0).toUpperCase() : "S"}
@@ -495,7 +495,7 @@ const Admin = () => {
                   </div>
 
                   {/* Recent messages */}
-                  <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-5">
+                  <div className="rounded-xl border border-white/10 bg-surface shadow-clay p-5">
                     <div className="mb-4 flex items-center justify-between">
                       <h3 className="flex items-center gap-2 text-sm font-bold text-white"><Icon name="mail" size={16} className="text-sky" /> Recent messages</h3>
                       <button onClick={() => setActiveTab("messages")} className="text-xs font-semibold text-violet-400 hover:underline">View all</button>
@@ -506,7 +506,7 @@ const Admin = () => {
                       <ul className="space-y-2">
                         {contactMessages.slice(0, 4).map((m) => (
                           <li key={m.id}>
-                            <button onClick={() => setSelectedMessage(m)} className="flex w-full items-center gap-3 rounded-lg border border-white/[0.05] bg-white/[0.02] px-3 py-2.5 text-left transition-colors hover:bg-white/[0.05]">
+                            <button onClick={() => setSelectedMessage(m)} className="flex w-full items-center gap-3 rounded-lg border border-white/10 bg-surface-2 shadow-clay-sm px-3 py-2.5 text-left transition-colors hover:bg-surface">
                               <div className="min-w-0 flex-1">
                                 <p className="truncate text-sm font-semibold text-ink-hi">{m.subject || "(No subject)"}</p>
                                 <p className="truncate text-[11px] text-ink-low">{m.name}</p>
@@ -544,15 +544,15 @@ const Admin = () => {
                 {loading ? (
                   <div className="space-y-2">{[...Array(5)].map((_, i) => <Skeleton key={i} className="h-14 w-full rounded-xl" />)}</div>
                 ) : filteredStudents.length === 0 ? (
-                  <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] py-14 text-center text-ink-low">
+                  <div className="rounded-xl border border-white/10 bg-surface shadow-clay py-14 text-center text-ink-low">
                     <Icon name="users" size={36} className="mx-auto mb-3 text-ink-faint" />
                     <p className="font-semibold">No students found</p>
                     <p className="text-sm">Try a different search term.</p>
                   </div>
                 ) : (
-                  <div className="overflow-x-auto rounded-xl border border-white/[0.08]">
+                  <div className="overflow-x-auto rounded-xl border border-white/10 bg-surface shadow-clay">
                     <table className="w-full text-left text-sm">
-                      <thead className="border-b border-white/[0.08] bg-white/[0.03] text-xs font-bold uppercase tracking-wider text-ink-low">
+                      <thead className="border-b border-white/[0.08] bg-surface-2 text-xs font-bold uppercase tracking-wider text-ink-low">
                         <tr>
                           <th className="px-5 py-3.5">Student</th>
                           <th className="px-5 py-3.5">Email</th>
@@ -595,7 +595,7 @@ const Admin = () => {
                 {loading ? (
                   <div className="space-y-3">{[...Array(3)].map((_, i) => <Skeleton key={i} className="h-24 w-full rounded-xl" />)}</div>
                 ) : contactMessages.length === 0 ? (
-                  <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] py-14 text-center text-ink-low">
+                  <div className="rounded-xl border border-white/10 bg-surface shadow-clay py-14 text-center text-ink-low">
                     <Icon name="mail" size={36} className="mx-auto mb-3 text-ink-faint" />
                     <p className="font-semibold">No messages received yet</p>
                     <p className="text-sm">Contact-form submissions appear here instantly.</p>
@@ -603,13 +603,13 @@ const Admin = () => {
                 ) : (
                   <div className="grid gap-3 sm:grid-cols-2">
                     {contactMessages.map((msg) => (
-                      <div key={msg.id} className="flex flex-col rounded-xl border border-white/[0.08] bg-white/[0.02] p-5 transition-colors hover:border-violet-500/30">
+                      <div key={msg.id} className="flex flex-col rounded-xl border border-white/10 bg-surface shadow-clay p-5 transition-colors hover:border-violet-500/30">
                         <div className="mb-2 flex items-start justify-between gap-2">
                           <h4 className="font-bold text-white">{msg.subject || "(No subject)"}</h4>
                           <span className="flex-none text-[11px] text-ink-faint">{msg.submittedAt?.toDate ? msg.submittedAt.toDate().toLocaleDateString() : "Recent"}</span>
                         </div>
                         <p className="text-xs text-ink-low">From <span className="font-semibold text-violet-300">{msg.name}</span></p>
-                        <p className="mt-3 line-clamp-2 flex-1 rounded-lg border border-white/[0.03] bg-black/20 p-3 text-sm leading-relaxed text-ink-low">
+                        <p className="mt-3 line-clamp-2 flex-1 rounded-lg clay-inset p-3 text-sm leading-relaxed text-ink-low">
                           &ldquo;{msg.message}&rdquo;
                         </p>
                         <div className="mt-3 flex justify-end">
@@ -628,7 +628,7 @@ const Admin = () => {
                 {loading ? (
                   <div className="grid gap-3 sm:grid-cols-2">{[...Array(2)].map((_, i) => <Skeleton key={i} className="h-28 w-full rounded-xl" />)}</div>
                 ) : bugReports.length === 0 ? (
-                  <div className="rounded-xl border border-white/[0.08] bg-white/[0.02] py-14 text-center text-ink-low">
+                  <div className="rounded-xl border border-white/10 bg-surface shadow-clay py-14 text-center text-ink-low">
                     <Icon name="alert-circle" size={36} className="mx-auto mb-3 text-ink-faint" />
                     <p className="font-semibold">No logs yet</p>
                     <p className="text-sm">Use &ldquo;Log note&rdquo; to record an issue or maintenance note.</p>
@@ -636,7 +636,7 @@ const Admin = () => {
                 ) : (
                   <div className="grid gap-3 sm:grid-cols-2">
                     {bugReports.map((bug) => (
-                      <div key={bug.id} className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-5">
+                      <div key={bug.id} className="rounded-xl border border-white/10 bg-surface shadow-clay p-5">
                         <div className="mb-2 flex items-center justify-between">
                           <span className="text-[11px] font-bold uppercase tracking-wider text-amber-300">{bug.priority || "Medium"} priority</span>
                           <span className="rounded-full bg-state-success/15 px-2 py-0.5 text-[10px] font-bold uppercase text-state-success">{bug.status || "Open"}</span>
@@ -657,7 +657,7 @@ const Admin = () => {
       {selectedStudent && (
         <Modal isOpen={!!selectedStudent} onClose={() => setSelectedStudent(null)} title={selectedStudent.fullName || "Learner"}>
           <div className="space-y-4 text-sm text-ink-hi">
-            <div className="space-y-2 rounded-xl border border-white/[0.08] bg-white/[0.02] p-4">
+            <div className="space-y-2 rounded-xl clay-inset p-4">
               <p><span className="text-ink-low">Email:</span> {selectedStudent.email || "N/A"}</p>
               <p><span className="text-ink-low">User ID:</span> <code className="font-mono text-xs text-violet-300">{selectedStudent.uid || selectedStudent.id}</code></p>
               <p><span className="text-ink-low">Total points:</span> <strong className="text-amber-300">{selectedStudent.totalPoints || 0}</strong></p>
@@ -668,8 +668,8 @@ const Admin = () => {
               <div className="flex flex-wrap gap-2">
                 {selectedStudent.badges && selectedStudent.badges.length > 0 ? (
                   selectedStudent.badges.map((b, i) => (
-                    <span key={i} className="rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-bold text-amber-300">
-                      🏆 {typeof b === "string" ? b : b.name}
+                    <span key={i} className="inline-flex items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-bold text-amber-300">
+                      <Icon name={typeof b === "string" ? "award" : (b.icon || "award")} size={14} /> {typeof b === "string" ? b : b.name}
                     </span>
                   ))
                 ) : (
@@ -688,21 +688,21 @@ const Admin = () => {
       {selectedMessage && (
         <Modal isOpen={!!selectedMessage} onClose={() => setSelectedMessage(null)} title={`Inquiry from ${selectedMessage.name}`}>
           <div className="space-y-4 text-sm text-ink-hi">
-            <div className="space-y-1.5 rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
+            <div className="space-y-1.5 rounded-xl clay-inset p-4">
               <p><span className="text-ink-low">Name:</span> <strong>{selectedMessage.name}</strong></p>
               <p><span className="text-ink-low">Email:</span> <a href={`mailto:${selectedMessage.email}`} className="text-sky underline">{selectedMessage.email}</a></p>
               <p><span className="text-ink-low">Subject:</span> <strong>{selectedMessage.subject}</strong></p>
             </div>
             <div>
               <h5 className="mb-2 font-bold text-white">Message</h5>
-              <div className="whitespace-pre-line rounded-xl border border-white/[0.06] bg-black/40 p-4 leading-relaxed text-ink-low">
+              <div className="whitespace-pre-line rounded-xl clay-inset p-4 leading-relaxed text-ink-low">
                 {selectedMessage.message}
               </div>
             </div>
             <div className="flex items-center justify-between pt-2">
               <a
                 href={`mailto:${selectedMessage.email}?subject=Re: ${encodeURIComponent(selectedMessage.subject || "Learntopia Support")}`}
-                className="inline-flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-violet-500"
+                className="inline-flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2 text-sm font-bold text-white shadow-clay-btn transition-colors hover:bg-violet-500"
               >
                 <Icon name="mail" size={16} /> Reply via email
               </a>

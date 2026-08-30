@@ -2,7 +2,7 @@
 // variant; the rest are quiet tints.
 
 const VARIANTS = {
-  default: "bg-white/[0.06] text-ink-hi border-white/[0.13]",
+  default: "bg-surface-2 text-ink-hi border-white/10",
   solid: "bg-violet-600 text-white border-transparent",
   sky: "bg-sky/[0.16] text-sky border-sky/35",
   success: "bg-state-success/[0.14] text-state-success border-state-success/35",

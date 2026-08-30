@@ -108,7 +108,7 @@ const AIChatDrawer = ({ isOpen, onClose, course, currentModule }) => {
         return (
           <pre
             key={i}
-            className="my-3 overflow-x-auto rounded-xl bg-ground-900/80 p-3.5 text-xs font-mono leading-relaxed text-state-success border border-state-success/20 shadow-inner"
+            className="my-3 overflow-x-auto rounded-xl clay-inset p-3.5 text-xs font-mono leading-relaxed text-state-success border border-state-success/20"
           >
             <code>{code.trim()}</code>
           </pre>
@@ -147,9 +147,9 @@ const AIChatDrawer = ({ isOpen, onClose, course, currentModule }) => {
 
   // Quick helper suggestion prompts
   const suggestionChips = [
-    "💡 Summarize this topic simply!",
-    "🎮 Give me a fun example!",
-    "🧠 Test my knowledge with a quick question!"
+    "Summarize this topic simply!",
+    "Give me a fun example!",
+    "Test my knowledge with a quick question!"
   ];
 
   return (
@@ -165,7 +165,7 @@ const AIChatDrawer = ({ isOpen, onClose, course, currentModule }) => {
 
       {/* Slide-out Drawer */}
       <div
-        className={`fixed top-0 right-0 z-[70] flex h-full w-full flex-col border-l border-white/10 bg-ground-900/95 backdrop-blur-2xl shadow-[0_0_50px_rgba(0,0,0,0.8)] transition-transform duration-300 ease-out sm:w-[440px] ${
+        className={`fixed top-0 right-0 z-[70] flex h-full w-full flex-col border-l border-white/10 bg-surface shadow-[0_0_50px_rgba(0,0,0,0.8)] transition-transform duration-300 ease-out sm:w-[440px] ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
         role="dialog"
@@ -173,7 +173,7 @@ const AIChatDrawer = ({ isOpen, onClose, course, currentModule }) => {
         aria-label={`Chat with ${tutor.name}`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-white/10 bg-gradient-to-r from-violet-700/40 via-violet-700/20 to-ground-900 p-4 shadow-lg">
+        <div className="flex items-center justify-between border-b border-white/10 bg-surface p-4 shadow-lg">
           <div className="flex items-center gap-3 min-w-0">
             <div className="relative flex-none">
               <BotAvatar name={tutor.name} size="sm" />
@@ -191,14 +191,14 @@ const AIChatDrawer = ({ isOpen, onClose, course, currentModule }) => {
           <div className="flex items-center gap-1 flex-none ml-2">
             <button
               onClick={clearChat}
-              className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-ink-low transition-all hover:bg-white/15 hover:text-white hover:scale-105 active:scale-95"
+              className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-surface-2 shadow-clay-sm text-ink-low transition-all hover:bg-surface-3 hover:text-white hover:scale-105 active:scale-95"
               title={t("aiTutor.clearChat")}
             >
               <Icon name="refresh-cw" size={15} />
             </button>
             <button
               onClick={onClose}
-              className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-ink-low transition-all hover:bg-white/15 hover:text-white hover:scale-105 active:scale-95"
+              className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-surface-2 shadow-clay-sm text-ink-low transition-all hover:bg-surface-3 hover:text-white hover:scale-105 active:scale-95"
               title={t("common.close")}
             >
               <Icon name="x" size={18} />
@@ -219,10 +219,10 @@ const AIChatDrawer = ({ isOpen, onClose, course, currentModule }) => {
               )}
 
               <div
-                className={`max-w-[82%] rounded-2xl p-4 text-sm leading-relaxed shadow-lg ${
+                className={`max-w-[82%] rounded-2xl p-4 text-sm leading-relaxed ${
                   msg.role === "user"
-                    ? "bg-gradient-to-r from-violet-600 via-violet-500 to-sky text-white rounded-tr-none font-medium shadow-violet-500/20"
-                    : "bg-white/[0.07] border border-white/10 text-ink-hi rounded-tl-none backdrop-blur-md"
+                    ? "bg-violet-600 text-white rounded-tr-none font-medium shadow-clay-sm"
+                    : "bg-surface-2 border border-white/10 text-ink-hi rounded-tl-none shadow-clay-sm"
                 }`}
               >
                 {msg.role === "model" && (
@@ -242,7 +242,7 @@ const AIChatDrawer = ({ isOpen, onClose, course, currentModule }) => {
           {isLoading && (
             <div className="flex items-start gap-2.5">
               <BotAvatar name={tutor.name} size="sm" className="!w-8 !h-8 !p-1 flex-none" />
-              <div className="rounded-2xl rounded-tl-none border border-violet-500/30 bg-violet-500/10 p-3.5 backdrop-blur-md">
+              <div className="rounded-2xl rounded-tl-none border border-violet-500/30 bg-violet-500/10 p-3.5 shadow-clay-sm">
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-1">
                     <span className="h-2 w-2 animate-bounce rounded-full bg-violet-400 [animation-delay:0ms]" />
@@ -274,7 +274,7 @@ const AIChatDrawer = ({ isOpen, onClose, course, currentModule }) => {
                 <button
                   key={i}
                   onClick={() => handleSend(chip)}
-                  className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-medium text-ink-hi hover:bg-violet-500/20 hover:border-violet-500/40 hover:text-white transition-all text-left"
+                  className="rounded-full border border-white/15 bg-surface-2 shadow-clay-sm px-3 py-1 text-xs font-medium text-ink-hi hover:bg-violet-500/20 hover:border-violet-500/40 hover:text-white transition-all text-left"
                 >
                   {chip}
                 </button>
@@ -284,8 +284,8 @@ const AIChatDrawer = ({ isOpen, onClose, course, currentModule }) => {
         )}
 
         {/* Footer Input Bar */}
-        <div className="border-t border-white/10 bg-ground-900/90 p-3.5 backdrop-blur-xl">
-          <div className="flex items-center gap-2 rounded-2xl border border-white/15 bg-white/[0.06] p-2 transition-all focus-within:border-violet-500 focus-within:ring-2 focus-within:ring-violet-500/30 focus-within:bg-white/[0.09]">
+        <div className="border-t border-white/10 bg-ground-900 p-3.5">
+          <div className="flex items-center gap-2 rounded-2xl border border-white/15 bg-surface-2 p-2 transition-all focus-within:border-violet-500 focus-within:ring-2 focus-within:ring-violet-500/30 focus-within:bg-surface-3">
             <textarea
               ref={inputRef}
               value={input}
@@ -301,7 +301,7 @@ const AIChatDrawer = ({ isOpen, onClose, course, currentModule }) => {
               type="button"
               onClick={() => handleSend()}
               disabled={!input.trim() || isLoading}
-              className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-gradient-to-tr from-violet-600 via-violet-500 to-sky text-white shadow-lg shadow-violet-500/30 hover:scale-105 active:scale-95 transition-all disabled:opacity-40 disabled:scale-100 disabled:shadow-none"
+              className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-violet-600 text-white shadow-clay-btn hover:bg-violet-500 hover:scale-105 active:scale-95 transition-all disabled:opacity-40 disabled:scale-100 disabled:shadow-none"
               title={t("aiTutor.askTutor", { name: tutor.name })}
             >
               <Icon name="send" size={17} className="text-white" />

@@ -36,7 +36,7 @@ export const COURSES = [
     },
     xpPerModule: 50,
     totalXP: 300,
-    badge: { name: "Python Pioneer", emoji: "🐍" },
+    badge: { name: "Python Pioneer", icon: "code" },
     syllabus: [
       {
         title: "Module 1: Hello Python!",
@@ -56,7 +56,7 @@ export const COURSES = [
           {
             type: "fact",
             title: "Fun Fact!",
-            content: "Python wasn't named after the snake! 🐍 It was named after a funny British comedy show called 'Monty Python's Flying Circus'. The creator, Guido van Rossum, was watching it while writing Python and thought the name was fun!"
+            content: "Python wasn't named after the snake! It was named after a funny British comedy show called 'Monty Python's Flying Circus'. The creator, Guido van Rossum, was watching it while writing Python and thought the name was fun!"
           },
           {
             type: "example",
@@ -71,7 +71,7 @@ export const COURSES = [
           {
             type: "activity",
             title: "Try It Yourself!",
-            content: "If you have Python on your computer, open it and try typing these commands one at a time:\n\n1. print('Hello World!')\n2. print('My name is [YOUR NAME]!')\n3. print('I am learning to code!')\n4. print('Python is awesome!')\n\nWatch what happens after each one. You just made a computer talk! 🎉"
+            content: "If you have Python on your computer, open it and try typing these commands one at a time:\n\n1. print('Hello World!')\n2. print('My name is [YOUR NAME]!')\n3. print('I am learning to code!')\n4. print('Python is awesome!')\n\nWatch what happens after each one. You just made a computer talk!"
           },
           {
             type: "recap",
@@ -141,12 +141,12 @@ export const COURSES = [
           {
             type: "fact",
             title: "Your Brain is Full of Variables!",
-            content: "Your brain works just like a computer with variables! Right now, your brain has a variable called 'my_name' storing your name, a variable called 'my_age' storing your age, and a variable called 'favorite_color' storing your favorite color. You just don't think about them as 'variables' — but that's exactly what they are! 🧠"
+            content: "Your brain works just like a computer with variables! Right now, your brain has a variable called 'my_name' storing your name, a variable called 'my_age' storing your age, and a variable called 'favorite_color' storing your favorite color. You just don't think about them as 'variables' — but that's exactly what they are!"
           },
           {
             type: "tip",
             title: "Naming Your Variables",
-            content: "Good variable names describe what's inside the box:\n\n✅ Good: player_score, user_name, lives_remaining\n❌ Bad: x, thing, abc123\n\nRules for Python variable names:\n• No spaces! Use underscores: player_name (not player name)\n• Can't start with a number: 1score is wrong, score1 is fine\n• Python is case-sensitive: Score and score are DIFFERENT variables!"
+            content: "Good variable names describe what's inside the box:\n\nGood: player_score, user_name, lives_remaining\nBad: x, thing, abc123\n\nRules for Python variable names:\n• No spaces! Use underscores: player_name (not player name)\n• Can't start with a number: 1score is wrong, score1 is fine\n• Python is case-sensitive: Score and score are DIFFERENT variables!"
           },
           {
             type: "recap",
@@ -212,17 +212,17 @@ export const COURSES = [
           {
             type: "fact",
             title: "If-Statements Are EVERYWHERE!",
-            content: "Video games use MILLIONS of if-statements! 🎮\n\n• IF Mario hits a Goomba → he loses a life\n• IF Mario grabs a mushroom → he grows big\n• IF the timer reaches zero → Game Over!\n• IF the player presses the jump button → Mario jumps\n\nEvery single thing that happens in a game is controlled by if-statements working together!"
+            content: "Video games use MILLIONS of if-statements!\n\n• IF Mario hits a Goomba → he loses a life\n• IF Mario grabs a mushroom → he grows big\n• IF the timer reaches zero → Game Over!\n• IF the player presses the jump button → Mario jumps\n\nEvery single thing that happens in a game is controlled by if-statements working together!"
           },
           {
             type: "example",
             title: "Comparison Operators",
-            content: "To write conditions, you need comparison operators:\n\n>  means 'greater than'       (10 > 5 is True)\n<  means 'less than'          (3 < 7 is True)\n== means 'equal to'           (5 == 5 is True)\n!= means 'not equal to'       (5 != 3 is True)\n>= means 'greater or equal'   (10 >= 10 is True)\n<= means 'less or equal'      (4 <= 9 is True)\n\n⚠️ Notice: Checking equality uses == (double equals), NOT = (single equals). Single = is for assigning variables!"
+            content: "To write conditions, you need comparison operators:\n\n>  means 'greater than'       (10 > 5 is True)\n<  means 'less than'          (3 < 7 is True)\n== means 'equal to'           (5 == 5 is True)\n!= means 'not equal to'       (5 != 3 is True)\n>= means 'greater or equal'   (10 >= 10 is True)\n<= means 'less or equal'      (4 <= 9 is True)\n\nNotice: Checking equality uses == (double equals), NOT = (single equals). Single = is for assigning variables!"
           },
           {
             type: "tip",
             title: "The Colon is Crucial!",
-            content: "Every if, elif, and else line MUST end with a colon (:)\n\n✅ Correct: if score > 10:\n❌ Wrong:   if score > 10\n\nAlso, the code that runs inside the if-statement must be indented (pushed to the right with spaces). Python uses indentation to know which code belongs inside the if-statement!"
+            content: "Every if, elif, and else line MUST end with a colon (:)\n\nCorrect: if score > 10:\nWrong:   if score > 10\n\nAlso, the code that runs inside the if-statement must be indented (pushed to the right with spaces). Python uses indentation to know which code belongs inside the if-statement!"
           },
           {
             type: "recap",
@@ -288,22 +288,22 @@ export const COURSES = [
           {
             type: "example",
             title: "The Complete Game Code",
-            content: "Here's the full guessing game:\n\nimport random\n\nsecret = random.randint(1, 20)\nprint('I picked a number between 1 and 20!')\n\nguess = 0\nattempts = 0\n\nwhile guess != secret:\n    guess = int(input('Your guess: '))\n    attempts = attempts + 1\n    \n    if guess > secret:\n        print('Too High! Try lower.')\n    elif guess < secret:\n        print('Too Low! Try higher.')\n    else:\n        print('YOU GOT IT! 🎉')\n        print('It took you', attempts, 'guesses!')\n\nEvery concept you learned — print, variables, if/elif/else, loops, input — is used here!"
+            content: "Here's the full guessing game:\n\nimport random\n\nsecret = random.randint(1, 20)\nprint('I picked a number between 1 and 20!')\n\nguess = 0\nattempts = 0\n\nwhile guess != secret:\n    guess = int(input('Your guess: '))\n    attempts = attempts + 1\n    \n    if guess > secret:\n        print('Too High! Try lower.')\n    elif guess < secret:\n        print('Too Low! Try higher.')\n    else:\n        print('YOU GOT IT!')\n        print('It took you', attempts, 'guesses!')\n\nEvery concept you learned — print, variables, if/elif/else, loops, input — is used here!"
           },
           {
             type: "fact",
             title: "Random Numbers in Games",
-            content: "The random.randint(1, 20) function picks a random number between 1 and 20. Every game you've ever played uses random numbers! Minecraft uses them to generate worlds, Pokémon uses them to decide if you catch a Pokémon, and card games use them to shuffle the deck. Randomness makes games exciting because you never know what will happen! 🎲"
+            content: "The random.randint(1, 20) function picks a random number between 1 and 20. Every game you've ever played uses random numbers! Minecraft uses them to generate worlds, Pokémon uses them to decide if you catch a Pokémon, and card games use them to shuffle the deck. Randomness makes games exciting because you never know what will happen!"
           },
           {
             type: "activity",
             title: "Upgrade Your Game!",
-            content: "Once your basic game works, try these upgrades:\n\n🌟 Easy: Change the range from 1-20 to 1-100 for a harder game\n🌟 Medium: Limit the player to only 5 guesses. If they run out, print 'Game Over!'\n🌟 Hard: Add a scoring system — fewer guesses = higher score!\n🌟 Expert: Ask the player if they want to play again after winning!\n\nEvery upgrade uses the same skills you've already learned — just combined in creative ways!"
+            content: "Once your basic game works, try these upgrades:\n\nEasy: Change the range from 1-20 to 1-100 for a harder game\nMedium: Limit the player to only 5 guesses. If they run out, print 'Game Over!'\nHard: Add a scoring system — fewer guesses = higher score!\nExpert: Ask the player if they want to play again after winning!\n\nEvery upgrade uses the same skills you've already learned — just combined in creative ways!"
           },
           {
             type: "recap",
             title: "Course Complete Recap!",
-            content: "Congratulations — you've learned all the fundamentals of Python! 🎉\n\n• print() displays text on screen\n• Variables store data in labeled boxes\n• Data types: Integers, Strings, Floats, Booleans\n• If/elif/else make decisions based on conditions\n• Comparison operators: > < == != >= <=\n• While loops repeat code until a condition is false\n• input() gets information from the user\n• int() converts text to a number\n• random.randint() generates random numbers\n\nYou're ready to build your own games — the sky is the limit! 🚀"
+            content: "Congratulations — you've learned all the fundamentals of Python!\n\n• print() displays text on screen\n• Variables store data in labeled boxes\n• Data types: Integers, Strings, Floats, Booleans\n• If/elif/else make decisions based on conditions\n• Comparison operators: > < == != >= <=\n• While loops repeat code until a condition is false\n• input() gets information from the user\n• int() converts text to a number\n• random.randint() generates random numbers\n\nYou're ready to build your own games — the sky is the limit!"
           }
         ],
         exercises: [
@@ -368,7 +368,7 @@ export const COURSES = [
     },
     xpPerModule: 50,
     totalXP: 300,
-    badge: { name: "Math Wizard", emoji: "🔮" },
+    badge: { name: "Math Wizard", icon: "sparkles" },
     syllabus: [
       {
         title: "Module 1: Number Patterns",
@@ -387,7 +387,7 @@ export const COURSES = [
           },
           {
             type: "fact",
-            title: "Nature Loves Fibonacci! 🌻",
+            title: "Nature Loves Fibonacci!",
             content: "The Fibonacci sequence starts like this: 1, 1, 2, 3, 5, 8, 13... where each number is the sum of the two before it! Sunflowers, pinecones, seashells, and even storm whirlwinds follow this exact sequence!"
           },
           {
@@ -462,7 +462,7 @@ export const COURSES = [
           },
           {
             type: "fact",
-            title: "Angles & Right Angles 📐",
+            title: "Angles & Right Angles",
             content: "An angle is formed where two lines meet. A corner of a square is a 90° angle, called a Right Angle. Look around your room — doors, books, and screens are full of right angles!"
           },
           {
@@ -668,7 +668,7 @@ export const COURSES = [
     },
     xpPerModule: 50,
     totalXP: 300,
-    badge: { name: "Cash Master", emoji: "💰" },
+    badge: { name: "Cash Master", icon: "award" },
     syllabus: [
       {
         title: "Module 1: What is Money?",
@@ -687,7 +687,7 @@ export const COURSES = [
           },
           {
             type: "fact",
-            title: "Fun Fact: Shells & Salt as Money! 🐚",
+            title: "Fun Fact: Shells & Salt as Money!",
             content: "Before paper money, people used cowrie shells, giant stones, and even salt as money! In fact, the word 'salary' comes from the Latin word for salt ('sal')!"
           },
           {
@@ -798,7 +798,7 @@ export const COURSES = [
           },
           {
             type: "fact",
-            title: "Albert Einstein's Quote 🧠",
+            title: "Albert Einstein's Quote",
             content: "Albert Einstein famously called compound interest 'the 8th wonder of the world. He who understands it, earns it... he who doesn't, pays it!'"
           },
           {
@@ -923,7 +923,7 @@ export const COURSES = [
     },
     xpPerModule: 50,
     totalXP: 300,
-    badge: { name: "Brand Genius", emoji: "🚀" },
+    badge: { name: "Brand Genius", icon: "zap" },
     syllabus: [
       {
         title: "Module 1: Branding & Identity",
@@ -1152,7 +1152,7 @@ export const COURSES = [
     },
     xpPerModule: 50,
     totalXP: 300,
-    badge: { name: "Web Architect", emoji: "🌐" },
+    badge: { name: "Web Architect", icon: "code" },
     syllabus: [
       {
         title: "Module 1: HTML Structure",
@@ -1383,7 +1383,7 @@ export const COURSES = [
     },
     xpPerModule: 50,
     totalXP: 300,
-    badge: { name: "Digital Picasso", emoji: "🎨" },
+    badge: { name: "Digital Picasso", icon: "star" },
     syllabus: [
       {
         title: "Module 1: Layers & Non-Destructive Art",

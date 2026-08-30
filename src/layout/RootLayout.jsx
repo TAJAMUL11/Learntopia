@@ -22,6 +22,12 @@ const RootLayout = () => {
   return (
     <div className="flex min-h-screen flex-col">
       <ScrollToTop />
+      {/* Ambient drifting clay orbs — subtle animated depth behind all content. */}
+      <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        <span className="ambient-orb orb-1" />
+        <span className="ambient-orb orb-2" />
+        <span className="ambient-orb orb-3" />
+      </div>
       <Navbar />
       <main className="flex-grow">
         <ChunkErrorBoundary>

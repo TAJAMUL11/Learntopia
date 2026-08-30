@@ -1,8 +1,8 @@
 import { useId } from "react";
 
-// Learntopia brand mark: a graduation cap on a violet→sky gradient badge.
-// Vector, so it stays crisp at every size and matches the favicon / OG image.
-// `withWordmark` toggles the "Learntopia" text beside the mark.
+// Learntopia brand mark: "Robo-Py" — the coding-buddy mascot, rendered as a soft
+// clay robot. Vector, so it stays crisp at every size and matches the favicon /
+// splash / OG image. `withWordmark` toggles the "Learntopia" text beside it.
 
 const LogoMark = ({ size = 36, className = "" }) => {
   const gid = useId();
@@ -17,46 +17,49 @@ const LogoMark = ({ size = 36, className = "" }) => {
       aria-label="Learntopia"
     >
       <defs>
-        <linearGradient id={`${gid}-bg`} x1="4" y1="2" x2="44" y2="46" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#B79DF0" />
-          <stop offset="0.55" stopColor="#8B63E3" />
-          <stop offset="1" stopColor="#7BBFF2" />
+        <linearGradient id={`${gid}-head`} x1="9" y1="8" x2="39" y2="42" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#9D8DF8" />
+          <stop offset="1" stopColor="#6D5CE0" />
         </linearGradient>
-        <linearGradient id={`${gid}-sheen`} x1="0" y1="0" x2="0" y2="48" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#ffffff" stopOpacity="0.22" />
-          <stop offset="0.5" stopColor="#ffffff" stopOpacity="0" />
+        <linearGradient id={`${gid}-eye`} x1="0" y1="0" x2="0" y2="1">
+          <stop stopColor="#8FE0FB" />
+          <stop offset="1" stopColor="#4EC5E8" />
         </linearGradient>
       </defs>
 
-      {/* Badge */}
-      <rect x="2" y="2" width="44" height="44" rx="13" fill={`url(#${gid}-bg)`} />
-      <rect x="2" y="2" width="44" height="44" rx="13" fill={`url(#${gid}-sheen)`} />
-      <rect x="2.6" y="2.6" width="42.8" height="42.8" rx="12.4" stroke="#ffffff" strokeOpacity="0.18" strokeWidth="1.2" />
+      {/* Ears */}
+      <rect x="3.5" y="19" width="5" height="12" rx="2.5" fill="#5B49C9" />
+      <rect x="39.5" y="19" width="5" height="12" rx="2.5" fill="#5B49C9" />
 
-      {/* Mortarboard */}
-      <g>
-        {/* board */}
-        <path d="M24 12.5 42 20 24 27.5 6 20 24 12.5Z" fill="#ffffff" />
-        <path d="M24 12.5 42 20 24 27.5 6 20 24 12.5Z" fill="#0B0713" fillOpacity="0.06" />
-        {/* cap base under the board */}
-        <path
-          d="M14 22.2 24 26.4 34 22.2V29.4C34 32.1 29.5 34 24 34 18.5 34 14 32.1 14 29.4V22.2Z"
-          fill="#ffffff"
-          fillOpacity="0.92"
-        />
-        {/* tassel */}
-        <path d="M40.5 20.7V29.2" stroke="#ffffff" strokeWidth="1.6" strokeLinecap="round" />
-        <circle cx="40.5" cy="30.6" r="1.9" fill="#ffffff" />
-      </g>
+      {/* Antenna */}
+      <path d="M24 6.2V9.6" stroke="#B9AEF9" strokeWidth="1.8" strokeLinecap="round" />
+      <circle cx="24" cy="4.6" r="2.4" fill="#4EC5E8" />
+
+      {/* Head (clay) */}
+      <rect x="7" y="9" width="34" height="31" rx="11" fill={`url(#${gid}-head)`} />
+      {/* Top sheen + subtle rim for the molded clay look */}
+      <rect x="9" y="10.6" width="30" height="10" rx="7" fill="#ffffff" fillOpacity="0.12" />
+      <rect x="7.6" y="9.6" width="32.8" height="29.8" rx="10.4" stroke="#ffffff" strokeOpacity="0.16" strokeWidth="1" />
+
+      {/* Face screen (recessed) */}
+      <rect x="12.5" y="15" width="23" height="15.5" rx="6" fill="#0B0D15" />
+
+      {/* Eyes */}
+      <rect x="18" y="18.8" width="4.4" height="6.6" rx="2.2" fill={`url(#${gid}-eye)`} />
+      <rect x="25.6" y="18.8" width="4.4" height="6.6" rx="2.2" fill={`url(#${gid}-eye)`} />
+      {/* Smile */}
+      <path d="M20.6 27.4c1.4 1.5 5.4 1.5 6.8 0" stroke="#4EC5E8" strokeWidth="1.6" strokeLinecap="round" opacity="0.75" />
     </svg>
   );
 };
 
-const Logo = ({ withWordmark = true, size = 34, className = "" }) => (
+// Responsive by default: the mark scales up with the viewport (CSS width/height
+// override the SVG's own size attributes), and the wordmark grows alongside it.
+const Logo = ({ withWordmark = true, className = "" }) => (
   <span className={`inline-flex items-center gap-2.5 ${className}`}>
-    <LogoMark size={size} />
+    <LogoMark className="h-10 w-10 sm:h-11 sm:w-11 lg:h-12 lg:w-12" />
     {withWordmark && (
-      <span className="hidden sm:inline text-[1.35rem] font-extrabold leading-none tracking-tight text-ink-hi">
+      <span className="hidden font-display text-[1.5rem] font-semibold leading-none tracking-tight text-ink-hi sm:inline lg:text-[1.7rem]">
         Learn<span className="text-gradient">topia</span>
       </span>
     )}

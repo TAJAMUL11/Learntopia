@@ -8,12 +8,19 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
+  // Headroom for slow first paints when the dev server runs from a WSL /mnt/c
+  // mount under parallel load. The specs still wait on DOM+mount, not on 'load'.
+  timeout: 45 * 1000,
   // Fail CI if a `test.only` was left in the source.
   forbidOnly: !!process.env.CI,
   // Retry flaky tests on CI only.
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
+  // 'list' prints each test live in the terminal; the html report is still
+  // generated but NOT auto-served (open:'never'), so the run never blocks the
+  // terminal waiting on the report server. View it later with:
+  //   npx playwright show-report
+  reporter: [['list'], ['html', { open: 'never' }]],
   use: {
     // Tests can use relative URLs like page.goto('/') against this base.
     baseURL: 'http://localhost:5173',

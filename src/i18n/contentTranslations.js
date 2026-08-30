@@ -29,7 +29,7 @@ export const contentTranslations = {
   en: {
     nav: { quizzes: "Quizzes" },
     notFound: { backHome: "Back to Home" },
-    thankYou: { whatsNext: "What's Next", exploreDesc: "Browse all our learning tracks", quizDesc: "Test your knowledge in a timed quiz" },
+    thankYou: { whatsNext: "While you wait", exploreDesc: "Explore free courses and start earning XP.", quizDesc: "Take a quick, timed quiz challenge." },
     common: { sfx: "SFX", off: "Off" },
     quiz: {
       start: "Start",
@@ -144,7 +144,7 @@ export const contentTranslations = {
         { concept: "Step-by-Step Lesson Player", behaviour: "Presents module content one card at a time with distinct visual themes (Story, Concept, Fun Fact, Pro Tip, Example, Activity, Recap) and code syntax highlighting." },
         { concept: "Multi-Type Exercise Engine", behaviour: "Tests understanding using 4 interactive formats: Multiple Choice (MCQ), True/False, Fill-in-the-Blank, and Tap-to-Connect Matching Pairs." },
         { concept: "Gamification & Level System", behaviour: "Earn XP by completing course modules (+50 XP each, +100 XP for full course) and quizzes (20–100 XP scaled by score). Level up from Rookie Coder (Level 1) to Grandmaster (Level 5)." },
-        { concept: "Badges & Celebrations", behaviour: "Unlocks unique course badges (e.g. Python Pioneer 🐍, Math Wizard 🔮) with celebratory full-screen overlays upon achievement." },
+        { concept: "Badges & Celebrations", behaviour: "Unlocks unique course badges (e.g. Python Pioneer, Math Wizard) with celebratory full-screen overlays upon achievement." },
         { concept: "Course progress", behaviour: "Tracks completed modules in real time with progress bars, saved automatically. Resume anytime from your Student Dashboard." },
         { concept: "Course reset", behaviour: "Reset completed courses anytime via the Start Again button to replay lessons and re-earn practice." },
       ],
@@ -186,11 +186,11 @@ export const contentTranslations = {
     },
     toasts: {
       // Notification titles (heading shown in the popup)
-      titleLogin: "Welcome back! 👋",
-      titleSignup: "Welcome to Learntopia! 🎉",
+      titleLogin: "Welcome back!",
+      titleSignup: "Welcome to Learntopia!",
       titleLogout: "See you soon!",
-      titleProfile: "Profile saved ✨",
-      titleQuiz: "Score saved! 🎯",
+      titleProfile: "Profile saved",
+      titleQuiz: "Score saved!",
       titleUnenroll: "Course unenrolled",
       titleDelete: "Account removed",
       titleSuccess: "All set!",
@@ -230,9 +230,9 @@ export const contentTranslations = {
       loggedOut: "Signed out. Come back tomorrow for your streak!",
       logoutFailedRetry: "Couldn't log you out. Try again.",
       unenrollFailed: "Couldn't unenroll. Try again.",
-      noNewXpModule: "Already done — nice work revisiting it! 🌟",
-      replayModuleNoXp: "Great refresher! No new XP, but keep it sharp. 🌟",
-      noNewXpQuiz: "So close! Beat your best score to earn more XP. 💪",
+      noNewXpModule: "Already done — nice work revisiting it!",
+      replayModuleNoXp: "Great refresher! No new XP, but keep it sharp.",
+      noNewXpQuiz: "So close! Beat your best score to earn more XP.",
       unenrolledFrom: "Moved to Unenrolled — rejoin anytime.",
       rejoined: "Back in \"{title}\" — progress saved.",
       rejoinFailed: "Couldn't rejoin. Try again.",
@@ -250,9 +250,9 @@ export const contentTranslations = {
       exportedCsv: "Student list exported to CSV.",
       loginToView: "Log in to view course details.",
       saveProgressFailed: "Couldn't save your progress. Try again.",
-      courseCompleted: "Course complete! +100 XP earned. 🏆",
+      courseCompleted: "Course complete! +100 XP earned.",
       markCompleteFailed: "Couldn't mark it complete. Try again.",
-      courseReset: "Course reset — fresh start! 🌱",
+      courseReset: "Course reset — fresh start!",
       resetFailed: "Couldn't reset the course. Try again.",
       loginToEnroll: "Log in to enroll.",
       enrollFailed: "Couldn't enroll. Try again.",
@@ -286,7 +286,7 @@ export const contentTranslations = {
   es: {
     nav: { quizzes: "Cuestionarios" },
     notFound: { backHome: "Volver al Inicio" },
-    thankYou: { whatsNext: "¿Qué Sigue?", exploreDesc: "Explora todos nuestros itinerarios de aprendizaje", quizDesc: "Pon a prueba tus conocimientos en un cuestionario cronometrado" },
+    thankYou: { whatsNext: "Mientras esperas", exploreDesc: "Explora cursos gratis y empieza a ganar XP.", quizDesc: "Acepta un reto de cuestionario rápido y cronometrado." },
     common: { sfx: "SFX", off: "Apagado" },
     quiz: {
       start: "Empezar",
@@ -401,7 +401,7 @@ export const contentTranslations = {
         { concept: "Reproductor de Lecciones Paso a Paso", behaviour: "Presenta el contenido del módulo de una tarjeta a la vez con temas visuales distintos (Historia, Concepto, Dato Curioso, Consejo Pro, Ejemplo, Actividad, Resumen) y resaltado de sintaxis de código." },
         { concept: "Motor de Ejercicios Multitipo", behaviour: "Evalúa la comprensión mediante 4 formatos interactivos: Opción Múltiple (MCQ), Verdadero/Falso, Rellenar el Espacio y Emparejar Pares." },
         { concept: "Gamificación y Sistema de Niveles", behaviour: "Gana XP completando módulos de cursos (+50 XP cada uno, +100 XP por curso completo) y cuestionarios (20–100 XP según tu puntuación). Sube de nivel desde Programador Novato (Nivel 1) hasta Gran Maestro (Nivel 5)." },
-        { concept: "Insignias y Celebraciones", behaviour: "Desbloquea insignias únicas de cada curso (p. ej. Pionero de Python 🐍, Mago de las Matemáticas 🔮) con superposiciones a pantalla completa al conseguirlas." },
+        { concept: "Insignias y Celebraciones", behaviour: "Desbloquea insignias únicas de cada curso (p. ej. Pionero de Python, Mago de las Matemáticas) con superposiciones a pantalla completa al conseguirlas." },
         { concept: "Progreso del curso", behaviour: "Registra los módulos completados en tiempo real con barras de progreso, guardadas automáticamente. Retoma cuando quieras desde tu Panel de Estudiante." },
         { concept: "Reinicio del curso", behaviour: "Reinicia los cursos completados cuando quieras con el botón Empezar de Nuevo para repetir las lecciones y volver a practicar." },
       ],
@@ -443,11 +443,11 @@ export const contentTranslations = {
     },
     toasts: {
       // Títulos de las notificaciones
-      titleLogin: "¡Bienvenido de nuevo! 👋",
-      titleSignup: "¡Bienvenido a Learntopia! 🎉",
+      titleLogin: "¡Bienvenido de nuevo!",
+      titleSignup: "¡Bienvenido a Learntopia!",
       titleLogout: "¡Hasta pronto!",
-      titleProfile: "Perfil guardado ✨",
-      titleQuiz: "¡Puntuación guardada! 🎯",
+      titleProfile: "Perfil guardado",
+      titleQuiz: "¡Puntuación guardada!",
       titleUnenroll: "Curso cancelado",
       titleDelete: "Cuenta eliminada",
       titleSuccess: "¡Listo!",
@@ -487,9 +487,9 @@ export const contentTranslations = {
       loggedOut: "Sesión cerrada. ¡Vuelve mañana por tu racha!",
       logoutFailedRetry: "No pudimos cerrar sesión. Inténtalo.",
       unenrollFailed: "No se pudo cancelar. Inténtalo de nuevo.",
-      noNewXpModule: "¡Ya hecho — bien por repasarlo! 🌟",
-      replayModuleNoXp: "¡Buen repaso! Sin XP nuevo, pero sigue afilado. 🌟",
-      noNewXpQuiz: "¡Casi! Supera tu mejor puntuación para ganar más XP. 💪",
+      noNewXpModule: "¡Ya hecho — bien por repasarlo!",
+      replayModuleNoXp: "¡Buen repaso! Sin XP nuevo, pero sigue afilado.",
+      noNewXpQuiz: "¡Casi! Supera tu mejor puntuación para ganar más XP.",
       unenrolledFrom: "Movido a Cancelados — vuelve cuando quieras.",
       rejoined: "De vuelta en \"{title}\" — progreso guardado.",
       rejoinFailed: "No se pudo volver a unir. Inténtalo.",
@@ -507,9 +507,9 @@ export const contentTranslations = {
       exportedCsv: "Lista de estudiantes exportada a CSV.",
       loginToView: "Inicia sesión para ver el curso.",
       saveProgressFailed: "No pudimos guardar tu progreso. Inténtalo.",
-      courseCompleted: "¡Curso completado! +100 XP. 🏆",
+      courseCompleted: "¡Curso completado! +100 XP.",
       markCompleteFailed: "No se pudo marcar como completado. Inténtalo.",
-      courseReset: "¡Curso reiniciado — nuevo comienzo! 🌱",
+      courseReset: "¡Curso reiniciado — nuevo comienzo!",
       resetFailed: "No se pudo reiniciar el curso. Inténtalo.",
       loginToEnroll: "Inicia sesión para inscribirte.",
       enrollFailed: "No se pudo inscribir. Inténtalo de nuevo.",
@@ -690,10 +690,10 @@ export const contentTranslations = {
             contentSections: [
               { title: "Conoce a Alex el Inventor", content: "Alex tiene 11 años y le encantan los videojuegos. Un día Alex pensó: '¿Y si pudiera CREAR mi propio juego en lugar de solo jugarlos?' Su profesora le dijo: '¡Puedes! Solo necesitas un lenguaje llamado Python.' Esta también es TU historia: al final de este curso, ¡crearás tu propio juego desde cero!" },
               { title: "¿Qué es Python?", content: "Python es un lenguaje de programación: un conjunto especial de palabras y reglas que usas para hablar con las computadoras. ¡Imagina que tienes un amigo robot, pero solo entiende un idioma: Python! Si quieres que el robot baile, dibuje o resuelva problemas de matemáticas, tienes que escribir instrucciones en Python. ¿Lo mejor? Python fue diseñado para parecerse casi al inglés normal, así que es uno de los lenguajes más fáciles de aprender." },
-              { title: "¡Dato Curioso!", content: "¡Python no recibió su nombre por la serpiente! 🐍 Fue nombrado por un divertido programa de comedia británico llamado 'Monty Python's Flying Circus'. El creador, Guido van Rossum, lo estaba viendo mientras programaba Python y pensó que el nombre era divertido." },
+              { title: "¡Dato Curioso!", content: "¡Python no recibió su nombre por la serpiente! Fue nombrado por un divertido programa de comedia británico llamado 'Monty Python's Flying Circus'. El creador, Guido van Rossum, lo estaba viendo mientras programaba Python y pensó que el nombre era divertido." },
               { title: "Tu Primer Comando: print()", content: "El comando print() le dice a la computadora que muestre texto en la pantalla. Prueba esto:\n\nprint('Hello World!')\n\nCuando lo ejecutes, la computadora mostrará: Hello World!\n\nPuedes imprimir lo que quieras:\nprint('My name is Alex!')\nprint('I am learning Python!')\n\n¿Notas cómo el texto siempre va entre comillas? ¡Eso le dice a Python: 'Oye, esto es texto, no un comando!'" },
               { title: "Consejo Pro: ¡No Olvides las Comillas!", content: "Un error muy común de los principiantes es olvidar las comillas alrededor del texto. Si escribes print(Hello) sin comillas, Python se confundirá y mostrará un error. ¡Envuelve siempre tu texto en comillas simples ('Hello') o dobles (\"Hello\") — ambas funcionan!" },
-              { title: "¡Inténtalo Tú Mismo!", content: "Si tienes Python en tu computadora, ábrelo y prueba escribir estos comandos uno por uno:\n\n1. print('Hello World!')\n2. print('My name is [TU NOMBRE]!')\n3. print('I am learning to code!')\n4. print('Python is awesome!')\n\nObserva qué pasa después de cada uno. ¡Acabas de hacer que una computadora hable! 🎉" },
+              { title: "¡Inténtalo Tú Mismo!", content: "Si tienes Python en tu computadora, ábrelo y prueba escribir estos comandos uno por uno:\n\n1. print('Hello World!')\n2. print('My name is [TU NOMBRE]!')\n3. print('I am learning to code!')\n4. print('Python is awesome!')\n\nObserva qué pasa después de cada uno. ¡Acabas de hacer que una computadora hable!" },
               { title: "Resumen del Módulo 1", content: "Repasemos lo que aprendiste:\n\n• Python es un lenguaje de programación usado para dar instrucciones a las computadoras\n• ¡Fue nombrado por un programa de comedia, no por la serpiente!\n• El comando print() muestra texto en la pantalla\n• El texto debe ir entre comillas (simples o dobles)\n• Acabas de escribir tu primer código real — ¡ya eres oficialmente programador!" }
             ],
             exercises: [
@@ -712,8 +712,8 @@ export const contentTranslations = {
               { title: "¿Qué es una Variable?", content: "Piensa en una variable como una caja etiquetada donde puedes guardar cosas. Si tienes una caja etiquetada 'score' y pones el número 10 dentro, ¡tu variable score ahora es igual a 10!\n\nEn Python, creas una variable así:\nscore = 10\nplayer_name = 'Alex'\n\nEl signo = no significa 'igual' como en matemáticas — significa 'pon este valor dentro de esta caja'. Así que score = 10 significa 'crea una caja llamada score y pon 10 dentro'." },
               { title: "Diferentes Tipos de Datos", content: "Las computadoras son exigentes: necesitan saber QUÉ TIPO de cosa hay en cada caja:\n\n• Enteros (int): Números enteros como 5, 42 o 1000. ¡Ideales para puntuaciones!\n• Cadenas (str): Texto entre comillas como 'Hello' o 'Alex'. ¡Se usan para nombres y mensajes!\n• Decimales (float): Números con decimales como 3.14 o 99.9. ¡Se usan para precios y medidas precisas!\n• Booleanos (bool): Solo True o False. Como un interruptor de luz: encendido o apagado.\n\nPython es lo bastante inteligente para averiguar el tipo automáticamente cuando creas una variable." },
               { title: "Variables en Acción", content: "Mira cómo Alex usa variables en el juego:\n\nplayer_name = 'Alex'\nscore = 0\nlives = 3\n\nscore = score + 10\nprint('Score:', score)\n\nLa computadora mostrará: Score: 10\n\n¡Fíjate cómo funciona score = score + 10: Python mira el valor ANTERIOR de score (0), le suma 10 y pone el NUEVO valor (10) de vuelta en la caja!" },
-              { title: "¡Tu Cerebro Está Lleno de Variables!", content: "¡Tu cerebro funciona igual que una computadora con variables! Ahora mismo, tu cerebro tiene una variable llamada 'mi_nombre' que guarda tu nombre, una variable 'mi_edad' que guarda tu edad y una variable 'color_favorito' que guarda tu color favorito. Simplemente no las piensas como 'variables', ¡pero eso es exactamente lo que son! 🧠" },
-              { title: "Cómo Nombrar tus Variables", content: "Los buenos nombres de variables describen lo que hay dentro de la caja:\n\n✅ Bien: player_score, user_name, lives_remaining\n❌ Mal: x, thing, abc123\n\nReglas para los nombres de variables en Python:\n• ¡Sin espacios! Usa guiones bajos: player_name (no player name)\n• No pueden empezar con número: 1score está mal, score1 está bien\n• Python distingue mayúsculas: ¡Score y score son variables DIFERENTES!" },
+              { title: "¡Tu Cerebro Está Lleno de Variables!", content: "¡Tu cerebro funciona igual que una computadora con variables! Ahora mismo, tu cerebro tiene una variable llamada 'mi_nombre' que guarda tu nombre, una variable 'mi_edad' que guarda tu edad y una variable 'color_favorito' que guarda tu color favorito. Simplemente no las piensas como 'variables', ¡pero eso es exactamente lo que son!" },
+              { title: "Cómo Nombrar tus Variables", content: "Los buenos nombres de variables describen lo que hay dentro de la caja:\n\nBien: player_score, user_name, lives_remaining\nMal: x, thing, abc123\n\nReglas para los nombres de variables en Python:\n• ¡Sin espacios! Usa guiones bajos: player_name (no player name)\n• No pueden empezar con número: 1score está mal, score1 está bien\n• Python distingue mayúsculas: ¡Score y score son variables DIFERENTES!" },
               { title: "Resumen del Módulo 2", content: "Repasemos lo que aprendiste:\n\n• Las variables son cajas etiquetadas que guardan datos\n• El signo = significa 'pon este valor en la caja'\n• Los enteros son números enteros, las cadenas son texto, los decimales tienen coma, los booleanos son True/False\n• Puedes actualizar una variable: score = score + 10\n• Usa nombres descriptivos: player_score es mejor que x\n• ¡Python distingue mayúsculas: score y Score son diferentes!" }
             ],
             exercises: [
@@ -731,9 +731,9 @@ export const contentTranslations = {
               { title: "El Juego de Alex Necesita un Cerebro", content: "El juego de Alex ya puede guardar puntuaciones, ¡genial! Pero hay un nuevo problema. Cuando un jugador llega a 100 puntos, el juego debería decir '¡GANASTE!' Y cuando el jugador pierde todas sus vidas, debería decir 'FIN DEL JUEGO'. Pero ¿cómo sabe la computadora CUÁNDO hacer estas cosas? Necesita la capacidad de tomar decisiones. ¡Para eso sirven los condicionales (if)!" },
               { title: "Tomar Decisiones con 'if'", content: "Un condicional (if) permite que tu código tome decisiones, ¡igual que hace tu cerebro cada día!\n\nEn la vida real: 'SI está lloviendo, ENTONCES lleva un paraguas.'\nEn Python: if score > 100:\n              print('You win!')\n\nLa computadora revisa la condición (¿es score mayor que 100?). Si es VERDADERA, ejecuta el código de abajo. Si es FALSA, lo omite por completo." },
               { title: "Añadir 'else' y 'elif'", content: "¿Y si quieres hacer algo DIFERENTE cuando la condición es falsa?\n\nif score > 100:\n    print('You win!')\nelse:\n    print('Keep trying!')\n\n¿Y si tienes VARIAS condiciones?\n\nif score > 100:\n    print('Amazing!')\nelif score > 50:\n    print('Getting close!')\nelse:\n    print('Keep going!')\n\n'elif' es la abreviatura de 'else if' — revisa otra condición si la primera fue falsa." },
-              { title: "¡Los Condicionales Están POR TODAS PARTES!", content: "¡Los videojuegos usan MILLONES de condicionales! 🎮\n\n• SI Mario golpea a un Goomba → pierde una vida\n• SI Mario agarra un hongo → crece\n• SI el temporizador llega a cero → ¡Fin del juego!\n• SI el jugador presiona el botón de salto → Mario salta\n\n¡Cada cosa que ocurre en un juego está controlada por condicionales trabajando juntos!" },
-              { title: "Operadores de Comparación", content: "Para escribir condiciones, necesitas operadores de comparación:\n\n>  significa 'mayor que'        (10 > 5 es True)\n<  significa 'menor que'        (3 < 7 es True)\n== significa 'igual a'          (5 == 5 es True)\n!= significa 'distinto de'      (5 != 3 es True)\n>= significa 'mayor o igual'    (10 >= 10 es True)\n<= significa 'menor o igual'    (4 <= 9 es True)\n\n⚠️ Fíjate: comprobar la igualdad usa == (doble igual), NO = (un solo igual). ¡El = simple es para asignar variables!" },
-              { title: "¡Los Dos Puntos Son Cruciales!", content: "Cada línea if, elif y else DEBE terminar con dos puntos (:)\n\n✅ Correcto: if score > 10:\n❌ Incorrecto: if score > 10\n\nAdemás, el código que se ejecuta dentro del condicional debe estar indentado (desplazado a la derecha con espacios). ¡Python usa la indentación para saber qué código pertenece dentro del condicional!" },
+              { title: "¡Los Condicionales Están POR TODAS PARTES!", content: "¡Los videojuegos usan MILLONES de condicionales!\n\n• SI Mario golpea a un Goomba → pierde una vida\n• SI Mario agarra un hongo → crece\n• SI el temporizador llega a cero → ¡Fin del juego!\n• SI el jugador presiona el botón de salto → Mario salta\n\n¡Cada cosa que ocurre en un juego está controlada por condicionales trabajando juntos!" },
+              { title: "Operadores de Comparación", content: "Para escribir condiciones, necesitas operadores de comparación:\n\n>  significa 'mayor que'        (10 > 5 es True)\n<  significa 'menor que'        (3 < 7 es True)\n== significa 'igual a'          (5 == 5 es True)\n!= significa 'distinto de'      (5 != 3 es True)\n>= significa 'mayor o igual'    (10 >= 10 es True)\n<= significa 'menor o igual'    (4 <= 9 es True)\n\nFíjate: comprobar la igualdad usa == (doble igual), NO = (un solo igual). ¡El = simple es para asignar variables!" },
+              { title: "¡Los Dos Puntos Son Cruciales!", content: "Cada línea if, elif y else DEBE terminar con dos puntos (:)\n\nCorrecto: if score > 10:\nIncorrecto: if score > 10\n\nAdemás, el código que se ejecuta dentro del condicional debe estar indentado (desplazado a la derecha con espacios). ¡Python usa la indentación para saber qué código pertenece dentro del condicional!" },
               { title: "Resumen del Módulo 3", content: "Repasemos lo que aprendiste:\n\n• Los condicionales (if) permiten que el código tome decisiones según condiciones\n• Usa 'else' cuando quieras que algo ocurra si la condición es falsa\n• Usa 'elif' para comprobar varias condiciones\n• Operadores de comparación: > < == != >= <=\n• El doble igual (==) comprueba igualdad, el igual simple (=) asigna variables\n• Termina siempre if/elif/else con dos puntos (:)\n• ¡Indenta el código dentro de tu condicional!" }
             ],
             exercises: [
@@ -751,10 +751,10 @@ export const contentTranslations = {
               { title: "El Gran Momento de Alex", content: "Por fin llegó el día. Alex conoce print(), las variables y los condicionales. ¡Ahora es momento de combinar TODAS estas habilidades para crear un juego real y jugable! El juego se llama 'Adivina el Número': la computadora elige un número secreto y el jugador tiene que adivinarlo. Después de cada intento, la computadora da pistas: '¡Muy alto!' o '¡Muy bajo!' ¡Vamos a crearlo!" },
               { title: "¿Qué Son los Bucles?", content: "Un bucle te permite ejecutar el mismo código una y otra vez. Sin un bucle, ¡el jugador solo tendría UN intento — eso no es divertido!\n\nEl bucle 'while' sigue ejecutándose mientras una condición sea True:\n\nwhile guess != secret:\n    guess = input('Try again: ')\n\nEsto sigue pidiendo intentos hasta que el jugador acierte. ¡Cuando por fin adivina correctamente, el bucle se detiene!" },
               { title: "Obtener la Entrada del Usuario", content: "El comando input() permite que el jugador escriba algo en el juego:\n\nguess = input('Enter your guess: ')\n\nLo que sea que el jugador escriba se guarda en la variable 'guess'. Sin embargo, hay algo complicado: ¡input() siempre te da una Cadena (texto), incluso si el jugador escribe un número! Para convertirlo en número y poder compararlo, usamos int():\n\nguess = int(input('Enter your guess: '))" },
-              { title: "El Código Completo del Juego", content: "Aquí está el juego de adivinanzas completo:\n\nimport random\n\nsecret = random.randint(1, 20)\nprint('I picked a number between 1 and 20!')\n\nguess = 0\nattempts = 0\n\nwhile guess != secret:\n    guess = int(input('Your guess: '))\n    attempts = attempts + 1\n    \n    if guess > secret:\n        print('Too High! Try lower.')\n    elif guess < secret:\n        print('Too Low! Try higher.')\n    else:\n        print('YOU GOT IT! 🎉')\n        print('It took you', attempts, 'guesses!')\n\n¡Cada concepto que aprendiste — print, variables, if/elif/else, bucles, input — se usa aquí!" },
-              { title: "Números Aleatorios en los Juegos", content: "La función random.randint(1, 20) elige un número aleatorio entre 1 y 20. ¡Cada juego que has jugado usa números aleatorios! Minecraft los usa para generar mundos, Pokémon los usa para decidir si atrapas un Pokémon y los juegos de cartas los usan para barajar el mazo. ¡La aleatoriedad hace que los juegos sean emocionantes porque nunca sabes qué pasará! 🎲" },
-              { title: "¡Mejora tu Juego!", content: "Cuando tu juego básico funcione, prueba estas mejoras:\n\n🌟 Fácil: Cambia el rango de 1-20 a 1-100 para un juego más difícil\n🌟 Medio: Limita al jugador a solo 5 intentos. Si se le acaban, imprime '¡Fin del juego!'\n🌟 Difícil: Añade un sistema de puntuación — ¡menos intentos = más puntos!\n🌟 Experto: ¡Pregunta al jugador si quiere jugar de nuevo tras ganar!\n\n¡Cada mejora usa las mismas habilidades que ya aprendiste, solo combinadas de formas creativas!" },
-              { title: "¡Resumen Final del Curso!", content: "Felicidades — ¡has aprendido todos los fundamentos de Python! 🎉\n\n• print() muestra texto en la pantalla\n• Las variables guardan datos en cajas etiquetadas\n• Tipos de datos: Enteros, Cadenas, Decimales, Booleanos\n• If/elif/else toman decisiones según condiciones\n• Operadores de comparación: > < == != >= <=\n• Los bucles while repiten código hasta que una condición es falsa\n• input() obtiene información del usuario\n• int() convierte texto en número\n• random.randint() genera números aleatorios\n\n¡Estás listo para crear tus propios juegos — el cielo es el límite! 🚀" }
+              { title: "El Código Completo del Juego", content: "Aquí está el juego de adivinanzas completo:\n\nimport random\n\nsecret = random.randint(1, 20)\nprint('I picked a number between 1 and 20!')\n\nguess = 0\nattempts = 0\n\nwhile guess != secret:\n    guess = int(input('Your guess: '))\n    attempts = attempts + 1\n    \n    if guess > secret:\n        print('Too High! Try lower.')\n    elif guess < secret:\n        print('Too Low! Try higher.')\n    else:\n        print('YOU GOT IT!')\n        print('It took you', attempts, 'guesses!')\n\n¡Cada concepto que aprendiste — print, variables, if/elif/else, bucles, input — se usa aquí!" },
+              { title: "Números Aleatorios en los Juegos", content: "La función random.randint(1, 20) elige un número aleatorio entre 1 y 20. ¡Cada juego que has jugado usa números aleatorios! Minecraft los usa para generar mundos, Pokémon los usa para decidir si atrapas un Pokémon y los juegos de cartas los usan para barajar el mazo. ¡La aleatoriedad hace que los juegos sean emocionantes porque nunca sabes qué pasará!" },
+              { title: "¡Mejora tu Juego!", content: "Cuando tu juego básico funcione, prueba estas mejoras:\n\nFácil: Cambia el rango de 1-20 a 1-100 para un juego más difícil\nMedio: Limita al jugador a solo 5 intentos. Si se le acaban, imprime '¡Fin del juego!'\nDifícil: Añade un sistema de puntuación — ¡menos intentos = más puntos!\nExperto: ¡Pregunta al jugador si quiere jugar de nuevo tras ganar!\n\n¡Cada mejora usa las mismas habilidades que ya aprendiste, solo combinadas de formas creativas!" },
+              { title: "¡Resumen Final del Curso!", content: "Felicidades — ¡has aprendido todos los fundamentos de Python!\n\n• print() muestra texto en la pantalla\n• Las variables guardan datos en cajas etiquetadas\n• Tipos de datos: Enteros, Cadenas, Decimales, Booleanos\n• If/elif/else toman decisiones según condiciones\n• Operadores de comparación: > < == != >= <=\n• Los bucles while repiten código hasta que una condición es falsa\n• input() obtiene información del usuario\n• int() convierte texto en número\n• random.randint() genera números aleatorios\n\n¡Estás listo para crear tus propios juegos — el cielo es el límite!" }
             ],
             exercises: [
               { question: "El comando ___ permite al jugador escribir una respuesta durante un juego." },
@@ -785,7 +785,7 @@ export const contentTranslations = {
             contentSections: [
               { title: "El Secreto del Descifrador", content: "La agente Maya encontró un cofre antiguo cerrado con una combinación secreta: 2, 4, 6, 8, __. Los guardias estaban desconcertados, pero Maya sonrió: '¡Es solo un patrón! Suma 2 cada vez.' Escribió 10, ¡y el cofre se abrió! Las matemáticas no tratan solo de números grandes: tratan de ver reglas secretas que resuelven misterios." },
               { title: "La Magia de las Secuencias", content: "Una secuencia es una lista de números que sigue una regla clara. ¡Cuando conoces la regla, puedes predecir lo que viene después! Por ejemplo:\n\n• Regla (+5): 5, 10, 15, 20, 25...\n• Regla (×2): 2, 4, 8, 16, 32...\n• Regla (-3): 20, 17, 14, 11, 8..." },
-              { title: "¡A la Naturaleza le Encanta Fibonacci! 🌻", content: "La secuencia de Fibonacci empieza así: 1, 1, 2, 3, 5, 8, 13... ¡donde cada número es la suma de los dos anteriores! ¡Los girasoles, las piñas, las conchas de mar e incluso los remolinos de las tormentas siguen exactamente esta secuencia!" },
+              { title: "¡A la Naturaleza le Encanta Fibonacci!", content: "La secuencia de Fibonacci empieza así: 1, 1, 2, 3, 5, 8, 13... ¡donde cada número es la suma de los dos anteriores! ¡Los girasoles, las piñas, las conchas de mar e incluso los remolinos de las tormentas siguen exactamente esta secuencia!" },
               { title: "Encontrar la Regla Secreta", content: "Mira esta secuencia: 3, 6, 12, 24, __\n\n¿Cómo pasamos de 3 a 6? Multiplicamos por 2 (o sumamos 3).\n¿Cómo pasamos de 6 a 12? ¡Multiplicamos por 2! (Sumar 3 daría 9, así que la regla DEBE ser ×2).\nPor lo tanto, ¡24 × 2 = 48! ¡El número secreto es 48!" },
               { title: "Consejo Pro: Fíjate en las Diferencias", content: "Si te atascas con un patrón, resta los números adyacentes (6 - 3 = 3, 12 - 6 = 6). ¡Si las diferencias crecen, comprueba la multiplicación!" },
               { title: "Desafío del Detective de Patrones", content: "¿Puedes resolver estas dos secuencias secretas de cabeza?\n\n1) 1, 4, 9, 16, 25, __ (Pista: 1×1, 2×2, 3×3...)\n2) 100, 90, 80, 70, __ (Pista: Va bajando de...)\n\n¡Respuestas: 36 y 60!" },
@@ -805,7 +805,7 @@ export const contentTranslations = {
             contentSections: [
               { title: "Diseñar Mundos de Minecraft", content: "¿Alguna vez te has preguntado cómo se construyen los juegos 3D como Minecraft o Roblox? Los desarrolladores empiezan con formas planas 2D — cuadrados y triángulos — y las extruyen en bloques 3D (cubos y pirámides). ¡La geometría es el motor secreto detrás de cada gráfico 3D que ves!" },
               { title: "Plano (2D) vs Sólido (3D)", content: "• Las formas 2D tienen Altura y Anchura (planas en el papel): Cuadrado, Círculo, Triángulo, Hexágono (6 lados).\n• Las formas 3D añaden Profundidad (sólidas en la mano): Cubo, Esfera, Pirámide, Cilindro." },
-              { title: "Ángulos y Ángulos Rectos 📐", content: "Un ángulo se forma donde se encuentran dos líneas. La esquina de un cuadrado es un ángulo de 90°, llamado Ángulo Recto. Mira a tu alrededor: ¡las puertas, los libros y las pantallas están llenos de ángulos rectos!" },
+              { title: "Ángulos y Ángulos Rectos", content: "Un ángulo se forma donde se encuentran dos líneas. La esquina de un cuadrado es un ángulo de 90°, llamado Ángulo Recto. Mira a tu alrededor: ¡las puertas, los libros y las pantallas están llenos de ángulos rectos!" },
               { title: "Contar Lados y Vértices", content: "• Triángulo: 3 lados, 3 esquinas (vértices)\n• Cuadrado / Rectángulo: 4 lados, 4 vértices\n• Hexágono: 6 lados, 6 vértices\n• Octágono (señal de Stop): 8 lados, 8 vértices" },
               { title: "Secreto del Cubo", content: "¡Un cubo 3D tiene 6 caras cuadradas planas, 8 esquinas (vértices) y 12 aristas rectas!" },
               { title: "Resumen del Módulo 2", content: "• 2D = plano (largo y ancho), 3D = sólido (largo, ancho y profundidad)\n• Los hexágonos tienen 6 lados, los octágonos tienen 8\n• Los ángulos de 90° son Ángulos Rectos\n• ¡Los cubos tienen 6 caras, 8 vértices y 12 aristas!" }
@@ -875,7 +875,7 @@ export const contentTranslations = {
             contentSections: [
               { title: "Cambiar Gallinas por Espadas", content: "Hace miles de años, si Sam tenía una gallina y quería una espada, ¡Sam tenía que encontrar a un herrero que quisiera una gallina! Esto se llamaba 'trueque'. Pero ¿y si el herrero solo quería manzanas? ¡El intercambio se volvía imposible! Por eso los humanos inventaron el dinero: algo que todos aceptan como valioso." },
               { title: "Antes del Dinero: El Trueque", content: "El trueque es intercambiar bienes o servicios directamente sin dinero. El dinero resolvió el trueque porque sirve como medio de intercambio universal." },
-              { title: "Dato Curioso: ¡Conchas y Sal como Dinero! 🐚", content: "¡Antes del papel moneda, la gente usaba conchas de cauri, piedras gigantes e incluso sal como dinero! ¡De hecho, la palabra 'salario' viene de la palabra latina para sal ('sal')!" },
+              { title: "Dato Curioso: ¡Conchas y Sal como Dinero!", content: "¡Antes del papel moneda, la gente usaba conchas de cauri, piedras gigantes e incluso sal como dinero! ¡De hecho, la palabra 'salario' viene de la palabra latina para sal ('sal')!" },
               { title: "Resumen del Módulo 1", content: "• Trueque = intercambiar objetos directamente\n• Dinero = medio de intercambio universal\n• ¡El dinero solo funciona porque todos aceptan que tiene valor!" }
             ],
             exercises: [
@@ -907,7 +907,7 @@ export const contentTranslations = {
             desc: "El multiplicador mágico que convierte pequeños ahorros en fortunas.",
             contentSections: [
               { title: "Interés sobre Interés", content: "Cuando depositas dinero en un banco, el banco te paga 'Interés'. ¡El interés compuesto significa que ganas interés sobre tu dinero Y sobre el interés que ya has ganado! ¡Se multiplica con el tiempo como una bola de nieve rodando montaña abajo!" },
-              { title: "La Cita de Albert Einstein 🧠", content: "Albert Einstein llamó célebremente al interés compuesto 'la 8ª maravilla del mundo. ¡Quien lo entiende, lo gana... quien no, lo paga!'" },
+              { title: "La Cita de Albert Einstein", content: "Albert Einstein llamó célebremente al interés compuesto 'la 8ª maravilla del mundo. ¡Quien lo entiende, lo gana... quien no, lo paga!'" },
               { title: "Resumen del Módulo 3", content: "• Interés = bonificación pagada por el banco por ahorrar\n• Interés compuesto = interés sobre el interés\n• ¡El tiempo es el multiplicador secreto!" }
             ],
             exercises: [
@@ -1171,6 +1171,7 @@ export const contentTranslations = {
   // FRENCH
   // ===================================================================
   fr: {
+    thankYou: { whatsNext: "En attendant", exploreDesc: "Explorez des cours gratuits et commencez à gagner des XP.", quizDesc: "Relevez un défi de quiz rapide et chronométré." },
     quizzesData: {
       python: {
         title: "Python pour les Enfants",
@@ -1311,6 +1312,7 @@ export const contentTranslations = {
   // GERMAN
   // ===================================================================
   de: {
+    thankYou: { whatsNext: "In der Zwischenzeit", exploreDesc: "Entdecke kostenlose Kurse und sammle XP.", quizDesc: "Stell dich einer kurzen Quiz-Challenge auf Zeit." },
     quizzesData: {
       python: {
         title: "Python für Kinder",
@@ -1451,6 +1453,7 @@ export const contentTranslations = {
   // ARABIC (RTL)
   // ===================================================================
   ar: {
+    thankYou: { whatsNext: "بينما تنتظر", exploreDesc: "استكشف الدورات المجانية وابدأ بكسب نقاط الخبرة.", quizDesc: "خُض تحدي اختبار سريع ومحدد بوقت." },
     quizzesData: {
       python: {
         title: "بايثون للأطفال",

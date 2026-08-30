@@ -42,11 +42,11 @@ const Modal = ({
         onClick={!loading ? onClose : undefined}
       />
       
-      <Card className="relative z-10 w-full max-w-lg overflow-hidden p-6 md:p-8 animate-fade-up border-white/[0.12] shadow-[0_0_40px_rgba(0,0,0,0.8)]">
+      <Card className="relative z-10 w-full max-w-lg overflow-hidden p-6 md:p-8 animate-fade-up">
         <div className="mb-6 flex items-start justify-between gap-4">
           <div className="flex items-center gap-4">
             {icon && (
-              <div className={`grid h-12 w-12 flex-none place-items-center rounded-2xl ${isDestructive ? 'bg-state-danger/15 text-state-danger' : 'bg-sky/15 text-sky'}`}>
+              <div className={`grid h-12 w-12 flex-none place-items-center rounded-2xl shadow-clay-sm ${isDestructive ? 'bg-state-danger/15 text-state-danger' : 'bg-sky/15 text-sky'}`}>
                 <Icon name={icon} size={24} />
               </div>
             )}
@@ -55,7 +55,7 @@ const Modal = ({
           <button 
             onClick={!loading ? onClose : undefined}
             disabled={loading}
-            className="rounded-xl p-2 text-ink-low transition-colors hover:bg-white/[0.06] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+            className="rounded-xl p-2 text-ink-low transition-colors hover:bg-surface-2 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Icon name="x" size={20} />
           </button>

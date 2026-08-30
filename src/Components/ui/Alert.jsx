@@ -15,7 +15,7 @@ const Alert = ({ variant = "info", title, children, className = "" }) => {
   return (
     <div
       role={variant === "danger" || variant === "warning" ? "alert" : "status"}
-      className={`glass flex items-start gap-3 rounded-xl border-l-[3px] p-4 ${c.stripe} ${className}`}
+      className={`flex items-start gap-3 rounded-xl border border-white/10 bg-surface shadow-clay border-l-[3px] p-4 ${c.stripe} ${className}`}
     >
       <span className={`mt-0.5 flex-none ${c.tint}`}>
         <Icon name={c.icon} size={20} />

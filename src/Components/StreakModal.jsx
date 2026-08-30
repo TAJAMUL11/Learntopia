@@ -3,6 +3,7 @@ import { useGamification } from "../context/GamificationContext";
 import { useLanguage } from "../context/LanguageContext";
 import { useSound } from "../context/SoundContext";
 import Button from "./ui/Button";
+import Icon from "./ui/Icon";
 
 /**
  * StreakModal — Gamified streak-milestone popup.
@@ -69,7 +70,7 @@ const StreakModal = () => {
 
       {/* Main Glassmorphism Card — clicks inside must NOT close the modal. */}
       <div
-        className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-amber-500/40 bg-gradient-to-b from-ground-800/95 via-ground-800 to-ground-900 p-6 text-center shadow-[0_0_60px_rgba(245,158,11,0.3)] animate-scale-up md:p-8"
+        className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-amber-500/40 bg-surface p-6 text-center shadow-[0_0_60px_rgba(245,158,11,0.3)] animate-scale-up md:p-8"
         onClick={(e) => e.stopPropagation()}
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
@@ -84,7 +85,7 @@ const StreakModal = () => {
         <div className="relative mx-auto mb-5 flex h-28 w-28 items-center justify-center">
           <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-amber-600/40 via-orange-500/40 to-yellow-400/40 blur-xl animate-pulse" />
           <div className="relative flex h-24 w-24 items-center justify-center rounded-full border-2 border-amber-500/60 bg-gradient-to-br from-amber-500/20 via-orange-500/20 to-yellow-500/10 shadow-[0_0_35px_rgba(245,158,11,0.5)]">
-            <span className="text-6xl animate-bounce">🔥</span>
+            <Icon name="flame" size={64} className="animate-bounce text-amber-400" />
           </div>
         </div>
 
@@ -97,7 +98,7 @@ const StreakModal = () => {
         </p>
 
         {/* Milestone Track: 7 → 15 → 30 */}
-        <div className="my-6 rounded-2xl border border-white/10 bg-ground-900/60 p-4 backdrop-blur-sm">
+        <div className="my-6 rounded-2xl border border-white/10 clay-inset p-4">
           <div className="flex items-center justify-between gap-2">
             {milestoneDays.map((day, i) => {
               const isCompleted = day < streak;
@@ -114,10 +115,10 @@ const StreakModal = () => {
                         ? "border border-state-success/50 bg-state-success/20 text-state-success"
                         : isFinal
                         ? "border border-violet-500/40 bg-violet-500/20 text-violet-300"
-                        : "border border-white/10 bg-ground-800/50 text-ink-faint opacity-70"
+                        : "border border-white/10 bg-surface-2 shadow-clay-sm text-ink-faint opacity-70"
                     }`}
                   >
-                    {isCompleted ? "✓" : isActive ? "🔥" : isFinal ? "🎁" : day}
+                    {isCompleted ? <Icon name="check" size={24} /> : isActive ? <Icon name="flame" size={24} /> : isFinal ? <Icon name="gift" size={24} /> : day}
                   </div>
                   <span className="text-xs font-bold text-ink-hi">{day}d</span>
                   <span className="text-[10px] font-semibold text-state-success/90">
@@ -131,7 +132,7 @@ const StreakModal = () => {
 
         {/* Bonus XP Badge — reflects the milestone just reached */}
         <div className="mb-6 inline-flex items-center gap-2 rounded-xl border border-state-success/30 bg-state-success/10 px-4 py-2 text-xs font-bold text-state-success">
-          <span>⚡</span>
+          <Icon name="zap" size={16} />
           <span>{t("streakModal.streakBonus", { amount: streakBonusXp })}</span>
         </div>
 
@@ -143,7 +144,7 @@ const StreakModal = () => {
         {/* Claim CTA — grants the milestone bonus XP (once per day, synced everywhere) */}
         <Button
           onClick={handleClaim}
-          className="w-full justify-center bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 py-3.5 text-base font-bold text-white shadow-[0_0_25px_rgba(245,158,11,0.4)] hover:shadow-[0_0_35px_rgba(245,158,11,0.6)] hover:brightness-110"
+          className="w-full justify-center bg-amber-500 py-3.5 text-base font-bold text-white shadow-[0_0_25px_rgba(245,158,11,0.4)] hover:bg-amber-400 hover:shadow-[0_0_35px_rgba(245,158,11,0.6)]"
         >
           {alreadyClaimedStreakToday
             ? t("streakModal.keepGoing")

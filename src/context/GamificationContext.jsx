@@ -11,11 +11,11 @@ const GamificationContext = createContext();
 export const useGamification = () => useContext(GamificationContext);
 
 export const LEVEL_THRESHOLDS = [
-  { level: 1, name: "Rookie Coder", minXP: 0, icon: "🌱" },
-  { level: 2, name: "Code Explorer", minXP: 100, icon: "🔍" },
-  { level: 3, name: "Byte Master", minXP: 250, icon: "⚡" },
-  { level: 4, name: "Logic Legend", minXP: 500, icon: "👑" },
-  { level: 5, name: "Grandmaster", minXP: 1000, icon: "🏆" },
+  { level: 1, name: "Rookie Coder", minXP: 0, icon: "sparkles" },
+  { level: 2, name: "Code Explorer", minXP: 100, icon: "search" },
+  { level: 3, name: "Byte Master", minXP: 250, icon: "zap" },
+  { level: 4, name: "Logic Legend", minXP: 500, icon: "crown" },
+  { level: 5, name: "Grandmaster", minXP: 1000, icon: "trophy" },
 ];
 
 export const getLevelInfo = (xp) => {
@@ -145,12 +145,12 @@ export const GamificationProvider = ({ children }) => {
     const which = new URLSearchParams(window.location.search).get("celTest");
     if (!which) return;
     const samples = {
-      level: { type: "level", art: "level", kind: "level", params: { icon: "👑", level: 4, name: "Logic Legend" } },
+      level: { type: "level", art: "level", kind: "level", params: { icon: "crown", level: 4, name: "Logic Legend" } },
       xp: { type: "xp", art: "xp", kind: "xp", params: { amount: 50 }, message: "Completed Module 1!" },
-      badge: { type: "badge", art: "badge", kind: "badge", params: { name: "Quiz Ace", emoji: "🎯" }, badge: { name: "Quiz Ace", emoji: "🎯" } },
+      badge: { type: "badge", art: "badge", kind: "badge", params: { name: "Quiz Ace", icon: "target" }, badge: { name: "Quiz Ace", icon: "target" } },
       champion: { type: "champion", art: "crown", kind: "champion" },
-      sharp: { type: "badge", art: "robotic", kind: "badge", params: { name: "Sharp Memory", emoji: "🤖" }, badge: { name: "Sharp Memory", emoji: "🤖" } },
-      perfect: { type: "badge", art: "zap", kind: "badge", params: { name: "Perfect Score", emoji: "💯" }, badge: { name: "Perfect Score", emoji: "💯" } },
+      sharp: { type: "badge", art: "robotic", kind: "badge", params: { name: "Sharp Memory", icon: "robot" }, badge: { name: "Sharp Memory", icon: "robot" } },
+      perfect: { type: "badge", art: "zap", kind: "badge", params: { name: "Perfect Score", icon: "zap" }, badge: { name: "Perfect Score", icon: "zap" } },
       course: { type: "course", art: "trophy", kind: "course", params: { course: "Python for Kids: Build Your First Game!" } },
       streak: { type: "xp", art: "streak", kind: "streakBonus", params: { amount: 40, streak: 15 } },
     };
@@ -265,7 +265,7 @@ export const GamificationProvider = ({ children }) => {
       type: "badge",
       art: badge.art || "badge",
       kind: "badge",
-      params: { emoji: badge.emoji || "", name: badge.name },
+      params: { icon: badge.icon || "award", name: badge.name },
       badge,
     });
   };
@@ -278,7 +278,7 @@ export const GamificationProvider = ({ children }) => {
     if (!currentUser || streak < 30) return;
     const hasBadge = badges.some((b) => (typeof b === "string" ? b : b.name) === "Streak Master");
     if (!hasBadge) {
-      awardBadge({ name: "Streak Master", emoji: "🔥", art: "flame" }, { silent: true });
+      awardBadge({ name: "Streak Master", icon: "flame", art: "flame" }, { silent: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [streak, badges, currentUser]);
@@ -303,9 +303,9 @@ export const GamificationProvider = ({ children }) => {
   // Anti-farming / accuracy awards. Both go through awardBadge, so they are
   // deduped (granted once) and fire the standard badge celebration.
   const awardPerfectScore = () =>
-    awardBadge({ name: "Perfect Score", emoji: "💯", art: "zap" });
+    awardBadge({ name: "Perfect Score", icon: "zap", art: "zap" });
   const awardSharpMemory = () =>
-    awardBadge({ name: "Sharp Memory", emoji: "🤖", art: "robotic" });
+    awardBadge({ name: "Sharp Memory", icon: "robot", art: "robotic" });
 
   // Claim the daily streak bonus (+20 XP). Guarded to once per calendar day via
   // lastStreakClaimDate stored in Firestore, so it can't be re-claimed on

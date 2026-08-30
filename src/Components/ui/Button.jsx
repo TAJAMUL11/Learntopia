@@ -5,13 +5,13 @@ import Spinner from "./Spinner";
 
 const VARIANTS = {
   primary:
-    "bg-violet-600 text-white border-white/10 shadow-glow hover:bg-violet-500 hover:shadow-glow",
+    "bg-violet-600 text-white border-violet-400/30 shadow-clay-btn hover:bg-violet-500",
   secondary:
-    "bg-white/[0.06] text-ink-hi border-white/[0.13] hover:bg-white/[0.1]",
+    "bg-surface-2 text-ink-hi border-white/10 shadow-clay-btn hover:bg-surface-3",
   ghost:
-    "bg-transparent text-ink border-white/[0.13] hover:bg-white/[0.05] hover:text-ink-hi",
+    "bg-transparent text-ink border-[rgba(160,140,220,0.18)] hover:bg-surface-2 hover:text-ink-hi",
   danger:
-    "bg-state-danger/[0.14] text-state-danger border-state-danger/40 hover:bg-state-danger/25",
+    "bg-state-danger/[0.16] text-state-danger border-state-danger/40 shadow-clay-sm hover:bg-state-danger/25",
 };
 
 const SIZES = {

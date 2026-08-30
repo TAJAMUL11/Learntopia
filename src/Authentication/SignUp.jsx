@@ -159,7 +159,7 @@ const SignUp = () => {
       {/* Account Already Exists Smart Guidance Modal */}
       {alreadyExistsEmail && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm animate-fade-in">
-          <Card className="w-full max-w-md border-violet-500/30 p-6 shadow-2xl">
+          <Card className="w-full max-w-md border-violet-500/30 p-6">
             <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/15 text-amber-400">
               <Icon name="alert-circle" size={24} />
             </div>
@@ -182,7 +182,7 @@ const SignUp = () => {
               <button
                 type="button"
                 onClick={() => setAlreadyExistsEmail(null)}
-                className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2.5 text-xs font-semibold text-ink-low transition-colors hover:bg-white/[0.08] hover:text-ink-hi"
+                className="w-full rounded-xl border border-white/10 bg-surface-2 shadow-clay-sm py-2.5 text-xs font-semibold text-ink-low transition-colors hover:bg-surface-3 hover:text-ink-hi"
               >
                 {t("common.cancel")}
               </button>
@@ -193,7 +193,7 @@ const SignUp = () => {
 
       <div className="grid w-full max-w-5xl items-center gap-10 lg:grid-cols-2">
         {/* Banner */}
-        <div className="relative hidden aspect-[4/5] max-h-[560px] overflow-hidden rounded-3xl border border-white/[0.06] shadow-card lg:block">
+        <div className="relative hidden aspect-[4/5] max-h-[560px] overflow-hidden rounded-3xl border border-white/10 shadow-clay lg:block">
           <ImageWithSkeleton src={signUpImage} alt="" imgClassName="h-full w-full object-cover transition-opacity duration-500" />
           
           {/* Overlay and Text */}
@@ -282,7 +282,7 @@ const SignUp = () => {
           <button
             type="button"
             onClick={handleGoogleSignIn}
-            className="mt-4 flex w-full items-center justify-center gap-3 rounded-xl border border-white/[0.1] bg-white/[0.04] p-3 text-xs font-semibold uppercase tracking-wider text-ink-hi transition-colors hover:bg-white/[0.08]"
+            className="mt-4 flex w-full items-center justify-center gap-3 rounded-xl border border-white/10 bg-surface-2 shadow-clay-sm p-3 text-xs font-semibold uppercase tracking-wider text-ink-hi transition-colors hover:bg-surface-3"
           >
             <img src={google} alt="" className="h-5 w-5 object-contain" />
             {t("auth.googleAuth")}

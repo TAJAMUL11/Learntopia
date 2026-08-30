@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <linearGradient id="og-bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0C0F17"/>
+      <stop offset="1" stop-color="#0A0C12"/>
+    </linearGradient>
+    <radialGradient id="og-glow" cx="0.5" cy="0.5" r="0.5">
+      <stop stop-color="#8B7CF6" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#8B7CF6" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="og-glow2" cx="0.5" cy="0.5" r="0.5">
+      <stop stop-color="#4EC5E8" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#4EC5E8" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="og-topia" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#A79BF8"/>
+      <stop offset="1" stop-color="#4EC5E8"/>
+    </linearGradient>
+    <linearGradient id="og-head" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#9D8DF8"/>
+      <stop offset="1" stop-color="#6D5CE0"/>
+    </linearGradient>
+    <linearGradient id="og-eye" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#8FE0FB"/>
+      <stop offset="1" stop-color="#4EC5E8"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#og-bg)"/>
+  <circle cx="1050" cy="60" r="420" fill="url(#og-glow)"/>
+  <circle cx="120" cy="600" r="360" fill="url(#og-glow2)"/>
+
+  <!-- Robo-Py mark, scaled from the 48-unit master -->
+  <g transform="translate(150 205) scale(4.6)">
+    <rect x="3.5" y="19" width="5" height="12" rx="2.5" fill="#5B49C9"/>
+    <rect x="39.5" y="19" width="5" height="12" rx="2.5" fill="#5B49C9"/>
+    <path d="M24 6.2V9.6" stroke="#B9AEF9" stroke-width="1.8" stroke-linecap="round"/>
+    <circle cx="24" cy="4.6" r="2.4" fill="#4EC5E8"/>
+    <rect x="7" y="9" width="34" height="31" rx="11" fill="url(#og-head)"/>
+    <rect x="9" y="10.6" width="30" height="10" rx="7" fill="#ffffff" fill-opacity="0.12"/>
+    <rect x="7.6" y="9.6" width="32.8" height="29.8" rx="10.4" stroke="#ffffff" stroke-opacity="0.16" stroke-width="1"/>
+    <rect x="12.5" y="15" width="23" height="15.5" rx="6" fill="#0B0D15"/>
+    <rect x="18" y="18.8" width="4.4" height="6.6" rx="2.2" fill="url(#og-eye)"/>
+    <rect x="25.6" y="18.8" width="4.4" height="6.6" rx="2.2" fill="url(#og-eye)"/>
+    <path d="M20.6 27.4c1.4 1.5 5.4 1.5 6.8 0" stroke="#4EC5E8" stroke-width="1.6" stroke-linecap="round" opacity="0.75"/>
+  </g>
+
+  <!-- Wordmark + tagline (system-bold fallback if Fredoka isn't installed on the renderer) -->
+  <text x="410" y="300" font-family="Fredoka, 'Segoe UI', Arial, sans-serif" font-size="104" font-weight="700" letter-spacing="-1">
+    <tspan fill="#EEF1F7">Learn</tspan><tspan fill="url(#og-topia)">topia</tspan>
+  </text>
+  <text x="414" y="368" font-family="'Segoe UI', Arial, sans-serif" font-size="40" font-weight="600" fill="#AEB5C6">Learn by playing.</text>
+  <text x="414" y="424" font-family="'Segoe UI', Arial, sans-serif" font-size="30" font-weight="700" fill="#8B7CF6" letter-spacing="1">FREE · AGES 7–16 · CODE, MATH &amp; MORE</text>
+</svg>

@@ -26,7 +26,7 @@ export const buildSystemPrompt = (tutor, course, currentModule) => {
 YOUR PERSONA:
 - Name: ${tutor.name}
 - Role: ${tutor.role}
-- Personality: Warm, patient, playful, and super encouraging. Use simple language. Add the occasional emoji to keep things fun.
+- Personality: Warm, patient, playful, and super encouraging. Use simple language. Keep things fun and lively with your words. Do NOT use emojis.
 
 COURSE CONTEXT:
 - Course: "${course.title}"
@@ -36,7 +36,7 @@ COURSE CONTEXT:
 ${moduleContext ? `- Current Module: ${moduleContext}` : ""}
 
 RULES (STRICTLY FOLLOW):
-1. ONLY answer questions related to the course subject (${course.category}). If asked about something off-topic, gently redirect: "Great question! But I'm your ${course.category} buddy — let's stick to our topic! 😊"
+1. ONLY answer questions related to the course subject (${course.category}). If asked about something off-topic, gently redirect: "Great question! But I'm your ${course.category} buddy — let's stick to our topic!"
 2. Keep responses SHORT (2-4 paragraphs max). Kids lose attention with long walls of text.
 3. Use simple, age-appropriate language. Explain complex concepts with fun analogies and real-world examples.
 4. NEVER provide harmful, violent, sexual, or inappropriate content. This is a kids' platform.
@@ -118,7 +118,7 @@ export const sendMessageToGemini = async (chatHistory, userMessage, systemPrompt
       const candidate = data?.candidates?.[0];
       if (!candidate) {
         if (data?.promptFeedback?.blockReason) {
-          return "I can't answer that question. Let me help you with something related to our course! 😊";
+          return "I can't answer that question. Let me help you with something related to our course!";
         }
         continue;
       }
@@ -126,7 +126,7 @@ export const sendMessageToGemini = async (chatHistory, userMessage, systemPrompt
       const text = candidate.content?.parts?.[0]?.text;
       if (!text) {
         if (candidate.finishReason === "SAFETY") {
-          return "I can't answer that question. Let's focus on our course topic! 😊";
+          return "I can't answer that question. Let's focus on our course topic!";
         }
         continue;
       }

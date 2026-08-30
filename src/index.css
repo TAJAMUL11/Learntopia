@@ -4,8 +4,69 @@
 
 /* ============================================================
    Learntopia — global foundation
-   Darker midnight-violet identity, single-theme by design.
+   Dark claymorphism identity (LT-60). Themeable via semantic tokens:
+   colors are space-separated RGB channels so Tailwind alpha works
+   (rgb(var(--c-surface) / <alpha-value>)). Dark is the default on
+   :root; the [data-theme="light"] block is a DORMANT stub finished
+   in the later Light-theme phase (no toggle wired up yet).
    ============================================================ */
+
+:root {
+  color-scheme: dark;
+
+  /* --- themeable color roles (RGB channels) --- */
+  --c-ground: 10 12 18; /* #0A0C12 — deep slate-indigo (approved redesign) */
+  --c-surface: 22 26 36; /* #161A24 — solid card (no wash, no sheen) */
+  --c-surface-2: 30 36 48; /* #1E2430 — raised (buttons/pills) */
+  --c-surface-3: 41 49 63; /* #29313F — highest (active) */
+  --c-ink-hi: 238 241 247; /* #EEF1F7 */
+  --c-ink: 174 181 198; /* #AEB5C6 */
+  --c-ink-low: 110 117 137; /* #6E7589 */
+  --c-ink-faint: 78 84 100; /* #4E5464 */
+  --c-border: 150 165 205; /* cool hairlines, used at low alpha */
+
+  /* --- clay: soft outer drop + light cool top rim + deep inner bottom.
+         Solid surfaces only — the molded look comes from THIS, not a gradient. --- */
+  --clay-rim: rgba(198, 212, 245, 0.17); /* cool light rim — visible molded top */
+  --clay-deep: rgba(0, 0, 0, 0.62);
+  --shadow-clay: 0 24px 40px -18px rgba(0, 0, 0, 0.8), 0 6px 14px -8px rgba(0, 0, 0, 0.5),
+    inset 0 6px 10px -4px var(--clay-rim), inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 -18px 28px -16px var(--clay-deep);
+  --shadow-clay-sm: 0 12px 22px -12px rgba(0, 0, 0, 0.7), inset 0 5px 8px -4px var(--clay-rim),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05), inset 0 -10px 16px -10px var(--clay-deep);
+
+  /* --- no card sheen (flat solid clay); molded look comes from the clay
+         inset rim in --shadow-clay, not a background gradient --- */
+  --surface-sheen: none;
+  --ground-glow:
+    radial-gradient(1000px 560px at 84% -6%, rgba(123, 110, 246, 0.1), transparent 60%),
+    radial-gradient(760px 460px at -4% 6%, rgba(78, 197, 232, 0.06), transparent 55%),
+    linear-gradient(170deg, #0a0c12 0%, #0b0e16 60%, #0d1119 100%);
+}
+
+/* Light theme — DORMANT stub. Values are a starting point; the Light-theme
+   phase (under LT-60) wires up the toggle and QAs contrast on every screen. */
+[data-theme="light"] {
+  color-scheme: light;
+  --c-ground: 231 226 244;
+  --c-surface: 244 241 251;
+  --c-surface-2: 251 250 254;
+  --c-surface-3: 255 255 255;
+  --c-ink-hi: 44 36 71;
+  --c-ink: 90 80 128;
+  --c-ink-low: 123 115 150;
+  --c-ink-faint: 160 152 185;
+  --c-border: 120 105 170;
+  --clay-rim: rgba(255, 255, 255, 0.9);
+  --clay-deep: rgba(120, 105, 170, 0.34);
+  --shadow-clay: 0 20px 34px -16px var(--clay-deep), inset 0 6px 10px -3px var(--clay-rim),
+    inset 0 -16px 24px -12px var(--clay-deep);
+  --shadow-clay-sm: 0 12px 20px -12px var(--clay-deep), inset 0 4px 7px -3px var(--clay-rim),
+    inset 0 -9px 14px -9px var(--clay-deep);
+  --surface-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0) 42%);
+  --ground-glow: radial-gradient(1100px 560px at 82% -8%, rgba(139, 99, 227, 0.1), transparent 60%),
+    linear-gradient(160deg, #efebfa 0%, #e7e2f4 100%);
+}
 
 * {
   margin: 0;
@@ -15,26 +76,34 @@
 
 html {
   scroll-behavior: smooth;
-  background-color: #070510;
+  background-color: rgb(var(--c-ground));
 }
 
 body {
-  /* Solid fallback so mobile overscroll never shows white */
-  background-color: #070510;
-  /* Deep midnight ground with restrained ambient glows (kept subtle, not flashy). */
-  background-image:
-    radial-gradient(1100px 560px at 82% -8%, rgba(139, 99, 227, 0.10), transparent 60%),
-    radial-gradient(820px 460px at -5% 8%, rgba(123, 191, 242, 0.06), transparent 55%),
-    linear-gradient(160deg, #070510 0%, #0E0A1C 55%, #150E28 100%);
+  /* Solid fallback so mobile overscroll never shows a mismatched color */
+  background-color: rgb(var(--c-ground));
+  /* Themed ground with restrained ambient glows (kept subtle, not flashy). */
+  background-image: var(--ground-glow);
   background-attachment: fixed;
   min-height: 100vh;
   min-height: 100dvh;
-  color: #bdb4d0;
+  color: rgb(var(--c-ink));
   overflow-x: hidden;
   font-family: "Poppins", "Segoe UI", system-ui, -apple-system, sans-serif;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/* Kill orphan/widow words everywhere: balance headings, pretty-wrap body copy.
+   Explicit text-balance/text-pretty utilities still override this base layer. */
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
 }
 
 /* Custom scrollbar */
@@ -77,15 +146,30 @@ a.active {
     @apply w-full max-w-[1280px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12;
   }
 
-  /* --- Glass surfaces (three tiers) --- */
+  /* --- Clay surfaces (three tiers) ---
+     V2 identity: opaque, raised, puffy surfaces. Class names kept as `.glass*`
+     so every existing consumer (cards, panels, navbar, modals) is rethemed
+     centrally without touching feature files. The top-lit gradient + clay
+     shadow give the molded, pressable look. */
   .glass {
-    @apply border border-white/[0.07] bg-white/[0.03] backdrop-blur-md;
+    @apply border bg-surface shadow-clay;
+    border-color: rgb(var(--c-border) / 0.12);
+    background-image: var(--surface-sheen);
   }
   .glass-2 {
-    @apply border border-white/[0.08] bg-white/[0.05] backdrop-blur-md;
+    @apply border bg-surface-2 shadow-clay;
+    border-color: rgb(var(--c-border) / 0.16);
+    background-image: var(--surface-sheen);
   }
   .glass-panel {
-    @apply glass rounded-2xl shadow-card;
+    @apply glass rounded-2xl;
+  }
+
+  /* Recessed clay: pressed-in wells & progress tracks (opposite of a raised card).
+     Pair with rounded-* + overflow-hidden on the element. */
+  .clay-inset {
+    background: rgb(var(--c-ground));
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.55), inset 0 -1px 0 rgba(198, 212, 245, 0.05);
   }
 
   /* --- Navbar underline links --- */
@@ -169,6 +253,51 @@ a.active {
     opacity: 1;
     transform: scale(1) translateY(0);
   }
+}
+
+/* Ambient drifting clay orbs (rendered by RootLayout) — subtle animated depth
+   behind content. Opaque cards sit on top, so they only glow through the gutters. */
+.ambient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  will-change: transform;
+}
+.orb-1 {
+  width: 640px;
+  height: 640px;
+  left: -10%;
+  top: -8%;
+  background: radial-gradient(circle, rgba(139, 124, 246, 0.5), transparent 70%);
+  animation: orbDrift1 22s ease-in-out infinite;
+}
+.orb-2 {
+  width: 560px;
+  height: 560px;
+  right: -8%;
+  top: 18%;
+  background: radial-gradient(circle, rgba(78, 197, 232, 0.42), transparent 70%);
+  animation: orbDrift2 27s ease-in-out infinite;
+}
+.orb-3 {
+  width: 560px;
+  height: 560px;
+  left: 26%;
+  bottom: -16%;
+  background: radial-gradient(circle, rgba(109, 92, 224, 0.44), transparent 70%);
+  animation: orbDrift3 24s ease-in-out infinite;
+}
+@keyframes orbDrift1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(120px, 90px) scale(1.08); }
+}
+@keyframes orbDrift2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-110px, 100px) scale(1.1); }
+}
+@keyframes orbDrift3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(100px, -90px) scale(1.06); }
 }
 
 /* Respect reduced-motion globally */

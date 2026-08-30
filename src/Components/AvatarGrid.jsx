@@ -34,7 +34,7 @@ const AvatarGrid = ({ selectedId, onSelect }) => {
             className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition-all duration-200 border ${
               filter === f.id
                 ? "border-violet-500 bg-violet-500/20 text-violet-300 shadow-glow"
-                : "border-white/10 bg-white/[0.03] text-ink-low hover:text-white hover:border-white/20"
+                : "border-white/10 bg-surface-2 shadow-clay-sm text-ink-low hover:text-white hover:border-white/20"
             }`}
           >
             {f.label}
@@ -56,7 +56,7 @@ const AvatarGrid = ({ selectedId, onSelect }) => {
               className={`group relative flex flex-col items-center gap-2 rounded-2xl p-2.5 sm:p-3 transition-all duration-200 border-2 ${
                 isSelected
                   ? "border-violet-500 bg-violet-500/15 shadow-glow scale-105"
-                  : "border-transparent bg-white/[0.03] hover:bg-white/[0.07] hover:scale-105"
+                  : "border-transparent bg-surface-2 shadow-clay-sm hover:bg-surface-3 hover:scale-105"
               }`}
             >
               {/* Avatar SVG — fills the responsive wrapper */}

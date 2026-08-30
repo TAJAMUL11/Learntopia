@@ -5,42 +5,54 @@ export default {
     extend: {
       colors: {
         // --- Legacy token names (kept so nothing breaks), remapped to the darker palette ---
-        "primary-bg-color": "#0E0A1C",
-        "light-bg-color": "#2A2040",
-        "button-bg-color": "#8B63E3",
-        "highlighted-btn-bg": "#7BBFF2",
+        "primary-bg-color": "#0A0C12",
+        "light-bg-color": "#1E2430",
+        "button-bg-color": "#7B6AEF",
+        "highlighted-btn-bg": "#4EC5E8",
 
-        // --- Refined system (darker ground, violet-biased neutrals) ---
+        // --- Refined system: deep slate-indigo ground, indigo-violet accents ---
         ground: {
-          DEFAULT: "#070510",
-          900: "#0B0816",
-          800: "#0E0A1C",
-          700: "#150E28",
-          600: "#1E1638",
+          DEFAULT: "#0A0C12",
+          900: "#0D1019",
+          800: "#0F1219",
+          700: "#141822",
+          600: "#1E2430",
         },
         violet: {
-          300: "#CBBAF5",
-          400: "#B79DF0",
-          500: "#A584EB",
-          600: "#8B63E3",
-          700: "#6D42BE",
+          300: "#C4BCF9",
+          400: "#A79BF8",
+          500: "#8B7CF6",
+          600: "#7B6AEF",
+          700: "#6D5CE0",
         },
-        sky: "#7BBFF2",
+        sky: "#4EC5E8",
+        // Themeable via CSS vars (see index.css :root / [data-theme]). Channel
+        // syntax keeps Tailwind's alpha modifiers (e.g. text-ink/70) working.
         ink: {
-          hi: "#F1EEF8", // headings / high contrast
-          DEFAULT: "#BDB4D0", // body
-          low: "#8E85A5", // muted
-          faint: "#5F5878", // faintest / disabled
+          hi: "rgb(var(--c-ink-hi) / <alpha-value>)", // headings / high contrast
+          DEFAULT: "rgb(var(--c-ink) / <alpha-value>)", // body
+          low: "rgb(var(--c-ink-low) / <alpha-value>)", // muted
+          faint: "rgb(var(--c-ink-faint) / <alpha-value>)", // faintest / disabled
+        },
+        // --- Clay surfaces: raised, opaque, deep violet-indigo. Sit clearly ABOVE
+        //     the ground so the clay dual-shadow reads, but kept rich/muted (not
+        //     candy-bright) so cards feel premium. Themeable (see index.css). ---
+        surface: {
+          DEFAULT: "rgb(var(--c-surface) / <alpha-value>)", // base raised surface
+          2: "rgb(var(--c-surface-2) / <alpha-value>)", // one step up
+          3: "rgb(var(--c-surface-3) / <alpha-value>)", // highest (active / accents)
         },
         state: {
           success: "#34D399",
-          warning: "#FBBF24",
+          warning: "#F6B93B",
           danger: "#FB7185",
-          info: "#7BBFF2",
+          info: "#4EC5E8",
         },
       },
       fontFamily: {
         sans: ['"Poppins"', '"Segoe UI"', "system-ui", "-apple-system", "sans-serif"],
+        // Rounded, friendly display face for headings, numbers and game-UI labels.
+        display: ['"Fredoka"', '"Poppins"', "system-ui", "sans-serif"],
       },
       borderRadius: {
         xl2: "1.25rem",
@@ -50,6 +62,14 @@ export default {
         card: "0 8px 30px rgba(0,0,0,0.35)",
         glow: "0 10px 30px rgba(139,99,227,0.22)",
         "glow-sky": "0 10px 30px rgba(123,191,242,0.18)",
+        // --- Claymorphism: soft outer drop + a light top rim + a deep inner bottom,
+        //     so surfaces read as puffy/molded rather than flat with a shadow.
+        //     Composed per-theme in index.css so light/dark swap the recipe. ---
+        clay: "var(--shadow-clay)",
+        "clay-sm": "var(--shadow-clay-sm)",
+        // Molded button: soft drop + bright inner top highlight + inner bottom shade.
+        "clay-btn":
+          "0 10px 20px -10px rgba(0,0,0,0.7), inset 0 2px 0 rgba(255,255,255,0.24), inset 0 -4px 8px rgba(0,0,0,0.34)",
       },
       screens: {
         mediumPhone: "420px",
