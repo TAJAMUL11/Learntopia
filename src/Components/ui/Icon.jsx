@@ -192,6 +192,18 @@ const PATHS = {
       <path d="m8 6-6 6 6 6" />
     </>
   ),
+  calculator: (
+    <>
+      <rect x="4" y="2" width="16" height="20" rx="2" />
+      <path d="M8 6h8M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01" />
+    </>
+  ),
+  "pie-chart": (
+    <>
+      <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
+      <path d="M22 12A10 10 0 0 0 12 2v10z" />
+    </>
+  ),
   "play-circle": (
     <>
       <circle cx="12" cy="12" r="10" />
@@ -250,6 +262,27 @@ const PATHS = {
       <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
       <line x1="23" y1="9" x2="17" y2="15" />
       <line x1="17" y1="9" x2="23" y2="15" />
+    </>
+  ),
+  crown: (
+    <>
+      <path d="M2 18h20M3 8l4.5 4L12 5l4.5 7L21 8l-2 10H5L3 8Z" />
+    </>
+  ),
+  robot: (
+    <>
+      <rect x="4" y="8" width="16" height="12" rx="2" />
+      <path d="M12 8V4M9 4h6" />
+      <circle cx="9" cy="14" r="1" />
+      <circle cx="15" cy="14" r="1" />
+      <path d="M2 13v3M22 13v3" />
+    </>
+  ),
+  gift: (
+    <>
+      <rect x="3" y="8" width="18" height="4" rx="1" />
+      <path d="M5 12v9h14v-9M12 8v13" />
+      <path d="M12 8S10.5 3 7.5 4.5 12 8 12 8ZM12 8s1.5-5 4.5-3.5S12 8 12 8Z" />
     </>
   ),
 };
