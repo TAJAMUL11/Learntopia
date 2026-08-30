@@ -1,5 +1,4 @@
-import { useLocation, useNavigate, Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import Icon from "../Components/ui/Icon";
 import { useLanguage } from "../context/LanguageContext";
 
@@ -14,15 +13,8 @@ const PARTICLES = [
 ];
 
 const ThankYou = () => {
-  const location = useLocation();
   const navigate = useNavigate();
   const { t } = useLanguage();
-  const name = location.state?.name || null;
-
-  // Guard: if someone navigates here directly without submitting, send them back
-  useEffect(() => {
-    if (!location.state?.name && location.state?.name !== undefined) return;
-  }, [location.state]);
 
   return (
     <div className="container-page relative flex min-h-[calc(100vh-5rem)] flex-col items-center justify-center py-20">
@@ -45,20 +37,18 @@ const ThankYou = () => {
       <div className="relative z-10 mx-auto w-full max-w-lg text-center">
 
         {/* Animated check icon */}
-        <div className="relative mx-auto mb-8 flex h-28 w-28 items-center justify-center">
-          {/* Outer pulse ring */}
-          <div className="absolute inset-0 animate-ping rounded-full bg-state-success/20 [animation-duration:2s]" />
-          {/* Middle ring */}
-          <div className="absolute inset-2 rounded-full border border-state-success/30 bg-state-success/10" />
-          {/* Inner icon */}
-          <div className="relative grid h-20 w-20 place-items-center rounded-full border border-state-success/40 bg-gradient-to-br from-state-success/30 to-sky/20 shadow-[0_0_40px_-8px_rgba(52,211,153,0.4)]">
-            <Icon name="check-circle" size={40} className="text-state-success" />
+        <div className="relative mx-auto mb-6 flex h-24 w-24 items-center justify-center">
+          {/* Single soft pulse ring */}
+          <div className="absolute inset-0 animate-ping rounded-full bg-state-success/15 [animation-duration:2.5s]" />
+          {/* Clay medallion with one clean checkmark (no nested circles) */}
+          <div className="relative grid h-[4.5rem] w-[4.5rem] place-items-center rounded-full border border-state-success/40 bg-state-success/15 text-state-success shadow-[0_0_40px_-10px_rgba(52,211,153,0.55)]">
+            <Icon name="check" size={38} strokeWidth={2.75} />
           </div>
         </div>
 
         {/* Heading */}
-        <h1 className="text-4xl font-black tracking-tight text-ink-hi sm:text-5xl">
-          {name ? `${t("thankYou.title")} ${name}!` : t("thankYou.title")}
+        <h1 className="text-balance text-3xl font-black leading-[1.12] tracking-tight text-ink-hi sm:text-4xl">
+          {t("thankYou.title")}
         </h1>
 
         <p className="mx-auto mt-5 max-w-md text-base leading-relaxed text-ink sm:text-lg">
@@ -78,31 +68,31 @@ const ThankYou = () => {
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           <Link
             to="/courses"
-            className="group flex flex-col items-center gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.03] p-5 transition-all duration-200 hover:border-sky/30 hover:bg-white/[0.06]"
+            className="group flex flex-col items-center gap-2 rounded-2xl border border-white/10 bg-surface shadow-clay p-5 transition-all duration-200 hover:border-sky/30 hover:bg-surface-2"
           >
-            <div className="grid h-10 w-10 place-items-center rounded-xl border border-white/[0.08] bg-sky/10 text-sky transition-transform duration-200 group-hover:scale-110">
+            <div className="grid h-10 w-10 place-items-center rounded-xl border border-sky/30 bg-sky/15 text-sky shadow-clay-sm transition-transform duration-200 group-hover:scale-110">
               <Icon name="book" size={18} />
             </div>
-            <span className="text-sm font-semibold text-ink-hi">{t("nav.courses")}</span>
-            <span className="text-xs text-ink-low">{t("thankYou.exploreDesc")}</span>
+            <span className="text-base font-bold text-ink-hi">{t("nav.courses")}</span>
+            <span className="text-[13px] leading-snug text-ink-low">{t("thankYou.exploreDesc")}</span>
           </Link>
 
           <Link
             to="/quiz"
-            className="group flex flex-col items-center gap-2 rounded-2xl border border-white/[0.07] bg-white/[0.03] p-5 transition-all duration-200 hover:border-amber-500/30 hover:bg-white/[0.06]"
+            className="group flex flex-col items-center gap-2 rounded-2xl border border-white/10 bg-surface shadow-clay p-5 transition-all duration-200 hover:border-amber-500/30 hover:bg-surface-2"
           >
-            <div className="grid h-10 w-10 place-items-center rounded-xl border border-white/[0.08] bg-amber-500/10 text-amber-400 transition-transform duration-200 group-hover:scale-110">
+            <div className="grid h-10 w-10 place-items-center rounded-xl border border-amber-500/30 bg-amber-500/15 text-amber-400 shadow-clay-sm transition-transform duration-200 group-hover:scale-110">
               <Icon name="zap" size={18} />
             </div>
             <span className="text-sm font-semibold text-ink-hi">{t("nav.quizzes")}</span>
-            <span className="text-xs text-ink-low">{t("thankYou.quizDesc")}</span>
+            <span className="text-[13px] leading-snug text-ink-low">{t("thankYou.quizDesc")}</span>
           </Link>
         </div>
 
         {/* Primary back button */}
         <button
           onClick={() => navigate("/")}
-          className="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-violet-500 px-6 py-3.5 text-sm font-bold text-white shadow-[0_4px_20px_-4px_rgba(139,99,227,0.5)] transition-all duration-200 hover:brightness-110 hover:shadow-[0_4px_28px_-4px_rgba(139,99,227,0.65)]"
+          className="mt-8 flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-6 py-3.5 text-sm font-bold text-white shadow-clay-btn transition-all duration-200 hover:bg-violet-500"
         >
           <Icon name="arrow-left" size={17} />
           {t("thankYou.backHome")}
