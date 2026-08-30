@@ -193,7 +193,7 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, onFirstAttempt, isComple
           const isOptionCorrect = option === exercise.answer;
           const isSelected = displayAns === option;
 
-          let style = "border-white/[0.08] bg-white/[0.02] hover:border-violet-500/50 hover:bg-white/[0.05]";
+          let style = "border-white/10 bg-surface-2 shadow-clay-sm hover:-translate-y-0.5 hover:border-violet-500/50 hover:bg-surface-3";
 
           if (isDone) {
             if (isOptionCorrect) style = "border-state-success bg-state-success/15 text-state-success shadow-[0_0_10px_rgba(52,211,153,0.1)]";
@@ -252,7 +252,7 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, onFirstAttempt, isComple
         return "border-white/[0.03] opacity-40";
       }
       if (isSelected) return "border-violet-500 bg-violet-500/20 text-white shadow-[0_0_15px_rgba(139,92,246,0.3)] scale-[1.02]";
-      return "border-white/[0.08] bg-white/[0.02] hover:border-violet-500/50 hover:bg-white/[0.05]";
+      return "border-white/10 bg-surface-2 shadow-clay-sm hover:border-violet-500/50 hover:bg-surface-3";
     };
 
     return (
@@ -263,7 +263,7 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, onFirstAttempt, isComple
           onClick={() => handleTrueFalse(qIndex, true)}
           className={`flex items-center justify-center gap-3 rounded-2xl border-2 px-6 py-5 text-lg font-bold transition-all duration-300 ${getBtnStyle(true)}`}
         >
-          <span className="text-2xl">✅</span> {t("exerciseEngine.trueBtn")}
+          <Icon name="check" size={24} /> {t("exerciseEngine.trueBtn")}
         </button>
         <button
           type="button"
@@ -271,7 +271,7 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, onFirstAttempt, isComple
           onClick={() => handleTrueFalse(qIndex, false)}
           className={`flex items-center justify-center gap-3 rounded-2xl border-2 px-6 py-5 text-lg font-bold transition-all duration-300 ${getBtnStyle(false)}`}
         >
-          <span className="text-2xl">❌</span> {t("exerciseEngine.falseBtn")}
+          <Icon name="x" size={24} /> {t("exerciseEngine.falseBtn")}
         </button>
       </div>
     );
@@ -284,7 +284,7 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, onFirstAttempt, isComple
     const parts = exercise.question.split("___");
     const hasBlankInline = parts.length > 1;
 
-    let inputStyle = "border-white/[0.15] bg-white/[0.05] focus:border-violet-500 focus:ring-violet-500/30";
+    let inputStyle = "border-white/10 bg-surface-2 focus:border-violet-500 focus:ring-violet-500/30";
     if (isDone) inputStyle = "border-state-success/50 bg-state-success/10 text-state-success";
     else if (hasFeedback && isCorrect) inputStyle = "border-state-success bg-state-success/15 text-state-success";
     else if (hasFeedback && !isCorrect) inputStyle = "border-state-danger bg-state-danger/15 text-state-danger";
@@ -363,7 +363,7 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, onFirstAttempt, isComple
               const isCorrectMatch = hasFeedback && state.matched.some(m => m.left === pair.term && m.right === pair.definition);
               const isWrongMatch = hasFeedback && state.matched.some(m => m.left === pair.term && m.right !== pair.definition);
 
-              let s = "border-white/[0.08] bg-white/[0.02] hover:border-violet-500/50";
+              let s = "border-white/10 bg-surface-2 shadow-clay-sm hover:border-violet-500/50 hover:bg-surface-3";
               if (isCorrectMatch) s = "border-state-success bg-state-success/15 text-state-success";
               else if (isWrongMatch) s = "border-state-danger bg-state-danger/15 text-state-danger";
               else if (isMatched) s = "border-sky/30 bg-sky/10 text-sky";
@@ -394,7 +394,7 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, onFirstAttempt, isComple
               const isCorrectMatch = hasFeedback && matchedPair && matchedPair.left === correctPair?.term;
               const isWrongMatch = hasFeedback && matchedPair && matchedPair.left !== correctPair?.term;
 
-              let s = "border-white/[0.08] bg-white/[0.02] hover:border-sky/50";
+              let s = "border-white/10 bg-surface-2 shadow-clay-sm hover:border-sky/50 hover:bg-surface-3";
               if (isCorrectMatch) s = "border-state-success bg-state-success/15 text-state-success";
               else if (isWrongMatch) s = "border-state-danger bg-state-danger/15 text-state-danger";
               else if (isMatched) s = "border-sky/30 bg-sky/10 text-sky";
@@ -419,9 +419,9 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, onFirstAttempt, isComple
           <button
             type="button"
             onClick={() => resetMatch(qIndex)}
-            className="mt-2 text-xs font-medium text-ink-low hover:text-ink-hi transition-colors"
+            className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-ink-low hover:text-ink-hi transition-colors"
           >
-            ↻ Reset matches
+            <Icon name="refresh-cw" size={14} /> Reset matches
           </button>
         )}
 
@@ -457,7 +457,7 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, onFirstAttempt, isComple
   };
 
   return (
-    <div className="rounded-3xl border border-violet-500/20 bg-gradient-to-br from-violet-500/5 to-transparent p-5 shadow-inner md:p-8 animate-fade-in">
+    <div className="rounded-3xl border border-white/10 bg-surface p-5 shadow-clay md:p-8 animate-fade-in">
       {/* Header */}
       <div className="mb-6 border-b border-white/[0.08] pb-4">
         <h4 className="flex items-center gap-3 text-xl font-extrabold text-ink-hi">
@@ -473,7 +473,7 @@ const ExerciseEngine = ({ exercises = [], onAllCorrect, onFirstAttempt, isComple
         {submitted && (
           <div className={`mt-3 flex items-center gap-2 text-sm font-bold ${allCorrect ? "text-state-success" : "text-state-danger"}`}>
             <Icon name={allCorrect ? "check-circle" : "alert-circle"} size={18} />
-            {allCorrect ? `Perfect! ${correctCount}/${totalQ} correct! 🎉` : `${correctCount}/${totalQ} correct — review and try again!`}
+            {allCorrect ? `Perfect! ${correctCount}/${totalQ} correct!` : `${correctCount}/${totalQ} correct — review and try again!`}
           </div>
         )}
       </div>

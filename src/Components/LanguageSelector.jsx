@@ -39,7 +39,7 @@ const LanguageSelector = ({ mobile = false }) => {
           playClick();
           setIsOpen(!isOpen);
         }}
-        className={`h-[34px] flex items-center justify-between gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 text-xs font-semibold text-ink-hi backdrop-blur-md transition-all duration-200 hover:border-violet-500/40 hover:bg-white/[0.08] hover:shadow-glow focus:outline-none ${
+        className={`h-[34px] flex items-center justify-between gap-1.5 rounded-full border border-white/10 bg-surface-2 shadow-clay-sm px-3 text-xs font-semibold text-ink-hi transition-all duration-200 hover:border-violet-500/40 hover:bg-surface-3 focus:outline-none ${
           mobile ? 'w-full h-10 px-4 text-sm' : ''
         }`}
         aria-expanded={isOpen}
@@ -47,7 +47,6 @@ const LanguageSelector = ({ mobile = false }) => {
         title={`Language: ${activeLangObj.name} (Click to change)`}
       >
         <span className="flex items-center gap-1.5">
-          <span className="text-sm leading-none">{activeLangObj.flag}</span>
           <span className="font-bold tracking-wide text-ink-hi">{shortCode}</span>
         </span>
         <svg
@@ -81,7 +80,7 @@ const LanguageSelector = ({ mobile = false }) => {
                 }`}
               >
                 <span className="flex items-center gap-2.5">
-                  <span className="text-base">{lang.flag}</span>
+                  <span className="inline-flex h-5 min-w-[1.75rem] items-center justify-center rounded-md border border-white/10 bg-surface-3 px-1 text-[10px] font-bold tracking-wide text-ink-hi">{lang.flag}</span>
                   <span className="font-medium">{lang.name}</span>
                 </span>
                 {isSelected && (

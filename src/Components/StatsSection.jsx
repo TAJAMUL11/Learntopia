@@ -88,7 +88,7 @@ const StatsSection = () => {
       <div className="mt-10 grid grid-cols-2 gap-4 lg:grid-cols-4">
         {STATS.map((stat, i) => (
           <Card key={stat.key} className="p-6 text-center">
-            <div className="mx-auto mb-3 grid h-11 w-11 place-items-center rounded-xl border border-white/[0.08] bg-white/[0.05] text-violet-400">
+            <div className="mx-auto mb-3 grid h-11 w-11 place-items-center rounded-xl border border-violet-500/30 bg-violet-500/15 text-violet-400 shadow-clay-sm">
               <Icon name={stat.icon} size={20} />
             </div>
             <div
@@ -121,7 +121,7 @@ const StatsSection = () => {
               <span className="w-[68px] flex-none truncate text-xs font-medium text-ink-low sm:w-24 sm:text-sm">
                 {t(`stats.${bar.key}`)}
               </span>
-              <div className="h-3.5 flex-grow overflow-hidden rounded-full bg-white/[0.06]">
+              <div className="h-3.5 flex-grow overflow-hidden rounded-full clay-inset">
                 <div
                   ref={(el) => { barRefs.current[i] = el; }}
                   style={{ width: `${(bar.value / MAX) * 100}%` }}
