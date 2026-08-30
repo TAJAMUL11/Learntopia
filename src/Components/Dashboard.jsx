@@ -517,7 +517,7 @@ const Dashboard = () => {
       rawValue: xp,
       suffix: " XP",
       accent: "text-violet-400",
-      iconBg: "bg-gradient-to-br from-violet-500/30 to-violet-500/[0.06] border-violet-500/30 text-violet-300",
+      iconBg: "bg-violet-500/15 border-violet-500/30 text-violet-300",
     },
     {
       iconName: "flame",
@@ -526,7 +526,7 @@ const Dashboard = () => {
       rawValue: streak,
       suffix: ` ${streak === 1 ? t("dashboard.day") : t("dashboard.days")}`,
       accent: "text-amber-400",
-      iconBg: "bg-gradient-to-br from-amber-400/30 to-orange-600/[0.12] border-amber-500/40 text-amber-300 shadow-[0_0_16px_rgba(251,191,36,0.20)]",
+      iconBg: "bg-amber-500/15 border-amber-500/40 text-amber-300",
     },
     {
       iconName: "book-open",
@@ -534,7 +534,7 @@ const Dashboard = () => {
       rawValue: activeCourses.length + completedCourses.length,
       suffix: "",
       accent: "text-sky",
-      iconBg: "bg-gradient-to-br from-sky/30 to-sky/[0.06] border-sky/30 text-sky",
+      iconBg: "bg-sky/15 border-sky/30 text-sky",
       onClickTab: "courses",
     },
     {
@@ -543,7 +543,7 @@ const Dashboard = () => {
       rawValue: completedCourses.length,
       suffix: "",
       accent: "text-sky",
-      iconBg: "bg-gradient-to-br from-sky/30 to-sky/[0.06] border-sky/30 text-sky",
+      iconBg: "bg-sky/15 border-sky/30 text-sky",
       onClickTab: "completed",
     },
   ];
@@ -560,7 +560,7 @@ const Dashboard = () => {
     return (
       <div
         key={c.courseId}
-        className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 transition-all duration-300 hover:-translate-y-1.5 hover:border-violet-500/35 hover:bg-white/[0.04] hover:shadow-card"
+        className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-surface shadow-clay p-5 transition-all duration-300 hover:-translate-y-1.5 hover:border-violet-500/35 hover:bg-surface-2"
       >
         {/* Tier 1: Category Tag + Unenroll Button */}
         <div className="flex items-center justify-between gap-2 border-b border-white/[0.06] pb-3 mb-3">
@@ -589,7 +589,7 @@ const Dashboard = () => {
               className="h-14 w-14 sm:h-12 sm:w-12 flex-none rounded-xl border border-white/10 object-cover shadow-sm transition-transform duration-300 group-hover:scale-105"
             />
           ) : (
-            <div className="flex h-14 w-14 sm:h-12 sm:w-12 flex-none items-center justify-center rounded-xl border border-white/10 bg-gradient-to-br from-violet-500 to-violet-700 text-white font-black text-lg shadow-[0_6px_16px_rgba(109,66,190,0.30),inset_0_1px_0_rgba(255,255,255,0.15)]">
+            <div className="flex h-14 w-14 sm:h-12 sm:w-12 flex-none items-center justify-center rounded-xl bg-violet-600 text-white font-black text-lg shadow-clay-sm">
               {category.charAt(0)}
             </div>
           )}
@@ -608,7 +608,7 @@ const Dashboard = () => {
 
         {/* Tier 3: Full-width Progress Bar + Full-width Continue Button */}
         <div className="space-y-3 border-t border-white/[0.06] pt-3">
-          <div className="h-2 w-full overflow-hidden rounded-full bg-white/[0.08]">
+          <div className="h-2 w-full overflow-hidden rounded-full clay-inset">
             <div
               className="h-full rounded-full bg-gradient-to-r from-violet-600 via-violet-500 to-sky transition-[width] duration-700 ease-out"
               style={{ width: `${pct}%` }}
@@ -618,9 +618,9 @@ const Dashboard = () => {
             size="md"
             fullWidth
             onClick={() => navigate(`/course/${c.courseId}`)}
-            className="font-bold shadow-glow"
+            className="font-bold"
           >
-            {t("courses.continueLearning")} ⚡
+            <span className="inline-flex items-center gap-1.5">{t("courses.continueLearning")} <Icon name="zap" size="sm" /></span>
           </Button>
         </div>
       </div>
@@ -633,7 +633,7 @@ const Dashboard = () => {
 
         {/* ── Incomplete Profile Warning Banner ────────────────────────────── */}
         {(!parsedDisplayName || !parsedAvatarId) && (
-          <div className="animate-fade-up flex flex-col gap-3 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 sm:flex-row sm:items-center sm:justify-between shadow-card">
+          <div className="animate-fade-up flex flex-col gap-3 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 sm:flex-row sm:items-center sm:justify-between shadow-clay-sm">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-amber-500/20 text-amber-300">
                 <Icon name="sparkles" size={20} />
@@ -654,7 +654,7 @@ const Dashboard = () => {
         )}
 
         {/* ── ROW 1 — Profile Header: identity, achievements & level progress ── */}
-        <Card className="animate-fade-up relative overflow-hidden border-violet-500/25 bg-gradient-to-r from-violet-700/20 via-violet-600/10 to-sky/15 p-5 sm:p-8 shadow-card">
+        <Card className="animate-fade-up relative overflow-hidden border-violet-500/15 p-5 sm:p-8">
           <div className="relative z-10 flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between text-center sm:text-left">
 
             {/* Avatar & Identity */}
@@ -676,7 +676,7 @@ const Dashboard = () => {
                     {studentName}
                   </h1>
                   <span className="inline-flex flex-none items-center gap-1.5 rounded-full border border-violet-500/30 bg-violet-500/15 px-3 py-1 text-xs font-bold text-violet-300 shadow-sm">
-                    {levelInfo.icon} {t("dashboard.level")} {levelInfo.level} · {t(`levelNames.level${levelInfo.level}`)}
+                    <Icon name={levelInfo.icon} size="xs" /> {t("dashboard.level")} {levelInfo.level} · {t(`levelNames.level${levelInfo.level}`)}
                   </span>
                 </div>
 
@@ -688,8 +688,8 @@ const Dashboard = () => {
                   <div className="flex flex-wrap justify-center sm:justify-start gap-3">
                     {achievements.map((a) => (
                       <div key={a.id} className="flex min-w-14 flex-col items-center gap-1.5 px-1" title={`${a.label} — ${a.desc}`}>
-                        <span className={`flex h-11 w-11 sm:h-11 sm:w-11 items-center justify-center overflow-hidden rounded-full border ${ACH_TONE[a.tone]}`}>
-                          <LottieIcon src={ACH_LOTTIE[a.icon]} size={isSmall ? 36 : 34} fallbackIcon={a.icon} className={ACH_LOTTIE_CLASS[a.icon]} />
+                        <span className={`flex h-14 w-14 items-center justify-center overflow-hidden rounded-full shadow-clay-sm ${ACH_TONE[a.tone]}`}>
+                          <LottieIcon src={ACH_LOTTIE[a.icon]} size={isSmall ? 40 : 40} fallbackIcon={a.icon} className={ACH_LOTTIE_CLASS[a.icon]} />
                         </span>
                         <span className="whitespace-nowrap text-center text-[9px] font-bold leading-tight text-ink-low">{a.label}</span>
                       </div>
@@ -731,7 +731,7 @@ const Dashboard = () => {
                   : t("dashboard.levelProgressMax")}
               </span>
             </div>
-            <div className="h-2.5 w-full overflow-hidden rounded-full bg-white/[0.07]">
+            <div className="h-2.5 w-full overflow-hidden rounded-full clay-inset">
               <div
                 className="h-full rounded-full bg-gradient-to-r from-violet-700 via-violet-500 to-sky transition-[width] duration-700 ease-out"
                 style={{ width: `${levelInfo.progressPct}%` }}
@@ -751,10 +751,10 @@ const Dashboard = () => {
                   setActiveTab(m.onClickTab);
                 }
               }}
-              className={`animate-fade-up border border-white/[0.08] bg-white/[0.02] p-3 sm:p-5 text-center flex flex-col items-center justify-center transition-all duration-200 ${m.onClickTab ? "cursor-pointer hover:bg-white/[0.04] hover:border-violet-500/30 hover:-translate-y-0.5" : ""}`}
+              className={`animate-fade-up p-3 sm:p-5 text-center flex flex-col items-center justify-center transition-all duration-200 ${m.onClickTab ? "cursor-pointer hover:bg-surface-2 hover:border-violet-500/30 hover:-translate-y-0.5" : ""}`}
               style={{ animationDelay: `${0.04 + i * 0.04}s` }}
             >
-              <div className={`mb-1.5 sm:mb-2 flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-xl border ${m.iconBg} shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]`}>
+              <div className={`mb-1.5 sm:mb-2 flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-xl border shadow-clay-sm ${m.iconBg}`}>
                 {m.lottie ? (
                   <LottieIcon src={m.lottie} size={isSmall ? 26 : 26} fallbackIcon={m.iconName} className={m.lottieClass} />
                 ) : (
@@ -792,7 +792,7 @@ const Dashboard = () => {
                 className={`w-full sm:w-auto rounded-xl px-2.5 py-2 sm:px-4 sm:py-2.5 text-[11px] sm:text-xs font-bold transition-all duration-200 text-center ${
                   isActive
                     ? "bg-violet-600 text-white shadow-glow border border-violet-400/30"
-                    : "bg-white/[0.03] text-ink-low hover:bg-white/[0.07] hover:text-ink-hi border border-white/[0.06]"
+                    : "bg-surface-2 text-ink-low hover:bg-surface-3 hover:text-ink-hi border border-white/10 shadow-clay-sm"
                 }`}
               >
                 {tab.label}
@@ -812,7 +812,7 @@ const Dashboard = () => {
             <div className="grid gap-6 lg:grid-cols-3">
               {/* Left 2 Cols: Continue Learning Spotlight */}
               <div className="lg:col-span-2">
-                <Card className="h-full border-sky/25 bg-gradient-to-r from-sky/20 via-violet-700/15 to-transparent p-6 shadow-card flex flex-col justify-between">
+                <Card className="h-full border-white/10 p-6 flex flex-col justify-between">
                   <div>
                     <div className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-2 border-b border-white/[0.08] pb-3">
                       <SectionHead icon="zap" tone="sky" title={t("dashboard.spotlightTitle")} />
@@ -830,8 +830,8 @@ const Dashboard = () => {
                             className="h-24 w-24 flex-none rounded-2xl border border-white/10 object-cover shadow-md"
                           />
                         ) : (
-                          <div className="flex h-24 w-24 flex-none items-center justify-center rounded-2xl border border-white/10 bg-gradient-to-br from-sky to-violet-600 text-white text-3xl shadow-[0_8px_20px_rgba(109,66,190,0.30),inset_0_1px_0_rgba(255,255,255,0.15)]">
-                            ⚡
+                          <div className="flex h-24 w-24 flex-none items-center justify-center rounded-2xl border border-white/10 bg-violet-600 text-white shadow-clay-sm">
+                            <Icon name="zap" size={32} />
                           </div>
                         )}
 
@@ -900,7 +900,7 @@ const Dashboard = () => {
 
               {/* Right 1 Col: Daily Streak Widget (weekly tracker fills only real streak days) */}
               <div>
-                <Card className="h-full border-amber-500/20 bg-gradient-to-b from-amber-500/[0.06] via-amber-500/[0.02] to-transparent p-6 shadow-card flex flex-col justify-between">
+                <Card className="h-full border-white/10 p-6 flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
                       <h2 className="flex items-center gap-2.5 text-sm font-extrabold text-amber-300">
@@ -928,8 +928,8 @@ const Dashboard = () => {
                               key={idx}
                               className={`flex flex-1 items-center justify-center rounded-xl py-2.5 text-[10px] font-extrabold tracking-tight transition-all ${
                                 isOn
-                                  ? "border border-amber-500/40 bg-gradient-to-br from-amber-400/25 to-amber-600/10 text-amber-300 shadow-[0_2px_8px_rgba(251,191,36,0.14)]"
-                                  : "border border-white/[0.05] bg-white/[0.03] text-ink-faint opacity-50"
+                                  ? "border border-amber-500/40 bg-amber-500/20 text-amber-300 shadow-clay-sm"
+                                  : "border border-white/10 bg-surface-2 text-ink-faint opacity-50"
                               } ${isToday ? "outline outline-2 outline-amber-400/55 outline-offset-2" : ""}`}
                             >
                               {day}
@@ -1032,7 +1032,7 @@ const Dashboard = () => {
                             className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-3 rounded-xl border border-sky/25 bg-sky/[0.05] p-3.5"
                           >
                             <div className="flex items-center gap-3 min-w-0">
-                              <span className="text-xl">🏆</span>
+                              <Icon name="trophy" size={20} className="text-sky" />
                               <p className="min-w-0 text-sm font-bold text-ink-hi text-center sm:text-left">{localizedTitle}</p>
                             </div>
                             <span className="flex-none rounded-full border border-sky/30 bg-sky/20 px-3 py-1 text-xs font-bold text-sky">
@@ -1043,7 +1043,7 @@ const Dashboard = () => {
                       })}
                     </div>
                   ) : (
-                    <div className="rounded-2xl border border-violet-500/20 bg-gradient-to-br from-violet-600/10 via-violet-500/[0.05] to-transparent p-6 text-center">
+                    <div className="rounded-2xl border border-white/10 bg-surface-2 p-6 text-center">
                       <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl border border-violet-500/30 bg-violet-500/10 shadow-glow">
                         <Icon name="trophy" size={24} className="text-violet-400" />
                       </div>
@@ -1096,7 +1096,7 @@ const Dashboard = () => {
                         return (
                           <div
                             key={q.quizId || q.title}
-                            className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5 transition-colors hover:bg-white/[0.04]"
+                            className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-3 rounded-xl border border-white/10 bg-surface-2 shadow-clay-sm p-3.5 transition-colors hover:bg-surface-3"
                           >
                             <span className="min-w-0 text-sm font-semibold text-ink-hi text-center sm:text-left">{localizedTitle}</span>
                             <span className="flex-none rounded-lg border border-violet-500/30 bg-violet-500/15 px-2.5 py-1 text-xs font-extrabold text-violet-300">
@@ -1187,8 +1187,8 @@ const Dashboard = () => {
                         {img ? (
                           <img src={img} alt="" className="h-14 w-14 rounded-xl object-cover border border-white/10 shadow-sm flex-none" />
                         ) : (
-                          <div className="flex h-14 w-14 flex-none items-center justify-center rounded-xl bg-sky/20 text-2xl">
-                            🏆
+                          <div className="flex h-14 w-14 flex-none items-center justify-center rounded-xl bg-sky/20 text-sky">
+                            <Icon name="trophy" size={24} />
                           </div>
                         )}
                         <div className="min-w-0 flex-1 w-full">
@@ -1215,7 +1215,7 @@ const Dashboard = () => {
                 })}
               </div>
             ) : (
-              <div className="rounded-2xl border border-violet-500/20 bg-gradient-to-br from-violet-600/10 via-violet-500/[0.05] to-transparent p-8 text-center max-w-lg mx-auto">
+              <div className="rounded-2xl border border-white/10 bg-surface-2 p-8 text-center max-w-lg mx-auto">
                 <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl border border-violet-500/30 bg-violet-500/10 shadow-glow">
                   <Icon name="trophy" size={28} className="text-violet-400" />
                 </div>
@@ -1257,7 +1257,7 @@ const Dashboard = () => {
                   return (
                     <div
                       key={q.quizId || q.title}
-                      className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-3 rounded-xl border border-white/10 bg-white/[0.02] p-4 hover:bg-white/[0.04] transition-colors"
+                      className="flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-3 rounded-xl border border-white/10 bg-surface-2 shadow-clay-sm p-4 hover:bg-surface-3 transition-colors"
                     >
                       <div className="min-w-0 flex-1 text-center sm:text-left">
                         <h3 className="font-bold text-sm sm:text-base text-ink-hi">{localizedTitle}</h3>
@@ -1307,7 +1307,7 @@ const Dashboard = () => {
                   const total = c.totalModules || 4;
                   const pct = Math.round((done / total) * 100);
                   return (
-                    <div key={c.courseId} className="flex flex-col justify-between rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5">
+                    <div key={c.courseId} className="flex flex-col justify-between rounded-2xl border border-white/10 bg-surface shadow-clay p-5">
                       <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4">
                         {img ? (
                           <img src={img} alt="" className="h-14 w-14 flex-none rounded-xl border border-white/10 object-cover shadow-sm" />
@@ -1444,7 +1444,7 @@ const Dashboard = () => {
                 onChange={(e) => setDeleteConfirmText(e.target.value)}
                 placeholder={t("dashboard.deleteConfirmPlaceholder")}
                 disabled={deleteLoading}
-                className="w-full rounded-lg border border-state-danger/25 bg-white/[0.03] px-3 py-2 text-xs font-mono text-ink-hi placeholder:text-ink-faint focus:border-state-danger focus:outline-none"
+                className="w-full rounded-lg border border-state-danger/25 bg-surface-2 px-3 py-2 text-xs font-mono text-ink-hi placeholder:text-ink-faint focus:border-state-danger focus:outline-none"
               />
             </div>
           </div>
