@@ -5,24 +5,24 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="256x256" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <meta name="theme-color" content="#0B0713" />
+    <meta name="theme-color" content="#0A0C12" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Instant paint: dark ground + splash styles apply before any JS loads,
          so the very first frame is branded instead of a blank white screen. -->
     <style>
-      html, body { margin: 0; background: #070510; }
+      html, body { margin: 0; background: #0A0C12; }
       /* Cold-boot loader (shared by the inline splash + React AppLoader via .app-splash). */
       .app-splash {
         position: fixed; inset: 0; z-index: 9999;
         display: flex; flex-direction: column; align-items: center; justify-content: center;
-        gap: 26px; background: #070510;
+        gap: 26px; background: #0A0C12;
         font-family: "Poppins", "Segoe UI", system-ui, -apple-system, sans-serif;
       }
       .app-splash .stage { position: relative; width: 104px; height: 104px; }
       .app-splash .mark {
         position: absolute; inset: 0; margin: auto; width: 52px; height: 52px;
-        filter: drop-shadow(0 0 18px rgba(139,99,227,0.55));
+        filter: drop-shadow(0 0 18px rgba(139,124,246,0.55));
         animation: lt-pulse 2s ease-in-out infinite;
       }
       .app-splash .orbit { position: absolute; inset: 0; animation: lt-spin 1.4s linear infinite; }
@@ -30,15 +30,15 @@
         position: absolute; top: 50%; left: 50%; width: 11px; height: 11px;
         margin: -5.5px 0 0 -5.5px; border-radius: 50%;
       }
-      .app-splash .orbit span:nth-child(1) { transform: rotate(0deg)   translateX(48px); background: #8B63E3; box-shadow: 0 0 12px rgba(139,99,227,0.7); }
-      .app-splash .orbit span:nth-child(2) { transform: rotate(120deg) translateX(48px); background: #7BBFF2; box-shadow: 0 0 12px rgba(123,191,242,0.7); }
-      .app-splash .orbit span:nth-child(3) { transform: rotate(240deg) translateX(48px); background: #CBBAF5; box-shadow: 0 0 12px rgba(203,186,245,0.6); }
+      .app-splash .orbit span:nth-child(1) { transform: rotate(0deg)   translateX(48px); background: #8B7CF6; box-shadow: 0 0 12px rgba(139,124,246,0.7); }
+      .app-splash .orbit span:nth-child(2) { transform: rotate(120deg) translateX(48px); background: #4EC5E8; box-shadow: 0 0 12px rgba(78,197,232,0.7); }
+      .app-splash .orbit span:nth-child(3) { transform: rotate(240deg) translateX(48px); background: #C4BCF9; box-shadow: 0 0 12px rgba(196,188,249,0.6); }
       .app-splash .word { display: flex; align-items: center; font-size: 15px; font-weight: 800; }
       .app-splash .word b {
-        background: linear-gradient(90deg, #CBBAF5, #7BBFF2);
+        background: linear-gradient(90deg, #C4BCF9, #4EC5E8);
         -webkit-background-clip: text; background-clip: text; color: transparent;
       }
-      .app-splash .word i { width: 4px; height: 4px; border-radius: 50%; background: #8B63E3; margin-left: 4px; animation: lt-bounce 1s infinite; }
+      .app-splash .word i { width: 4px; height: 4px; border-radius: 50%; background: #8B7CF6; margin-left: 4px; animation: lt-bounce 1s infinite; }
       .app-splash .word i:nth-of-type(2) { animation-delay: 0.15s; }
       .app-splash .word i:nth-of-type(3) { animation-delay: 0.30s; }
       @keyframes lt-spin { to { transform: rotate(360deg); } }
@@ -85,7 +85,7 @@
     <link rel="dns-prefetch" href="https://firestore.googleapis.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
    
     <!-- AEO Metadata (Structured JSON-LD Schema Markup) -->
     <script type="application/ld+json">
