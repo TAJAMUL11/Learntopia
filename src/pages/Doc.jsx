@@ -59,14 +59,14 @@ const Doc = () => {
           </aside>
 
           {/* Mobile / Tablet wrapped nav pills (2-3 rows, zero scrolling) */}
-          <div className="xl:hidden mb-8 rounded-2xl border border-white/10 bg-white/[0.02] p-4">
+          <div className="xl:hidden mb-8 rounded-2xl border border-white/10 bg-surface shadow-clay p-4">
             <p className="mb-3 text-[11px] font-bold uppercase tracking-widest text-ink-low/50">{t("doc.quickJump")}</p>
             <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
               {NAV.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => scrollTo(item.id)}
-                  className="rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 text-xs font-semibold text-ink-low hover:border-violet-500/50 hover:bg-violet-500/10 hover:text-ink-hi active:scale-95 transition-all"
+                  className="rounded-full border border-white/10 bg-surface-2 shadow-clay-sm px-3.5 py-1.5 text-xs font-semibold text-ink-low hover:border-violet-500/50 hover:bg-violet-500/10 hover:text-ink-hi active:scale-95 transition-all"
                 >
                   {item.label}
                 </button>
@@ -93,8 +93,8 @@ const Doc = () => {
                   { icon: "clock", title: t("doc.cardQuizzes"), text: t("doc.cardQuizzesDesc") },
                   { icon: "bar-chart", title: t("doc.cardTracking"), text: t("doc.cardTrackingDesc") },
                 ].map((item) => (
-                  <div key={item.title} className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-5">
-                    <div className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-lg bg-violet-500/15 text-violet-400">
+                  <div key={item.title} className="rounded-xl border border-white/10 bg-surface shadow-clay p-5">
+                    <div className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-violet-500/30 bg-violet-500/15 text-violet-400 shadow-clay-sm">
                       <Icon name={item.icon} size={18} />
                     </div>
                     <p className="font-semibold text-ink-hi text-sm">{item.title}</p>
@@ -143,11 +143,11 @@ const Doc = () => {
               <h2 className="text-2xl font-bold text-ink-hi border-b border-white/[0.06] pb-3 mb-5">{t("doc.coursesHeading")}</h2>
               <p className="text-ink-low leading-relaxed">{t("doc.coursesIntro")}</p>
 
-              <div className="mt-6 rounded-xl border border-white/[0.07] overflow-hidden bg-white/[0.01]">
+              <div className="mt-6 rounded-xl border border-white/10 overflow-hidden bg-surface shadow-clay">
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm min-w-[500px]">
                     <thead>
-                      <tr className="border-b border-white/[0.07] bg-white/[0.02]">
+                      <tr className="border-b border-white/[0.07] bg-surface-2">
                         <th className="px-5 py-3.5 text-left font-semibold text-ink-hi w-2/5 sm:w-1/3">{t("doc.tableColFeature")}</th>
                         <th className="px-5 py-3.5 text-left font-semibold text-ink-hi w-3/5 sm:w-2/3">{t("doc.tableColDesc")}</th>
                       </tr>
@@ -174,7 +174,7 @@ const Doc = () => {
 
               <div className="mt-6 space-y-3">
                 {(tRaw("doc.quizMeta") || []).map((item) => (
-                  <div key={item.label} className="flex flex-col sm:flex-row gap-1.5 sm:gap-4 rounded-lg border border-white/[0.05] bg-white/[0.015] px-4 sm:px-5 py-3.5">
+                  <div key={item.label} className="flex flex-col sm:flex-row gap-1.5 sm:gap-4 rounded-lg border border-white/10 bg-surface-2 shadow-clay-sm px-4 sm:px-5 py-3.5">
                     <span className="sm:w-36 flex-none text-xs font-semibold uppercase tracking-wider text-violet-400 sm:text-ink-low/60 pt-0.5">{item.label}</span>
                     <span className="text-sm text-ink-low leading-relaxed">{item.value}</span>
                   </div>
@@ -206,15 +206,15 @@ const Doc = () => {
               <div className="mt-6 space-y-4">
                 {(tRaw("doc.accountCards") || []).map((card, i) => {
                   const styles = [
-                    { box: "border-violet-500/20 bg-violet-500/[0.03]", title: "text-violet-300" },
-                    { box: "border-sky/20 bg-sky/[0.03]", title: "text-sky" },
-                    { box: "border-violet-500/20 bg-violet-500/[0.03]", title: "text-violet-300" },
-                    { box: "border-sky/20 bg-sky/[0.03]", title: "text-sky" },
-                    { box: "border-violet-500/20 bg-violet-500/[0.03]", title: "text-violet-300" },
+                    { box: "border-violet-500/20", title: "text-violet-300" },
+                    { box: "border-sky/20", title: "text-sky" },
+                    { box: "border-violet-500/20", title: "text-violet-300" },
+                    { box: "border-sky/20", title: "text-sky" },
+                    { box: "border-violet-500/20", title: "text-violet-300" },
                   ];
                   const s = styles[i % styles.length];
                   return (
-                    <div key={i} className={`rounded-xl border p-5 ${s.box}`}>
+                    <div key={i} className={`rounded-xl border bg-surface shadow-clay p-5 ${s.box}`}>
                       <p className={`text-sm font-semibold mb-1.5 ${s.title}`}>{card.title}</p>
                       <p className="text-sm text-ink-low leading-relaxed">{card.text}</p>
                     </div>
@@ -237,7 +237,7 @@ const Doc = () => {
             </section>
 
             {/* Footer note */}
-            <div className="rounded-xl border border-white/[0.06] bg-white/[0.015] p-6">
+            <div className="rounded-xl border border-white/10 bg-surface shadow-clay p-6">
               <p className="font-semibold text-ink-hi text-sm">{t("doc.footerTitle")}</p>
               <p className="text-xs text-ink-low mt-1">{t("doc.footerPre")} <Link to="/contact" className="text-violet-400 hover:underline">{t("doc.footerContact")}</Link> {t("doc.footerMid")} <Link to="/terms" className="text-violet-400 hover:underline">{t("doc.footerTerms")}</Link> {t("doc.footerAnd")} <Link to="/privacy" className="text-violet-400 hover:underline">{t("doc.footerPrivacy")}</Link>.</p>
             </div>

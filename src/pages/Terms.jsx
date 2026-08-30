@@ -11,7 +11,7 @@ const Terms = () => {
 
         {/* Header */}
         <div className="border-b border-white/[0.08] pb-8 mb-10">
-          <span className="inline-block rounded-md border border-white/10 bg-white/[0.04] px-2.5 py-1 text-xs font-semibold uppercase tracking-widest text-ink-low mb-3">{t("terms.badge")}</span>
+          <span className="inline-block rounded-md border border-white/10 bg-surface-2 shadow-clay-sm px-2.5 py-1 text-xs font-semibold uppercase tracking-widest text-ink-low mb-3">{t("terms.badge")}</span>
           <h1 className="text-3xl font-bold tracking-tight text-ink-hi">{t("terms.title")}</h1>
           <p className="mt-2 text-sm text-ink-low/60">{t("terms.lastUpdated")}</p>
           <p className="mt-4 text-sm text-ink-low leading-relaxed border-l-2 border-violet-500/40 pl-4">
@@ -43,7 +43,7 @@ const Terms = () => {
       </div>
 
       {/* Contact footer */}
-      <div className="mt-12 rounded-xl border border-white/[0.07] bg-white/[0.02] p-6">
+      <div className="mt-12 rounded-xl border border-white/10 bg-surface shadow-clay p-6">
         <p className="font-semibold text-ink-hi text-sm">{t("terms.footerTitle")}</p>
         <p className="mt-1.5 text-sm text-ink-low">
           {t("terms.footerPre")}{" "}

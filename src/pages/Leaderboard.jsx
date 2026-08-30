@@ -209,9 +209,9 @@ const Leaderboard = () => {
 
   // ── Rank medal helpers ──
   const getMedal = (rank) => {
-    if (rank === 1) return "🥇";
-    if (rank === 2) return "🥈";
-    if (rank === 3) return "🥉";
+    if (rank === 1) return "trophy";
+    if (rank === 2) return "award";
+    if (rank === 3) return "award";
     return null;
   };
 
@@ -269,7 +269,7 @@ const Leaderboard = () => {
               className={`rounded-lg px-4 py-2 text-xs font-semibold transition-all duration-200 border ${
                 activeTab === tab.id
                   ? "bg-violet-600 border-violet-500 text-white shadow-glow"
-                  : "bg-white/[0.03] border-white/[0.07] text-ink-low hover:text-white hover:border-white/15 hover:bg-white/[0.06]"
+                  : "bg-surface-2 shadow-clay-sm border-white/10 text-ink-low hover:text-white hover:border-white/15"
               }`}
             >
               {tab.label}
@@ -311,7 +311,7 @@ const Leaderboard = () => {
         </div>
       ) : filteredEntries.length === 0 ? (
         <Card className="w-full max-w-md p-10 text-center my-6">
-          <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-xl border border-violet-500/30 bg-violet-500/10 text-violet-400">
+          <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-xl border border-violet-500/30 bg-violet-500/15 text-violet-400 shadow-clay-sm">
             <Icon name="award" size={26} />
           </div>
           <h3 className="text-base font-bold text-white">{t("leaderboard.noRankings")}</h3>
@@ -335,10 +335,10 @@ const Leaderboard = () => {
               return (
                 <div
                   key={item.id}
-                  className={`lb-row flex items-center gap-3 rounded-xl px-4 py-3.5 border transition-all ${
+                  className={`lb-row flex items-center gap-3 rounded-xl px-4 py-3.5 border border-white/10 transition-all ${
                     rank <= 3
-                      ? "border-white/[0.08] bg-white/[0.04]"
-                      : "border-white/[0.05] bg-white/[0.02]"
+                      ? "bg-surface shadow-clay"
+                      : "bg-surface-2 shadow-clay-sm"
                   } ${isYou ? "!bg-violet-500/[0.1] !border-violet-500/20" : ""}`}
                 >
                   {/* Rank */}
@@ -346,7 +346,7 @@ const Leaderboard = () => {
                     {rank === 1 ? (
                       <LottieIcon src={crownLottie} size={26} fallbackIcon="crown" />
                     ) : medal ? (
-                      <span className="text-xl leading-none">{medal}</span>
+                      <Icon name={medal} size={20} className={getRankColor(rank)} />
                     ) : (
                       <span className={`text-sm font-bold tabular-nums ${getRankColor(rank)}`}>{rank}</span>
                     )}
@@ -405,12 +405,12 @@ const Leaderboard = () => {
           </div>
 
           {/* ── Desktop: Table Layout ── */}
-          <div className="w-full max-w-5xl rounded-2xl border border-white/10 bg-ground-900 overflow-hidden hidden md:block shadow-card">
+          <div className="w-full max-w-5xl rounded-2xl border border-white/10 bg-surface shadow-clay overflow-hidden hidden md:block">
             <table className="w-full text-left">
 
               {/* Header */}
               <thead>
-                <tr className="border-b-2 border-white/10 bg-white/[0.03]">
+                <tr className="border-b-2 border-white/10 bg-surface-2">
                   <th className="py-4 pl-7 pr-3 text-xs font-bold uppercase tracking-wider text-ink-low w-20">{t("leaderboard.rank")}</th>
                   <th className="py-4 px-5 text-xs font-bold uppercase tracking-wider text-ink-low">{t("leaderboard.student")}</th>
                   {activeTab === "all" && (
@@ -444,7 +444,7 @@ const Leaderboard = () => {
                           {rank === 1 ? (
                             <LottieIcon src={crownLottie} size={30} fallbackIcon="crown" />
                           ) : medal ? (
-                            <span className="text-xl leading-none">{medal}</span>
+                            <Icon name={medal} size={20} className={getRankColor(rank)} />
                           ) : (
                             <span className={`text-sm font-bold tabular-nums ${getRankColor(rank)}`}>{rank}</span>
                           )}
@@ -501,7 +501,7 @@ const Leaderboard = () => {
             </table>
 
             {/* Desktop footer */}
-            <div className="border-t border-white/[0.06] bg-white/[0.02] px-7 py-3.5 flex items-center justify-between">
+            <div className="border-t border-white/[0.06] bg-surface-2 px-7 py-3.5 flex items-center justify-between">
               <span className="text-xs font-medium text-ink-faint">
                 {t("leaderboard.top")} {filteredEntries.length} {filteredEntries.length === 1 ? t("leaderboard.entry") : t("leaderboard.entries")}
               </span>
