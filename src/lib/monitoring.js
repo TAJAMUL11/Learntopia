@@ -39,6 +39,15 @@ export async function initMonitoring() {
         "Object Not Found Matching Id",
         "ResizeObserver loop limit exceeded",
         "ResizeObserver loop completed with undelivered notifications",
+        // Injected in-app-browser / extension scripts (Samsung Internet, FB/IG
+        // WebViews) running their own document.onclick handlers — not our code.
+        "onShow is not defined",
+        "onHide is not defined",
+        /className\.indexOf is not a function/,
+        // Third-party DOM mutation (translation extensions) vs React. Guarded in
+        // domGuards.js so it no longer crashes; not actionable on our side.
+        "The node to be removed is not a child of this node",
+        "The node before which the new node is to be inserted is not a child of this node",
       ],
       // Ignore anything whose stack originates in an extension bundle.
       denyUrls: [
