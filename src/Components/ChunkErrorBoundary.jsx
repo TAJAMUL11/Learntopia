@@ -5,13 +5,14 @@ import { reportError } from "../lib/monitoring";
 class ChunkErrorBoundary extends Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false, isChunk: false };
   }
 
-  static getDerivedStateFromError() {
-    // Any render error (commonly a ChunkLoadError during code updates or flaky
-    // connections) flips to the fallback UI.
-    return { hasError: true };
+  static getDerivedStateFromError(error) {
+    // Separate a chunk/network failure (self-healing, network-sounding copy)
+    // from a genuine render crash (generic copy), so the message isn't
+    // misleading — a crash is not a "connection" problem.
+    return { hasError: true, isChunk: ChunkErrorBoundary.isChunkError(error) };
   }
 
   // A stale-chunk error happens when a new version is deployed while a user has
@@ -55,7 +56,7 @@ class ChunkErrorBoundary extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.state.hasError && prevProps.children !== this.props.children) {
-      this.setState({ hasError: false });
+      this.setState({ hasError: false, isChunk: false });
     }
   }
 
@@ -66,20 +67,23 @@ class ChunkErrorBoundary extends Component {
 
   render() {
     if (this.state.hasError) {
+      const isChunk = this.state.isChunk;
       return (
         <div className="container-page flex min-h-[50vh] flex-col items-center justify-center py-16 text-center">
           <div className="relative mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border border-state-danger/20 bg-state-danger/10 text-state-danger">
             <Icon name="warning" size={36} />
           </div>
           <h2 className="text-2xl font-black tracking-tight text-ink-hi sm:text-3xl">
-            Connection Interrupted
+            {isChunk ? "Connection Interrupted" : "Something went wrong"}
           </h2>
           <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-ink-low sm:text-base">
-            We couldn&rsquo;t load the required page resources. This usually happens due to a temporary network drop or application update.
+            {isChunk
+              ? "We couldn't load the required page resources. This usually happens after a temporary network drop or an app update."
+              : "An unexpected error interrupted this page. Reloading usually fixes it."}
           </p>
           <button
             onClick={this.handleReload}
-            className="mt-6 flex items-center gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-violet-500 px-5 py-3 text-sm font-bold text-white shadow-[0_4px_20px_-4px_rgba(139,99,227,0.4)] transition-all duration-200 hover:brightness-110"
+            className="mt-6 flex items-center gap-2 rounded-xl bg-violet-600 px-5 py-3 text-sm font-bold text-white shadow-clay-btn transition-all duration-200 hover:bg-violet-500"
           >
             <Icon name="refresh-cw" size={16} />
             Reload Page
