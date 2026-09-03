@@ -108,7 +108,7 @@ The platform is designed to be fast, accessible, and mobile-friendly, with authe
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/TAJAMUL11/Learntopia.git
+git clone https://github.com/tajamul-wani/Learntopia.git
 cd Learntopia
 
 # 2. Install dependencies
